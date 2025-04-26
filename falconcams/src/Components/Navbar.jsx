@@ -53,7 +53,8 @@ export const Navbar = () => {
                 <IconButton size="large" color="inherit" onClick={handleClick}>
                   <AccountCircle/>
                 </IconButton>
-                <Menu
+              </Tooltip>
+              <Menu
                   id="basic-menu"
                   anchorEl={anchorEl}
                   open={open}
@@ -61,8 +62,7 @@ export const Navbar = () => {
                 >
                   <MenuItem onClick={handleCloseLogin}>Login</MenuItem>
                   <MenuItem onClick={handleCloseSignup}>Signup</MenuItem>
-                </Menu>
-              </Tooltip>
+              </Menu>
             </Box>
             <Box sx={{display:{lg:"none",md:'none',xs:'block',sm:'block'}}}>
               <IconButton size="large" color="inherit" onClick={toggleDrawer(true)}><MenuSharp/></IconButton>
