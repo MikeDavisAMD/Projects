@@ -38,7 +38,7 @@ export const Navbar = () => {
     <AppBar position='static' sx={{backgroundColor:'#190098',height:{lg:"100px",md:"100px",sm:"80px",xs:"80px"}, justifyContent:'center'}}>
       <Toolbar>
             <Box sx={{color:'white',margin:'0px', width:{lg:'85%',md:'85%',sm:'90%',xs:'80%'}}}>
-              <Link to={'/'} style={{textDecoration:'none'}}>
+              <Link to={'/'} style={{textDecoration:'none',WebkitTapHighlightColor: 'transparent'}}>
                 <Box component='img' src={FalconLogo} alt='Falcon cams logo' sx={{height:{lg:'180px',md:'180px',sm:'130px',xs:'130px'}}}></Box>
               </Link>
             </Box>
