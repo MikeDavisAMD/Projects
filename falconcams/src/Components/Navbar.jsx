@@ -1,4 +1,4 @@
-import { AppBar, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material'
+import { AppBar, Badge, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material'
 import Menu from '@mui/material/Menu';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -44,10 +44,18 @@ export const Navbar = () => {
             </Box>
             <Box sx={{display:{lg:"block",md:'block',xs:'none',sm:'none'}}}>
               <Tooltip title='Wishlist' arrow>
-                <IconButton size="large" color="inherit"><Favorite/></IconButton>
+                <IconButton size="large" color="inherit">
+                  <Badge badgeContent={5} color='primary'>
+                    <Favorite/>
+                  </Badge>
+                </IconButton>
               </Tooltip>
               <Tooltip title='cart' arrow>
-                <IconButton size="large" color="inherit"><ShoppingCart/></IconButton>
+                <IconButton size="large" color="inherit">
+                  <Badge badgeContent={4} color='primary'>
+                    <ShoppingCart/>
+                  </Badge>
+                </IconButton>
               </Tooltip>
               <Tooltip title='login/signup' arrow>
                 <IconButton size="large" color="inherit" onClick={handleClick}>
