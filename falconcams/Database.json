@@ -50,6 +50,78 @@
       "price": "20000"
     }
   ],
+  "parts":[
+    {
+      "id": "1",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "2",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "3",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "4",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "5",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "6",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "7",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "8",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "9",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "10",
+      "img": "https://www.all-about-photo.com/images/equipment/GEAR-nikon-af-s-dx-nikkor-18-300mm-f-3-5-6-3g-ed-vr-lens-for-nikon-f.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    }
+  ],
   "users": [
     {
       "id": 1,
