@@ -1,6 +1,5 @@
 import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material'
 import React from 'react'
-import 'animate.css';
 import dslr from '../Assets/Images/Carousel/DSLR.jpg'
 import mlesscamera from '../Assets/Images/Carousel/mirrorless.jpg'
 // Import Swiper React components
@@ -11,8 +10,10 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 // Import required modules
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
+  const navigate = useNavigate()
   const slides=[
     {
       title: 'DSLR cameras',
@@ -60,7 +61,7 @@ export const Home = () => {
       </Grid>
       <Grid size={{lg:4,md:4,sm:6,xs:12}}>
         <Box sx={{height:{lg:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
-            <Card className='animate__animated animate__fadeInTopLeft' sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
+            <Card sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -79,8 +80,8 @@ export const Home = () => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button variant='contained' size="small" color="white">
-                  Explore
+                <Button variant='contained' size="small" color="white" onClick={()=>navigate('/Camera')}>
+                  Shop now
                 </Button>
               </CardActions>
             </Card>
@@ -88,7 +89,7 @@ export const Home = () => {
       </Grid>
       <Grid size={{lg:4,md:4,sm:6,xs:12}}>
         <Box sx={{height:{lg:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
-            <Card className='animate__animated animate__fadeInUp' sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
+            <Card sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -107,8 +108,8 @@ export const Home = () => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button variant='contained' size="small" color="white">
-                  Explore
+                <Button variant='contained' size="small" color="white" onClick={()=>navigate('/Parts')}>
+                  shop now
                 </Button>
               </CardActions>
             </Card>
@@ -116,7 +117,7 @@ export const Home = () => {
       </Grid>
       <Grid size={{lg:4,md:4,sm:12,xs:12}}>
         <Box sx={{height:{lg:'340px'},display:{lg:'block',md:'block',sm:'flex',xs:'block'},justifyContent:'center',padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
-            <Card className='animate__animated animate__fadeInTopRight' sx={{width:{lg:'80%',md:'80%',sm:'38%',xs:'80%'},background: 'rgba(0, 153, 254, 0.51)'}}>
+            <Card sx={{width:{lg:'80%',md:'80%',sm:'38%',xs:'80%'},background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -135,8 +136,8 @@ export const Home = () => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button variant='contained' size="small" color="white">
-                  Explore
+                <Button variant='contained' size="small" color="white" onClick={()=>navigate('/Service')}>
+                  book now
                 </Button>
               </CardActions>
             </Card>

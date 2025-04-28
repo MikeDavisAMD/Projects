@@ -13,7 +13,7 @@ export const Footer = () => {
   return (
     <Grid container sx={{background:'radial-gradient(circle,#07CCFD,#07FDFD,#07A3FD)',color:'#190098'}}>
         <Grid size={{lg:3,md:3,sm:6,xs:12}}>
-          <Box sx={{height:{lg:'210px',md:'210px',sm:'210px',xs:'210px'}}}>
+          <Box sx={{height:{lg:'210px',md:'260px',sm:'210px',xs:'210px'}}}>
             <Box sx={{
               paddingTop:'20px',
               display:'flex',justifyContent:'center'

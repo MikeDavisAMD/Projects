@@ -1,8 +1,97 @@
-import { CircularProgress } from '@mui/material'
-import React from 'react'
+import { AccountCircle, Close, Password } from '@mui/icons-material'
+import { Alert, Box, Button, Grid, IconButton, Snackbar, TextField } from '@mui/material'
+import React, { useState } from 'react'
+import 'animate.css';
+import pic from '../Assets/Images/Pic1.jpeg'
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const Login = () => {
+  const navigate = useNavigate()
+  const [username,setUsername]=useState('')
+  const [password,setPassword]=useState('')
+  const [error,setError] = useState('')
+  // snackbar
+  const [open,setOpen]=useState(false)
+  const openSnackbar = () => {
+    setOpen(true)
+  }
+  const closeSnackbar = () => {
+    setOpen(false)
+  }
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('http://localhost:7320/users')
+      const users = response.data
+      const userdata = users.find(user=>
+        ((user.username===username || user.mobile===username || user.email===username) && 
+        (user.password===password)))
+      if(userdata){
+        localStorage.setItem('loggedIn','true')
+        navigate('/')
+        window.dispatchEvent(new Event('storage'));
+        openSnackbar()
+      } else {
+        setError('Invalid credentials')
+        openSnackbar()
+      }
+    } catch (error) {
+      console.error(error.message)
+      setError(error.message)
+      openSnackbar()
+    }
+  }
   return (
-    <CircularProgress/>
+    <Grid container>
+      <Grid size={{lg:6,md:6,sm:6,xs:12}}>
+        <Box sx={{height:{lg:'320px',md:'320px',sm:'270px',xs:'270px'},paddingTop:{lg:'80px',md:'80px',sm:'30px',xs:'30px'},background:'linear-gradient(to bottom,#039BFF,#03F8FF)'}}>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
+            <AccountCircle sx={{height:"80px",width:'50px',color:'inherit'}}/>
+            <TextField 
+            sx={{marginTop:'10px',width:'60%'}} 
+            variant='filled' 
+            label='username or email or mobile'
+            value={username}
+            onChange={(e)=>setUsername(e.target.value)}
+            />
+          </Box>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
+            <Password sx={{height:"80px",width:'50px',color:'inherit'}}/>
+            <TextField 
+            sx={{marginTop:'10px',width:'60%'}} 
+            variant='filled' 
+            label='Password'
+            type='password'
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            />
+          </Box>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center'}}>
+            <Button variant='contained' sx={{backgroundColor:'#3CE6FF',color:'#190098'}} onClick={handleLogin}>
+              Login
+            </Button>
+          </Box>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',padding:'10px'}}>
+            <Link to='/Signup'>New user? No worries, Sign up</Link>
+          </Box>
+          <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
+          action={
+            <IconButton size="small" aria-label="close" color='inherit' onClick={closeSnackbar}>
+              <Close fontSize='small'/>
+            </IconButton>
+          }>
+            <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}>
+              {error || "Logged in successfully"}
+            </Alert>
+          </Snackbar>
+        </Box>
+      </Grid>
+      <Grid size={{lg:6,md:6,sm:6,xs:12}}>
+        <Box sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>
+          <Box component='img' src={pic} alt='Pigeons' 
+          sx={{width:'100%',height:{lg:'400px',md:'400px',sm:'300px'}}}></Box>
+        </Box>
+      </Grid>
+    </Grid>
   )
 }

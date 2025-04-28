@@ -1,3 +1,91 @@
 {
-    
+  "camera": [
+    {
+      "id": "1",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "2",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "3",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "4",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "5",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "6",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    },
+    {
+      "id": "7",
+      "img": "https://amateurphotographer.com/wp-content/uploads/sites/7/2023/09/Nikon-D3500-gradient.jpg",
+      "brand": "Nikon",
+      "category": "DSLR",
+      "price": "20000"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "fname": "Admin",
+      "lname": "Admin",
+      "username": "admin",
+      "mobile": "244466666",
+      "mail": "admin.falconmd@gmail.com",
+      "password": "Admin@falconcam"
+    },
+    {
+      "id": "b864",
+      "fname": "Mike",
+      "lname": "Davis",
+      "mobile": "7708172413",
+      "email": "mike732000davis@gmail.com",
+      "username": "FalconMD73",
+      "password": "Password@1234"
+    },
+    {
+      "id": "e0a6",
+      "fname": "Test",
+      "lname": "Test",
+      "mobile": "123456789",
+      "email": "test@gmail.com",
+      "username": "test",
+      "password": "test"
+    },
+    {
+      "id": "f6b7",
+      "fname": "test",
+      "lname": "1",
+      "mobile": "9876543210",
+      "email": "test1@gmail.com",
+      "username": "test1",
+      "password": "test1"
+    }
+  ]
 }

@@ -1,9 +1,10 @@
-import { AppBar, Badge, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material'
+import { AppBar, Avatar, Badge, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material'
 import Menu from '@mui/material/Menu';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import FalconLogo from '../Assets/Images/Falconscamlogo.png'
-import { AccountCircle, AppRegistration, Close, Favorite, Login, MenuSharp, ShoppingCart } from '@mui/icons-material'
+import UserAvatar from '../Assets/Images/FalconAvatar.jpeg'
+import { AccountCircle, AppRegistration, Close, Favorite, Login, Logout, MenuSharp, ShoppingCart } from '@mui/icons-material'
 
 
 export const Navbar = () => {
@@ -34,6 +35,27 @@ export const Navbar = () => {
   const toggleDrawerAcc = (newOpen) => () => {
     setOpenAcc(newOpen);
   };
+  // Account changes while logged in
+  const [loggedIn,setLoggedIn] = useState(false)
+  const handleProfile = () => {
+    navigate('/Profile')
+    setAnchorEl(null)
+  }
+  useEffect(() => {
+    const isLoggedIn =()=>{
+      setLoggedIn(localStorage.getItem('loggedIn') === 'true');
+    };
+    window.addEventListener('storage',isLoggedIn)
+    isLoggedIn()
+    return () => window.removeEventListener('storage',isLoggedIn)    
+  },[]);
+  const handleLogout = () => {
+    localStorage.removeItem('loggedIn')
+    setLoggedIn(false)
+    setAnchorEl(null)
+    navigate('/')
+  } 
+
   return (
     <AppBar position='static' sx={{backgroundColor:'#190098',height:{lg:"100px",md:"100px",sm:"80px",xs:"80px"}, justifyContent:'center'}}>
       <Toolbar>
@@ -44,22 +66,26 @@ export const Navbar = () => {
             </Box>
             <Box sx={{display:{lg:"block",md:'block',xs:'none',sm:'none'}}}>
               <Tooltip title='Wishlist' arrow>
-                <IconButton size="large" color="inherit">
+                <IconButton size="large" color="inherit" onClick={()=>{loggedIn ? navigate('/Wishlist') : navigate('/Login')}}>
                   <Badge badgeContent={5} color='primary'>
                     <Favorite/>
                   </Badge>
                 </IconButton>
               </Tooltip>
               <Tooltip title='cart' arrow>
-                <IconButton size="large" color="inherit">
+                <IconButton size="large" color="inherit" onClick={()=>{loggedIn ? navigate('/Cart') : navigate('/Login')}}>
                   <Badge badgeContent={4} color='primary'>
                     <ShoppingCart/>
                   </Badge>
                 </IconButton>
               </Tooltip>
-              <Tooltip title='login/signup' arrow>
+              <Tooltip title={loggedIn ? 'Account' : 'Login / Signup'} arrow>
                 <IconButton size="large" color="inherit" onClick={handleClick}>
-                  <AccountCircle/>
+                  {loggedIn ? (
+                    <Avatar alt='user avatar' src={UserAvatar}></Avatar>
+                  ):(
+                    <AccountCircle/>
+                  )}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -68,8 +94,17 @@ export const Navbar = () => {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleCloseLogin}>Login</MenuItem>
-                  <MenuItem onClick={handleCloseSignup}>Signup</MenuItem>
+                  {loggedIn ? (
+                    <>
+                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </>
+                  ):(
+                    <>
+                    <MenuItem onClick={handleCloseLogin}>Login</MenuItem>
+                    <MenuItem onClick={handleCloseSignup}>Signup</MenuItem>
+                    </>
+                  )}
               </Menu>
             </Box>
             <Box sx={{display:{lg:"none",md:'none',xs:'block',sm:'block'}}}>
@@ -87,13 +122,13 @@ export const Navbar = () => {
                   </AppBar>
                   <List sx={{flexGrow:1}}>
                     <ListItem disablePadding>
-                      <ListItemButton>
+                      <ListItemButton onClick={()=>{loggedIn ? navigate('/Wishlist') : navigate('/Login')}}>
                         <ListItemIcon><Favorite/></ListItemIcon>
                         <ListItemText>Wishlist</ListItemText>
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                      <ListItemButton>
+                      <ListItemButton onClick={()=>{loggedIn ? navigate('/Cart') : navigate('/Login')}}>
                         <ListItemIcon><ShoppingCart/></ListItemIcon>
                         <ListItemText>Cart</ListItemText>
                       </ListItemButton>
@@ -102,10 +137,10 @@ export const Navbar = () => {
                   <Divider/>
                   <List>
                     <ListItem disablePadding>
-                      <ListItemButton onClick={toggleDrawerAcc(true)}>
-                        <ListItemIcon><AccountCircle/></ListItemIcon>
-                        <ListItemText>Login / Signup</ListItemText>
-                      </ListItemButton>
+                          <ListItemButton onClick={toggleDrawerAcc(true)}>
+                            <ListItemIcon><AccountCircle/></ListItemIcon>
+                            <ListItemText>{loggedIn ? 'Account' : 'Login / Signup'}</ListItemText>
+                          </ListItemButton>
                     </ListItem>
                   </List>
                 </Box>
@@ -124,17 +159,48 @@ export const Navbar = () => {
                 </AppBar>
                 <List sx={{flexGrow:1}}>
                   <ListItem disablePadding>
-                    <ListItemButton onClick={handleCloseLogin}>
-                      <ListItemIcon><Login/></ListItemIcon>
-                      <ListItemText>Login</ListItemText>
-                    </ListItemButton>
+                      {loggedIn ? (
+                        <>
+                        <ListItemButton onClick={handleProfile}>
+                          <ListItemIcon>
+                            <Avatar alt='user avatar' src={UserAvatar}></Avatar>
+                          </ListItemIcon>
+                          <ListItemText>Profile</ListItemText>
+                        </ListItemButton>
+                        </>
+                      ):(
+                        <>
+                        <ListItemButton onClick={handleCloseLogin}>
+                          <ListItemIcon><Login/></ListItemIcon>
+                          <ListItemText>Login</ListItemText>
+                        </ListItemButton>
+                        </>
+                      )}
                   </ListItem>
-                  <ListItem disablePadding>
+                  {!loggedIn ? (
+                    <ListItem disablePadding>
                     <ListItemButton onClick={handleCloseSignup}>
                       <ListItemIcon><AppRegistration/></ListItemIcon>
                       <ListItemText>Signup</ListItemText>
                     </ListItemButton>
                   </ListItem>
+                  ):(
+                    <></>
+                  )}
+                </List>
+                <List>
+                  {loggedIn ? (
+                    <>
+                    <ListItem disablePadding>
+                      <ListItemButton onClick={handleLogout}>
+                        <ListItemIcon><Logout/></ListItemIcon>
+                        <ListItemText>Logout</ListItemText>
+                      </ListItemButton>
+                    </ListItem>
+                    </>
+                  ):(
+                    <></>
+                  )}
                 </List>
               </Box>
             </Drawer>
