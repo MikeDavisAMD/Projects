@@ -1,5 +1,5 @@
-import { AccountCircle, Close, Password } from '@mui/icons-material'
-import { Alert, Box, Button, Grid, IconButton, Snackbar, TextField } from '@mui/material'
+import { AccountCircle, Close, Password, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Alert, Box, Button, FilledInput, Grid, IconButton, InputAdornment, Snackbar, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import 'animate.css';
 import pic from '../Assets/Images/Pic1.jpeg'
@@ -11,6 +11,9 @@ export const Login = () => {
   const [username,setUsername]=useState('')
   const [password,setPassword]=useState('')
   const [error,setError] = useState('')
+  // password visibility
+  const [showPassword,setShowPassword] = useState(false)
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
   // snackbar
   const [open,setOpen]=useState(false)
   const openSnackbar = () => {
@@ -21,8 +24,10 @@ export const Login = () => {
   }
   const handleLogin = async () => {
     try {
-      const response = await axios.get('http://localhost:7320/users')
-      const users = response.data
+      const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json')
+      const users = Object.entries(response.data).map(([key,val])=>({
+        firebaseKey: key,...val
+      }))
       const userdata = users.find(user=>
         ((user.username===username || user.mobile===username || user.email===username) && 
         (user.password===password)))
@@ -61,7 +66,26 @@ export const Login = () => {
             sx={{marginTop:'10px',width:'60%'}} 
             variant='filled' 
             label='Password'
-            type='password'
+            type={showPassword ? 'text' : 'password'}
+            slots={{
+              input: FilledInput,
+            }}
+            slotProps={{
+              input:{
+                type: showPassword ? 'text' : 'password',
+                endAdornment: (
+                  <InputAdornment>
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge='end'
+                      sx={{height:"80px",width:'50px',color:'inherit'}}
+                    >
+                      {showPassword ? <VisibilityOff/> : <Visibility/>}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }
+            }}
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
             />

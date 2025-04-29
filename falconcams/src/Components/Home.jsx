@@ -71,7 +71,7 @@ export const Home = () => {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Lizard
+                    Cameras
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -99,7 +99,7 @@ export const Home = () => {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Lizard
+                    Camera Parts
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -127,7 +127,7 @@ export const Home = () => {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Lizard
+                    Camera Service
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Lizards are a widespread group of squamate reptiles, with over 6,000

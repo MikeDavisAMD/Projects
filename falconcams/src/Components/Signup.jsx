@@ -1,5 +1,5 @@
-import { AccountCircle, AlternateEmail, Close, Password, Person, PhoneIphone } from '@mui/icons-material'
-import { Alert, Box, Button, Grid, IconButton, Snackbar, TextField } from '@mui/material'
+import { AccountCircle, AlternateEmail, Close, Password, Person, PhoneIphone, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Alert, Box, Button, FilledInput, Grid, IconButton, InputAdornment, Snackbar, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import pic from '../Assets/Images/Pic2.jpeg'
@@ -15,13 +15,16 @@ export const Signup = () => {
   const [password,setPassword] = useState('')
   const [error,setError] = useState('')
   const [registered,setRegister] = useState(false)
+  // password visibility
+  const [showPassword,setShowpassword]=useState(false)
+  const handleClickShowPassword = () => setShowpassword((show)=>!show)
   const clickHandle = () => {
     if(!fname || !lname || !mobile || !email || !username || !password) {
       setError('Please enter all the fields')
       openSnackbar()
       return
     }
-    axios.post("http://localhost:7320/users",{
+    axios.post("https://falconcams-default-rtdb.firebaseio.com/users.json",{
       fname:fname,
       lname:lname,
       mobile:mobile,
@@ -116,7 +119,26 @@ export const Signup = () => {
             sx={{marginTop:'10px',width:'60%'}} 
             variant='filled' 
             label='Enter new Password'
-            type='password'
+            type={showPassword ? 'text' :'password'}
+            slots={{
+              input:FilledInput
+            }}
+            slotProps={{
+              input: {
+                type: showPassword ? 'text' : 'password',
+                endAdornment:(
+                  <InputAdornment>
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge='end'
+                      sx={{height:"80px",width:'50px',color:'inherit'}}
+                    >
+                      {showPassword ? <VisibilityOff/> : <Visibility/>}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }
+            }}
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
             />
