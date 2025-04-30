@@ -1,11 +1,37 @@
 import { Add, AddCircle, Delete, Remove } from "@mui/icons-material"
-import {   Box, Button, Card, CardContent, CircularProgress, Dialog, DialogTitle, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material"
+import { Box, Button, Card, CardContent, CircularProgress, Dialog, DialogTitle, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, TextareaAutosize, Typography } from "@mui/material"
 import axios from "axios"
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 
 export const Cart = () => {
   const navigate = useNavigate()
+  // Add an address to the json file
+  const updateAddr = async (newAddr) => {
+    try {
+      const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
+      const users = res.data
+      let userKeyToUpdate = null
+      for (const key in users) {
+        const user = users[key];
+        if(user.username===username || user.mobile===username || user.mail===username){
+          userKeyToUpdate = key;
+          break
+        }
+      }
+      if (userKeyToUpdate) {
+        const existingAddress = users[userKeyToUpdate].address || []
+        const updatedAddress = Array.isArray(existingAddress) ? [...existingAddress,newAddr] : [existingAddress,newAddr]
+        await axios.patch(`https://falconcams-default-rtdb.firebaseio.com/users/${userKeyToUpdate}.json`,{
+          address: updatedAddress
+        })
+        setAddr(updatedAddress)
+        setSelectedAddress(newAddr)
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
   // for address
   const [address,setAddr]=useState('')
   const [loadAddr,setloadaddr]=useState(false)
@@ -32,10 +58,18 @@ export const Cart = () => {
     }
     fetchAddress()
   },[username])
+  // modal for adding address
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
   // for change dialog
   function AddressDialog({ open, onClose, address }) {
-    const handleSelect = (selectedAddress) => {
-      onClose(selectedAddress);
+    const [newAddr,setnewAddress] = useState('')
+    const handleSelect = () => {
+      if (newAddr.trim()) {
+        onClose(newAddr.trim())
+        setnewAddress('')
+      }
     };
     return (
       <Dialog onClose={() => onClose(null)} open={open}>
@@ -52,7 +86,7 @@ export const Cart = () => {
               <ListItemText primary="No Address Available" />
             </ListItem>
           )}
-          <ListItemButton>
+          <ListItemButton onClick={handleOpenModal}>
             <ListItemIcon><AddCircle/></ListItemIcon>
             <ListItemText>Add new Address</ListItemText>
           </ListItemButton>
@@ -70,7 +104,7 @@ export const Cart = () => {
 
   const handleClose = (value) => {
     if (value) {
-      setSelectedAddress(value);
+      updateAddr(value);
     }
     setDialogOpen(false);
   };
@@ -186,6 +220,31 @@ export const Cart = () => {
               </Typography>
             </Link>
             <AddressDialog open={dialogOpen} onClose={handleClose} address={address}/>
+            <Modal
+              open={openModal}
+              onClose={handleCloseModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={{
+                position:'absolute',
+                top:'50%',left:'50%',transform:'translate(-50%, -50%)',
+                width:{lg:400,md:400,sm:400,xs:250},
+                bgcolor: 'background.paper',
+                border: '2px solid #03A3FF',
+                borderRadius:'12px',
+                boxShadow: 24,p: 4,
+              }}>
+                <Box sx={{display:'flex',flexDirection:'column'}}>
+                  <TextareaAutosize 
+                    aria-label="minimum height"
+                    minRows={5}
+                    placeholder="Enter new Address"
+                  />
+                  <Button variant="contained">Add new address</Button>
+                </Box>
+              </Box>
+            </Modal>
           </CardContent>
           <CardContent>
             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
