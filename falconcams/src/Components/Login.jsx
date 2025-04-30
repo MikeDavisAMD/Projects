@@ -29,10 +29,11 @@ export const Login = () => {
         firebaseKey: key,...val
       }))
       const userdata = users.find(user=>
-        ((user.username===username || user.mobile===username || user.email===username) && 
+        ((user.username===username || user.mobile===username || user.mail===username) && 
         (user.password===password)))
       if(userdata){
         localStorage.setItem('loggedIn','true')
+        localStorage.setItem('username',username)
         navigate('/')
         window.dispatchEvent(new Event('storage'));
         openSnackbar()

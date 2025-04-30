@@ -1,22 +1,72 @@
-import { AppBar, Box, Button, Card, CardActions, CardContent, CardMedia, FormControl, Grid, IconButton, MenuItem, Pagination, Select, TextField, Toolbar, Typography } from '@mui/material'
-import { AddCircle, RemoveCircle, } from '@mui/icons-material'
+import { Alert, AppBar, Box, Button, Card, CardActions, CardContent, CardMedia, FormControl, Grid, IconButton, MenuItem, Pagination, Select, Snackbar, TextField, Toolbar, Typography } from '@mui/material'
+import { Close, Favorite } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export const Parts = () => {
   const [data,setData] = useState([])
-  // for quantity
-  const [quantity,setQuantity] = useState({})
-  const handleQuantityChange = (id, change) => {
-    setQuantity(prevQuantities => {
-      const currentQuantity = prevQuantities[id] || 1;
-      const newQuantity = currentQuantity + change;
-      return {
-        ...prevQuantities,
-        [id]: Math.max(newQuantity, 1), // Prevent quantity from going below 1
-      };
-    });
-  };
+  // snackbar
+  const [open,setOpen]=useState(false)
+  const openSnackbar = () => {
+    setOpen(true)
+  }
+  const closeSnackbar = () => {
+    setOpen(false)
+  }
+  // add to wishlist
+  const [error,setError]=useState('')
+  const [success,setSuccess]=useState('')
+  const [wishlist,setWishlist]=useState([])
+  const addWishlist = async (itemwithkey) => {
+    const {firebaseKey,...items} = itemwithkey
+    const duplicate = wishlist.some(w => w.id===items.id)
+    if(duplicate){
+      setError("Already added to wishlist")
+      openSnackbar()
+      return
+    }
+    const updatedWishlist = [...wishlist,items]
+    setWishlist(updatedWishlist)
+    localStorage.setItem('wishlist',updatedWishlist.length)
+    window.dispatchEvent(new Event('storage'))
+    try {
+      await axios.post("https://falconcams-default-rtdb.firebaseio.com/wishlist.json",items)
+      setError('')
+      setSuccess('Added to wishlist')
+      openSnackbar()
+    } catch (error) {
+      console.error(error.message)
+      setError(error.message)
+      setSuccess('')
+      openSnackbar()
+    }
+  }
+  // add to cart
+  const [cart,setCart]=useState([])
+  const addCart = async (itemwithkey) => {
+    const {firebaseKey,...items} = itemwithkey
+    const duplicate = cart.some(w => w.id===items.id)
+    if(duplicate){
+      setError("Already added to cart")
+      openSnackbar()
+      return
+    }
+    const updatedCart = [...cart,items]
+    setCart(updatedCart)
+    localStorage.setItem('cart',updatedCart.length)
+    window.dispatchEvent(new Event('storage'))
+    try {
+      await axios.post("https://falconcams-default-rtdb.firebaseio.com/cart.json",items)
+      setError('')
+      setSuccess('Added to cart')
+      openSnackbar()
+    } catch (error) {
+      console.error(error.message)
+      setError(error.message)
+      setSuccess('')
+      openSnackbar()
+    }
+  }
   // pagination navigation
   const [page,setPage] = useState(1)
   const fetchData = async () => {
@@ -90,7 +140,7 @@ export const Parts = () => {
       {currentItems.map((data,index)=>(
         <Grid size={{lg:3,md:3,sm:6,xs:12}} key={index}>
           <Box sx={{padding:'20px',background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)',
-            height:'440px'}}>
+            height:'380px'}}>
             <Card sx={{ maxWidth: 280 }}>
               <CardMedia
                 sx={{ height: 140 }}
@@ -108,19 +158,16 @@ export const Parts = () => {
               </CardContent>
               <CardContent sx={{margin:0,padding:0}}>
                 <Typography variant="h6" component="div" sx={{textAlign:'center'}}>
-                  &#8377; {data.price * (quantity[data.id] || 1)}
+                  &#8377; {data.price}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Box sx={{display:'flex',justifyContent:'center',width:'100%'}}>
-                  <IconButton color='primary' onClick={()=>handleQuantityChange(data.id,-1)}><RemoveCircle/></IconButton>
-                  <Box sx={{padding:'10px'}}>{quantity[data.id] || 1}</Box>
-                  <IconButton color='primary' onClick={()=>handleQuantityChange(data.id,1)}><AddCircle/></IconButton>
-                </Box>
-              </CardActions>
               <CardActions sx={{display:'flex',justifyContent:'center'}}>
-                <Button variant='contained' size="small">Cart</Button>
-                <Button variant='contained' size="small">Wishlist</Button>
+                <Button variant='contained' size="small" onClick={()=>addCart(data)}>
+                  Add to Cart
+                </Button>
+                <IconButton size="small" onClick={()=>addWishlist(data)}>
+                  <Favorite color={wishlist.some(w => w.id === data.id) ? 'primary' : 'inherit'}/>
+                </IconButton>
               </CardActions>
             </Card>
           </Box>
@@ -131,6 +178,16 @@ export const Parts = () => {
             <Pagination count={Math.ceil(filteredItems.length/itemsPerPage)} color="primary" page={page} onChange={handleChangepage}/>
           </Box>
       </Grid>
+      <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
+        action={
+          <IconButton size="small" aria-label="close" color='inherit' onClick={closeSnackbar}>
+            <Close fontSize='small'/>
+          </IconButton>
+        }>
+        <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}>
+          {error || success}
+        </Alert>
+      </Snackbar>
     </Grid>
   )
 }

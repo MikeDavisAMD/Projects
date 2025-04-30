@@ -9,6 +9,28 @@ import { AccountCircle, AppRegistration, Close, Favorite, Login, Logout, MenuSha
 
 export const Navbar = () => {
   const navigate = useNavigate()
+  // wishlist
+  const [wishlist,setWishlist] = useState(localStorage.getItem('wishlist') || 0)
+  useEffect(()=>{
+    const updateWishlistCount = () => {
+      const wishlistCount = localStorage.getItem('wishlist') || 0
+      setWishlist(Number(wishlistCount))
+    }
+    window.addEventListener('storage',updateWishlistCount)
+    updateWishlistCount()
+    return () => window.removeEventListener('storage',updateWishlistCount) 
+  },[])
+  // cart
+  const [cart,setCart] = useState(localStorage.getItem('cart') || 0)
+  useEffect(()=>{
+    const updateCartCount = () => {
+      const cartCount = localStorage.getItem('cart') || 0
+      setCart(Number(cartCount))
+    }
+    window.addEventListener('storage',updateCartCount)
+    updateCartCount()
+    return () => window.removeEventListener('storage',updateCartCount) 
+  },[])
   // for account button
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl);
@@ -51,6 +73,7 @@ export const Navbar = () => {
   },[]);
   const handleLogout = () => {
     localStorage.removeItem('loggedIn')
+    localStorage.removeItem('username')
     setLoggedIn(false)
     setAnchorEl(null)
     navigate('/')
@@ -59,7 +82,7 @@ export const Navbar = () => {
   return (
     <AppBar position='static' sx={{backgroundColor:'#190098',height:{lg:"100px",md:"100px",sm:"80px",xs:"80px"}, justifyContent:'center'}}>
       <Toolbar>
-            <Box sx={{color:'white',margin:'0px', width:{lg:'85%',md:'85%',sm:'90%',xs:'80%'}}}>
+            <Box sx={{color:'white',margin:'0px', width:{lg:'85%',md:'80%',sm:'90%',xs:'80%'}}}>
               <Link to={'/'} style={{textDecoration:'none',WebkitTapHighlightColor: 'transparent'}}>
                 <Box component='img' src={FalconLogo} alt='Falcon cams logo' sx={{height:{lg:'180px',md:'180px',sm:'130px',xs:'130px'}}}></Box>
               </Link>
@@ -67,14 +90,14 @@ export const Navbar = () => {
             <Box sx={{display:{lg:"block",md:'block',xs:'none',sm:'none'}}}>
               <Tooltip title='Wishlist' arrow>
                 <IconButton size="large" color="inherit" onClick={()=>{loggedIn ? navigate('/Wishlist') : navigate('/Login')}}>
-                  <Badge badgeContent={5} color='primary'>
+                  <Badge badgeContent={wishlist} color='primary'>
                     <Favorite/>
                   </Badge>
                 </IconButton>
               </Tooltip>
               <Tooltip title='cart' arrow>
                 <IconButton size="large" color="inherit" onClick={()=>{loggedIn ? navigate('/Cart') : navigate('/Login')}}>
-                  <Badge badgeContent={4} color='primary'>
+                  <Badge badgeContent={cart} color='primary'>
                     <ShoppingCart/>
                   </Badge>
                 </IconButton>
