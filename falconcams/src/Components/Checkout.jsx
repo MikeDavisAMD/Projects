@@ -1,8 +1,12 @@
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Grid } from '@mui/material'
 import React from 'react'
 
 export const Checkout = () => {
   return (
-    <CircularProgress/>
+    <Grid container>
+        <Grid size={12}>
+            <CircularProgress/>
+        </Grid>
+    </Grid>
   )
 }

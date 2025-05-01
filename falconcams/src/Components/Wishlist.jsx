@@ -1,9 +1,47 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Pagination, Typography } from '@mui/material'
+import { Alert, Box, Card, CardActions, CardContent, CardMedia, Grid, IconButton, Pagination, Snackbar, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { AddShoppingCart, Close, Delete, } from '@mui/icons-material'
 
 export const Wishlist = () => {
   const [data,setData] = useState([])
+  // snackbar
+  const [open,setOpen]=useState(false)
+  const openSnackbar = () => {
+    setOpen(true)
+  }
+  const closeSnackbar = () => {
+    setOpen(false)
+  }
+  // add to cart
+  const [error,setError] = useState('')
+  const [success,setSuccess]=useState('')
+  const [cart,setCart]=useState([])
+  const addCart = async (itemwithkey) => {
+    const {firebaseKey,...items} = itemwithkey
+    const duplicate = cart.some(w => w.id===items.id)
+    if(duplicate){
+      setError("Already added to cart")
+      openSnackbar()
+      return
+    }
+    const updatedCart = [...cart,items]
+    setCart(updatedCart)
+    localStorage.setItem('cart',updatedCart.length)
+    window.dispatchEvent(new Event('storage'))
+    try {
+      await axios.post("https://falconcams-default-rtdb.firebaseio.com/cart.json",items)
+      setError('')
+      setSuccess('Added to cart')
+      openSnackbar()
+      removeItem(firebaseKey)
+    } catch (error) {
+      console.error(error.message)
+      setError(error.message)
+      setSuccess('')
+      openSnackbar()
+    }
+  }
   // pagination navigation
   const [page,setPage] = useState(1)
   const fetchData = async () => {
@@ -23,10 +61,12 @@ export const Wishlist = () => {
   const removeItem = (key) =>{
     axios.delete(`https://falconcams-default-rtdb.firebaseio.com/wishlist/${key}.json`)
     .then(()=>{
-      console.log("deleted")
       fetchData()
     })
-    .catch(err => console.error(err.message))
+    .catch(err => {
+      console.error(err.message)
+      setError(err.message)
+    })
   }
   useEffect(()=>{
     fetchData()
@@ -67,11 +107,12 @@ export const Wishlist = () => {
                 </Typography>
               </CardContent>
               <CardActions sx={{display:'flex',justifyContent:'center'}}>
-                <Button variant='contained' size="small">Cart</Button>
-                <Button variant='contained' size='small' onClick={()=>{
-                  removeItem(data.firebaseKey)}}>
-                  Remove
-                </Button>
+                <IconButton onClick={()=>addCart(data)}>
+                  <AddShoppingCart color='primary'/>
+                </IconButton>
+                <IconButton onClick={()=>removeItem(data.firebaseKey)}>
+                  <Delete color='primary'/>
+                </IconButton>
               </CardActions>
             </Card>
           </Box>
@@ -82,6 +123,16 @@ export const Wishlist = () => {
             <Pagination count={Math.ceil(data.length/itemsPerPage)} color="primary" page={page} onChange={handleChangepage}/>
           </Box>
       </Grid>
+      <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
+      action={
+        <IconButton size="small" aria-label="close" color='inherit' onClick={closeSnackbar}>
+          <Close fontSize='small'/>
+        </IconButton>
+      }>
+        <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}>
+          {error || success}
+        </Alert>
+      </Snackbar>
     </Grid>
   )
 }

@@ -1,123 +1,112 @@
-import { Add, AddCircle, Delete, Remove } from "@mui/icons-material"
-import { Box, Button, Card, CardContent, CircularProgress, Dialog, DialogTitle, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, TextareaAutosize, Typography } from "@mui/material"
+import { Add, Delete, Place, Remove } from "@mui/icons-material"
+import { Avatar, Box, Button, Card, CardContent, CircularProgress, Dialog, DialogTitle, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Modal, TextareaAutosize, Typography } from "@mui/material"
 import axios from "axios"
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
+import PropTypes from 'prop-types';
+import { blue } from '@mui/material/colors'; 
+import { green } from '@mui/material/colors';
+
+function SimpleDialog(props) {
+  const { onClose, selectedValue, open, onAddClick, addresses } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Select Delivery Address</DialogTitle>
+      <List sx={{ pt: 0 }}>
+        {addresses.length===0 ? (
+          <ListItem>
+            <ListItemText primary='No Address found'/>
+          </ListItem>
+        ):(
+          addresses.map((Address) => (
+            <ListItem disablePadding key={Address}>
+              <ListItemButton onClick={() => handleListItemClick(Address)}>
+                <ListItemAvatar>
+                  <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                    <Place/>
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={Address} />
+              </ListItemButton>
+            </ListItem>
+          ))
+        )}
+        <ListItem disablePadding>
+          <ListItemButton
+            autoFocus
+            onClick={onAddClick}
+          >
+            <ListItemAvatar>
+              <Avatar>
+                <Add />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="Add Address" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+  onAddClick: PropTypes.func.isRequired,
+  addresses: PropTypes.array.isRequired,
+};
 
 export const Cart = () => {
   const navigate = useNavigate()
-  // Add an address to the json file
-  const updateAddr = async (newAddr) => {
-    try {
-      const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
-      const users = res.data
-      let userKeyToUpdate = null
-      for (const key in users) {
-        const user = users[key];
-        if(user.username===username || user.mobile===username || user.mail===username){
-          userKeyToUpdate = key;
-          break
-        }
-      }
-      if (userKeyToUpdate) {
-        const existingAddress = users[userKeyToUpdate].address || []
-        const updatedAddress = Array.isArray(existingAddress) ? [...existingAddress,newAddr] : [existingAddress,newAddr]
-        await axios.patch(`https://falconcams-default-rtdb.firebaseio.com/users/${userKeyToUpdate}.json`,{
-          address: updatedAddress
-        })
-        setAddr(updatedAddress)
-        setSelectedAddress(newAddr)
-      }
-    } catch (error) {
-      console.error(error.message)
+  // modal for adding address
+  const [newAddAddr,setNewAddAddr]=useState('')
+  const [addresses,setAddresses]=useState([])
+  const handleAddAddress = async () =>{
+    if (newAddAddr.trim()) {
+      await address(newAddAddr)
+      setNewAddAddr('')
+      await fetchAddresses()
+      handleCloseModal()
+      handleClose()
     }
   }
-  // for address
-  const [address,setAddr]=useState('')
-  const [loadAddr,setloadaddr]=useState(false)
-  const username = localStorage.getItem('username')
-  useEffect(()=>{
-    const fetchAddress = async () => {
-      if(!username) return
-      setloadaddr(true)
-      try {
-        const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
-        const users = res.data
-        for (const key in users){
-          if(users[key].username===username || users[key].mobile===username || users[key].mail===username){
-            setAddr(Array.isArray(users[key].address) ? users[key].address : [users[key].address || 'No Address found']);
-            setSelectedAddress(Array.isArray(users[key].address) ? users[key].address[0] : users[key].address);
-            break
-          }
-        }
-      } catch (error) {
-        console.error(error.message)
-      } finally {
-        setloadaddr(false)
-      }
-    }
-    fetchAddress()
-  },[username])
-  // modal for adding address
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-  // for change dialog
-  function AddressDialog({ open, onClose, address }) {
-    const [newAddr,setnewAddress] = useState('')
-    const handleSelect = () => {
-      if (newAddr.trim()) {
-        onClose(newAddr.trim())
-        setnewAddress('')
-      }
-    };
-    return (
-      <Dialog onClose={() => onClose(null)} open={open}>
-        <DialogTitle>Select an address</DialogTitle>
-        <List>
-          {address && address.length > 0 ? (
-            address.map((addr, index) => (
-              <ListItem button onClick={() => handleSelect(addr)} key={index}>
-                <ListItemText primary={addr} />
-              </ListItem>
-            ))
-          ) : (
-            <ListItem>
-              <ListItemText primary="No Address Available" />
-            </ListItem>
-          )}
-          <ListItemButton onClick={handleOpenModal}>
-            <ListItemIcon><AddCircle/></ListItemIcon>
-            <ListItemText>Add new Address</ListItemText>
-          </ListItemButton>
-        </List>
-      </Dialog>
-    );
-  }
-  
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState('');
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  };
+  const [value,setValue] = useState([])
+  // Opening Dialog
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(addresses[1]);
 
-  const handleOpen = () => {
-    setDialogOpen(true);
+  const handleClickOpen = () => {
+    setOpen(true);
   };
 
   const handleClose = (value) => {
-    if (value) {
-      updateAddr(value);
-    }
-    setDialogOpen(false);
+    setOpen(false);
+    setSelectedValue(value);
   };
-  const [value,setValue] = useState([])
   // for quantity
   const [quantity,setQuantity] = useState({})
-  const handleQuantityChange = (id, change) => {
+  const handleQuantityChange = (firebaseKey, change) => {
     setQuantity(prevQuantities => {
-      const currentQuantity = prevQuantities[id] || 1;
+      const currentQuantity = prevQuantities[firebaseKey] || 1;
       const newQuantity = currentQuantity + change;
       return {
         ...prevQuantities,
-        [id]: Math.max(newQuantity, 1), // Prevent quantity from going below 1
+        [firebaseKey]: Math.max(newQuantity, 1), // Prevent quantity from going below 1
       };
     });
   };
@@ -134,7 +123,6 @@ export const Cart = () => {
     } catch (error) {
       console.error(error.message)
     }
-    setloadaddr(false)
   }
   const removeItem = (key) => {
     axios.delete(`https://falconcams-default-rtdb.firebaseio.com/cart/${key}.json`)
@@ -144,9 +132,79 @@ export const Cart = () => {
       console.error(err.message)
     })
   }
+  const fetchAddresses = async () => {
+    try {
+      const username = localStorage.getItem('username')
+      const res=await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
+      const users = Object.entries(res.data).map(([key,val])=>({
+        firebaseKey: key,...val
+      }))
+      const userdata = users.find(user => user.username===username || user.mobile===username || user.mail===username)
+      const userAddresses = userdata?.address || []
+      setAddresses(userAddresses)
+      setSelectedValue(userAddresses[0] || '')
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+  const address = async (newAddress) => {
+    try {
+      const username = localStorage.getItem('username')
+      const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
+      const users = Object.entries(res.data).map(([key,val])=>({
+        firebaseKey: key,...val
+      }))
+      const userdata = users.find(user => user.username===username || user.mobile===username || user.mail===username)
+      const firebaseKey = userdata.firebaseKey
+      const currentAddresses = Array.isArray(userdata.address) ? userdata.address : [];
+      const updatedAddresses = [...currentAddresses, newAddress];
+      return axios.patch(`https://falconcams-default-rtdb.firebaseio.com/users/${firebaseKey}.json`,{
+        address: updatedAddresses
+      })
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
   useEffect(()=>{
     fetchData();
+    fetchAddresses();
   },[])
+  // price updation
+  const totalPrice = value.reduce((acc,item)=>{
+    const qty = quantity[item.firebaseKey] || 1
+    return acc + (item.price * qty)
+  },0) 
+  // button loading navigation
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const timer = React.useRef(undefined);
+
+  const buttonSx = {
+    ...(success && {
+      bgcolor: green[500],
+      '&:hover': {
+        bgcolor: green[700],
+      },
+    }),
+  };
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+      timer.current = setTimeout(() => {
+        setSuccess(true);
+        setLoading(false);
+        navigate('/Checkout')
+      }, 2000);
+    }
+  };
   return (
     <Grid container sx={{background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)'}}>
       <Grid size={12}>
@@ -179,9 +237,9 @@ export const Cart = () => {
                   </td>
                   <td style={{borderBottom:'1px solid black'}}>
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                      <Button color="primary" onClick={()=>handleQuantityChange(data.id,1)}><Add/></Button>
-                      <Box>{quantity[data.id] || 1}</Box>
-                      <Button color="primary" onClick={()=>handleQuantityChange(data.id,-1)}><Remove/></Button>
+                      <Button color="primary" onClick={()=>handleQuantityChange(data.firebaseKey,1)}><Add/></Button>
+                      <Box>{quantity[data.firebaseKey] || 1}</Box>
+                      <Button color="primary" onClick={()=>handleQuantityChange(data.firebaseKey,-1)}><Remove/></Button>
                     </Box>
                   </td>
                   <td style={{borderBottom:'1px solid black'}}>
@@ -212,14 +270,20 @@ export const Cart = () => {
               Delivery Address
             </Typography>
             <Typography variant="body2">
-              {loadAddr ? <CircularProgress size={24} /> : selectedAddress || 'No Address Available'}
+              {addresses.length===0 ? "No address available" : selectedValue}
             </Typography>
-            <Link style={{textDecoration:'none'}} onClick={handleOpen}>
+            <Link style={{textDecoration:'none'}} onClick={handleClickOpen}>
               <Typography variant="body2">
                 change
               </Typography>
             </Link>
-            <AddressDialog open={dialogOpen} onClose={handleClose} address={address}/>
+            <SimpleDialog
+              selectedValue={selectedValue}
+              open={open}
+              onClose={handleClose}
+              onAddClick={handleOpenModal}
+              addresses={addresses}
+            />
             <Modal
               open={openModal}
               onClose={handleCloseModal}
@@ -240,8 +304,15 @@ export const Cart = () => {
                     aria-label="minimum height"
                     minRows={5}
                     placeholder="Enter new Address"
+                    value={newAddAddr}
+                    onChange={(e)=>setNewAddAddr(e.target.value)}
                   />
-                  <Button variant="contained">Add new address</Button>
+                  <Button 
+                  variant="contained"
+                  onClick={handleAddAddress}
+                  >
+                    Add new address
+                  </Button>
                 </Box>
               </Box>
             </Modal>
@@ -252,18 +323,10 @@ export const Cart = () => {
             </Typography>
             <Box sx={{display:'flex'}}>
               <Typography width='80%' variant="body2">
-                GST:
-              </Typography>
-              <Typography variant="body2">
-                18%
-              </Typography>
-            </Box>
-            <Box sx={{display:'flex'}}>
-              <Typography width='80%' variant="body2">
                 CGST:
               </Typography>
               <Typography variant="body2">
-                9%
+                {totalPrice*(9/100)}
               </Typography>
             </Box>
             <Box sx={{display:'flex'}}>
@@ -271,7 +334,15 @@ export const Cart = () => {
                 SGST:
               </Typography>
               <Typography variant="body2">
-                9%
+                {totalPrice*(9/100)}
+              </Typography>
+            </Box>
+            <Box sx={{display:'flex'}}>
+              <Typography width='80%' variant="body2">
+                GST:
+              </Typography>
+              <Typography variant="body2">
+                {totalPrice*(18/100)}
               </Typography>
             </Box>
           </CardContent>
@@ -282,13 +353,31 @@ export const Cart = () => {
                 Total Price:
               </Typography>
               <Typography variant="h5" component="div">
-                &#8377; 20,000
+                &#8377; {totalPrice + (totalPrice*(18/100))}
               </Typography>
             </Box>
           </CardContent>
           <CardContent>
-            <Box sx={{display:'flex',justifyContent:'center'}}>
-              <Button variant="contained" onClick={()=>navigate('/Checkout')}>Proceed to Checkout</Button>
+            <Box sx={{display:'flex',justifyContent:'center',position:'relative'}}>
+              <Button variant="contained"
+                sx={buttonSx}
+                disabled={loading}
+                onClick={handleButtonClick}>
+                Proceed to Checkout
+              </Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    color: green[500],
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                  }}
+                />
+              )}
             </Box>
           </CardContent>
         </Card>
