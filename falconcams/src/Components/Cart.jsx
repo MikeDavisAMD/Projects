@@ -323,7 +323,7 @@ export const Cart = () => {
             </Typography>
             <Box sx={{display:'flex'}}>
               <Typography width='80%' variant="body2">
-                CGST:
+                CGST (9%):
               </Typography>
               <Typography variant="body2">
                 {totalPrice*(9/100)}
@@ -331,7 +331,7 @@ export const Cart = () => {
             </Box>
             <Box sx={{display:'flex'}}>
               <Typography width='80%' variant="body2">
-                SGST:
+                SGST (9%):
               </Typography>
               <Typography variant="body2">
                 {totalPrice*(9/100)}
@@ -339,7 +339,7 @@ export const Cart = () => {
             </Box>
             <Box sx={{display:'flex'}}>
               <Typography width='80%' variant="body2">
-                GST:
+                GST (CGST+SGST):
               </Typography>
               <Typography variant="body2">
                 {totalPrice*(18/100)}
