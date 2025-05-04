@@ -69,7 +69,15 @@ export const Navbar = () => {
     };
     window.addEventListener('storage',isLoggedIn)
     isLoggedIn()
-    return () => window.removeEventListener('storage',isLoggedIn)    
+    const handleBeforeUnload = () => {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('username');
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () =>{ 
+      window.removeEventListener('storage',isLoggedIn) 
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    }   
   },[]);
   const handleLogout = () => {
     localStorage.removeItem('loggedIn')
