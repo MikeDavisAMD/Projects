@@ -18,6 +18,12 @@ export const Wishlist = () => {
   const [success,setSuccess]=useState('')
   const [cart,setCart]=useState([])
   const addCart = async (itemwithkey) => {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      setError('User not logged in');
+      openSnackbar();
+      return;
+    }
     const {firebaseKey,...items} = itemwithkey
     const duplicate = cart.some(w => w.id===items.id)
     if(duplicate){
@@ -27,10 +33,19 @@ export const Wishlist = () => {
     }
     const updatedCart = [...cart,items]
     setCart(updatedCart)
-    localStorage.setItem('cart',updatedCart.length)
+    let cartCount = parseInt(localStorage.getItem('cart'), 10) || 0;
+    localStorage.setItem('cart',cartCount+1)
     window.dispatchEvent(new Event('storage'))
     try {
-      await axios.post("https://falconcams-default-rtdb.firebaseio.com/cart.json",items)
+      const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
+      const users = response.data;
+      const userKey = Object.keys(users).find(key => ((users[key].username || users[key].mobile || users[key].email) === username));
+      if (!userKey) {
+        setError('User not found in database');
+        openSnackbar();
+        return;
+      }
+      await axios.post(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/cart.json`,items)
       setError('')
       setSuccess('Added to cart')
       openSnackbar()
@@ -45,29 +60,52 @@ export const Wishlist = () => {
   // pagination navigation
   const [page,setPage] = useState(1)
   const fetchData = async () => {
+    const username = localStorage.getItem('username')
+    if (!username) {
+      return;
+    }
     try {
-      const response = await axios.get("https://falconcams-default-rtdb.firebaseio.com/wishlist.json")
-      const data = Object.entries(response.data || {}).map(([key,val])=>({
-        firebaseKey: key,...val
+      const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
+      const users = response.data;
+      const userKey = Object.keys(users).find(key => ((users[key].username || users[key].mobile || users[key].email) === username));
+      if (!userKey) {
+        return;
+      }
+      const wishlistRes = await axios.get(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/wishlist.json`)
+      const data = Object.entries(wishlistRes.data || {}).map(([key,val])=>({
+        firebaseKey : key, ...val
       }))
       setData(data)
       localStorage.setItem('wishlist',data.length)
       window.dispatchEvent(new Event('storage'))
       console.log(data)
     } catch (error) {
-      console.error(error.response ? error.response.data : error)
+      console.error(error.message)
     }
   }
-  const removeItem = (key) =>{
-    axios.delete(`https://falconcams-default-rtdb.firebaseio.com/wishlist/${key}.json`)
-    .then(()=>{
-      fetchData()
-    })
-    .catch(err => {
-      console.error(err.message)
-      setError(err.message)
-    })
-  }
+  const removeItem = async (key) => {
+      const username = localStorage.getItem('username')
+      if (!username) {
+        return;
+      }
+      try {
+        const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json");
+        const users = Object.entries(res.data).map(([key, val]) => ({
+          firebaseKey: key,
+          ...val
+        }));
+        const userdata = users.find(user => user.username === username || user.mobile === username || user.email === username);
+        const firebaseKey = userdata?.firebaseKey;
+        if (!firebaseKey) {
+          console.error("User not found!");
+          return;
+        }
+        await axios.delete(`https://falconcams-default-rtdb.firebaseio.com/users/${firebaseKey}/wishlist/${key}.json`);
+        await fetchData()
+      } catch (error) {
+        console.error(error.message)
+      }
+    }
   useEffect(()=>{
     fetchData()
   },[])

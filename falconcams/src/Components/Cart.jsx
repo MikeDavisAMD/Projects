@@ -97,6 +97,10 @@ export const Cart = () => {
   const handleClose = (value) => {
     setOpen(false);
     setSelectedValue(value);
+    const index = addresses.indexOf(value)
+    if (index!==-1) {
+      localStorage.setItem('addressIndex',index)
+    }
   };
   // for quantity
   const [quantity,setQuantity] = useState({})
@@ -104,16 +108,29 @@ export const Cart = () => {
     setQuantity(prevQuantities => {
       const currentQuantity = prevQuantities[firebaseKey] || 1;
       const newQuantity = currentQuantity + change;
-      return {
+      const updatedQuantities = {
         ...prevQuantities,
         [firebaseKey]: Math.max(newQuantity, 1), // Prevent quantity from going below 1
       };
+      localStorage.setItem('cartQuantities', JSON.stringify(updatedQuantities));
+      window.dispatchEvent(new Event('storage'))
+      return updatedQuantities
     });
   };
   const fetchData = async () => {
+    const username = localStorage.getItem('username')
+    if (!username) {
+      return;
+    }
     try {
-      const response = await axios.get("https://falconcams-default-rtdb.firebaseio.com/cart.json")
-      const data = Object.entries(response.data || {}).map(([key,val])=>({
+      const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
+      const users = response.data;
+      const userKey = Object.keys(users).find(key => ((users[key].username || users[key].mobile || users[key].email) === username));
+      if (!userKey) {
+        return;
+      }
+      const cartRes = await axios.get(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/cart.json`)
+      const data = Object.entries(cartRes.data || {}).map(([key,val])=>({
         firebaseKey : key, ...val
       }))
       setValue(data)
@@ -124,13 +141,28 @@ export const Cart = () => {
       console.error(error.message)
     }
   }
-  const removeItem = (key) => {
-    axios.delete(`https://falconcams-default-rtdb.firebaseio.com/cart/${key}.json`)
-    .then(()=>{
-      fetchData()
-    }).catch((err)=>{
-      console.error(err.message)
-    })
+  const removeItem = async (key) => {
+    const username = localStorage.getItem('username')
+    if (!username) {
+      return;
+    }
+    try {
+      const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json");
+      const users = Object.entries(res.data).map(([key, val]) => ({
+        firebaseKey: key,
+        ...val
+      }));
+      const userdata = users.find(user => user.username === username || user.mobile === username || user.email === username);
+      const firebaseKey = userdata?.firebaseKey;
+      if (!firebaseKey) {
+        console.error("User not found!");
+        return;
+      }
+      await axios.delete(`https://falconcams-default-rtdb.firebaseio.com/users/${firebaseKey}/cart/${key}.json`);
+      await fetchData()
+    } catch (error) {
+      console.error(error.message)
+    }
   }
   const fetchAddresses = async () => {
     try {
@@ -168,6 +200,10 @@ export const Cart = () => {
   useEffect(()=>{
     fetchData();
     fetchAddresses();
+    const savedQuantities = localStorage.getItem('cartQuantities');
+    if (savedQuantities) {
+      setQuantity(JSON.parse(savedQuantities));
+    }
   },[])
   // price updation
   const totalPrice = value.reduce((acc,item)=>{
@@ -244,7 +280,7 @@ export const Cart = () => {
                   </td>
                   <td style={{borderBottom:'1px solid black'}}>
                     <Typography variant="h6" component="div" sx={{textAlign:'center'}}>
-                      &#8377; {data.price * (quantity[data.id] || 1)}
+                      &#8377; {data.price * (quantity[data.firebaseKey] || 1)}
                     </Typography>
                   </td>
                   <td style={{borderBottom:'1px solid black'}}>

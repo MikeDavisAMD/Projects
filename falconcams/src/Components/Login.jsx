@@ -29,7 +29,7 @@ export const Login = () => {
         firebaseKey: key,...val
       }))
       const userdata = users.find(user=>
-        ((user.username===username || user.mobile===username || user.mail===username) && 
+        ((user.username===username || user.mobile===username || user.email===username) && 
         (user.password===password)))
       if(userdata){
         localStorage.setItem('loggedIn','true')

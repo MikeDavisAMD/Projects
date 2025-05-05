@@ -18,6 +18,12 @@ export const Camera = () => {
   const [success,setSuccess]=useState('')
   const [wishlist,setWishlist]=useState([])
   const addWishlist = async (itemwithkey) => {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      setError('User not logged in');
+      openSnackbar();
+      return;
+    }
     const {firebaseKey,...items} = itemwithkey
     const duplicate = wishlist.some(w => w.id===items.id)
     if(duplicate){
@@ -27,10 +33,19 @@ export const Camera = () => {
     }
     const updatedWishlist = [...wishlist,items]
     setWishlist(updatedWishlist)
-    localStorage.setItem('wishlist',updatedWishlist.length)
+    let wishlistCount = parseInt(localStorage.getItem('wishlist'), 10) || 0;
+    localStorage.setItem('wishlist',wishlistCount+1)
     window.dispatchEvent(new Event('storage'))
     try {
-      await axios.post("https://falconcams-default-rtdb.firebaseio.com/wishlist.json",items)
+      const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
+      const users = response.data;
+      const userKey = Object.keys(users).find(key => ((users[key].username || users[key].mobile || users[key].email) === username));
+      if (!userKey) {
+        setError('User not found in database');
+        openSnackbar();
+        return;
+      }
+      await axios.post(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/wishlist.json`,items)
       setError('')
       setSuccess('Added to wishlist')
       openSnackbar()
@@ -44,6 +59,12 @@ export const Camera = () => {
   // add to cart
   const [cart,setCart]=useState([])
   const addCart = async (itemwithkey) => {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      setError('User not logged in');
+      openSnackbar();
+      return;
+    }
     const {firebaseKey,...items} = itemwithkey
     const duplicate = cart.some(w => w.id===items.id)
     if(duplicate){
@@ -53,10 +74,19 @@ export const Camera = () => {
     }
     const updatedCart = [...cart,items]
     setCart(updatedCart)
-    localStorage.setItem('cart',updatedCart.length)
+    let cartCount = parseInt(localStorage.getItem('cart'), 10) || 0;
+    localStorage.setItem('cart',cartCount+1)
     window.dispatchEvent(new Event('storage'))
     try {
-      await axios.post("https://falconcams-default-rtdb.firebaseio.com/cart.json",items)
+      const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
+      const users = response.data;
+      const userKey = Object.keys(users).find(key => ((users[key].username || users[key].mobile || users[key].email) === username));
+      if (!userKey) {
+        setError('User not found in database');
+        openSnackbar();
+        return;
+      }
+      await axios.post(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/cart.json`,items)
       setError('')
       setSuccess('Added to cart')
       openSnackbar()
