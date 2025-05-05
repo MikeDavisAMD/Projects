@@ -144,7 +144,7 @@ export const Checkout = () => {
         if (!userKey) {
           return;
         }
-        const quantities = JSON.parse(localStorage.getItem('cartQuantities'));
+        const quantities = JSON.parse(localStorage.getItem('cartQuantities')) || 1;
         const cartRes = await axios.get(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/cart.json`)
         const data = Object.entries(cartRes.data || {}).map(([key,val])=>({
           firebaseKey : key, 
