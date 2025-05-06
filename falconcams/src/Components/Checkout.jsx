@@ -1,5 +1,5 @@
 import { ExpandMore } from '@mui/icons-material'
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Backdrop, Box, Button, Card, CardContent, CircularProgress, Divider, Grid, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material'
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Backdrop, Box, Button, Card, CardContent, CircularProgress, Divider, Grid, Step, StepLabel, Stepper, Tab, Tabs, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import successAnimate from '../Assets/Animations/success.gif'
 import { useNavigate } from 'react-router-dom';
@@ -104,7 +104,7 @@ export const Checkout = () => {
           if (userData) {
             setFname(userData.fname)
             setLname(userData.lname)
-            setAddress(userData.address[localStorage.getItem('addressIndex')])
+            setAddress(userData.address[localStorage.getItem('addressIndex')] || userData.address[0])
             setMob(userData.mobile)
             setEmail(userData.email)
           }
@@ -172,6 +172,7 @@ export const Checkout = () => {
     },0) 
     return (
       <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'scroll'}}>
+        <CardContent>
         <table align="center" width='90%'>
           <thead>
             <tr>
@@ -205,6 +206,7 @@ export const Checkout = () => {
           ))}
           </tbody>
         </table>
+        </CardContent>
         <br />
         <Divider/>
         <CardContent>
@@ -276,19 +278,34 @@ export const Checkout = () => {
                 </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
-                Item One
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
+                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                Item Two
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
+                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
-                Item Three
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
+                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={3}>
-                Item four
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
+                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={4}>
-                Item five
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
+                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
             </Box>
           </AccordionDetails>
@@ -310,10 +327,26 @@ export const Checkout = () => {
                 </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
-                Item One
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter card number' sx={{width:'100%'}}/> <br />
+                  <TextField variant='outlined' label='Card holder&#39;s name' sx={{width:'100%'}}/> <br />
+                  <Box sx={{display:'flex',gap:2}}>
+                    <TextField variant='outlined' label='Expiry Date'/>
+                    <TextField variant='outlined' label='CVV'/>
+                  </Box> <br />
+                  <Button variant='contained' sx={{width:'100%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                Item Two
+                <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                  <TextField variant='outlined' label='Enter card number' sx={{width:'100%'}}/> <br />
+                  <TextField variant='outlined' label='Card holder&#39;s name' sx={{width:'100%'}}/> <br />
+                  <Box sx={{display:'flex',gap:2}}>
+                    <TextField variant='outlined' label='Expiry Date'/>
+                    <TextField variant='outlined' label='CVV'/>
+                  </Box> <br />
+                  <Button variant='contained' sx={{width:'100%'}}>Proceed to payment</Button>
+                </Box>
               </CustomTabPanel>
             </Box>
           </AccordionDetails>

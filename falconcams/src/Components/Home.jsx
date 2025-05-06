@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import dslr from '../Assets/Images/Carousel/DSLR.jpg'
 import mlesscamera from '../Assets/Images/Carousel/mirrorless.jpg'
 // Import Swiper React components
@@ -14,6 +14,17 @@ import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const navigate = useNavigate()
+  const [loggedIn,setLoggedIn]=useState(false)
+    useEffect(() => {
+      const isLoggedIn =()=>{
+        setLoggedIn(localStorage.getItem('loggedIn') === 'true');
+      };
+      window.addEventListener('storage',isLoggedIn)
+      isLoggedIn()
+      return () =>{ 
+        window.removeEventListener('storage',isLoggedIn) 
+      }   
+    },[]);
   const slides=[
     {
       title: 'DSLR cameras',
@@ -136,7 +147,7 @@ export const Home = () => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button variant='contained' size="small" color="white" onClick={()=>navigate('/Service')}>
+                <Button variant='contained' size="small" color="white" onClick={()=>(loggedIn ? navigate('/Service') : navigate('/Login'))}>
                   book now
                 </Button>
               </CardActions>

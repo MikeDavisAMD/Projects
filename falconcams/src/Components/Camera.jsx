@@ -5,6 +5,15 @@ import axios from 'axios'
 
 export const Camera = () => {
   const [data,setData] = useState([])
+  useEffect(() => {
+    // Set default values if they don't already exist
+    if (!localStorage.getItem('wishlist')) {
+      localStorage.setItem('wishlist', '0');
+    }
+    if (!localStorage.getItem('cart')) {
+      localStorage.setItem('cart', '0');
+    }
+  }, []);
   // snackbar
   const [open,setOpen]=useState(false)
   const openSnackbar = () => {
