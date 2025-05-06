@@ -24,32 +24,47 @@ export const Signup = () => {
       openSnackbar()
       return
     }
-    axios.post("https://falconcams-default-rtdb.firebaseio.com/users.json",{
-      fname:fname,
-      lname:lname,
-      mobile:mobile,
-      email:email,
-      username:username,
-      password:password
-    })
-    .then(()=>{
-      setFname('')
-      setLname('')
-      setMobile('')
-      setEmail('')
-      setUsername('')
-      setPassword('')
-      setRegister(true)
-      openSnackbar()
-      setTimeout(()=>{
-        localStorage.setItem('loggedIn','true')
-        localStorage.setItem('username',username)
-        navigate('/')
-        window.dispatchEvent(new Event('storage'));
-      },2000)
-    }).catch((error)=>{
-      console.error(error.message)
-      setError(error.message)
+    axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
+    .then(response => {
+      const users = response.data || {}
+      const existingUsers = Object.values(users).some(user => 
+        user.email===email || user.username===username
+      )
+      if (existingUsers) {
+        setError('Username or Email already exists')
+        openSnackbar()
+        return
+      }
+      axios.post("https://falconcams-default-rtdb.firebaseio.com/users.json",{
+        fname:fname,
+        lname:lname,
+        mobile:mobile,
+        email:email,
+        username:username,
+        password:password
+      })
+      .then(()=>{
+        setFname('')
+        setLname('')
+        setMobile('')
+        setEmail('')
+        setUsername('')
+        setPassword('')
+        setRegister(true)
+        openSnackbar()
+        setTimeout(()=>{
+          localStorage.setItem('loggedIn','true')
+          localStorage.setItem('username',username)
+          navigate('/')
+          window.dispatchEvent(new Event('storage'));
+        },2000)
+      }).catch((error)=>{
+        console.error(error.message)
+        setError(error.message)
+        openSnackbar()
+      })
+    }).catch((err)=>{
+      setError("error checking existing users")
       openSnackbar()
     })
   }

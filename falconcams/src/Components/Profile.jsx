@@ -1,8 +1,7 @@
 import { Close, Delete, Edit, Save } from '@mui/icons-material';
-import { Alert, Avatar, Box, Button, Card, CardContent, Grid, IconButton, Snackbar, TextField, } from '@mui/material'
+import { Alert, Avatar, Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Snackbar, TextField, } from '@mui/material'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
   function stringAvatar(name) {
@@ -18,13 +17,17 @@ export const Profile = () => {
     const closeSnackbar = () => {
       setOpen(false)
     }
-  const navigate = useNavigate()
+  // dialog
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
   const username = localStorage.getItem('username')
-  useEffect(()=>{
-    if (!username) {
-      navigate('/login');  // Redirect to login page
-    }
-  },[username,navigate])
   const [error,setError]=useState('')
   const [saved,setSaved]=useState(false)
   const [name,setName]=useState('')
@@ -79,7 +82,7 @@ export const Profile = () => {
       setSaved("Profile Deleted")
       localStorage.removeItem('loggedIn')
       localStorage.removeItem('username')
-      navigate('/')
+      window.location.href='/';
     })
   }
   return (
@@ -145,7 +148,7 @@ export const Profile = () => {
               <Box sx={{display:'flex',justifyContent:'center',gap:2,paddingTop:'25px'}}>
                 {readOnly ? (<Button variant='contained' sx={{backgroundColor:'#190098'}} onClick={edit}><Edit/></Button>):
                 (<Button variant='contained' sx={{backgroundColor:'#190098'}} onClick={save}><Save/></Button>)}
-                <Button variant='contained' sx={{backgroundColor:'#FF0303'}} onClick={()=>del(firebaseKey)}><Delete/></Button>
+                <Button variant='contained' sx={{backgroundColor:'#FF0303'}} onClick={handleClickOpen}><Delete/></Button>
               </Box>
             </CardContent>
           </Card>
@@ -160,6 +163,28 @@ export const Profile = () => {
             </Alert>
           </Snackbar>
         </Box>
+        <Dialog
+        open={openDialog}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm delete account?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete your account? This action is permanent and cannot be undone. 
+            This will permanently remove your account and all associated data. Do you want to proceed?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={()=>del(firebaseKey)} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       </Grid>
     </Grid>
   )
