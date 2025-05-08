@@ -5,7 +5,12 @@ import { Build, Close, Email, Person, PhoneAndroid } from '@mui/icons-material'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const options = ['The Godfather', 'Pulp Fiction'];
+const options = [
+  'Sensor Cleaning', 'Lens Cleaning & calibration','Firmware updates','Shutter Repair/Replacement',
+  'Display Repair/Replacement','Power Issue','Camera Body Damage','Autofocus Repair','Viewfinder issues',
+  'Lens mount issues','Flash/Flash mount issues','Circuit/Ports Repair/Replacement','Water Damage Repair',
+  'Mirror Repair/Replacement','Image quality enhancement','Full service','Used Camera consultancy'
+];
 
 export const Service = () => {
   const username = localStorage.getItem('username')

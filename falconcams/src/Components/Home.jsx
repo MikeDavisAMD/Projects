@@ -1,7 +1,5 @@
 import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import dslr from '../Assets/Images/Carousel/DSLR.jpg'
-import mlesscamera from '../Assets/Images/Carousel/mirrorless.jpg'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
@@ -11,6 +9,10 @@ import 'swiper/css/pagination';
 // Import required modules
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import camera from '../Assets/Images/HomeImages/Cameras.jpg'
+import parts from '../Assets/Images/HomeImages/Parts.jpg'
+import service from '../Assets/Images/HomeImages/Service.jpg'
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -25,18 +27,16 @@ export const Home = () => {
         window.removeEventListener('storage',isLoggedIn) 
       }   
     },[]);
-  const slides=[
-    {
-      title: 'DSLR cameras',
-      img: dslr,
-      desc: 'This is a DSLR camera'
-    },
-    {
-      title: 'Mirrorless DSLR cameras',
-      img: mlesscamera,
-      desc: 'This is a Mirrorless DSLR camera'
+  const [data,setData]=useState([])
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://falconcams-default-rtdb.firebaseio.com/carousel.json")
+      setData(Object.entries(response.data).map(([key,val])=>({firebaseKey:key,...val})))
+    } catch (error) {
+      console.error(error.message)
     }
-  ]
+  }
+  useEffect(()=>{fetchData()},[])
   return (
     <>
     <Grid container>
@@ -46,15 +46,15 @@ export const Home = () => {
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={20}
             slidesPerView={1}
-            loop={true}
+            loop={data.length>1}
             navigation
             pagination={{ clickable: true }}
             autoplay={{ delay: 3000, disableOnInteraction: false }}
           >
-            {slides.map((data,index)=>(
+            {data.map((data,index)=>(
               <SwiperSlide key={index}>
-                <Box sx={{height:{lg:'610px',md:'410px',sm:'410px',xs:'610px', color:'white'}}}>
-                  <img src={data.img} alt="" height='610px' width='100%'/>
+                <Box sx={{height:{lg:'610px',md:'610px',sm:'410px',xs:'610px', color:'white'}}}>
+                  <img src={data.img} alt="Images" height='610px' width='100%'/>
                   <Box sx={{position: 'absolute', bottom: 10, left: 10, width: '50%', background: 'rgba(0,0,0,0.5)', padding: '20px',borderRadius:'10px' }}>
                     <Typography variant='h4'>{data.title}</Typography>
                     <Typography variant='p'>{data.desc}</Typography>
@@ -71,22 +71,22 @@ export const Home = () => {
         </Box>
       </Grid>
       <Grid size={{lg:4,md:4,sm:6,xs:12}}>
-        <Box sx={{height:{lg:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
+        <Box sx={{height:{lg:'340px',md:'380px',sm:'360px',xs:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
             <Card sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
                   height="140"
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  alt="green iguana"
+                  image={camera}
+                  alt="Cameras"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     Cameras
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                    species, ranging across all continents except Antarctica
+                  From beginner-friendly point-and-shoots to professional-grade DSLRs and 4K action cams, 
+                  our collection has something for every photographer.
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -99,22 +99,21 @@ export const Home = () => {
         </Box>
       </Grid>
       <Grid size={{lg:4,md:4,sm:6,xs:12}}>
-        <Box sx={{height:{lg:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
+        <Box sx={{height:{lg:'340px',md:'380px',sm:'360px',xs:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
             <Card sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
                   height="140"
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  alt="green iguana"
+                  image={parts}
+                  alt="camera accessories"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Camera Parts
+                    Accessories
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                    species, ranging across all continents except Antarctica
+                  Our premium selection of camera accessories is designed to elevate your photography and filmmaking experience, that makes best shooting experience.
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -127,13 +126,13 @@ export const Home = () => {
         </Box>
       </Grid>
       <Grid size={{lg:4,md:4,sm:12,xs:12}}>
-        <Box sx={{height:{lg:'340px'},display:{lg:'block',md:'block',sm:'flex',xs:'block'},justifyContent:'center',padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
+        <Box sx={{height:{lg:'340px',md:'380px',sm:'360px',xs:'340px'},display:{lg:'block',md:'block',sm:'flex',xs:'block'},justifyContent:'center',padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
             <Card sx={{width:{lg:'80%',md:'80%',sm:'38%',xs:'80%'},background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
                   height="140"
-                  image="/static/images/cards/contemplative-reptile.jpg"
+                  image={service}
                   alt="green iguana"
                 />
                 <CardContent>
@@ -141,8 +140,8 @@ export const Home = () => {
                     Camera Service
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                    species, ranging across all continents except Antarctica
+                  From expert repairs to sensor cleaning and lens calibration, our certified technicians ensure your equipment performs like new.
+                  We offer upgrade services also.
                   </Typography>
                 </CardContent>
               </CardActionArea>

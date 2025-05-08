@@ -362,7 +362,7 @@ export const Cart = () => {
                 CGST (9%):
               </Typography>
               <Typography variant="body2">
-                {totalPrice*(9/100)}
+                {Math.round(totalPrice*(9/100))}
               </Typography>
             </Box>
             <Box sx={{display:'flex'}}>
@@ -370,7 +370,7 @@ export const Cart = () => {
                 SGST (9%):
               </Typography>
               <Typography variant="body2">
-                {totalPrice*(9/100)}
+                {Math.round(totalPrice*(9/100))}
               </Typography>
             </Box>
             <Box sx={{display:'flex'}}>
@@ -378,7 +378,7 @@ export const Cart = () => {
                 GST (CGST+SGST):
               </Typography>
               <Typography variant="body2">
-                {totalPrice*(18/100)}
+                {Math.round(totalPrice*(18/100))}
               </Typography>
             </Box>
           </CardContent>
@@ -389,7 +389,7 @@ export const Cart = () => {
                 Total Price:
               </Typography>
               <Typography variant="h5" component="div">
-                &#8377; {totalPrice + (totalPrice*(18/100))}
+                &#8377; {Math.round(totalPrice + (totalPrice*(18/100)))}
               </Typography>
             </Box>
           </CardContent>

@@ -128,15 +128,34 @@ export const Wishlist = () => {
               <CardMedia
                 sx={{ height: 140 }}
                 image={data.img}
-                alt="green iguana"
+                alt="Wishlisted"
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div" sx={{textAlign:'center'}}>
+                <Box sx={{
+                  width: '100%',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textAlign: 'center',
+                }}>
+                <Typography gutterBottom variant="h5" component="div" sx={{
+                  display: 'inline-block',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  animation: data.brand.length + data.model.length > 20 ? 'scrollText 15s linear infinite' : 'none',
+                  }}>
                   {data.brand+" "+data.model}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary',textAlign:'center'}}>
-                  Lizards are a widespread group of squamate reptiles, with over 6,000
-                  species, ranging across all continents except Antarctica
+                </Box>
+                <Typography variant="body2" sx={{ 
+                  color: 'text.secondary',
+                  textAlign:'center',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 4,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                  }}>
+                  {data.desc}
                 </Typography>
               </CardContent>
               <CardContent sx={{margin:0,padding:0}}>
