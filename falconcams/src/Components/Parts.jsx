@@ -1,7 +1,19 @@
-import { Alert, AppBar, Box, Button, Card, CardActions, CardContent, CardMedia, FormControl, Grid, IconButton, MenuItem, Pagination, Select, Snackbar, TextField, Toolbar, Typography } from '@mui/material'
+import { Alert, AppBar, Box, Button, Card, CardActions, CardContent, CardMedia, FormControl, Grid, IconButton, MenuItem, Modal, Pagination, Select, Snackbar, TextField, Toolbar, Typography } from '@mui/material'
 import { Close, Favorite } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 export const Parts = () => {
   const [data,setData] = useState([])
@@ -135,6 +147,17 @@ export const Parts = () => {
     setPage(value)
     console.log(event)
   }
+  // Modal for image zooming
+  const [openModal, setOpenModal] = useState(false);
+  const [ModalImg,setModalImg] = useState(null)
+  const handleOpenModal = (img) => {
+    setModalImg(img)
+    setOpenModal(true)
+  };
+  const handleCloseModal = () => {
+    setModalImg(null)
+    setOpenModal(false)
+  };
   return (
     <Grid container>
       <Grid size={12}>
@@ -178,9 +201,10 @@ export const Parts = () => {
             height:'380px'}}>
             <Card sx={{ maxWidth: 280 }}>
               <CardMedia
-                sx={{ height: 140 }}
+                sx={{ height: 140,width:'55%',objectFit:'contain',objectPosition:'center',margin:'0px 55px' }}
                 image={data.img}
                 alt="Accessories"
+                onClick={()=>handleOpenModal(data.img)}
               />
               <CardContent>
                 <Box sx={{
@@ -242,6 +266,17 @@ export const Parts = () => {
           {error || success}
         </Alert>
       </Snackbar>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box component="img" src={ModalImg} alt='Camera Accessories' 
+          sx={{height:{lg:'400px',md:'300px',sm:'200px',xs:'auto'},width:'100%'}}/>
+        </Box>
+      </Modal>
     </Grid>
   )
 }

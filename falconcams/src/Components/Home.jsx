@@ -72,7 +72,7 @@ export const Home = () => {
       </Grid>
       <Grid size={{lg:4,md:4,sm:6,xs:12}}>
         <Box sx={{height:{lg:'340px',md:'380px',sm:'360px',xs:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
-            <Card sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
+            <Card sx={{width:{lg:'80%',md:'80%',sm:'80%',xs:'100%'},background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -100,7 +100,7 @@ export const Home = () => {
       </Grid>
       <Grid size={{lg:4,md:4,sm:6,xs:12}}>
         <Box sx={{height:{lg:'340px',md:'380px',sm:'360px',xs:'340px'},padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
-            <Card sx={{width:'80%',background: 'rgba(0, 153, 254, 0.51)'}}>
+            <Card sx={{width:{lg:'80%',md:'80%',sm:'80%',xs:'100%'},background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -127,7 +127,7 @@ export const Home = () => {
       </Grid>
       <Grid size={{lg:4,md:4,sm:12,xs:12}}>
         <Box sx={{height:{lg:'340px',md:'380px',sm:'360px',xs:'340px'},display:{lg:'block',md:'block',sm:'flex',xs:'block'},justifyContent:'center',padding:'20px',background:'linear-gradient(to bottom,#190098,cyan)'}}>
-            <Card sx={{width:{lg:'80%',md:'80%',sm:'38%',xs:'80%'},background: 'rgba(0, 153, 254, 0.51)'}}>
+            <Card sx={{width:{lg:'80%',md:'80%',sm:'38%',xs:'100%'},background: 'rgba(0, 153, 254, 0.51)'}}>
               <CardActionArea>
                 <CardMedia
                   component="img"
