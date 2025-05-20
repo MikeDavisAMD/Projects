@@ -242,7 +242,7 @@ export const Cart = () => {
     }
   };
   return (
-    <Grid container sx={{background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)'}}>
+    <Grid container sx={{backgroundColor: '#1C1C1C',color:'#FFFFFF'}}>
       <Grid size={12}>
         <Typography variant="h4" sx={{padding:'10px 40px'}}>
           Shopping Cart ({localStorage.getItem('cart')} items)
@@ -250,7 +250,7 @@ export const Cart = () => {
       </Grid>
       <Grid size={{lg:8,md:8,sm:7,xs:12}}>
         <Box>
-          <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'scroll'}}>
+          <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'scroll',backgroundColor: '#2A2A2A',color: '#FFFFFF'}}>
             <table align="center" width='90%'>
               <thead>
                 <tr>
@@ -300,7 +300,7 @@ export const Cart = () => {
         </Box>
       </Grid>
       <Grid size={{lg:4,md:4,sm:5,xs:12}}>
-        <Card sx={{marginLeft:{lg:0,md:0,sm:0,xs:'40px'},marginBottom:'40px',width:{lg:'90%',md:"90%",sm:'85%',xs:'80%'},backgroundColor:'#C1EFFF'}}>
+        <Card sx={{marginLeft:{lg:0,md:0,sm:0,xs:'40px'},marginBottom:'40px',width:{lg:'90%',md:"90%",sm:'85%',xs:'80%'},backgroundColor: '#2A2A2A',color: '#FFFFFF'}}>
           <CardContent>
             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
               Delivery Address

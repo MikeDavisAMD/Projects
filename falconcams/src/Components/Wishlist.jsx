@@ -119,17 +119,19 @@ export const Wishlist = () => {
     console.log(event)
   }
   return (
-    <Grid container>
+    <Grid container sx={{backgroundColor:'#121B2B',color:'#E0E0E0'}}>
       {currentItems.map((data,index)=>(
         <Grid size={{lg:3,md:3,sm:6,xs:12}} key={data.firebaseKey || index}>
-          <Box sx={{padding:'20px',background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)',
+          <Box sx={{padding:'20px',background:'#121B2B',
             height:'380px'}}>
-            <Card sx={{ maxWidth: 280 }}>
+            <Card sx={{ maxWidth: 280,backgroundColor: 'rgba(255, 255, 255, 0.05)',backdropFilter: 'blur(6px)' }}>
+              <Box sx={{backgroundColor:'white'}}>
               <CardMedia
-                sx={{ height: 140 }}
+                sx={{ height: 140,width:'55%',objectFit:'contain',objectPosition:'center',margin:'0px 55px' }}
                 image={data.img}
                 alt="Wishlisted"
               />
+              </Box>
               <CardContent>
                 <Box sx={{
                   width: '100%',
@@ -138,6 +140,7 @@ export const Wishlist = () => {
                   textAlign: 'center',
                 }}>
                 <Typography gutterBottom variant="h5" component="div" sx={{
+                  color:'#E0E0E0',
                   display: 'inline-block',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
@@ -147,7 +150,7 @@ export const Wishlist = () => {
                 </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ 
-                  color: 'text.secondary',
+                  color: '#A0A0A0',
                   textAlign:'center',
                   display: '-webkit-box',
                   WebkitLineClamp: 4,
@@ -159,7 +162,7 @@ export const Wishlist = () => {
                 </Typography>
               </CardContent>
               <CardContent sx={{margin:0,padding:0}}>
-                <Typography variant="h6" component="div" sx={{textAlign:'center'}}>
+                <Typography variant="h6" component="div" sx={{textAlign:'center',color:'#E0E0E0',}}>
                   &#8377; {data.price}
                 </Typography>
               </CardContent>

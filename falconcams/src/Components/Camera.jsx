@@ -168,22 +168,38 @@ export const Camera = () => {
     setOpenModal(false)
   };
   return (
-    <Grid container>
+    <Grid container sx={{backgroundColor:'#121B2B',color:'#E0E0E0'}}>
       <Grid size={12}>
         <Box sx={{flexGrow:1}}>
-          <AppBar position='static' sx={{background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)'}}>
-            <Toolbar>
+          <AppBar position='static' sx={{background:'#121B2B'}}>
+            <Toolbar sx={{ minHeight: 48, px: 1 }}>
               <Box sx={{display:'flex',gap:2,width:{lg:'60%',md:'60%',sm:'60%',xs:'80%'},justifyContent:'end'}}>
                 <TextField
+                  size='small'
                   variant="outlined"
                   placeholder="Search..."
                   fullWidth
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  sx={{ backgroundColor: 'white', borderRadius: 2 , width:{lg:'50%',md:'50%',sm:'50%',xs:'100%'} }}
+                  sx={{ 
+                    backgroundColor: '#121B2B',
+                    borderRadius: 2,
+                    color: '#E0E0E0', 
+                    '& .MuiInputBase-input': { color: '#E0E0E0' }, 
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#00FFE7' },
+                    width:{lg:'50%',md:'50%',sm:'50%',xs:'100%'}
+                  }}
                 />
               </Box>
               <Box>
-                <FormControl variant="outlined" sx={{ minWidth: '50%', backgroundColor: 'white', borderRadius: 1 }}>
+                <FormControl size='small' variant="outlined" 
+                sx={{ 
+                  minWidth: '50%', 
+                  backgroundColor: '#121B2B', 
+                  borderRadius: 1,
+                  color: '#E0E0E0',
+                  '& .MuiSelect-select': { color: '#E0E0E0' },
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: '#00FFE7' }
+                }}>
                     <Select
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
@@ -205,15 +221,17 @@ export const Camera = () => {
       </Grid>
       {currentItems.map((data,index)=>(
         <Grid size={{lg:3,md:3,sm:6,xs:12}} key={index}>
-          <Box sx={{padding:'20px',background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)',
+          <Box sx={{padding:'20px',background:'#121B2B',
             height:'380px'}}>
-            <Card sx={{ maxWidth: 280 }}>
-              <CardMedia
-                sx={{ height: 140,width:'55%',objectFit:'contain',objectPosition:'center',margin:'0px 55px' }}
-                image={data.img}
-                alt="Cameras"
-                onClick={()=>handleOpenModal(data.img)}
-              />
+            <Card sx={{ maxWidth: 280,backgroundColor: 'rgba(255, 255, 255, 0.05)',backdropFilter: 'blur(6px)' }}>
+              <Box sx={{backgroundColor:'white'}}>
+                <CardMedia
+                  sx={{ height: 140,width:'55%',objectFit:'contain',objectPosition:'center',margin:'0px 55px' }}
+                  image={data.img}
+                  alt="Cameras"
+                  onClick={()=>handleOpenModal(data.img)}
+                />
+              </Box>
               <CardContent>
                 <Box sx={{
                   width: '100%',
@@ -222,6 +240,7 @@ export const Camera = () => {
                   textAlign: 'center',
                 }}>
                 <Typography gutterBottom variant="h5" component="div" sx={{
+                  color:'#E0E0E0',
                   display: 'inline-block',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
@@ -231,7 +250,7 @@ export const Camera = () => {
                 </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ 
-                  color: 'text.secondary',
+                  color: '#A0A0A0',
                   textAlign:'center',
                   display: '-webkit-box',
                   WebkitLineClamp: 4,
@@ -243,16 +262,18 @@ export const Camera = () => {
                 </Typography>
               </CardContent>
               <CardContent sx={{margin:0,padding:0}}>
-                <Typography variant="h6" component="div" sx={{textAlign:'center'}}>
+                <Typography variant="h6" component="div" sx={{textAlign:'center',color:'#E0E0E0'}}>
                   &#8377; {data.price}
                 </Typography>
               </CardContent>
               <CardActions sx={{display:'flex',justifyContent:'center'}}>
-                <Button variant='contained' size="small" onClick={()=>addCart(data)}>
+                <Button variant='contained' size="small" 
+                sx={{ backgroundColor: '#FF4D6D', color: '#121B2B',fontWeight:'bold', '&:hover': { backgroundColor: '#E0435E' } }} 
+                onClick={()=>addCart(data)}>
                   Add to Cart
                 </Button>
                 <IconButton size="small" onClick={()=>addWishlist(data)}>
-                  <Favorite color={wishlist.some(w => w.id === data.id) ? 'primary' : 'inherit'}/>
+                  <Favorite sx={{ color: wishlist.some(w => w.id === data.id) ? '#00FFE7' : '#A0A0A0' }}/>
                 </IconButton>
               </CardActions>
             </Card>
@@ -260,8 +281,13 @@ export const Camera = () => {
         </Grid>
       ))}
       <Grid size={12}>
-          <Box sx={{width:'100%',display:'flex',justifyContent:'center',height:'50px',alignItems:'center',background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)'}}>
-            <Pagination count={Math.ceil(filteredItems.length/itemsPerPage)} color="primary" page={page} onChange={handleChangepage}/>
+          <Box sx={{width:'100%',display:'flex',justifyContent:'center',height:'50px',alignItems:'center',background:'#121B2B'}}>
+            <Pagination count={Math.ceil(filteredItems.length/itemsPerPage)} 
+            sx={{ 
+              '& .MuiPaginationItem-root': { color: '#00FFE7' },
+              '& .MuiPaginationItem-root.Mui-selected': { backgroundColor: '#FF4D6D', color: '#E0E0E0' }
+            }}
+            page={page} onChange={handleChangepage}/>
           </Box>
       </Grid>
       <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
@@ -270,7 +296,12 @@ export const Camera = () => {
             <Close fontSize='small'/>
           </IconButton>
         }>
-        <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}>
+        <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}
+        sx={{
+          backgroundColor: error ? '#FF4D6D' : '#00FFE7',
+          color: '#121B2B',
+          fontWeight: 'bold'
+        }}>
           {error || success}
         </Alert>
       </Snackbar>
