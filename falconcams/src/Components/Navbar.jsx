@@ -88,7 +88,7 @@ export const Navbar = () => {
   } 
 
   return (
-    <AppBar position='static' sx={{backgroundColor:'#190098',height:{lg:"100px",md:"100px",sm:"80px",xs:"80px"}, justifyContent:'center'}}>
+    <AppBar position='static' sx={{backgroundColor:'#1C1C1C',height:{lg:"100px",md:"100px",sm:"80px",xs:"80px"}, justifyContent:'center'}}>
       <Toolbar>
             <Box sx={{color:'white',margin:'0px', width:{lg:'85%',md:'80%',sm:'90%',xs:'80%'}}}>
               <Link to={'/'} style={{textDecoration:'none',WebkitTapHighlightColor: 'transparent'}}>
@@ -98,14 +98,14 @@ export const Navbar = () => {
             <Box sx={{display:{lg:"block",md:'block',xs:'none',sm:'none'}}}>
               <Tooltip title='Wishlist' arrow>
                 <IconButton size="large" color="inherit" onClick={()=>{loggedIn ? navigate('/Wishlist') : navigate('/Login')}}>
-                  <Badge badgeContent={wishlist} color='primary'>
+                  <Badge badgeContent={wishlist} sx={{ '& .MuiBadge-badge': { backgroundColor: '#3A86FF' } }}>
                     <Favorite/>
                   </Badge>
                 </IconButton>
               </Tooltip>
               <Tooltip title='cart' arrow>
                 <IconButton size="large" color="inherit" onClick={()=>{loggedIn ? navigate('/Cart') : navigate('/Login')}}>
-                  <Badge badgeContent={cart} color='primary'>
+                  <Badge badgeContent={cart} sx={{ '& .MuiBadge-badge': { backgroundColor: '#3A86FF' } }}>
                     <ShoppingCart/>
                   </Badge>
                 </IconButton>
@@ -142,7 +142,7 @@ export const Navbar = () => {
               <IconButton size="large" color="inherit" onClick={toggleDrawer(true)}><MenuSharp/></IconButton>
               <Drawer open={openMenu} onClose={toggleDrawer(false)} anchor='right'>
                 <Box sx={{ width: 250, height:'100%', display: 'flex', flexDirection: 'column' }} role="presentation" onClick={toggleDrawer(false)}>
-                  <AppBar sx={{position:'static'}}>
+                  <AppBar sx={{position:'static',backgroundColor:'#1C1C1C'}}>
                     <Toolbar sx={{display:'flex'}}>
                       <Typography variant='h4' 
                         sx={{fontFamily:"Anton, sans-serif",fontSize:'400',fontStyle:'normal',width:'80%'}}>
