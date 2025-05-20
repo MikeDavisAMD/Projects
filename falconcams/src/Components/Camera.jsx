@@ -223,7 +223,7 @@ export const Camera = () => {
         <Grid size={{lg:3,md:3,sm:6,xs:12}} key={index}>
           <Box sx={{padding:'20px',background:'#121B2B',
             height:'380px'}}>
-            <Card sx={{ maxWidth: 280,backgroundColor: 'rgba(255, 255, 255, 0.05)',backdropFilter: 'blur(6px)' }}>
+            <Card sx={{ maxWidth: 280,backgroundColor: 'rgba(255, 255, 255, 0.05)',backdropFilter: 'blur(6px)',boxShadow: '0 4px 20px rgba(0, 255, 231, 0.3)' }}>
               <Box sx={{backgroundColor:'white'}}>
                 <CardMedia
                   sx={{ height: 140,width:'55%',objectFit:'contain',objectPosition:'center',margin:'0px 55px' }}

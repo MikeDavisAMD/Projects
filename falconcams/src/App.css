@@ -15,6 +15,27 @@
     transform: translateX(-100%); /* Move to the left */
     }
 }
+@keyframes flashLine {
+    0%, 100% {
+        background-color: #00FFE7;
+        opacity: 1;
+    }
+    50% {
+        background-color: #00FFE7;
+        opacity: 0.3;
+    }
+}
+.MuiStepConnector-root.Mui-active .MuiStepConnector-line {
+    height: 2px;
+    border: none;
+    background-color: #00FFE7;
+    animation: flashLine 1s infinite;
+    transition: background-color 0.3s ease-in-out;
+}
+.MuiStepConnector-root.Mui-completed .MuiStepConnector-line {
+    background-color: #00FFE7;
+    height: 2px;
+}
 .footer{
     font-family: "Tektur", sans-serif;
     font-optical-sizing: auto;

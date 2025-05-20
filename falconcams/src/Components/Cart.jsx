@@ -4,7 +4,6 @@ import axios from "axios"
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import PropTypes from 'prop-types';
-import { blue } from '@mui/material/colors'; 
 import { green } from '@mui/material/colors';
 
 function SimpleDialog(props) {
@@ -19,9 +18,18 @@ function SimpleDialog(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Select Delivery Address</DialogTitle>
-      <List sx={{ pt: 0 }}>
+    <Dialog onClose={handleClose} open={open}
+    slotProps={{
+      paper: {
+        sx: {
+          backgroundColor: '#121B2B',
+          color: '#E0E0E0',
+          minWidth: 300,
+        },
+      },
+    }}>
+      <DialogTitle sx={{ color: '#E0E0E0' }}>Select Delivery Address</DialogTitle>
+      <List sx={{ pt: 0,backgroundColor: '#121B2B' }}>
         {addresses.length===0 ? (
           <ListItem>
             <ListItemText primary='No Address found'/>
@@ -29,9 +37,20 @@ function SimpleDialog(props) {
         ):(
           addresses.map((Address) => (
             <ListItem disablePadding key={Address}>
-              <ListItemButton onClick={() => handleListItemClick(Address)}>
+              <ListItemButton onClick={() => handleListItemClick(Address)}
+                sx={{
+                  color: '#E0E0E0',
+                  '&:hover': {
+                    backgroundColor: '#C8B8FF',
+                    color: '#121B2B',
+                  },
+                  ...(selectedValue === Address && {
+                    backgroundColor: '#C8B8FF',
+                    color: '#121B2B',
+                  }),
+                }}>
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                  <Avatar sx={{ bgcolor: '#C8B8FF', color: '#121B2B' }}>
                     <Place/>
                   </Avatar>
                 </ListItemAvatar>
@@ -44,13 +63,27 @@ function SimpleDialog(props) {
           <ListItemButton
             autoFocus
             onClick={onAddClick}
+            sx={{
+              color: '#00FFE7',
+              '&:hover': {
+                backgroundColor: '#00FFE7',
+                color: '#121B2B',
+              },
+              '&:hover .add-avatar': {
+                backgroundColor: '#C8B8FF',
+              },
+            }}
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className="add-avatar" sx={{
+                bgcolor: '#00FFE7',
+                color: '#121B2B',
+                transition: 'background-color 0.3s ease',
+              }}>
                 <Add />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Add Address" />
+            <ListItemText primary="Add Address"/>
           </ListItemButton>
         </ListItem>
       </List>
@@ -216,6 +249,11 @@ export const Cart = () => {
   const timer = React.useRef(undefined);
 
   const buttonSx = {
+    backgroundColor: '#FF4D6D',
+    color: '#121B2B',
+    '&:hover': {
+      backgroundColor: '#e04360',
+    },
     ...(success && {
       bgcolor: green[500],
       '&:hover': {
@@ -242,7 +280,7 @@ export const Cart = () => {
     }
   };
   return (
-    <Grid container sx={{backgroundColor: '#1C1C1C',color:'#FFFFFF'}}>
+    <Grid container sx={{backgroundColor: '#121B2B', color: '#E0E0E0'}}>
       <Grid size={12}>
         <Typography variant="h4" sx={{padding:'10px 40px'}}>
           Shopping Cart ({localStorage.getItem('cart')} items)
@@ -250,7 +288,7 @@ export const Cart = () => {
       </Grid>
       <Grid size={{lg:8,md:8,sm:7,xs:12}}>
         <Box>
-          <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'scroll',backgroundColor: '#2A2A2A',color: '#FFFFFF'}}>
+          <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'auto',backgroundColor: '#2A2A2A',color: '#E0E0E0',boxShadow: '0 4px 20px rgba(0, 255, 231, 0.1)'}}>
             <table align="center" width='90%'>
               <thead>
                 <tr>
@@ -273,9 +311,9 @@ export const Cart = () => {
                   </td>
                   <td style={{borderBottom:'1px solid black'}}>
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                      <Button color="primary" onClick={()=>handleQuantityChange(data.firebaseKey,1)}><Add/></Button>
+                      <Button sx={{ color: '#00FFE7' }} onClick={()=>handleQuantityChange(data.firebaseKey,1)}><Add/></Button>
                       <Box>{quantity[data.firebaseKey] || 1}</Box>
-                      <Button color="primary" onClick={()=>handleQuantityChange(data.firebaseKey,-1)}><Remove/></Button>
+                      <Button sx={{ color: '#00FFE7' }} onClick={()=>handleQuantityChange(data.firebaseKey,-1)}><Remove/></Button>
                     </Box>
                   </td>
                   <td style={{borderBottom:'1px solid black'}}>
@@ -288,7 +326,7 @@ export const Cart = () => {
                       <IconButton onClick={()=>{
                         removeItem(data.firebaseKey)
                       }}>
-                        <Delete color="primary"/>
+                        <Delete sx={{ color: '#00FFE7' }}/>
                       </IconButton>
                     </Box>
                   </td>
@@ -302,13 +340,13 @@ export const Cart = () => {
       <Grid size={{lg:4,md:4,sm:5,xs:12}}>
         <Card sx={{marginLeft:{lg:0,md:0,sm:0,xs:'40px'},marginBottom:'40px',width:{lg:'90%',md:"90%",sm:'85%',xs:'80%'},backgroundColor: '#2A2A2A',color: '#FFFFFF'}}>
           <CardContent>
-            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+            <Typography gutterBottom sx={{ color: '#A0A0A0', fontSize: 14 }}>
               Delivery Address
             </Typography>
             <Typography variant="body2">
               {addresses.length===0 ? "No address available" : selectedValue}
             </Typography>
-            <Link style={{textDecoration:'none'}} onClick={handleClickOpen}>
+            <Link style={{textDecoration:'none',color:'#00FFE7'}} onClick={handleClickOpen}>
               <Typography variant="body2">
                 change
               </Typography>
@@ -330,10 +368,10 @@ export const Cart = () => {
                 position:'absolute',
                 top:'50%',left:'50%',transform:'translate(-50%, -50%)',
                 width:{lg:400,md:400,sm:400,xs:250},
-                bgcolor: 'background.paper',
-                border: '2px solid #03A3FF',
+                bgcolor: '#1C1C2D',
+                border: '2px solid #00FFE7',
                 borderRadius:'12px',
-                boxShadow: 24,p: 4,
+                boxShadow: 24,p: 4,color: '#E0E0E0'
               }}>
                 <Box sx={{display:'flex',flexDirection:'column'}}>
                   <TextareaAutosize 
@@ -342,10 +380,30 @@ export const Cart = () => {
                     placeholder="Enter new Address"
                     value={newAddAddr}
                     onChange={(e)=>setNewAddAddr(e.target.value)}
+                    style={{
+                      backgroundColor: '#121B2B',
+                      color: '#E0E0E0',
+                      border: '1.5px solid #00FFE7',
+                      borderRadius: '6px',
+                      padding: '10px',
+                      fontSize: '1rem',
+                      fontFamily: 'Roboto, sans-serif',
+                      outline: 'none',
+                      resize: 'vertical',
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#00FFE7';
+                      e.target.style.boxShadow = '0 0 5px #00FFE7';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#00FFE7';
+                      e.target.style.boxShadow = 'none';
+                    }}
                   />
                   <Button 
                   variant="contained"
                   onClick={handleAddAddress}
+                  sx={{backgroundColor:'#FF4D6D', color: '#121B2B',fontWeight:'bold'}}
                   >
                     Add new address
                   </Button>
@@ -354,7 +412,7 @@ export const Cart = () => {
             </Modal>
           </CardContent>
           <CardContent>
-            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+            <Typography gutterBottom sx={{ color: '#A0A0A0', fontSize: 14 }}>
               Price Breakdown
             </Typography>
             <Box sx={{display:'flex'}}>

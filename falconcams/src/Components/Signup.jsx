@@ -79,60 +79,200 @@ export const Signup = () => {
   return (
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
-        <Box sx={{height:'500px',paddingTop:'20px',background:'linear-gradient(to bottom,#039BFF,#03F8FF)'}}>
+        <Box sx={{height:'450px',paddingTop:'70px',background:'linear-gradient(to bottom, #121B2B, #00FFE7)'}}>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <Person sx={{height:"80px",width:'50px',color:'inherit'}}/>
+            <Person sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
-            sx={{marginTop:'10px',width:'30%'}} 
             variant='filled' 
             label='First Name'
             value={fname}
             onChange={(e)=>setFname(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '30%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                color: '#00FFE7',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
-            <TextField 
-            sx={{marginTop:'10px',width:'30%'}} 
+            <TextField  
             variant='filled' 
             label='Last Name'
             value={lname}
             onChange={(e)=>setLname(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '30%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <PhoneIphone sx={{height:"80px",width:'50px',color:'inherit'}}/>
+            <PhoneIphone sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
-            sx={{marginTop:'10px',width:'60%'}}
             variant='filled' 
             label='Mobile number'
             type='number'
             value={mobile}
             onChange={(e)=>setMobile(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '62%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <AlternateEmail sx={{height:"80px",width:'50px',color:'inherit'}}/>
-            <TextField 
-            sx={{marginTop:'10px',width:'60%'}} 
+            <AlternateEmail sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <TextField  
             variant='filled' 
             label='E-Mail ID'
             type='email'
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '62%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <AccountCircle sx={{height:"80px",width:'50px',color:'inherit'}}/>
+            <AccountCircle sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
-            sx={{marginTop:'10px',width:'60%'}} 
             variant='filled' 
             label='Enter new Username'
             value={username}
             onChange={(e)=>setUsername(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '62%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <Password sx={{height:"80px",width:'50px',color:'inherit'}}/>
+            <Password sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
-            sx={{marginTop:'10px',width:'60%'}} 
             variant='filled' 
             label='Enter new Password'
             type={showPassword ? 'text' :'password'}
@@ -157,14 +297,51 @@ export const Signup = () => {
             }}
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '62%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
-          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center'}}>
-            <Button variant='contained' sx={{backgroundColor:'#3CE6FF',color:'#190098'}} onClick={clickHandle}>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{ml:7,mt:2,display:'flex',justifyContent:'center'}}>
+            <Button variant='contained' onClick={clickHandle}
+            sx={{
+              backgroundColor: '#FF4D6D',
+              color: '#121B2B', 
+              fontWeight: 'bold',
+              '&:hover': {
+                backgroundColor: '#e04360'
+              }
+            }}>
               Sign Up
             </Button>
           </Box>
-          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',padding:'10px'}}>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{ml:6,display:'flex',justifyContent:'center',padding:'10px'}}>
             <Link to='/Login'>Already having an account? Sign in</Link>
           </Box>
           <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
@@ -173,7 +350,12 @@ export const Signup = () => {
               <Close fontSize='small'/>
             </IconButton>
           }>
-            <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}>  
+            <Alert severity={error ? 'error' : 'success'} onClose={closeSnackbar}
+            sx={{
+              backgroundColor: error ? '#FF4D6D' : '#00FFE7',
+              color: '#121B2B',
+              fontWeight: 'bold'
+            }}>  
               {error || (registered ? 'User registered successfully': error)}
             </Alert>
           </Snackbar>

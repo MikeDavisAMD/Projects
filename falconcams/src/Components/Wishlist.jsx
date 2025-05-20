@@ -124,7 +124,7 @@ export const Wishlist = () => {
         <Grid size={{lg:3,md:3,sm:6,xs:12}} key={data.firebaseKey || index}>
           <Box sx={{padding:'20px',background:'#121B2B',
             height:'380px'}}>
-            <Card sx={{ maxWidth: 280,backgroundColor: 'rgba(255, 255, 255, 0.05)',backdropFilter: 'blur(6px)' }}>
+            <Card sx={{ maxWidth: 280,backgroundColor: 'rgba(255, 255, 255, 0.05)',backdropFilter: 'blur(6px)',boxShadow: '0 4px 20px rgba(0, 255, 231, 0.3)' }}>
               <Box sx={{backgroundColor:'white'}}>
               <CardMedia
                 sx={{ height: 140,width:'55%',objectFit:'contain',objectPosition:'center',margin:'0px 55px' }}
@@ -168,10 +168,10 @@ export const Wishlist = () => {
               </CardContent>
               <CardActions sx={{display:'flex',justifyContent:'center'}}>
                 <IconButton onClick={()=>addCart(data)}>
-                  <AddShoppingCart color='primary'/>
+                  <AddShoppingCart sx={{color:'#FF4D6D'}}/>
                 </IconButton>
                 <IconButton onClick={()=>removeItem(data.firebaseKey)}>
-                  <Delete color='primary'/>
+                  <Delete sx={{color:'#FF4D6D'}}/>
                 </IconButton>
               </CardActions>
             </Card>
@@ -179,8 +179,13 @@ export const Wishlist = () => {
         </Grid>
       ))}
       <Grid size={12}>
-          <Box sx={{width:'100%',display:'flex',justifyContent:'center',height:'50px',alignItems:'center',background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)'}}>
-            <Pagination count={Math.ceil(data.length/itemsPerPage)} color="primary" page={page} onChange={handleChangepage}/>
+          <Box sx={{width:'100%',display:'flex',justifyContent:'center',height:'50px',alignItems:'center',background:'#121B2B'}}>
+            <Pagination count={Math.ceil(data.length/itemsPerPage)}
+            sx={{ 
+              '& .MuiPaginationItem-root': { color: '#00FFE7' },
+              '& .MuiPaginationItem-root.Mui-selected': { backgroundColor: '#FF4D6D', color: '#E0E0E0' }
+            }}
+            page={page} onChange={handleChangepage}/>
           </Box>
       </Grid>
       <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}

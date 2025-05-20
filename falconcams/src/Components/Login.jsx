@@ -50,21 +50,48 @@ export const Login = () => {
   return (
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
-        <Box sx={{height:{lg:'320px',md:'320px',sm:'270px',xs:'270px'},paddingTop:{lg:'80px',md:'80px',sm:'30px',xs:'30px'},background:'linear-gradient(to bottom,#039BFF,#03F8FF)'}}>
+        <Box sx={{height:{lg:'320px',md:'320px',sm:'270px',xs:'270px'},paddingTop:{lg:'80px',md:'80px',sm:'30px',xs:'30px'},background:'linear-gradient(to bottom, #121B2B, #00FFE7)'}}>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <AccountCircle sx={{height:"80px",width:'50px',color:'inherit'}}/>
-            <TextField 
-            sx={{marginTop:'10px',width:'60%'}} 
+            <AccountCircle sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <TextField size="small" 
             variant='filled' 
             label='username or email or mobile'
             value={username}
             onChange={(e)=>setUsername(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '60%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <Password sx={{height:"80px",width:'50px',color:'inherit'}}/>
-            <TextField 
-            sx={{marginTop:'10px',width:'60%'}} 
+            <Password sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <TextField  
             variant='filled' 
             label='Password'
             type={showPassword ? 'text' : 'password'}
@@ -89,17 +116,60 @@ export const Login = () => {
             }}
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
+            sx={{
+              marginTop: '10px',
+              width: '60%',
+              backgroundColor: '#1D2A44',
+              borderRadius: '5px',
+              '& .MuiFilledInput-root': {
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginBottom: 0,
+                minHeight: '48px',
+                alignItems: 'center',
+              },
+              '& .MuiFilledInput-input': {
+                padding: '6px 12px',
+                height: '1.5em',
+                boxSizing: 'border-box',
+                color: '#00FFE7',
+                fontSize: '0.875rem',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#A0A0A0',
+              },
+              '& .MuiFilledInput-underline:before': {
+                borderBottomColor: '#00FFE7',
+              },
+              '& .MuiFilledInput-underline:after': {
+                borderBottomColor: '#FF4D6D',
+              },
+            }}
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center'}}>
-            <Button variant='contained' sx={{backgroundColor:'#3CE6FF',color:'#190098'}} onClick={handleLogin}>
+            <Button variant='contained' onClick={handleLogin}
+            sx={{
+              ml:6,mt:2,
+              backgroundColor: '#FF4D6D',
+              color: '#121B2B', 
+              fontWeight: 'bold',
+              '&:hover': {
+                backgroundColor: '#e04360'
+              }
+            }}>
               Login
             </Button>
           </Box>
-          <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',padding:'10px'}}>
-            <Link to='/Signup'>New user? No worries, Sign up</Link>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{ml:6,display:'flex',justifyContent:'center',padding:'10px'}}>
+            <Link to='/Signup'>New user? Sign up</Link>
           </Box>
           <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
+          sx={{
+            backgroundColor: error ? '#FF4D6D' : '#00FFE7',
+            color: '#121B2B',
+            fontWeight: 'bold'
+          }}
           action={
             <IconButton size="small" aria-label="close" color='inherit' onClick={closeSnackbar}>
               <Close fontSize='small'/>

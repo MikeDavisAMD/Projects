@@ -115,12 +115,12 @@ export const Checkout = () => {
       fetchData()
     },[])
     return (
-      <Card sx={{ minWidth: 275, width:'400px',backgroundColor:'#C1EFFF' }}>
+      <Card sx={{ minWidth: 275, width:'400px',backgroundColor:'#1D2A44', color: '#E0E0E0' }}>
         <CardContent>
           <Typography variant="h5" component="div">
             Delivering To:
           </Typography>
-          <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+          <Typography gutterBottom sx={{ color: '#A0A0A0', fontSize: 14 }}>
             {fname+" "+lname} <br />
             {address} <br />
             {mobile} <br />
@@ -171,7 +171,7 @@ export const Checkout = () => {
       return acc + (item.price * qty)
     },0) 
     return (
-      <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'scroll'}}>
+      <Card sx={{margin:'0px 40px',marginBottom:'40px',width:{lg:'90%',md:'90%',sm:'85%',xs:'80%'},overflow:'auto',backgroundColor:'#1D2A44', color: '#E0E0E0'}}>
         <CardContent>
         <table align="center" width='90%'>
           <thead>
@@ -231,139 +231,395 @@ export const Checkout = () => {
       setValue(newValue);
     };
     return(
-      <Card sx={{ minWidth: 275, width:'400px',backgroundColor:'#C1EFFF' }}>
+      <Card sx={{ minWidth: 275, width:'400px',backgroundColor:'#1D2A44', color: '#E0E0E0'}}>
       <CardContent>
-        <Accordion>
+        <Accordion
+        sx={{
+          backgroundColor: '#121B2B',
+          color: '#E0F7FA',
+          borderRadius: '8px',
+          mb: 2,
+          '&:before': { display: 'none' },
+          '&.Mui-expanded': { backgroundColor: '#1B2A3A' },
+          '&:hover': { backgroundColor: '#1E2E40' },
+        }}>
           <AccordionSummary
-            expandIcon={<ExpandMore />}
+            expandIcon={<ExpandMore sx={{ color: '#00FFE7' }}/>}
             aria-controls="panel1-content"
             id="panel1-header"
+            sx={{
+              '& .MuiAccordionSummary-content': {
+                fontWeight: 'bold',
+                color: '#00FFE7',
+              },
+            }}
           >
             <Typography component="span">UPI or other online payments</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box sx={{ width: '100%' }}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant='scrollable' scrollButtons='auto'>
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant='scrollable' scrollButtons='auto'
+                sx={{
+                  borderBottom: 1,
+                  borderColor: 'divider',
+                }}>
                   <Tab label={
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                       <img src={gpay} alt="Google Pay" height='50px'/>
                       <span>google pay</span>
                     </Box>
-                  } {...a11yProps(0)} />
+                  } 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(0)} />
                   <Tab label={
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                     <img src={phonepe} alt="Google Pay" height='50px'/>
                     <span>PhonePe</span>
                   </Box>
-                  } {...a11yProps(1)} />
+                  } 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(1)} />
                   <Tab label={
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                     <img src={amazonpay} alt="Google Pay" height='50px'/>
                     <span>Amazon pay</span>
                   </Box>
-                  } {...a11yProps(2)} />
+                  } 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(2)} />
                   <Tab label={
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                     <img src={paytm} alt="Google Pay" height='50px'/>
                     <span>PayTM</span>
                   </Box>
-                  } {...a11yProps(3)} />
+                  } 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(3)} />
                   <Tab label={
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                     <img src={bhim} alt="Google Pay" height='50px'/>
                     <span>BHIM</span>
                   </Box>
-                  } {...a11yProps(4)} />
+                  } 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(4)} />
                 </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
-                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                  <TextField variant='outlined' label='Enter your UPI ID' sx={{
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },
+                  }}/> <br />
+                  <Button variant='contained' sx={{ width:'78%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B',
+                    },
+                  }}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
-                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                  <TextField variant='outlined' label='Enter your UPI ID'
+                  sx={{
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },
+                  }}/> <br />
+                  <Button variant='contained' sx={{ width:'78%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B',
+                    },
+                  }}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
-                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                  <TextField variant='outlined' label='Enter your UPI ID'
+                  sx={{
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },
+                  }}/> <br />
+                  <Button variant='contained' sx={{ width:'78%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B',
+                    },
+                  }}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={3}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
-                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                  <TextField variant='outlined' label='Enter your UPI ID'
+                  sx={{
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },
+                  }}/> <br />
+                  <Button variant='contained' sx={{ width:'78%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B',
+                    },
+                  }}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={4}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter your UPI ID'/> <br />
-                  <Button variant='contained' sx={{width:'78%'}}>Proceed to payment</Button>
+                  <TextField variant='outlined' label='Enter your UPI ID'
+                  sx={{
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },
+                  }}/> <br />
+                  <Button variant='contained' sx={{ width:'78%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B',
+                    },
+                  }}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
             </Box>
           </AccordionDetails>
         </Accordion> 
-        <Accordion>
+        <Accordion
+        sx={{
+          backgroundColor: '#121B2B',
+          color: '#E0F7FA',
+          borderRadius: '8px',
+          mb: 2,
+          '&:before': { display: 'none' },
+          '&.Mui-expanded': { backgroundColor: '#1B2A3A' },
+          '&:hover': { backgroundColor: '#1E2E40' },
+        }}>
           <AccordionSummary
-            expandIcon={<ExpandMore />}
+            expandIcon={<ExpandMore sx={{ color: '#00FFE7' }}/>}
             aria-controls="panel1-content"
             id="panel1-header"
+            sx={{
+              '& .MuiAccordionSummary-content': {
+                fontWeight: 'bold',
+                color: '#00FFE7',
+              },
+            }}
           >
             <Typography component="span">Credit or Debit card</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box sx={{ width: '100%' }}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                  <Tab label="Credit Card" {...a11yProps(0)} />
-                  <Tab label="Debit Card" {...a11yProps(1)} />
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
+                sx={{
+                  borderBottom: 1,
+                  borderColor: 'divider',
+                }}>
+                  <Tab label="Credit Card" 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(0)} />
+                  <Tab label="Debit Card" 
+                  sx={{
+                    color: '#A0A0A0',
+                    '&.Mui-selected': {
+                      color: '#00FFE7',
+                    },
+                  }}
+                  {...a11yProps(1)} />
                 </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter card number' sx={{width:'100%'}}/> <br />
-                  <TextField variant='outlined' label='Card holder&#39;s name' sx={{width:'100%'}}/> <br />
+                  <TextField variant='outlined' label='Enter card number' sx={{width:'100%',
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },
+                  }}
+                  /> <br />
+                  <TextField variant='outlined' label='Card holder&#39;s name' sx={{width:'100%',
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },}}/> <br />
                   <Box sx={{display:'flex',gap:2}}>
-                    <TextField variant='outlined' label='Expiry Date'/>
-                    <TextField variant='outlined' label='CVV'/>
+                    <TextField variant='outlined' label='Expiry Date'
+                    sx={{
+                      input: { color: '#E0E0E0' },
+                      label: { color: '#A0A0A0' },
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: '#00FFE7' },
+                        '&:hover fieldset': { borderColor: '#C8B8FF' },
+                        '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                      },
+                    }}/>
+                    <TextField variant='outlined' label='CVV'
+                    sx={{
+                      input: { color: '#E0E0E0' },
+                      label: { color: '#A0A0A0' },
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: '#00FFE7' },
+                        '&:hover fieldset': { borderColor: '#C8B8FF' },
+                        '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                      },
+                    }}/>
                   </Box> <br />
-                  <Button variant='contained' sx={{width:'100%'}}>Proceed to payment</Button>
+                  <Button variant='contained' sx={{width:'100%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B'}}}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                  <TextField variant='outlined' label='Enter card number' sx={{width:'100%'}}/> <br />
-                  <TextField variant='outlined' label='Card holder&#39;s name' sx={{width:'100%'}}/> <br />
+                  <TextField variant='outlined' label='Enter card number' sx={{width:'100%',
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },}}/> <br />
+                  <TextField variant='outlined' label='Card holder&#39;s name' sx={{width:'100%',
+                    input: { color: '#E0E0E0' },
+                    label: { color: '#A0A0A0' },
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#00FFE7' },
+                      '&:hover fieldset': { borderColor: '#C8B8FF' },
+                      '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                    },}}/> <br />
                   <Box sx={{display:'flex',gap:2}}>
-                    <TextField variant='outlined' label='Expiry Date'/>
-                    <TextField variant='outlined' label='CVV'/>
+                    <TextField variant='outlined' label='Expiry Date'
+                    sx={{
+                      input: { color: '#E0E0E0' },
+                      label: { color: '#A0A0A0' },
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: '#00FFE7' },
+                        '&:hover fieldset': { borderColor: '#C8B8FF' },
+                        '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                      },
+                    }}/>
+                    <TextField variant='outlined' label='CVV'
+                    sx={{
+                      input: { color: '#E0E0E0' },
+                      label: { color: '#A0A0A0' },
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: '#00FFE7' },
+                        '&:hover fieldset': { borderColor: '#C8B8FF' },
+                        '&.Mui-focused fieldset': { borderColor: '#FF4D6D' },
+                      },
+                    }}/>
                   </Box> <br />
-                  <Button variant='contained' sx={{width:'100%'}}>Proceed to payment</Button>
+                  <Button variant='contained' sx={{width:'100%',
+                    backgroundColor: '#FF4D6D',
+                    color: '#121B2B',fontWeight:'bold',
+                    '&:hover': {
+                      backgroundColor: '#C8B8FF',
+                      color: '#121B2B',}}}>Proceed to payment</Button>
                 </Box>
               </CustomTabPanel>
             </Box>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion
+        sx={{
+            backgroundColor: '#121B2B',
+            color: '#E0F7FA',
+            borderRadius: '8px',
+            mb: 2,
+            '&:before': { display: 'none' },
+            '&.Mui-expanded': { backgroundColor: '#1B2A3A' },
+            '&:hover': { backgroundColor: '#1E2E40' },
+          }}>
           <AccordionSummary
-            expandIcon={<ExpandMore />}
+            expandIcon={<ExpandMore sx={{ color: '#00FFE7' }}/>}
             aria-controls="panel1-content"
             id="panel1-header"
-          >
+            sx={{
+              '& .MuiAccordionSummary-content': {
+                fontWeight: 'bold',
+                color: '#00FFE7'
+              },
+            }}>
             <Typography component="span">Cash on Delivery</Typography>
           </AccordionSummary>
           <AccordionDetails>
             Pay using cash or UPI at the time of delivery
           </AccordionDetails>
           <AccordionActions>
-            <Button onClick={handleOpen}>
+            <Button onClick={handleOpen} sx={{color: '#FF4D6D',fontWeight:'bold'}}>
               Place the Order
             </Button>
           </AccordionActions>
@@ -373,10 +629,18 @@ export const Checkout = () => {
     )
   }
   return (
-    <Grid container sx={{background:'linear-gradient(to bottom,#00BCFF,#A5E8FF)'}}>
+    <Grid container sx={{background:'#121B2B'}}>
         <Grid size={12}>
           <Box sx={{width:{lg:'60%',md:'60%',sm:'60%',xs:'100%'},paddingLeft:{lg:'250px',md:'200px',sm:'180px'},paddingTop:'40px',paddingBottom:'20px'}}>
-          <Stepper activeStep={activeStep}>
+          <Stepper activeStep={activeStep}
+          sx={{
+            '.MuiStepLabel-label': { color: '#A0A0A0' }, 
+            '.MuiStepLabel-root.Mui-completed .MuiStepLabel-label': { color: '#A0A0A0' }, 
+            '.MuiStepLabel-root.Mui-active .MuiStepLabel-label': { color: '#FF4D6D' }, 
+            '.MuiStepIcon-root': { color: '#333' }, 
+            '.MuiStepIcon-root.Mui-completed': { color: '#00FFE7' }, 
+            '.MuiStepIcon-root.Mui-active': { color: '#FF4D6D' }, 
+          }}>
               {steps.map((label, index) => {
                 const stepProps = {};
                 const labelProps = {};
@@ -405,13 +669,31 @@ export const Checkout = () => {
                     color="inherit"
                     disabled={activeStep === 0}
                     onClick={handleBack}
-                    sx={{ mr: 1 }}
+                    sx={{
+                      textTransform: 'none',
+                      color: '#7B61FF',
+                      '&:hover': {
+                        bgcolor: 'rgba(123, 97, 255, 0.1)',
+                        borderColor: '#7B61FF',
+                        color: '#7B61FF',
+                      },
+                    }}
                   >
                     Back
                   </Button>
                   <Box sx={{ flex: '1 1 auto' }} />
-                  <Button onClick={handleNext} disabled={activeStep===steps.length-1}>
-                    next
+                  <Button onClick={handleNext} disabled={activeStep===steps.length-1}
+                  sx={{
+                    mr: 1,
+                    textTransform: 'none',
+                    color: '#FF4D6D',
+                    '&:hover': {
+                      bgcolor: 'rgba(255, 77, 109, 0.1)',
+                      borderColor: '#FF4D6D',
+                      color: '#FF4D6D',
+                    },
+                  }}>
+                    Next
                   </Button>
                 </Box>
               </React.Fragment>
@@ -423,7 +705,7 @@ export const Checkout = () => {
             onClick={handleClose}
           >
             {showCard === true ? (
-              <Card sx={{ minWidth: 275, backgroundColor: '#C1EFFF' }}>
+              <Card sx={{ minWidth: 275, backgroundColor: '#1D2A44', color: '#E0E0E0' }}>
                 <CardContent>
                   <Typography variant="h6">Order Placed 👍</Typography>
                   <Typography>Order will be shipped shortly</Typography>
