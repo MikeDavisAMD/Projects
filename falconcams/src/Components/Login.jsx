@@ -52,7 +52,7 @@ export const Login = () => {
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
         <Box sx={{height:{lg:'320px',md:'320px',sm:'270px',xs:'270px'},paddingTop:{lg:'80px',md:'80px',sm:'30px',xs:'30px'},background:'linear-gradient(to bottom, #121B2B, #00FFE7)'}}>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <AccountCircle sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <AccountCircle sx={{mt:1.5,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField size="small" 
             variant='filled' 
             label='username or email or mobile'
@@ -64,18 +64,11 @@ export const Login = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
-                minHeight: '48px',
+                minHeight: '54px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
-                color: '#00FFE7',
-                fontSize: '0.875rem',
+                color: '#00FFE7'
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -90,7 +83,7 @@ export const Login = () => {
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <Password sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <Password sx={{mt:1.5,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField  
             variant='filled' 
             label='Password'
@@ -106,7 +99,7 @@ export const Login = () => {
                     <IconButton
                       onClick={handleClickShowPassword}
                       edge='end'
-                      sx={{height:"80px",width:'50px',color:'inherit'}}
+                      sx={{height:"40px",width:'40px',color:'#A0A0A0'}}
                     >
                       {showPassword ? <VisibilityOff/> : <Visibility/>}
                     </IconButton>
@@ -122,18 +115,11 @@ export const Login = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -161,8 +147,8 @@ export const Login = () => {
               Login
             </Button>
           </Box>
-          <Box className='animate__animated animate__fadeInTopLeft' sx={{ml:6,display:'flex',justifyContent:'center',padding:'10px'}}>
-            <Link to='/Signup'>New user? Sign up</Link>
+          <Box className='animate__animated animate__fadeInTopLeft' sx={{ml:6,display:'flex',justifyContent:'center',padding:'10px',}}>
+            <Link style={{color:'#121B2B'}} to='/Signup'>New user? Sign up</Link>
           </Box>
           <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
           sx={{

@@ -79,9 +79,9 @@ export const Signup = () => {
   return (
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
-        <Box sx={{height:'450px',paddingTop:'70px',background:'linear-gradient(to bottom, #121B2B, #00FFE7)'}}>
+        <Box sx={{height:'460px',paddingTop:'60px',background:'linear-gradient(to bottom, #121B2B, #00FFE7)'}}>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <Person sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <Person sx={{mt:1.8,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
             variant='filled' 
             label='First Name'
@@ -93,19 +93,12 @@ export const Signup = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 color: '#00FFE7',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -129,18 +122,11 @@ export const Signup = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -155,7 +141,7 @@ export const Signup = () => {
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <PhoneIphone sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <PhoneIphone sx={{mt:1.5,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
             variant='filled' 
             label='Mobile number'
@@ -168,18 +154,11 @@ export const Signup = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -207,18 +186,11 @@ export const Signup = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -233,7 +205,7 @@ export const Signup = () => {
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <AccountCircle sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <AccountCircle sx={{mt:1.5,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
             variant='filled' 
             label='Enter new Username'
@@ -245,18 +217,11 @@ export const Signup = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -271,7 +236,7 @@ export const Signup = () => {
             />
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'center',gap:'12px'}}>
-            <Password sx={{mt:1,height:"50px",width:'50px',color:'inherit'}}/>
+            <Password sx={{mt:1.5,height:"50px",width:'50px',color:'inherit'}}/>
             <TextField 
             variant='filled' 
             label='Enter new Password'
@@ -287,7 +252,7 @@ export const Signup = () => {
                     <IconButton
                       onClick={handleClickShowPassword}
                       edge='end'
-                      sx={{height:"80px",width:'50px',color:'inherit'}}
+                      sx={{height:"50px",width:'50px',color:'#A0A0A0'}}
                     >
                       {showPassword ? <VisibilityOff/> : <Visibility/>}
                     </IconButton>
@@ -303,18 +268,11 @@ export const Signup = () => {
               backgroundColor: '#1D2A44',
               borderRadius: '5px',
               '& .MuiFilledInput-root': {
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginBottom: 0,
                 minHeight: '48px',
                 alignItems: 'center',
               },
               '& .MuiFilledInput-input': {
-                padding: '6px 12px',
-                height: '1.5em',
-                boxSizing: 'border-box',
                 color: '#00FFE7',
-                fontSize: '0.875rem',
               },
               '& .MuiInputLabel-root': {
                 color: '#A0A0A0',
@@ -342,7 +300,7 @@ export const Signup = () => {
             </Button>
           </Box>
           <Box className='animate__animated animate__fadeInTopLeft' sx={{ml:6,display:'flex',justifyContent:'center',padding:'10px'}}>
-            <Link to='/Login'>Already having an account? Sign in</Link>
+            <Link style={{color:'#121B2B'}} to='/Login'>Already having an account? Sign in</Link>
           </Box>
           <Snackbar open={open} autoHideDuration={5000} onClose={closeSnackbar}
           action={
