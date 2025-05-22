@@ -636,7 +636,7 @@ export const Checkout = () => {
           sx={{
             '.MuiStepLabel-label': { color: '#A0A0A0' }, 
             '.MuiStepLabel-root.Mui-completed .MuiStepLabel-label': { color: '#A0A0A0' }, 
-            '.MuiStepLabel-root.Mui-active .MuiStepLabel-label': { color: '#FF4D6D' }, 
+            '.MuiStepLabel-root.Mui-active .MuiStepLabel-label': { color: '#A0A0A0' }, 
             '.MuiStepIcon-root': { color: '#333' }, 
             '.MuiStepIcon-root.Mui-completed': { color: '#00FFE7' }, 
             '.MuiStepIcon-root.Mui-active': { color: '#FF4D6D' }, 
