@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import './App.css'
 import { Home } from './component/Home'
 import { Navbar } from './component/Navbar'
 import { Footer } from './component/Footer'
@@ -8,7 +9,8 @@ import { Education } from './component/Education'
 import { Experience } from './component/Experience'
 import { Projects } from './component/Projects'
 import { Contact } from './component/Contact'
-import { BackToTop } from './component/BackToTop'
+import ScrollToTop from 'react-scroll-to-top'
+import { KeyboardDoubleArrowUp } from '@mui/icons-material'
  
 export const App = () => {
   const AboutRef = useRef(null)
@@ -36,7 +38,9 @@ export const App = () => {
     <Projects ref = {ProjectRef}/>
     <Contact ref={ContactRef}/>
     <Footer/>
-    <BackToTop/>
+    <ScrollToTop smooth className='back2top'
+    component={<KeyboardDoubleArrowUp/>}
+    />
     </>
   )
 }

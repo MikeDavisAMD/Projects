@@ -13,13 +13,13 @@ export const Navbar = ({AboutRef,EduRef,SkillsRef,ExpRef,ProjectRef,ContactRef})
     SkillsRef.current?.scrollIntoView({behavior:'smooth'})
   }
   const scrollExp = () => {
-    ExpRef.current.scrollIntoView({behavior:'smooth'})
+    ExpRef.current?.scrollIntoView({behavior:'smooth'})
   }
   const scrollProject = () => {
-    ProjectRef.current.scrollIntoView({behavior:'smooth'})
+    ProjectRef.current?.scrollIntoView({behavior:'smooth'})
   }
   const scrollContact = () => {
-    ContactRef.current.scrollIntoView({behavior:'smooth'})
+    ContactRef.current?.scrollIntoView({behavior:'smooth'})
   }
   // Drawer with options
   const [open, setOpen] = useState(false);
@@ -55,10 +55,10 @@ export const Navbar = ({AboutRef,EduRef,SkillsRef,ExpRef,ProjectRef,ContactRef})
     </Box>
   );
   return (
-    <Grid container sx={{backgroundColor:'#1A73E8'}}>
+    <Grid container>
       <Grid size={12}>
         <Box sx={{flexFlow:1}}>
-          <AppBar sx={{height:{lg:'100px',md:'100px',sm:'90px',xs:'70px'}}}>
+          <AppBar sx={{backgroundColor:'#1A73E8',height:{lg:'100px',md:'100px',sm:'90px',xs:'70px'}}}>
             <Toolbar>
               <Box sx={{display:'flex',alignItems:'center',height:{lg:'100px',md:'100px',sm:'90px',xs:'70px'},width:{lg:'80%',md:'80%',sm:'90%',xs:'90%'}}}>
                 <Typography 
