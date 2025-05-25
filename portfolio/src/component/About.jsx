@@ -1,4 +1,4 @@
-import { Facebook, GitHub, Mail, PhoneAndroid } from '@mui/icons-material'
+import { Facebook, GitHub, Instagram, LinkedIn, Mail, PhoneAndroid, WhatsApp } from '@mui/icons-material'
 import { Box, Button, Divider, Grid, Typography } from '@mui/material'
 import React from 'react'
 import aboutImg from '../Assets/Images/about.jpeg'
@@ -9,7 +9,7 @@ export const About = React.forwardRef((props,ref) => {
       <Grid size={12}>
         <Box sx={{height:{lg:'100px',md:'100px',sm:'90px',xs:'70px'},alignContent:'center'}}>
           <Typography variant='h1' 
-          sx={{fontFamily:'"Special Gothic Expanded One", sans-serif',fontSize:'40px',
+          sx={{fontFamily:'"Special Gothic Expanded One", sans-serif',fontSize:{lg:'40px',md:'40px',sm:'40px',xs:'20px'},
           fontWeight:400,fontStyle:'normal',color:'#1A73E8',textAlign:'center'}}>
             About Me
           </Typography>
@@ -18,10 +18,28 @@ export const About = React.forwardRef((props,ref) => {
       <Grid size={{sm:12,xs:12}}>
         <Box sx={{display:{lg:'none',md:'none',sm:'flex',xs:'flex'},position:'relative',justifyContent:'center',backgroundColor:'#F5F7FA'}}>
           <Box component='img' src={aboutImg} variant='About image'
-          sx={{height:{sm:'700px',xs:'400px'}}}></Box>
-          <Box sx={{position:'absolute',backgroundColor:'#1A73E8',height:{sm:'60px',xs:'50px',},left:0,right:0,bottom:0}}>
-            
-
+          sx={{height:{sm:'700px',xs:'550px'},width:{sm:'auto',xs:'100%'}}}></Box>
+          <Box sx={{position:'absolute',display:'flex',justifyContent:'center',gap:{sm:4,xs:2},alignItems:'center',backgroundColor:'#1A73E8',height:{sm:'60px',xs:'50px',},left:{sm:127,xs:0},right:{sm:127,xs:0},bottom:0}}>
+          <Button variant='outlined' href='https://www.facebook.com/share/1CA2gFtN5v/?mibextid=wwXIfr'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <Facebook/>
+            </Button>
+            <Button variant='outlined' href='https://github.com/MikeDavisAMD'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <GitHub/>
+            </Button>
+            <Button variant='outlined' href='https://www.linkedin.com/in/mikedavisa73'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <LinkedIn/>
+            </Button>
+            <Button variant='outlined' href='https://www.instagram.com/m.d.falcon73?igsh=MW1nazBqYmNjcmI4Yw%3D%3D&utm_source=qr'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <Instagram/>
+            </Button>
+            <Button variant='outlined' href='https://wa.me/917708172413'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <WhatsApp/>
+            </Button>
           </Box>
         </Box>
       </Grid>
@@ -68,8 +86,27 @@ export const About = React.forwardRef((props,ref) => {
         <Box sx={{display:{lg:'flex',md:'flex',sm:'none',xs:'none'},position:'relative',justifyContent:'center',backgroundColor:'#F5F7FA'}}>
           <Box component='img' src={aboutImg} variant='About image'
           sx={{height:{lg:'610px',md:'665px'}}}></Box>
-          <Box sx={{position:'absolute',backgroundColor:'#1A73E8',height:{lg:'70px',md:'70px',},left:0,right:0,bottom:0}}>
-            <Button variant='outlined' sx={{color:'#212121',backgroundColor:'#34A853',p:0,minWidth:'auto'}}><Facebook/></Button>
+          <Box sx={{position:'absolute',display:'flex',justifyContent:'center',gap:4,alignItems:'center',backgroundColor:'#1A73E8',height:{lg:'70px',md:'70px',},left:{lg:93,md:13},right:{lg:93,md:13},bottom:0}}>
+            <Button variant='outlined' href='https://www.facebook.com/share/1CA2gFtN5v/?mibextid=wwXIfr'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <Facebook/>
+            </Button>
+            <Button variant='outlined' href='https://github.com/MikeDavisAMD'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <GitHub/>
+            </Button>
+            <Button variant='outlined' href='https://www.linkedin.com/in/mikedavisa73'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <LinkedIn/>
+            </Button>
+            <Button variant='outlined' href='https://www.instagram.com/m.d.falcon73?igsh=MW1nazBqYmNjcmI4Yw%3D%3D&utm_source=qr'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <Instagram/>
+            </Button>
+            <Button variant='outlined' href='https://wa.me/917708172413'
+            sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
+              <WhatsApp/>
+            </Button>
           </Box>
         </Box>
       </Grid>
