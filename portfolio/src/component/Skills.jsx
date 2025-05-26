@@ -1,4 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
 import React from 'react'
 import html from '../Assets/Logo/html.png'
 import css from '../Assets/Logo/css-3.png'
@@ -7,11 +13,6 @@ import react from '../Assets/Logo/react.png'
 import node from '../Assets/Logo/nodejs.png'
 import express from '../Assets/Logo/Express.png'
 import mongodb from '../Assets/Logo/mongodb.png'
-import communication from '../Assets/Logo/communication.png'
-import teamplayer from '../Assets/Logo/teamplayer.png'
-import problemsolving from '../Assets/Logo/problemsolving.png'
-import criticalthinking from '../Assets/Logo/criticalthinking.png'
-import { ExpandMore } from '@mui/icons-material'
 
 export const Skills = React.forwardRef((props,ref) => {
   return (
@@ -26,84 +27,106 @@ export const Skills = React.forwardRef((props,ref) => {
         </Box>
       </Grid>
       <Grid size={12} sx={{backgroundColor:'#F5F7FA'}}>
-        <Box sx={{p:2,display:'flex',justifyContent:'center'}}>
-          <Card sx={{minWidth: 275,maxWidth:530,backgroundColor:'#F5F7FA',borderRadius:'10px',boxShadow:'2px 4px 8px black'}}>
-            <CardContent>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel1-content"
-                  id="panel1-header"
-                >
-                  <Typography component="span">Frontend Skills</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Box sx={{display:'flex',gap:{lg:8,md:8,sm:6,xs:3},justifyContent:'center'}}>
-                    <Box>
-                      <img src={html} alt="HTML" height={40}/>
-                    </Box>
-                    <Box>
-                      <img src={css} alt="CSS" height={40}/>
-                    </Box>
-                    <Box>
-                      <img src={js} alt="JS" height={40}/>
-                    </Box>
-                    <Box>
-                      <img src={react} alt="React JS" height={40}/>
-                    </Box>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel2-content"
-                  id="panel2-header"
-                >
-                  <Typography component="span">Backend Skills</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Box sx={{display:'flex',gap:{lg:10,md:10,sm:8,xs:5},justifyContent:'center'}}>
-                    <Box>
-                      <img src={node} alt="Node.js" height={40}/>
-                    </Box>
-                    <Box>
-                      <img src={express} alt="Express.js" height={40}/>
-                    </Box>
-                    <Box>
-                      <img src={mongodb} alt="MongoDB" height={40}/>
-                    </Box>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel2-content"
-                  id="panel2-header"
-                >
-                  <Typography component="span">Soft Skills</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Box sx={{display:'flex',gap:{lg:8,md:8,sm:6,xs:3},justifyContent:'center'}}>
-                    <Box>
-                      <img src={communication} alt="Communication" height={50}/>
-                    </Box>
-                    <Box>
-                      <img src={teamplayer} alt="Team Player" height={50}/>
-                    </Box>
-                    <Box>
-                      <img src={problemsolving} alt="Problem Solving" height={50}/>
-                    </Box>
-                    <Box>
-                      <img src={criticalthinking} alt="Critical Thinking" height={50}/>
-                    </Box>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </CardContent>
-          </Card>
-        </Box>
+        <Timeline position="alternate">
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector />
+              <TimelineDot >
+                <img src={html} alt="HTML" height={35}/>
+              </TimelineDot>
+              <TimelineConnector/>
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2 }}>
+              <Typography variant="h6" component="span">
+                HTML
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{height:'50px'}}/>
+              <TimelineDot >
+                <img src={css} alt="CSS" height={35}/>
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2,display:'flex',justifyContent:'end',alignItems:'end' }}>
+              <Typography variant="h6" component="span">
+                CSS
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{height:'50px'}}/>
+              <TimelineDot >
+                <img src={js} alt="JavaScript" height={35} style={{borderRadius:'15px'}}/>
+              </TimelineDot>
+              <TimelineConnector sx={{height:'50px'}} />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2, display:'flex',alignItems:'center' }}>
+              <Typography variant="h6" component="span">
+                Java Script
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector />
+              <TimelineDot>
+                <img src={react} alt="React JS" height={35}/>
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2 }}>
+              <Typography variant="h6" component="span">
+                React JS
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{height:'50px'}} />
+              <TimelineDot >
+                <img src={node} alt="Node.js" height={35}/>
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2, display:'flex', alignItems:'end' }}>
+              <Typography variant="h6" component="span">
+                Node JS
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{height:'50px'}} />
+              <TimelineDot sx={{p:0}}>
+                <img src={express} alt="Express JS" height={40} />
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2,display:'flex',justifyContent:'end',alignItems:'end' }}>
+              <Typography variant="h6" component="span">
+                Express JS
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{height:'50px'}} />
+              <TimelineDot >
+                <img src={mongodb} alt="Mongo DB" height={35} />
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '20px', px: 2,display:'flex',alignItems:'end' }}>
+              <Typography variant="h6" component="span">
+                Mongo DB
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+        </Timeline>
       </Grid>
     </Grid>
   )
