@@ -1,3 +1,4 @@
+import emailjs from '@emailjs/browser'
 import { Alert, Autocomplete, Box, Button, Grid, IconButton, Snackbar, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import repair from '../Assets/Images/Repair.jpg'
@@ -58,21 +59,45 @@ export const Service = () => {
         openSnackbar()
         return;
       }
-      await axios.post(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/services.json`,{
-        name: name,
-        mobile: mobile,
-        email: email,
-        serviceType: serviceType
+      emailjs.send(
+        'FalconCamsService73',
+        'CustomerReplyFC73',
+        {
+          name: name,
+          mobile: mobile,
+          email: email,
+          serviceType: serviceType
+        },'AVGf1iFYr6MFznfAv'
+      ).then(()=>{
+        emailjs.send(
+          'FalconCamsService73',
+          'ServiceEmailFC73',
+          {
+            name: name,
+            mobile: mobile,
+            email: email,
+            serviceType: serviceType
+          },'AVGf1iFYr6MFznfAv'
+        )
+      }).then(
+        ()=>{
+          setBooked(true)
+          openSnackbar()
+          setName('')
+          setMobile('')
+          setEmail('')
+          setType('')
+          setTimeout(()=>{
+            navigate('/')
+          },2000)
+        }
+      ).catch((error)=>{
+        const errorMessage =
+          error?.text || error?.message || JSON.stringify(error) || 'Unknown error';
+        console.error('EmailJS Error:', errorMessage);
+        setError(errorMessage);
+        openSnackbar();
       })
-      setName('')
-      setMobile('')
-      setEmail('')
-      setType('')
-      setBooked(true)
-      openSnackbar()
-      setTimeout(()=>{
-        navigate('/')
-      },2000)
     } catch (error) {
       setError(error.message)
       openSnackbar()
