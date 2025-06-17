@@ -32,8 +32,8 @@ export const Login = () => {
         ((user.username===username || user.mobile===username || user.email===username) && 
         (user.password===password)))
       if(userdata){
-        localStorage.setItem('loggedIn','true')
-        localStorage.setItem('username',username)
+        sessionStorage.setItem('loggedIn','true')
+        sessionStorage.setItem('username',username)
         navigate('/')
         window.dispatchEvent(new Event('storage'));
         openSnackbar()

@@ -132,7 +132,7 @@ export const Cart = () => {
     setSelectedValue(value);
     const index = addresses.indexOf(value)
     if (index!==-1) {
-      localStorage.setItem('addressIndex',index)
+      sessionStorage.setItem('addressIndex',index)
     }
   };
   // for quantity
@@ -145,13 +145,13 @@ export const Cart = () => {
         ...prevQuantities,
         [firebaseKey]: Math.max(newQuantity, 1), // Prevent quantity from going below 1
       };
-      localStorage.setItem('cartQuantities', JSON.stringify(updatedQuantities));
+      sessionStorage.setItem('cartQuantities', JSON.stringify(updatedQuantities));
       window.dispatchEvent(new Event('storage'))
       return updatedQuantities
     });
   };
   const fetchData = async () => {
-    const username = localStorage.getItem('username')
+    const username = sessionStorage.getItem('username')
     if (!username) {
       return;
     }
@@ -167,7 +167,7 @@ export const Cart = () => {
         firebaseKey : key, ...val
       }))
       setValue(data)
-      localStorage.setItem('cart',data.length)
+      sessionStorage.setItem('cart',data.length)
       window.dispatchEvent(new Event('storage'))
       console.log(data)
     } catch (error) {
@@ -175,7 +175,7 @@ export const Cart = () => {
     }
   }
   const removeItem = async (key) => {
-    const username = localStorage.getItem('username')
+    const username = sessionStorage.getItem('username')
     if (!username) {
       return;
     }
@@ -199,7 +199,7 @@ export const Cart = () => {
   }
   const fetchAddresses = async () => {
     try {
-      const username = localStorage.getItem('username')
+      const username = sessionStorage.getItem('username')
       const res=await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
       const users = Object.entries(res.data).map(([key,val])=>({
         firebaseKey: key,...val
@@ -214,7 +214,7 @@ export const Cart = () => {
   }
   const address = async (newAddress) => {
     try {
-      const username = localStorage.getItem('username')
+      const username = sessionStorage.getItem('username')
       const res = await axios.get("https://falconcams-default-rtdb.firebaseio.com/users.json")
       const users = Object.entries(res.data).map(([key,val])=>({
         firebaseKey: key,...val
@@ -233,7 +233,7 @@ export const Cart = () => {
   useEffect(()=>{
     fetchData();
     fetchAddresses();
-    const savedQuantities = localStorage.getItem('cartQuantities');
+    const savedQuantities = sessionStorage.getItem('cartQuantities');
     if (savedQuantities) {
       setQuantity(JSON.parse(savedQuantities));
     }
@@ -283,7 +283,7 @@ export const Cart = () => {
     <Grid container sx={{backgroundColor: '#121B2B', color: '#E0E0E0'}}>
       <Grid size={12}>
         <Typography variant="h4" sx={{padding:'10px 40px'}}>
-          Shopping Cart ({localStorage.getItem('cart')} items)
+          Shopping Cart ({sessionStorage.getItem('cart')} items)
         </Typography>
       </Grid>
       <Grid size={{lg:8,md:8,sm:7,xs:12}}>

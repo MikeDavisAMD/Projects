@@ -18,7 +18,7 @@ export const Wishlist = () => {
   const [success,setSuccess]=useState('')
   const [cart,setCart]=useState([])
   const addCart = async (itemwithkey) => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       setError('User not logged in');
       openSnackbar();
@@ -33,8 +33,8 @@ export const Wishlist = () => {
     }
     const updatedCart = [...cart,items]
     setCart(updatedCart)
-    let cartCount = parseInt(localStorage.getItem('cart'), 10) || 0;
-    localStorage.setItem('cart',cartCount+1)
+    let cartCount = parseInt(sessionStorage.getItem('cart'), 10) || 0;
+    sessionStorage.setItem('cart',cartCount+1)
     window.dispatchEvent(new Event('storage'))
     try {
       const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
@@ -60,7 +60,7 @@ export const Wishlist = () => {
   // pagination navigation
   const [page,setPage] = useState(1)
   const fetchData = async () => {
-    const username = localStorage.getItem('username')
+    const username = sessionStorage.getItem('username')
     if (!username) {
       return;
     }
@@ -76,7 +76,7 @@ export const Wishlist = () => {
         firebaseKey : key, ...val
       }))
       setData(data)
-      localStorage.setItem('wishlist',data.length)
+      sessionStorage.setItem('wishlist',data.length)
       window.dispatchEvent(new Event('storage'))
       console.log(data)
     } catch (error) {
@@ -84,7 +84,7 @@ export const Wishlist = () => {
     }
   }
   const removeItem = async (key) => {
-      const username = localStorage.getItem('username')
+      const username = sessionStorage.getItem('username')
       if (!username) {
         return;
       }

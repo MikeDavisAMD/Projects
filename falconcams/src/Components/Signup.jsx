@@ -53,8 +53,8 @@ export const Signup = () => {
         setRegister(true)
         openSnackbar()
         setTimeout(()=>{
-          localStorage.setItem('loggedIn','true')
-          localStorage.setItem('username',username)
+          sessionStorage.setItem('loggedIn','true')
+          sessionStorage.setItem('username',username)
           navigate('/')
           window.dispatchEvent(new Event('storage'));
         },2000)

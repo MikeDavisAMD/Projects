@@ -10,10 +10,10 @@ import { AccountCircle, AppRegistration, Close, Favorite, Login, Logout, MenuSha
 export const Navbar = () => {
   const navigate = useNavigate()
   // wishlist
-  const [wishlist,setWishlist] = useState(localStorage.getItem('wishlist') || 0)
+  const [wishlist,setWishlist] = useState(sessionStorage.getItem('wishlist') || 0)
   useEffect(()=>{
     const updateWishlistCount = () => {
-      const wishlistCount = localStorage.getItem('wishlist') || 0
+      const wishlistCount = sessionStorage.getItem('wishlist') || 0
       setWishlist(Number(wishlistCount))
     }
     window.addEventListener('storage',updateWishlistCount)
@@ -21,10 +21,10 @@ export const Navbar = () => {
     return () => window.removeEventListener('storage',updateWishlistCount) 
   },[])
   // cart
-  const [cart,setCart] = useState(localStorage.getItem('cart') || 0)
+  const [cart,setCart] = useState(sessionStorage.getItem('cart') || 0)
   useEffect(()=>{
     const updateCartCount = () => {
-      const cartCount = localStorage.getItem('cart') || 0
+      const cartCount = sessionStorage.getItem('cart') || 0
       setCart(Number(cartCount))
     }
     window.addEventListener('storage',updateCartCount)
@@ -65,13 +65,13 @@ export const Navbar = () => {
   }
   useEffect(() => {
     const isLoggedIn =()=>{
-      setLoggedIn(localStorage.getItem('loggedIn') === 'true');
+      setLoggedIn(sessionStorage.getItem('loggedIn') === 'true');
     };
     window.addEventListener('storage',isLoggedIn)
     isLoggedIn()
     const handleBeforeUnload = () => {
-      localStorage.removeItem('loggedIn');
-      localStorage.removeItem('username');
+      sessionStorage.removeItem('loggedIn');
+      sessionStorage.removeItem('username');
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () =>{ 
@@ -80,8 +80,8 @@ export const Navbar = () => {
     }   
   },[]);
   const handleLogout = () => {
-    localStorage.removeItem('loggedIn')
-    localStorage.removeItem('username')
+    sessionStorage.removeItem('loggedIn')
+    sessionStorage.removeItem('username')
     setLoggedIn(false)
     setAnchorEl(null)
     navigate('/')

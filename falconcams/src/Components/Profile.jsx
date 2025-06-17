@@ -27,7 +27,7 @@ export const Profile = () => {
   const handleClose = () => {
     setOpenDialog(false);
   };
-  const username = localStorage.getItem('username')
+  const username = sessionStorage.getItem('username')
   const [error,setError]=useState('')
   const [saved,setSaved]=useState(false)
   const [name,setName]=useState('')
@@ -80,8 +80,8 @@ export const Profile = () => {
     axios.delete(`https://falconcams-default-rtdb.firebaseio.com/users/${firebaseKey}.json`)
     .then(()=>{
       setSaved("Profile Deleted")
-      localStorage.removeItem('loggedIn')
-      localStorage.removeItem('username')
+      sessionStorage.removeItem('loggedIn')
+      sessionStorage.removeItem('username')
       window.location.href='/';
     })
   }

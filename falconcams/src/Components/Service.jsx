@@ -14,7 +14,7 @@ const options = [
 ];
 
 export const Service = () => {
-  const username = localStorage.getItem('username')
+  const username = sessionStorage.getItem('username')
   const [error,setError] = useState('')
   const navigate = useNavigate()
   // Snackbar

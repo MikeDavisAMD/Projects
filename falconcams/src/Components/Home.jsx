@@ -19,7 +19,7 @@ export const Home = () => {
   const [loggedIn,setLoggedIn]=useState(false)
     useEffect(() => {
       const isLoggedIn =()=>{
-        setLoggedIn(localStorage.getItem('loggedIn') === 'true');
+        setLoggedIn(sessionStorage.getItem('loggedIn') === 'true');
       };
       window.addEventListener('storage',isLoggedIn)
       isLoggedIn()

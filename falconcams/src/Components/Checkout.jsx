@@ -48,7 +48,7 @@ export const Checkout = () => {
   const navigate = useNavigate()
   // on refresh go to login
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       navigate('/login');  // Redirect to login page
     }
@@ -92,7 +92,7 @@ export const Checkout = () => {
     const [address,setAddress]=useState([])
     useEffect(()=>{
       const fetchData = async () => {
-        const username = localStorage.getItem('username')
+        const username = sessionStorage.getItem('username')
         if (!username) {
           return;
         }
@@ -104,7 +104,7 @@ export const Checkout = () => {
           if (userData) {
             setFname(userData.fname)
             setLname(userData.lname)
-            setAddress(userData.address[localStorage.getItem('addressIndex')] || userData.address[0])
+            setAddress(userData.address[sessionStorage.getItem('addressIndex')] || userData.address[0])
             setMob(userData.mobile)
             setEmail(userData.email)
           }
@@ -133,7 +133,7 @@ export const Checkout = () => {
   const OrderSummaryCard = () => {
     const [data,setData]=useState([])
     const fetchData = async () => {
-      const username = localStorage.getItem('username')
+      const username = sessionStorage.getItem('username')
       if (!username) {
         return;
       }
@@ -144,7 +144,7 @@ export const Checkout = () => {
         if (!userKey) {
           return;
         }
-        const quantities = JSON.parse(localStorage.getItem('cartQuantities')) || 1;
+        const quantities = JSON.parse(sessionStorage.getItem('cartQuantities')) || 1;
         const cartRes = await axios.get(`https://falconcams-default-rtdb.firebaseio.com/users/${userKey}/cart.json`)
         const data = Object.entries(cartRes.data || {}).map(([key,val])=>({
           firebaseKey : key, 
@@ -152,7 +152,7 @@ export const Checkout = () => {
           quantity: quantities[key]
         }))
         setData(data)
-        console.log(localStorage.getItem('cartQuantities'))
+        console.log(sessionStorage.getItem('cartQuantities'))
         console.log(data)
       } catch (error) {
         console.error(error.message)

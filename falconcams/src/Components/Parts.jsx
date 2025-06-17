@@ -30,7 +30,7 @@ export const Parts = () => {
   const [success,setSuccess]=useState('')
   const [wishlist,setWishlist]=useState([])
   const addWishlist = async (itemwithkey) => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       setError('User not logged in');
       openSnackbar();
@@ -45,8 +45,8 @@ export const Parts = () => {
     }
     const updatedWishlist = [...wishlist,items]
     setWishlist(updatedWishlist)
-    let wishlistCount = parseInt(localStorage.getItem('wishlist'), 10) || 0;
-    localStorage.setItem('wishlist',wishlistCount+1)
+    let wishlistCount = parseInt(sessionStorage.getItem('wishlist'), 10) || 0;
+    sessionStorage.setItem('wishlist',wishlistCount+1)
     window.dispatchEvent(new Event('storage'))
     try {
       const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
@@ -71,7 +71,7 @@ export const Parts = () => {
   // add to cart
   const [cart,setCart]=useState([])
   const addCart = async (itemwithkey) => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       setError('User not logged in');
       openSnackbar();
@@ -86,8 +86,8 @@ export const Parts = () => {
     }
     const updatedCart = [...cart,items]
     setCart(updatedCart)
-    let cartCount = parseInt(localStorage.getItem('cart'), 10) || 0;
-    localStorage.setItem('cart',cartCount+1)
+    let cartCount = parseInt(sessionStorage.getItem('cart'), 10) || 0;
+    sessionStorage.setItem('cart',cartCount+1)
     window.dispatchEvent(new Event('storage'))
     try {
       const response = await axios.get('https://falconcams-default-rtdb.firebaseio.com/users.json');
