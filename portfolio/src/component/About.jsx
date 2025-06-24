@@ -43,7 +43,7 @@ export const About = React.forwardRef((props,ref) => {
           </Box>
         </Box>
       </Grid>
-      <Grid size={{lg:6,md:6,sm:12,xs:12}}>
+      <Grid size={{lg:6,md:6,sm:12,xs:12}} sx={{backgroundColor:'#F5F7FA'}}>
         <Box sx={{p:4,backgroundColor:'#F5F7FA',height:'auto'}}>
           <Typography variant='body1' sx={{fontSize:'20px'}}>
             <b>My name is Mike Davis.I am a budding Web Developer looking for a job oppurtunity.</b>
@@ -82,11 +82,11 @@ export const About = React.forwardRef((props,ref) => {
           </Grid>
         </Box>
       </Grid>
-      <Grid size={{lg:6,md:6}}>
+      <Grid size={{lg:6,md:6}} sx={{backgroundColor:'#F5F7FA'}}>
         <Box sx={{display:{lg:'flex',md:'flex',sm:'none',xs:'none'},position:'relative',justifyContent:'center',backgroundColor:'#F5F7FA'}}>
           <Box component='img' src={aboutImg} variant='About image'
-          sx={{height:{lg:'610px',md:'665px'}}}></Box>
-          <Box sx={{position:'absolute',display:'flex',justifyContent:'center',gap:4,alignItems:'center',backgroundColor:'#1A73E8',height:{lg:'70px',md:'70px',},left:{lg:93,md:13},right:{lg:93,md:13},bottom:0}}>
+          sx={{height:{lg:'610px',md:'610px'}}}></Box>
+          <Box sx={{position:'absolute',display:'flex',justifyContent:'center',gap:4,alignItems:'center',backgroundColor:'#1A73E8',height:{lg:'70px',md:'70px',},left:{lg:93,md:32},right:{lg:93,md:32},bottom:0}}>
             <Button variant='outlined' href='https://www.facebook.com/share/1CA2gFtN5v/?mibextid=wwXIfr'
             sx={{color:'#212121',backgroundColor:'#34A853',p:0.5,minWidth:'auto',borderRadius:'10px','&:hover':{backgroundColor:'#F9AB00'}}}>
               <Facebook/>
