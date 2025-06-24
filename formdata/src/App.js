@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
+import { RouteSecure } from './components/RouteSecure'
+import './App.css'
+import { Home } from './components/Home'
+import { Form } from './components/Form'
+import { List } from './components/List'
+import { Register } from './components/Register'
+import { Profile } from './components/Profile'
+import { FilledForm } from './components/FilledForm'
 
-function App() {
+
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/Form' element={
+          <RouteSecure>
+            <Form/>
+          </RouteSecure>
+        }/>
+        <Route path='/List' element={
+          <RouteSecure>
+            <List/>
+          </RouteSecure>
+        }/>
+        <Route path='/Register' element={<Register/>}/>
+        <Route path='/Profile' element={
+          <RouteSecure>
+            <Profile/>
+          </RouteSecure>
+        }/>
+        <Route path='/FilledForm' element={
+          <RouteSecure>
+            <FilledForm/>
+          </RouteSecure>
+        }
+        />
+      </Routes>
+    </Router>
+  )
 }
-
-export default App;
