@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     response: {
         type: Map,
         of: mongoose.Schema.Types.ObjectId,
-        default:{}
+        default: {}
     }
 })
 

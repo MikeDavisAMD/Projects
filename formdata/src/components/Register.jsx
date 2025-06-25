@@ -37,7 +37,7 @@ export const Register = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:2000/user/register',{
+            const response = await axios.post('https://formdata.up.railway.app/user/register',{
                 username,
                 password,
                 isAdmin

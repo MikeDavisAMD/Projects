@@ -41,10 +41,16 @@ router.post('/',async (req,res) => {
             userId:user._id
         })
         const save = await form.save()
-        if (!user.response) user.response = new Map()
-        
-        user.response.set(fname,save._id)
-        await user.save()
+        const uniqueKey = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        if (user.response instanceof Map) {
+            user.response.set(uniqueKey, save._id);
+        } else {
+            user.response[uniqueKey] = save._id;
+        }
+
+        user.markModified('response');
+        await user.save();
 
         res.status(201).json({responseId: save._id})
     } catch (error) {
@@ -90,19 +96,24 @@ router.delete('/:id',async (req,res) => {
         if (!data) return res.status(400).json({error:"Data not found"})
         const user = await User.find({ response: { $exists: true } })
         for (const usr of user) {
-        const responseMap = usr.response instanceof Map
-            ? usr.response
-            : new Map(Object.entries(usr.response))
-    
-        for (const [key, value] of responseMap.entries()) {
-            if (value.toString() === id) {
-            responseMap.delete(key)
-            usr.response = responseMap
-            usr.markModified('response') 
-            await usr.save()
-            break 
+            const responseMap = usr.response instanceof Map
+                ? usr.response
+                : new Map(Object.entries(usr.response));
+
+            let modified = false;
+
+            for (const [key, value] of responseMap.entries()) {
+                if (value.toString() === id) {
+                responseMap.delete(key);
+                modified = true;
+                }
             }
-        }
+
+            if (modified) {
+                usr.response = responseMap;
+                usr.markModified('response');
+                await usr.save();
+            }
         }
         res.json({message:'Deleted Successfully'})
     } catch (error) {

@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, Link, Snackbar, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardActions, CardContent, CircularProgress, Link, Snackbar, TextField, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 export const Home = () => {
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
 
     // Snackbar
@@ -26,9 +27,9 @@ export const Home = () => {
             setOpen(true)
             return
         }
-
+        setLoading(true)
         try {
-            const response = await axios.post('http://localhost:2000/user/login',{
+            const response = await axios.post('https://formdata.up.railway.app/user/login',{
                 username,
                 password
             })
@@ -38,6 +39,8 @@ export const Home = () => {
         } catch (error) {
             setError(error.response?.data?.message || "Login Failed")
             setOpen(true)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -50,7 +53,9 @@ export const Home = () => {
                 <TextField value={password} onChange={e=>setPassword(e.target.value)} variant='outlined' label="Password" type='password' sx={{width:'80%'}}/>
             </CardContent>
             <CardActions sx={{display:'flex',flexDirection:'column',alignItems:'center',pb:'30px'}}>
-                <Button variant='contained' onClick={handleClick}>Login</Button><br />
+                <Button variant='contained' onClick={handleClick} disabled={loading}>
+                    {loading ? <CircularProgress size={24} color="inherit"/> : 'Login'}
+                </Button><br />
                 <Typography variant='body2'>New user? <Link href='/Register'>Register</Link></Typography>
                 <Snackbar
                     open={open}

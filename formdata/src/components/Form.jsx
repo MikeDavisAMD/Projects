@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Card, CardActions, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Link, Radio, RadioGroup, Snackbar, TextareaAutosize, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Card, CardActions, CardContent, Checkbox, CircularProgress, FormControl, FormControlLabel, FormGroup, FormLabel, Link, Radio, RadioGroup, Snackbar, TextareaAutosize, TextField, Typography } from '@mui/material'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -8,6 +8,7 @@ import axios from 'axios';
 
 export const Form = () => {
     const [country,setCountry] = useState([])
+    const [loading,setLoading] = useState(false)
     const fetchCountries = async () => {
         try {
             const response = await axios.get('https://restcountries.com/v3.1/all?fields=name')
@@ -37,7 +38,7 @@ export const Form = () => {
                 console.error("No token in Storage");
                 return;
             }
-            const response = await axios.get('http://localhost:2000/user/me',{
+            const response = await axios.get('https://formdata.up.railway.app/user/me',{
                 headers:{
                     Authorization: `Bearer ${token}`
                 }
@@ -73,13 +74,14 @@ export const Form = () => {
     };
 
     const handleClick = async () => {
+        setLoading(true)
         let fileData = null
         // file upload multer
         if (profile) {
             try {
                 const formData = new FormData();
                 formData.append('file', profile);
-                const uploadRes = await axios.post('http://localhost:2000/data/uploads',formData,{
+                const uploadRes = await axios.post('https://formdata.up.railway.app/data/uploads',formData,{
                     headers:{
                         "Content-Type":"multipart/form-data"
                     }
@@ -92,11 +94,12 @@ export const Form = () => {
             } catch (error) {
                 setOpen(true)
                 setError('Failed to upload image')
+                setLoading(false)
                 return
             }
         }
 
-        await axios.post('http://localhost:2000/data',{
+        await axios.post('https://formdata.up.railway.app/data',{
             username:username,
             fname: fname,
             lname: lname,
@@ -128,7 +131,7 @@ export const Form = () => {
             setOpen(true);
             setSuccess('')
             setError(error.message)
-        })
+        }).finally(()=>setLoading(false))
     }
 
   return (
@@ -231,7 +234,9 @@ export const Form = () => {
                     </Box>
                 </CardContent>
                 <CardActions sx={{display:'flex',justifyContent:'center',pb:'30px'}}>
-                    <Button variant='contained' onClick={handleClick}>Submit</Button>
+                    <Button variant='contained' onClick={handleClick} disabled={loading}>
+                        {loading ? <CircularProgress size={24} color="inherit"/> : 'Submit'}
+                    </Button>
                     <Snackbar
                         open={open}
                         autoHideDuration={5000}
