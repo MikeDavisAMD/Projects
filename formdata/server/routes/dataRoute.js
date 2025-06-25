@@ -2,26 +2,33 @@ const express = require('express');
 const router = express.Router();
 const Data = require('../models/Data')
 const User = require('../models/User')
+const cloudinary = require('../middleware/cloudinary')
 const multer = require('multer')
 
-const storage = multer.diskStorage({
-    destination: function(req,file,cb){
-        cb(null,'./uploads')
-    },
-    filename: function(req,file,cb){
-        const uniqueName = Date.now()+'-'+file.originalname
-        cb(null,uniqueName)
-    }
-})
+const storage = multer.memoryStorage()
 
 const upload = multer({ storage: storage })
 
 router.post('/uploads',upload.single('file'),async (req,res) => {
     try {
-        const {filename,path:filepath} = req.file
-        res.status(201).json({
-            filename,
-            filepath
+        if (!req.file) return res.status(400).json({error:"No file found"})
+        const streamifier = require('streamifier')
+        const streamUpload = (req) => {
+            return new Promise((resolve,reject)=>{
+                const stream = cloudinary.uploader.upload_stream({folder:'uploads'},
+                    (error,result)=> {
+                        if (result) resolve(result)
+                        else reject(error)
+                    }
+                )
+                streamifier.createReadStream(req.file.buffer).pipe(stream)
+            })
+        }
+        
+        const result = await streamUpload(req)
+        return res.status(201).json({
+            filename:result.original_filename,
+            filepath:result.secure_url
         })
     } catch (error) {
         res.status(500).json({error:error.message})

@@ -13,8 +13,6 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
 
-app.use('/uploads',express.static('uploads'))
-
 const userRoute = require('./routes/userRoute')
 const dataRoute = require('./routes/dataRoute')
 
