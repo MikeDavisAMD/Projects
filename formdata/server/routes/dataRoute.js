@@ -43,11 +43,9 @@ router.post('/',async (req,res) => {
         const save = await form.save()
         const uniqueKey = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-        if (user.response instanceof Map) {
-            user.response.set(uniqueKey, save._id);
-        } else {
-            user.response[uniqueKey] = save._id;
-        }
+        if (!user.response) user.response = new Map()
+        
+        user.response.set(uniqueKey,save._id)
 
         user.markModified('response');
         await user.save();
