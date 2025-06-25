@@ -37,7 +37,7 @@ export const Register = () => {
         }
 
         try {
-            const response = await axios.post('https://formdata.up.railway.app/user/register',{
+            const response = await axios.post('https://projects-tvrs.onrender.com/user/register',{
                 username,
                 password,
                 isAdmin

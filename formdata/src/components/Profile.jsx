@@ -32,7 +32,7 @@ export const Profile = () => {
                 return
             }
 
-            const response = await axios.get('https://formdata.up.railway.app/user/me',{
+            const response = await axios.get('https://projects-tvrs.onrender.com/user/me',{
                 headers:{
                     Authorization:`Bearer ${token}`
                 }
@@ -51,7 +51,7 @@ export const Profile = () => {
                 return
             }
 
-            await axios.put('https://formdata.up.railway.app/user/update',{username,password},{
+            await axios.put('https://projects-tvrs.onrender.com/user/update',{username,password},{
                 headers:{
                     Authorization:`Bearer ${token}`
                 }
@@ -83,7 +83,7 @@ export const Profile = () => {
         const userId = decoded.id
 
         try {
-            await axios.delete(`https://formdata.up.railway.app/user/${userId}`)
+            await axios.delete(`https://projects-tvrs.onrender.com/user/${userId}`)
             sessionStorage.removeItem(token)
             setSuccess("Profile Deleted Successfully")
             setOpen(true)

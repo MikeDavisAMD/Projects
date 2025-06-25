@@ -42,7 +42,7 @@ export const FilledForm = () => {
   const handleUpdate = async (id) => {
     setSaveLoad(id)
     try {
-      await axios.put(`https://formdata.up.railway.app/data/${id}`,{
+      await axios.put(`https://projects-tvrs.onrender.com/data/${id}`,{
         fname: fname,
         lname: lname,
         email: email,
@@ -64,7 +64,7 @@ export const FilledForm = () => {
   const handleDelete = async (id) => {
     setDelLoad(id)
     try {
-      await axios.delete(`https://formdata.up.railway.app/data/${id}`)
+      await axios.delete(`https://projects-tvrs.onrender.com/data/${id}`)
       fetchData()
     } catch (error) {
       console.error(error.message)
@@ -77,7 +77,7 @@ export const FilledForm = () => {
     setLoading(true)
     try {
         const token = sessionStorage.getItem('token')
-        const response = await axios.get('https://formdata.up.railway.app/user/me',{
+        const response = await axios.get('https://projects-tvrs.onrender.com/user/me',{
             headers:{
                 Authorization: `Bearer ${token}`
             }
@@ -89,7 +89,7 @@ export const FilledForm = () => {
         console.log("Fetching form IDs:", id)
 
         const datas = await Promise.all(
-            id.map(id=>axios.get(`https://formdata.up.railway.app/data/${id}`))
+            id.map(id=>axios.get(`https://projects-tvrs.onrender.com/data/${id}`))
         )
         setData(datas.map(d=>d.data))
     } catch (error) {
@@ -133,7 +133,7 @@ export const FilledForm = () => {
               id="panel3-header"
             >
               <Box sx={{display:'flex',alignItems:'center',gap:4,pl:4}}>
-              <Avatar alt={data.file?.filename || data.fname} src={data.file?.filepath ? `https://formdata.up.railway.app/data/${data.file.filepath.replace('\\','/')}` : ''}/>
+              <Avatar alt={data.file?.filename || data.fname} src={data.file?.filepath ? `https://projects-tvrs.onrender.com/data/${data.file.filepath.replace('\\','/')}` : ''}/>
               <Typography component="span"><b>{edit === data._id? (
                 <Box>
                   <TextField variant='standard' size='small' value={fname} onChange={e=>setFname(e.target.value)}/>

@@ -38,7 +38,7 @@ export const Form = () => {
                 console.error("No token in Storage");
                 return;
             }
-            const response = await axios.get('https://formdata.up.railway.app/user/me',{
+            const response = await axios.get('https://projects-tvrs.onrender.com/user/me',{
                 headers:{
                     Authorization: `Bearer ${token}`
                 }
@@ -81,7 +81,7 @@ export const Form = () => {
             try {
                 const formData = new FormData();
                 formData.append('file', profile);
-                const uploadRes = await axios.post('https://formdata.up.railway.app/data/uploads',formData,{
+                const uploadRes = await axios.post('https://projects-tvrs.onrender.com/data/uploads',formData,{
                     headers:{
                         "Content-Type":"multipart/form-data"
                     }
@@ -99,7 +99,7 @@ export const Form = () => {
             }
         }
 
-        await axios.post('https://formdata.up.railway.app/data',{
+        await axios.post('https://projects-tvrs.onrender.com/data',{
             username:username,
             fname: fname,
             lname: lname,

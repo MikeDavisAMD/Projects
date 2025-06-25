@@ -13,12 +13,13 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
 
+app.use('/data/uploads',express.static('uploads'))
+
 const userRoute = require('./routes/userRoute')
 const dataRoute = require('./routes/dataRoute')
 
 app.use('/user',userRoute)
 app.use('/data',dataRoute)
-app.use('/data/uploads',express.static('uploads'))
 
 app.get('/', (req,res) => {
     res.send("Welcome to my app")
