@@ -103,7 +103,7 @@ export const Form = () => {
             username:username,
             fname: fname,
             lname: lname,
-            dob: dob ? dob.format('DD/MM/YYYY') : null,
+            dob: dob ? dob.toDate() : null,
             gender: gender,
             mobile: mobile,
             email: email,

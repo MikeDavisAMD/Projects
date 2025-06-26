@@ -86,8 +86,6 @@ export const FilledForm = () => {
         const resMap = response.data.response || {}
         const id = Object.values(resMap)
 
-        console.log("Fetching form IDs:", id)
-
         const datas = await Promise.all(
             id.map(id=>axios.get(`https://projects-tvrs.onrender.com/data/${id}`))
         )
@@ -167,7 +165,7 @@ export const FilledForm = () => {
                               <DatePicker value={dob ? dayjs(dob) : null} onChange={(e)=>setDOB(e ? e.toISOString() : '')} format='DD/MM/YYYY' label="Date of Birth" sx={{width:'85%'}}/>
                           </DemoContainer>
                       </LocalizationProvider>
-                      ):new Date(data.dob).toLocaleDateString('en-US')}</TableCell>
+                      ):new Date(data.dob).toLocaleDateString()}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell><b>Gender</b></TableCell>
