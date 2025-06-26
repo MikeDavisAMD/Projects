@@ -12,6 +12,7 @@ const upload = multer({ storage: storage })
 router.post('/uploads',upload.single('file'),async (req,res) => {
     try {
         if (!req.file) return res.status(400).json({error:"No file found"})
+        console.log(req.file) //check incomming file
         const streamifier = require('streamifier')
         const streamUpload = (req) => {
             return new Promise((resolve,reject)=>{
@@ -31,6 +32,7 @@ router.post('/uploads',upload.single('file'),async (req,res) => {
             filepath:result.secure_url
         })
     } catch (error) {
+        console.error('cloudinary upload error',error)
         res.status(500).json({error:error.message})
     }
 })

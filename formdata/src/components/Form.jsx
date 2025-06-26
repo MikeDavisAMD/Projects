@@ -93,7 +93,7 @@ export const Form = () => {
                 }
             } catch (error) {
                 setOpen(true)
-                setError('Failed to upload image')
+                setError('Failed to upload image',error)
                 setLoading(false)
                 return
             }
