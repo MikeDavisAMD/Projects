@@ -103,19 +103,18 @@ router.delete('/:id',async (req,res) => {
         if (!data) return res.status(400).json({error:"Data not found"})
         const user = await User.find({ response: { $exists: true } })
         for (const usr of user) {
-            const response = usr.response || {}
+            const responseMap = usr.response || {}
 
             let modified = false;
 
-            for (const [key, value] of Object.entries(response)) {
+            for (const [key, value] of responseMap.entries()) {
                 if (value.toString() === id) {
-                    delete response[key];
+                    responseMap.delete(key);
                     modified = true;
                 }
             }
 
             if (modified) {
-                usr.response = response;
                 usr.markModified('response');
                 await usr.save();
             }
