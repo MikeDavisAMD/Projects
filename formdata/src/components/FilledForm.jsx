@@ -133,7 +133,7 @@ export const FilledForm = () => {
               id="panel3-header"
             >
               <Box sx={{display:'flex',alignItems:'center',gap:4,pl:4}}>
-              <Avatar alt={data.file?.filename || data.fname} src={data.file?.filepath ? `https://projects-tvrs.onrender.com/data/${data.file.filepath.replace('\\','/')}` : ''}/>
+              <Avatar alt={data.file?.filename || data.fname} src={data.file?.filepath || ''}/>
               <Typography component="span"><b>{edit === data._id? (
                 <Box>
                   <TextField variant='standard' size='small' value={fname} onChange={e=>setFname(e.target.value)}/>
