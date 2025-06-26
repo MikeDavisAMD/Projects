@@ -107,10 +107,10 @@ router.delete('/:id',async (req,res) => {
 
             let modified = false;
 
-            for (const [key, value] of Object.entries()) {
+            for (const [key, value] of Object.entries(response)) {
                 if (value.toString() === id) {
-                delete response[key];
-                modified = true;
+                    delete response[key];
+                    modified = true;
                 }
             }
 
