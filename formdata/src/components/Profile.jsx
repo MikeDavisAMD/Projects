@@ -1,5 +1,5 @@
 import { Close, ContactPage, Delete, Edit, Logout, Save } from '@mui/icons-material'
-import { Box, Button, Card, CardActions, CardContent, Fab, Snackbar, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Card, CardActions, CardContent, CircularProgress, Fab, Snackbar, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Tooltip, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +10,8 @@ export const Profile = () => {
     const [password,setPassword] = useState('')
     const [edit, setEdit] = useState(false)
     const navigate = useNavigate()
+    const [saveLoad,setSaveLoad] = useState(false)
+    const [delLoad,setDelLoad] = useState(false)
 
     // Snackbar
     const [open,setOpen] = useState(false)
@@ -44,6 +46,7 @@ export const Profile = () => {
     }
 
     const handleUpdate = async () => {
+        setSaveLoad(true)
         try {
             const token = sessionStorage.getItem('token')
             if(!token) {
@@ -63,6 +66,8 @@ export const Profile = () => {
             setEdit(false)
         } catch (error) {
             setError(error.response?.data?.message)
+        } finally {
+            setSaveLoad(false)
         }
     }
 
@@ -76,6 +81,7 @@ export const Profile = () => {
     }
 
     const handleDelete = async () => {
+        setDelLoad(true)
         const token = sessionStorage.getItem('token')
         if (!token) return
 
@@ -90,6 +96,8 @@ export const Profile = () => {
             navigate('/')
         } catch (error) {
             setError(error.response?.data?.message)
+        } finally {
+            setDelLoad(false)
         }
     }
 
@@ -123,8 +131,8 @@ export const Profile = () => {
             <CardActions sx={{display:'flex',justifyContent:'center',gap:4}}>
                 {edit ? (
                     <Tooltip title='Save'>
-                        <Fab sx={{backgroundColor:'#46C2FF'}} onClick={handleUpdate}>
-                            <Save/>
+                        <Fab sx={{backgroundColor:'#46C2FF'}} onClick={handleUpdate} disabled={saveLoad}>
+                            {saveLoad ? <CircularProgress size={24} color="inherit" /> : <Save/>}
                         </Fab>
                     </Tooltip>
                 ):(
@@ -135,8 +143,8 @@ export const Profile = () => {
                     </Tooltip>
                 )}
                 <Tooltip title='Delete'>
-                    <Fab sx={{backgroundColor:'#FD2212'}} onClick={handleDelete}> 
-                        <Delete/>
+                    <Fab sx={{backgroundColor:'#FD2212'}} onClick={handleDelete} disabled={delLoad}> 
+                        {delLoad ? <CircularProgress size={24} color="inherit" /> : <Delete/>}
                     </Fab>
                 </Tooltip>
                 <Snackbar

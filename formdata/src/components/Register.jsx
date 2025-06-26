@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, Checkbox, Link, Snackbar, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardActions, CardContent, Checkbox, CircularProgress, Link, Snackbar, TextField, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +9,7 @@ export const Register = () => {
     const [confirm,setConfirm] = useState('')
     const [isAdmin,setIsAdmin] = useState(false)
     const navigate = useNavigate()
+    const [loading,setLoading] = useState(false)
 
     // Snackbar
     const [open,setOpen] = useState(false)
@@ -24,6 +25,7 @@ export const Register = () => {
     };
 
     const handleClick = async () => {
+        setLoading(true)
         if (!username || !password || !confirm){
             setError('All Fields are Required')
             setOpen(true)
@@ -48,6 +50,8 @@ export const Register = () => {
         } catch (error) {
             setOpen(true)
             setError(error.response?.data?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -64,7 +68,9 @@ export const Register = () => {
                 </Box>
             </CardContent>
             <CardActions sx={{display:'flex',flexDirection:'column',alignItems:'center',pb:'30px'}}>
-                <Button variant='contained' onClick={handleClick}>Register</Button><br />
+                <Button variant='contained' onClick={handleClick} disabled={loading}>
+                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
+                </Button><br />
                 <Typography variant='body2'>Already have an account? <Link href='/'>Login</Link></Typography>
                 <Snackbar
                     open={open}

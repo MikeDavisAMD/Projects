@@ -12,7 +12,6 @@ const upload = multer({ storage: storage })
 router.post('/uploads',upload.single('file'),async (req,res) => {
     try {
         if (!req.file) return res.status(400).json({error:"No file found"})
-        console.log(req.file) //check incomming file
         const streamifier = require('streamifier')
         const streamUpload = (req) => {
             return new Promise((resolve,reject)=>{
