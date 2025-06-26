@@ -9,10 +9,6 @@ const storage = multer.memoryStorage()
 
 const upload = multer({ storage: storage })
 
-router.get('/test',async (req,res) => {
-    res.send("Route Working")
-})
-
 router.post('/uploads',upload.single('file'),async (req,res) => {
     try {
         if (!req.file) return res.status(400).json({error:"No file found"})

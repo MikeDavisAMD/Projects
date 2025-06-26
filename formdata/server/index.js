@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGO)
 const app = express()
 app.use(express.json())
 app.use(morgan('dev'))
-app.use(cors())
+app.use(cors({origin:'*'}))
 
 const userRoute = require('./routes/userRoute')
 const dataRoute = require('./routes/dataRoute')
