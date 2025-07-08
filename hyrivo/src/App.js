@@ -16,11 +16,7 @@ export const App = () => {
             <Home/>
           </RouteSecure>
         }/>
-        <Route path='/Signup' element={
-          <RouteSecure>
-            <Signup/>
-          </RouteSecure>
-        }/>
+        <Route path='/Signup' element={<Signup/>}/>
       </Routes>
     </Router>
   )
