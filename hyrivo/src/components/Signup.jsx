@@ -1,7 +1,7 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Box, Button, Card, CardContent, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, FormControlLabel, Grid, IconButton, InputAdornment, Link, Switch, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import SignupImg from '../Assets/Images/Signup.jpeg'
+import SignupImg from '../Assets/Images/Signup.png'
 import 'animate.css'
 
 export const Signup = () => {
@@ -11,7 +11,7 @@ export const Signup = () => {
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
         <Box sx={{display:'flex',justifyContent:{lg:'end',md:'center',sm:'center',xs:'center'},alignItems:'center',height:'550px'}}>
-          <Card className='animate__animated animate__fadeInTopLeft' sx={{width:{lg:'70%',md:'70%',sm:'90%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>
+          <Card className='animate__animated animate__fadeInTopLeft' sx={{width:{lg:'70%',md:'70%',sm:'95%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>
             <CardContent>
               <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'40px',md:'40px',sm:'30px',xs:'30px'},color:'#1A1A1A'}}>
                 <span>Welcome to</span> <span style={{fontStyle:'italic'}}>Hyrivo</span>
@@ -99,7 +99,24 @@ export const Signup = () => {
                     )
                   }
                 }}
-                /> <br /><br />
+                /> <br />
+                <Box>
+                  <FormControlLabel required control={<Switch size='small'/>} label={<span>Create Account as an Organization</span>}
+                  sx={{
+                    '& .MuiSwitch-switchBase':{
+                      backgroundColor:'default',
+                      '&:hover':{
+                        color:'#FF6EC7'
+                      }
+                    },
+                    '& .Mui-checked':{
+                      color:'#00BFFF'
+                    },
+                    '& .Mui-checked + .MuiSwitch-track':{
+                      backgroundColor:'#00BFFF'
+                    }
+                  }}/>
+                </Box><br />
                 <Button variant='outlined' size='large' sx={{
                   color:'#00BFFF',
                   borderColor:'#00BFFF',

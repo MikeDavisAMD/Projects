@@ -1,12 +1,14 @@
-import { Box, Button, Card, CardContent, Divider, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Checkbox, Divider, FormControlLabel, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 import 'animate.css'
-import LoginImg from '../Assets/Images/Login.jpeg'
+import LoginImg from '../Assets/Images/Login.png'
 import Google from '../Assets/Images/google.png'
 
 export const Login = () => {
   const [showPw,setShowPw] = useState(false)
+  const [username,setUsername] = useState('')
+  const [password,setPassword] = useState('')
 
   return (
     <Grid container>
@@ -27,7 +29,8 @@ export const Login = () => {
                 <span>Please Login to Your Account</span>
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
-                <TextField variant='standard' label='Username' sx={{width:'80%',
+                <TextField variant='standard' label='Username' value={username} onClick={(e)=>setUsername(e.target.value)}
+                sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
                     borderBottomColor:'#FF6EC7'
                   },
@@ -41,7 +44,8 @@ export const Login = () => {
                     color:'#FF6EC7'
                   }
                 }}/> <br />
-                <TextField variant='standard' label='Password' type={showPw ? 'text' : 'password'} sx={{width:'80%',
+                <TextField variant='standard' label='Password' type={showPw ? 'text' : 'password'} 
+                value={password} onClick={(e)=>setPassword(e.target.value)} sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
                     borderBottomColor:'#FF6EC7'
                   },
@@ -66,8 +70,13 @@ export const Login = () => {
                     )
                   }
                 }}
-                /> <br /><br />
-                <Button variant='outlined' size='large' sx={{
+                /> <br />
+                <Box>
+                  <FormControlLabel control={<Checkbox />} label={<span>Remember Me</span>} />
+                </Box><br />
+                <Button variant='outlined' size='large' 
+                
+                sx={{
                   color:'#00BFFF',
                   borderColor:'#00BFFF',
                   '&:hover':{
