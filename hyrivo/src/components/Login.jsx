@@ -143,8 +143,9 @@ export const Login = () => {
               </Box><br />
               <Divider><span>or</span></Divider><br />
               <Box sx={{display:'flex',justifyContent:'center'}}>
-                  <Button variant='outlined' sx={{borderRadius:'20px',
-                    
+                  <Button variant='outlined' 
+                  onClick={()=>window.location.href = 'http://localhost:2000/user/auth/google'}
+                  sx={{borderRadius:'20px',
                     color:'#00BFFF',
                     borderColor:'#00BFFF',
                     '&:hover':{

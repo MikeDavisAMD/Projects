@@ -5,6 +5,48 @@ const User = require('../models/User')
 const auth = require('../middleware/auth')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// Google OAuth authentication
+passport.use(new GoogleStrategy({
+clientID: process.env.GOOGLE_CLIENT_ID,  
+clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+callbackURL: '/user/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+try {
+    let user = await User.findOne({ email: profile.emails[0].value });
+
+    if (!user) {
+    user = new User({
+        username: profile.displayName,
+        email: profile.emails[0].value,
+        password: await bcrypt.hash(Math.random().toString(36), 10),
+        isCompany: false
+    });
+    await user.save();
+    }
+
+    return done(null, user);
+    } catch (err) {
+        return done(err, null);
+    }
+}));
+
+router.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+  );
+  
+  router.get('/auth/google/callback',
+    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+    async (req, res) => {
+      // Google profile is in req.user
+      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      res.redirect(`http://localhost:3000/oauth-success?token=${token}`);
+    }
+  );
+  
 
 router.post('/register',async (req,res) => {
     const {email,username,password,isCompany} = req.body

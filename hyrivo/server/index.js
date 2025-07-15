@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
+const passport = require('passport');
 
 mongoose.connect(process.env.MONGODB)
 .then(()=>console.log("Connected to Database"))
@@ -12,6 +13,7 @@ const app = express()
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
+app.use(passport.initialize())
 
 const userRoute = require('./routes/userRoute')
 
