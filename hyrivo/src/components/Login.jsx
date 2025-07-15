@@ -1,14 +1,60 @@
-import { Box, Button, Card, CardContent, Checkbox, Divider, FormControlLabel, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, CardContent, Checkbox, CircularProgress, Divider, FormControlLabel, Grid, IconButton, InputAdornment, Link, Snackbar, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 import 'animate.css'
 import LoginImg from '../Assets/Images/Login.png'
 import Google from '../Assets/Images/google.png'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
+  const navigate = useNavigate()
   const [showPw,setShowPw] = useState(false)
   const [username,setUsername] = useState('')
   const [password,setPassword] = useState('')
+  const [rememberMe,setRememberMe] = useState(false)
+  const [loading,setLoading] = useState(false)
+
+  // Snackbar
+  const [open,setOpen] = useState(false)
+  const [error,setError] = useState('')
+
+  const handleClose = (event, reason) => {
+  if (reason === 'clickaway') {
+      return;
+  }
+
+  setOpen(false);
+  };
+
+  const handleClick = async () => {
+    if (!username || !password) {
+      setError("Invalid Credentials")
+      setOpen(true)
+      setLoading(false)
+      return
+    }
+    setLoading(true)
+    try {
+      const response = await axios.post("http://localhost:2000/user/login",{
+        username,
+        password,
+        rememberMe
+      })
+      const {token} = response.data
+      if (rememberMe) {
+        localStorage.setItem('token',token)
+      } else {
+        sessionStorage.setItem('token',token)
+      }
+      navigate('/')
+    } catch (error) {
+      setError(error.response?.data?.message || "Login Failed")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Grid container>
@@ -20,13 +66,15 @@ export const Login = () => {
       </Grid>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
         <Box sx={{display:'flex',justifyContent:{lg:'start',md:'start',sm:'center',xs:'center'},alignItems:'center',height:{lg:'550px',md:'550px',sm:'500px',xs:'500px'}}}>
-          <Card className='animate__animated animate__fadeInTopRight' sx={{width:{lg:'70%',md:'80%',sm:'80%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>
+          <Card className='animate__animated animate__fadeInTopRight' sx={{width:{lg:'70%',md:'80%',sm:'95%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>
             <CardContent>
               <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'40px',md:'40px',sm:'30px',xs:'30px'},color:'#1A1A1A'}}>
-                <span>Welcome to</span> <span style={{fontStyle:'italic'}}>Hyrivo</span>
+                <span>Login to</span> <span style={{fontStyle:'italic'}}>Hyrivo</span>
               </Typography>
               <Typography variant='body2' sx={{textAlign:'center',fontSize:{lg:'18px',md:'18px',sm:'15px',xs:'15px'},color:'#4F4F4F'}}>
-                <span>Please Login to Your Account</span>
+                <span>or</span> <Link href="/Signup" sx={{textDecoration:'none',color:'#00BFFF',fontSize:{lg:'18px',md:'18px',sm:'15px',xs:'15px'},
+                    '&:hover':{color:'#FF6EC7'}
+                  }}><span>Create your own Account</span></Link>
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
                 <TextField variant='standard' label='Username or Email' value={username} onChange={(e)=>setUsername(e.target.value)}
@@ -71,11 +119,13 @@ export const Login = () => {
                   }
                 }}
                 /> <br />
-                <Box>
-                  <FormControlLabel control={<Checkbox />} label={<span>Remember Me</span>} />
+                <Box sx={{width:'80%'}}>
+                  <FormControlLabel control={<Checkbox checked={rememberMe} 
+                  onChange={e=>setRememberMe(e.target.checked)}/>} label={<span>Remember Me</span>} 
+                  sx={{alignSelf:'flex-start'}}/>
                 </Box><br />
-                <Button variant='outlined' size='large' 
-                
+                <Button variant='outlined' size='large' disabled={loading}
+                onClick={handleClick}
                 sx={{
                   color:'#00BFFF',
                   borderColor:'#00BFFF',
@@ -84,16 +134,17 @@ export const Login = () => {
                     borderColor:'#FF6EC7',
                     color:'#fff'
                   }
-                }}>Login</Button> <br />
+                }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'login'}</Button> <br />
                 <Typography variant='span' sx={{fontSize:{lg:'18px',md:'18px',sm:'13px',xs:'12px'}}}>
-                  Doesn't have an account? <Link href="/Signup" sx={{textDecoration:'none',color:'#00BFFF',
+                  Forgot your password? <Link href="" sx={{textDecoration:'none',color:'#00BFFF',
                     '&:hover':{color:'#FF6EC7'}
-                  }}>Create an Account</Link>
+                  }}>Click Here</Link>
                 </Typography>                
               </Box><br />
               <Divider><span>or</span></Divider><br />
               <Box sx={{display:'flex',justifyContent:'center'}}>
                   <Button variant='outlined' sx={{borderRadius:'20px',
+                    
                     color:'#00BFFF',
                     borderColor:'#00BFFF',
                     '&:hover':{
@@ -106,6 +157,14 @@ export const Login = () => {
               </Box>
             </CardContent>
           </Card>
+          <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} variant='filled' severity='error'
+            sx={{
+              backgroundColor: '#FF4D6D'
+            }}>
+              {error}
+            </Alert>
+          </Snackbar>
         </Box>
       </Grid>
     </Grid>
