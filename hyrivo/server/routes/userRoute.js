@@ -2,21 +2,69 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router()
 const User = require('../models/User')
+const auth = require('../middleware/auth')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-router.post('/',async (req,res) => {
+router.post('/register',async (req,res) => {
+    const {email,username,password,isCompany} = req.body
     try {
-        const data = new User(req.body)
-        await data.save()
-        res.status(201).json(data)
+        const exUser = await User.findOne({username})
+        if(exUser) return res.status(422).json({error:'User Already Exists'})
+
+        const user = new User({email,username,password,isCompany})
+        await user.save()
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' })
+
+        res.status(201).json({
+            message: 'User Registered Successfully',
+            token
+        })
     } catch (error) {
         res.status(500).json({error:error.message})
     }    
 })
 
-router.get('/',async (req,res) => {
+router.post('/login',async (req,res) => {
+    const {username,password} = req.body
     try {
-        const data = await User.find()
-        res.json(data)
+        const user = await User.findOne({
+            $or:[{username: username},{email: username}]
+        })
+        if(!user) return res.status(400).json({message:'Invalid Username or password'})
+        
+        const pw = await user.matchPassword(password)
+        if(!pw) return res.status(400).json({message:'Invalid username or Password'})
+
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '1h'})
+
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                isCompany: user.isCompany
+            }
+        })
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+})
+
+router.get('/me',auth,async (req,res) => {
+    try {
+        const user = await User.findById(req.userId)
+        if(!user) return res.status(400).json({message:'user not found'})
+        res.json(user)
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+})
+
+router.get('/',auth,async (req,res) => {
+    try {
+        const user = await User.find().select('username')
+        res.json(user)
     } catch (error) {
         res.status(500).json({error:error.message})
     }
@@ -24,22 +72,26 @@ router.get('/',async (req,res) => {
 
 router.get('/:id',async (req,res) => {
     try {
-        const data = await User.findById(req.params.id)
-        if(!data) return res.status(400).json({message:'User not found'})
-        res.json(data)
+        const user = await User.findById(req.params.id)
+        if(!user) return res.status(400).json({message:'User not found'})
+        res.json(user)
     } catch (error) {
         res.status(500).json({error:error.message})
     }
 })
 
-router.put('/:id',async (req,res) => {
+router.put('/update',auth,async (req,res) => {
+    const {username,password} = req.body
     try {
-        const data = await User.findByIdAndUpdate(req.params.id,req.body,{
+        const update = {}
+        if (username) update.username = username
+        if (password) update.password = await bcrypt.hash(password, 10)
+        const user = await User.findByIdAndUpdate(req.userId,{$set: update},{
             new:true,
             runValidators:true
         })
-        if(!data) return res.status(400).json({message:'User not found'})
-        res.json(data)
+        if(!user) return res.status(400).json({message:'User not found'})
+        res.json({message:'Updated Successfully'})
     } catch (error) {
         res.status(500).json({error:error.message})
     }
@@ -47,9 +99,9 @@ router.put('/:id',async (req,res) => {
 
 router.delete('/:id',async (req,res) => {
     try {
-        const data = await User.findByIdAndDelete(req.params.id)
-        if(!data) return res.status(400).json({message:'User not found'})
-        res.json(data)
+        const user = await User.findByIdAndDelete(req.params.id)
+        if(!user) return res.status(400).json({message:'User not found'})
+        res.json({message:'User Deleted Successfully'})
     } catch (error) {
         res.status(500).json({error:error.message})
     }

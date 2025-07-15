@@ -12,7 +12,7 @@ export const Login = () => {
 
   return (
     <Grid container>
-      <Grid size={{lg:6,md:6,sm:6}} sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>
+      <Grid size={{lg:6,md:6,sm:6,xs:12}} sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>
         <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'end',alignItems:'center',height:{lg:'550px',md:'550px',sm:'500px'}}}>
           <Box component='img' src={LoginImg}
           height={{lg:'500px',md:'550px',sm:'400px'}}></Box>
@@ -29,7 +29,7 @@ export const Login = () => {
                 <span>Please Login to Your Account</span>
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
-                <TextField variant='standard' label='Username' value={username} onClick={(e)=>setUsername(e.target.value)}
+                <TextField variant='standard' label='Username or Email' value={username} onChange={(e)=>setUsername(e.target.value)}
                 sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
                     borderBottomColor:'#FF6EC7'
@@ -45,7 +45,7 @@ export const Login = () => {
                   }
                 }}/> <br />
                 <TextField variant='standard' label='Password' type={showPw ? 'text' : 'password'} 
-                value={password} onClick={(e)=>setPassword(e.target.value)} sx={{width:'80%',
+                value={password} onChange={(e)=>setPassword(e.target.value)} sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
                     borderBottomColor:'#FF6EC7'
                   },
