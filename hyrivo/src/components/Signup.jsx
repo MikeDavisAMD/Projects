@@ -1,21 +1,37 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, FormControlLabel, Grid, IconButton, InputAdornment, Link, Snackbar, Switch, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, FormControlLabel, Grid, IconButton, InputAdornment, Link, Modal, Snackbar, Switch, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import SignupImg from '../Assets/Images/Signup.png'
 import 'animate.css'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import emailjs from '@emailjs/browser'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: {lg:400,md:400,sm:400,xs:300},
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 export const Signup = () => {
   const [showPw,setShowPw] = useState(false)
   const [showCpw,setShowCpw] = useState(false)
-  const navigate = useNavigate()
   const [email,setEmail] = useState('')
   const [username,setUsername] = useState('')
   const [password,setPassword] = useState('')
   const [confirmPw,setConfirmPw] = useState('')
   const [isCompany,setIsCompany] = useState(false)
   const [loading,setLoading] = useState(false)
+
+  // modal 
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   // Snackbar
   const [open,setOpen] = useState(false)
@@ -47,15 +63,29 @@ export const Signup = () => {
     }
 
     try {
-      await axios.post('http://localhost:2000/user/register',{
+      const res = await axios.post('http://localhost:2000/user/register-temp',{
         email,
         username,
         password,
         isCompany
       })
+      const {verifyLink} = res.data
+      await emailjs.send(
+        'hyrivo_verification', //service ID
+        'hyrivoregisterverify', //Template ID
+        {
+          to_email: email,
+          to_name: username,
+          verification_link: verifyLink 
+        }, //Template params 
+        'TysG2i8QGw5LVoUge' //public key
+      )
       setOpen(true)
-      setSuccess("User registered successfully")
-      setTimeout(()=>navigate('/Login'),2000)
+      setSuccess("Verification link send to your email")
+      handleOpenModal()
+      setTimeout(() => {
+        window.location.reload()
+      }, 5000);
     } catch (error) {
       setOpen(true)
       setError(error.message)
@@ -91,7 +121,7 @@ export const Signup = () => {
                   '&:hover label:not(.Mui-focused)':{
                     color:'#FF6EC7'
                   }
-                }}/> <br />
+                }}/> <br /> 
                 <TextField variant='standard' label='Username' value={username} onChange={(e)=>setUsername(e.target.value)}
                 sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
@@ -211,6 +241,21 @@ export const Signup = () => {
               {error || success}
             </Alert>
           </Snackbar>
+          <Modal
+            open={openModal}
+            onClose={handleCloseModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Verify Your Email ID
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                We have send a verification mail to your mail ID <br />
+              </Typography>
+            </Box>
+          </Modal>
         </Box>
       </Grid>
       <Grid size={{lg:6,md:6,sm:6,xs:12}} sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>

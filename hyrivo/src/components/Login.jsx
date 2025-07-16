@@ -136,7 +136,7 @@ export const Login = () => {
                   }
                 }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'login'}</Button> <br />
                 <Typography variant='span' sx={{fontSize:{lg:'18px',md:'18px',sm:'13px',xs:'12px'}}}>
-                  Forgot your password? <Link href="" sx={{textDecoration:'none',color:'#00BFFF',
+                  Forgot your password? <Link href="/ForgotPassword" sx={{textDecoration:'none',color:'#00BFFF',
                     '&:hover':{color:'#FF6EC7'}
                   }}>Click Here</Link>
                 </Typography>                

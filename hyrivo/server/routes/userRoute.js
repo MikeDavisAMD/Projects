@@ -5,8 +5,71 @@ const User = require('../models/User')
 const auth = require('../middleware/auth')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// Nodemailer function
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+    }
+})
+
+const registerSuccess = async (email,username) => {
+    const mailOptions = {
+        from: '"Hyrivo" mike732000davis@gmail.com',
+        to: email,
+        subject: `Welcome to Hyrivo, ${username}`,
+        text: `Hi ${username}!! Your Account has been registered successfully`,
+        html: `<div style="font-family: system-ui, sans-serif, Arial; font-size: 16px; background-color: #E4F7FF">
+                <div style="max-width: 600px; margin: auto; padding: 16px">
+                    <a style="text-decoration: none; outline: none" href="" target="_blank">
+                    <img
+                        style="height: 32px; vertical-align: middle"
+                        height="32px"
+                        src="https://i.postimg.cc/FHwssfhN/favicon.png"
+                        alt="logo"
+                    />
+                    </a>
+                    <p>Welcome to the <img style="height: 32px; vertical-align: middle" height="32px" src="https://i.postimg.cc/Zqynr8wW/Hyrivo-copy.png" alt="logo" /> family! We're excited to have you on board.</p>
+                    <p>
+                    Your account has been successfully created, and you're now ready to explore all the great
+                    features we offer.
+                    </p>
+                    <p>
+                    <a
+                        style="
+                        display: inline-block;
+                        text-decoration: none;
+                        outline: none;
+                        color: #fff;
+                        background-color: #00BFFF;
+                        padding: 8px 16px;
+                        border-radius: 30px;
+                        "
+                        href=""
+                        target="_blank"
+                    >
+                        Open Hyrivo
+                    </a>
+                    </p>
+                    <p>
+                    If you have any questions or need help getting started, our support team is just an email away
+                    at
+                    <a href="mailto:hyrivo73@gmail.com" style="text-decoration: none; outline: none; color: #00BFFF"
+                        >hyrivo73@gmail.com</a
+                    >. We're here to assist you every step of the way!
+                    </p>
+                    <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://i.postimg.cc/Zqynr8wW/Hyrivo-copy.png" alt="logo" /></p>
+                </div>
+                </div>`,
+    }
+    await transporter.sendMail(mailOptions)
+}
 
 // Google OAuth authentication
 passport.use(new GoogleStrategy({
@@ -22,9 +85,13 @@ try {
         username: profile.displayName,
         email: profile.emails[0].value,
         password: await bcrypt.hash(Math.random().toString(36), 10),
-        isCompany: false
+        isCompany: false,
+        isVerified: true
     });
     await user.save();
+    } else if (!user.isVerified) {
+        user.isVerified = true
+        await user.save()
     }
 
     return done(null, user);
@@ -32,21 +99,25 @@ try {
         return done(err, null);
     }
 }));
+ 
+router.post('/register-temp',async (req,res) => {
+    const {email,username,password,isCompany} = req.body
+    try {
+        const exUser = await User.findOne({username})
+        if(exUser) return res.status(422).json({error:'User Already Exists'})
 
-router.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
-  );
-  
-  router.get('/auth/google/callback',
-    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-    async (req, res) => {
-      // Google profile is in req.user
-      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const verifyToken = crypto.randomBytes(32).toString('hex')
+        const tokenExpiry = new Date(Date.now()+(60*60*1000))
 
-      res.redirect(`http://localhost:3000/oauth-success?token=${token}`);
+        const user = new User({email,username,password,isCompany,isVerified:false,verifyToken,tokenExpiry})
+        await user.save()
+        const verifyLink = `http://localhost:2000/user/verify?token=${verifyToken}`
+
+        res.status(200).json({message: 'verification link send to email', verifyLink})
+    } catch (error) {
+        res.status(500).json({error: error.message})
     }
-  );
-  
+})
 
 router.post('/register',async (req,res) => {
     const {email,username,password,isCompany} = req.body
@@ -67,6 +138,44 @@ router.post('/register',async (req,res) => {
     }    
 })
 
+router.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+  );
+  
+  router.get('/auth/google/callback',
+    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+    async (req, res) => {
+      // Google profile is in req.user
+      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      res.redirect(`http://localhost:3000/oauth-success?token=${token}`);
+    }
+  );
+
+  router.get('/verify',async (req,res) => {
+    const {token} = req.query
+
+    if(!token) return res.status(400).json({message:'invalid or no token found'})
+
+    try {
+        const user = await User.findOne({
+            verifyToken: token,
+            tokenExpiry: { $gt:Date.now() }
+        })
+
+        if(!user) return res.status(400).json('Invalid or expired verification link')
+
+        user.isVerified = true
+        user.verifyToken = undefined
+        user.tokenExpiry = undefined
+        user.save()
+        await registerSuccess(user.email,user.username)
+        res.redirect('http://localhost:3000/')
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+})
+
 router.post('/login',async (req,res) => {
     const {username,password} = req.body
     try {
@@ -74,6 +183,7 @@ router.post('/login',async (req,res) => {
             $or:[{username: username},{email: username}]
         })
         if(!user) return res.status(400).json({message:'Invalid Username or password'})
+        if(!user.isVerified) return res.status(401).json({message:'User is not verified'})
         
         const pw = await user.matchPassword(password)
         if(!pw) return res.status(400).json({message:'Invalid username or Password'})
@@ -112,16 +222,6 @@ router.get('/',auth,async (req,res) => {
     }
 })
 
-router.get('/:id',async (req,res) => {
-    try {
-        const user = await User.findById(req.params.id)
-        if(!user) return res.status(400).json({message:'User not found'})
-        res.json(user)
-    } catch (error) {
-        res.status(500).json({error:error.message})
-    }
-})
-
 router.put('/update',auth,async (req,res) => {
     const {username,password} = req.body
     try {
@@ -134,6 +234,16 @@ router.put('/update',auth,async (req,res) => {
         })
         if(!user) return res.status(400).json({message:'User not found'})
         res.json({message:'Updated Successfully'})
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+})
+
+router.get('/:id',async (req,res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user) return res.status(400).json({message:'User not found'})
+        res.json(user)
     } catch (error) {
         res.status(500).json({error:error.message})
     }

@@ -6,7 +6,7 @@ export const Home = () => {
     <Grid container>
         <Grid size={12}>
             <AppBar>
-                
+                Home
             </AppBar>
         </Grid>
     </Grid>

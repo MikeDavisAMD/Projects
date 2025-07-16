@@ -5,6 +5,7 @@ import { Login } from './components/Login'
 import { Signup } from './components/Signup'
 import { Home } from './components/Home'
 import './App.css'
+import { ForgotPassword } from './components/ForgotPassword'
 
 export const App = () => {
   return (
@@ -16,6 +17,7 @@ export const App = () => {
             <Home/>
           </RouteSecure>
         }/>
+        <Route path='/ForgotPassword' element={<ForgotPassword/>}/>
         <Route path='/Signup' element={<Signup/>}/>
       </Routes>
     </Router>

@@ -5,8 +5,12 @@ const userSchema = new mongoose.Schema({
     email: String,
     username: {type:String, required:true, unique:true},
     password: {type:String, required:true},
-    isCompany: Boolean,
-    remember: Boolean
+    isCompany: {type: Boolean, default: false},
+    remember: Boolean,
+    isVerified: {type: Boolean, default: false},
+    verifyToken: String,
+    tokenExpiry: Date,
+    createdAt: {type: Date, default: Date.now}
 })
 
 // hashing password
