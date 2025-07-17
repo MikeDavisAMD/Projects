@@ -1,9 +1,11 @@
-import { Box, Button, Card, CardContent, Grid, TextField, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, Card, CardContent, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import forgotpw from '../Assets/Images/forgotpw.png'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
-export const ForgotPassword = () => {
-  
+export const ChangePassword = () => {
+  const [showPw,setShowPw] = useState(false)
+  const [showCPw,setShowCPw] = useState(false)
   return (
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}} sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>
@@ -20,10 +22,10 @@ export const ForgotPassword = () => {
                 <span>Forgot Password?</span>
               </Typography>
               <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'18px',md:'18px',sm:'15px',xs:'15px'},color:'#828282'}}>
-              <span>Enter username to change password</span>
+              <span>Change password for username</span>
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column',width:'100%'}}>
-              <TextField variant='standard' label='Username or Email or Mobile' 
+              <TextField variant='standard' label='Enter new Password' type={showPw ? 'text' : 'password'}
                 sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
                     borderBottomColor:'#FF6EC7'
@@ -37,6 +39,43 @@ export const ForgotPassword = () => {
                   '&:hover label:not(.Mui-focused)':{
                     color:'#FF6EC7'
                   }
+                }}
+                slotProps={{
+                  input:{
+                    endAdornment:(
+                      <InputAdornment position='end'>
+                        <IconButton onClick={()=>setShowPw((prev)=>!prev)}>
+                          {showPw ? <VisibilityOff/> : <Visibility/>}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
+                }}/> <br />
+                <TextField variant='standard' label='Confirm new Password' type={showCPw ? 'text' : 'password'}
+                sx={{width:'80%',
+                  '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
+                    borderBottomColor:'#FF6EC7'
+                  },
+                  '& .MuiInput-underline:after':{ //underline on clicking
+                    borderBottomColor:'#00BFFF'
+                  },
+                  '& label.Mui-focused':{ //label on clicking
+                    color:'#00BFFF'
+                  },
+                  '&:hover label:not(.Mui-focused)':{
+                    color:'#FF6EC7'
+                  }
+                }}
+                slotProps={{
+                  input:{
+                    endAdornment:(
+                      <InputAdornment position='end'>
+                        <IconButton onClick={()=>setShowCPw((prev)=>!prev)}>
+                          {showCPw ? <VisibilityOff/> : <Visibility/>}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
                 }}/> <br />
                 <Button variant='outlined' size='large' 
                 sx={{
@@ -47,7 +86,7 @@ export const ForgotPassword = () => {
                     borderColor:'#FF6EC7',
                     color:'#fff'
                   }
-                }}>submit</Button> <br /> 
+                }}>Change Password</Button> <br /> 
               </Box> <br />           
             </CardContent>
           </Card>

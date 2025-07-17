@@ -36,8 +36,9 @@ export const Login = () => {
     }
     setLoading(true)
     try {
+      const isMobile = /^\d{7,15}$/.test(username.replace(/\D/g, ''));
       const response = await axios.post("http://localhost:2000/user/login",{
-        username,
+        [isMobile ? 'mobile' : 'username']:username,
         password,
         rememberMe
       })
@@ -47,7 +48,7 @@ export const Login = () => {
       } else {
         sessionStorage.setItem('token',token)
       }
-      navigate('/')
+      navigate('/LoginValidation')
     } catch (error) {
       setError(error.response?.data?.message || "Login Failed")
       setOpen(true)
@@ -77,7 +78,7 @@ export const Login = () => {
                   }}><span>Create your own Account</span></Link>
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
-                <TextField variant='standard' label='Username or Email' value={username} onChange={(e)=>setUsername(e.target.value)}
+                <TextField variant='standard' label='Username or Email or Mobile' value={username} onChange={(e)=>setUsername(e.target.value)}
                 sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
                     borderBottomColor:'#FF6EC7'
