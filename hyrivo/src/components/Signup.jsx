@@ -1,6 +1,6 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, Link, MenuItem, Modal, Select, Snackbar, Switch, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, FormControlLabel, Grid, IconButton, InputAdornment, Link, Modal, Snackbar, Switch, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import SignupImg from '../Assets/Images/Signup.png'
 import 'animate.css'
 import axios from 'axios'
@@ -22,43 +22,11 @@ export const Signup = () => {
   const [showPw,setShowPw] = useState(false)
   const [showCpw,setShowCpw] = useState(false)
   const [email,setEmail] = useState('')
-  const [mobile,setMobile] = useState('')
   const [username,setUsername] = useState('')
   const [password,setPassword] = useState('')
   const [confirmPw,setConfirmPw] = useState('')
   const [isCompany,setIsCompany] = useState(false)
   const [loading,setLoading] = useState(false)
-
-  // Country Calling Code for Mobile number
-  const [number,setNumber] = useState('')
-  const [code,setCode] = useState([])
-  const [select,setSelect] = useState('+')
-  useEffect(()=>{
-    const fetchCodes = async () => {
-      setLoading(true)
-      try {
-        const response = await axios.get('https://restcountries.com/v3.1/all?fields=cca2,idd')
-        setCode(response.data.map((c)=>{
-          const country = c.cca2
-          const code = c.idd?.root + c.idd?.suffixes?.[0]
-
-          if(country && code !== undefined) {
-            return {
-              label: `${country} ${code}`,
-              value: `${code}`
-            }
-          }
-          return null
-        }).filter(Boolean).sort((a,b)=>a.label.localeCompare(b.label))
-      )
-      } catch (error) {
-        console.error("Error fetching calling code",error.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchCodes()
-  },[])
 
   // modal 
   const [openModal, setOpenModal] = useState(false);
@@ -97,7 +65,6 @@ export const Signup = () => {
     try {
       const res = await axios.post('http://localhost:2000/user/register-temp',{
         email,
-        mobile,
         username,
         password,
         isCompany
@@ -126,14 +93,11 @@ export const Signup = () => {
       setLoading(false)
     }
   }
-
-  useEffect(()=>{
-    select && number ? setMobile(select + number) : setMobile('')
-  },[select,number])
+  
   return (
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
-        <Box sx={{display:'flex',justifyContent:{lg:'end',md:'center',sm:'center',xs:'center'},alignItems:'center',height:'700px'}}>
+        <Box sx={{display:'flex',justifyContent:{lg:'end',md:'center',sm:'center',xs:'center'},alignItems:'center',height:'600px'}}>
           <Card className='animate__animated animate__fadeInTopLeft' sx={{width:{lg:'70%',md:'70%',sm:'90%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>
             <CardContent>
               <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'40px',md:'40px',sm:'30px',xs:'30px'},color:'#1A1A1A'}}>
@@ -143,59 +107,6 @@ export const Signup = () => {
                 <span>Please Register to be a member</span>
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
-              <TextField variant='standard' type='number' value={number} onChange={(e)=>setNumber(e.target.value)}
-              sx={{width:'80%',
-                  '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
-                    borderBottomColor:'#FF6EC7'
-                  },
-                  '& .MuiInput-underline:after':{ //underline on clicking
-                    borderBottomColor:'#00BFFF'
-                  },
-                  '& label.Mui-focused':{ //label on clicking
-                    color:'#00BFFF'
-                  },
-                  '&:hover label:not(.Mui-focused)':{
-                    color:'#FF6EC7'
-                  }
-                }}slotProps={{
-                  input:{
-                    startAdornment:(
-                      <InputAdornment>
-                        <FormControl variant="standard" sx={{ minWidth: 70, mb:2 }}>
-                          <InputLabel id="demo-simple-select-standard-label">Mobile</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-standard-label"
-                            id="demo-simple-select-standard"
-                            value={select} disableUnderline
-                            defaultValue={select}
-                            onChange={e=>setSelect(e.target.value)}
-                            label="Age" renderValue={value=>value}
-                            sx={{width:'100%',
-                              '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering
-                                borderBottomColor:'#FF6EC7'
-                              },
-                              '& .MuiInput-underline:after':{ //underline on clicking
-                                borderBottomColor:'#00BFFF'
-                              },
-                              '& label.Mui-focused':{ //label on clicking
-                                color:'#00BFFF'
-                              },
-                              '&:hover label:not(.Mui-focused)':{
-                                color:'#FF6EC7'
-                              }
-                            }}
-                          >
-                            {code.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                          </Select>
-                        </FormControl>
-                      </InputAdornment>
-                    )
-                  }
-                }}/> <br />
               <TextField variant='standard' label='Email' type='email' value={email} onChange={(e)=>setEmail(e.target.value)}
               sx={{width:'80%',
                   '& .MuiInput-underline:hover:not(.Mui-disabled):before':{ //underline on hovering

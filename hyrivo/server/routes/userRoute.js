@@ -31,11 +31,11 @@ const registerSuccess = async (email,username) => {
                     <img
                         style="height: 32px; vertical-align: middle"
                         height="32px"
-                        src="https://i.postimg.cc/FHwssfhN/favicon.png"
+                        src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826110/favicon_fjofxa.png"
                         alt="logo"
                     />
                     </a>
-                    <p>Welcome to the <img style="height: 32px; vertical-align: middle" height="32px" src="https://i.postimg.cc/Zqynr8wW/Hyrivo-copy.png" alt="logo" /> family! We're excited to have you on board.</p>
+                    <p>Welcome to the <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /> family! We're excited to have you on board.</p>
                     <p>
                     Your account has been successfully created, and you're now ready to explore all the great
                     features we offer.
@@ -64,7 +64,7 @@ const registerSuccess = async (email,username) => {
                         >hyrivo73@gmail.com</a
                     >. We're here to assist you every step of the way!
                     </p>
-                    <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://i.postimg.cc/Zqynr8wW/Hyrivo-copy.png" alt="logo" /></p>
+                    <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /></p>
                 </div>
                 </div>`,
     }
@@ -101,7 +101,7 @@ try {
 }));
  
 router.post('/register-temp',async (req,res) => {
-    const {mobile,email,username,password,isCompany} = req.body
+    const {email,username,password,isCompany} = req.body
     try {
         const exUser = await User.findOne({username})
         if(exUser) return res.status(422).json({error:'User Already Exists'})
@@ -109,7 +109,7 @@ router.post('/register-temp',async (req,res) => {
         const verifyToken = crypto.randomBytes(32).toString('hex')
         const tokenExpiry = new Date(Date.now()+(60*60*1000))
 
-        const user = new User({mobile,email,username,password,isCompany,isVerified:false,verifyToken,tokenExpiry})
+        const user = new User({email,username,password,isCompany,isVerified:false,verifyToken,tokenExpiry})
         await user.save()
         const verifyLink = `http://localhost:2000/user/verify?token=${verifyToken}`
 
@@ -120,12 +120,12 @@ router.post('/register-temp',async (req,res) => {
 })
 
 router.post('/register',async (req,res) => {
-    const {mobile,email,username,password,isCompany} = req.body
+    const {email,username,password,isCompany} = req.body
     try {
         const exUser = await User.findOne({username})
         if(exUser) return res.status(422).json({error:'User Already Exists'})
 
-        const user = new User({mobile,email,username,password,isCompany})
+        const user = new User({email,username,password,isCompany})
         await user.save()
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
@@ -177,38 +177,10 @@ router.get('/auth/google',
 })
 
 router.post('/login',async (req,res) => {
-    const {username,password,mobile} = req.body
+    const {username,password} = req.body
     try {
-        let user
-        if (mobile) {
-            const normalize = (m) => m.replace(/\D/g, '')
-            const inputMobile = normalize(mobile)
-
-            if (!inputMobile || inputMobile.length < 5) return res.status(404).json({message: 'Mobile number is too short'})
-            user = await User.findOne({mobile: inputMobile})
-
-            if (!user) {
-                const fallback10 = new RegExp(`${inputMobile.slice(-10)}$`);
-                user = await User.findOne({ mobile: fallback10});
-            }
-
-            if (!user) {
-                const fallback7 = new RegExp(`${inputMobile.slice(-7)}$`);
-                user = await User.findOne({ mobile: fallback7});
-            }
-
-            console.log("Trying full match:", inputMobile);
-            console.log("Trying fallback10:", inputMobile.slice(-10));
-            console.log("Trying fallback7:", inputMobile.slice(-7));
-
-
-            if(!user) return res.status(400).json({message: 'Mobile number not found'})
-        } else {
-            user = await User.findOne({
-                $or:[{username: username},{email: username}]
-            })
-        }
-
+        const user = await User.findOne({$or:[{username: username},{email: username}]})
+        
         if(!user) return res.status(400).json({message:'Invalid Username or password'})
         if(!user.isVerified) return res.status(401).json({message:'User is not verified'})
         

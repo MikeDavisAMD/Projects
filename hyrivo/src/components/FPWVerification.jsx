@@ -1,29 +1,8 @@
-import { Box, Button, Card, CardContent, Grid, Link, List, ListItemButton, ListItemText, Menu, MenuItem, Portal, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, Link, Portal, TextField, Typography } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import loginValidate from '../Assets/Images/LoginValidate.png'
 
 export const FPWVerification = () => {
-  // Menu for getting validation otp
-  const options = [
-    `Registered Email `,
-    `Registered Mobile Number ending with  `
-    ];
-const [anchorEl, setAnchorEl] = React.useState(null);
-const [selectedIndex, setSelectedIndex] = React.useState(1);
-const open = Boolean(anchorEl);
-const handleClickListItem = (event) => {
-setAnchorEl(event.currentTarget);
-};
-
-const handleMenuItemClick = (event, index) => {
-setSelectedIndex(index);
-setAnchorEl(null);
-};
-
-const handleCloseMenu = () => {
-setAnchorEl(null);
-};
-
 //   portal
 const [show, setShow] = useState(false);
 const container = useRef(null);
@@ -48,62 +27,23 @@ return (
             <span>OTP Verification</span>
           </Typography>
           <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
+            <Typography variant='body2' sx={{textAlign:'center',fontSize:{lg:'20px',md:'20px',sm:'18px',xs:'18px'},color:'#1A1A1A'}}>
+                <span>We have send the OTP through the registered Email ID</span>
+                <span>mi**********vis@gmail.com</span>
+            </Typography><br />
             <Box>
-            <List
-                component="nav"
-                aria-label="Device settings"
-                sx={{ bgcolor: 'background.paper' }}
-            >
-                <ListItemButton
-                id="lock-button"
-                aria-haspopup="listbox"
-                aria-controls="lock-menu"
-                aria-label="Receive OTP through"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClickListItem}
-                >
-                <ListItemText
-                    primary= {<span style={{fontWeight:'bolder'}}>Receive OTP through</span>}   
-                    secondary={<span>{options[selectedIndex]}</span>}
-                    sx={{textAlign:'center'}}
-                />
-                
-                </ListItemButton> <br />
-                <Box sx={{display:'flex',justifyContent:'center'}}>
-                    <Button variant='outlined' onClick={handleClickPortal} sx={{
-                        color:'#00BFFF',
-                        borderColor:'#00BFFF',
-                        '&:hover':{
-                            backgroundColor:'#FF6EC7',
-                            borderColor:'#FF6EC7',
-                            color:'#fff'
-                        }
-                        }}>send otp</Button>
-                </Box>
-            </List>
-            <Menu
-                id="lock-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleCloseMenu}
-                slotProps={{
-                list: {
-                    'aria-labelledby': 'lock-button',
-                    role: 'listbox',
-                },
-                }}
-            >
-                {options.map((option, index) => (
-                <MenuItem
-                    key={option}
-                    selected={index === selectedIndex}
-                    onClick={(event) => handleMenuItemClick(event, index)}
-                >
-                    {option}
-                </MenuItem>
-                ))}
-            </Menu>
-            </Box> <br />
+                <Button variant='outlined' 
+                    onClick={handleClickPortal}
+                    sx={{
+                    color:'#00BFFF',
+                    borderColor:'#00BFFF',
+                    '&:hover':{
+                        backgroundColor:'#FF6EC7',
+                        borderColor:'#FF6EC7',
+                        color:'#fff'
+                    }
+                }}>send otp</Button>
+            </Box>
             <Box sx={{width:'100%',display:'flex',justifyContent:'center'}} ref={container} />
             {show ? (
             <Portal container={() => container.current}>
