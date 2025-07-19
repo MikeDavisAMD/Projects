@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     isVerified: {type: Boolean, default: false},
     verifyToken: String,
     tokenExpiry: Date,
-    createdAt: {type: Date, default: Date.now}
+    createdAt: {type: Date, default: Date.now},
 })
 
 // hashing password

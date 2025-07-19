@@ -9,6 +9,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const Otp = require('../models/Otp');
 
 // Nodemailer function
 const transporter = nodemailer.createTransport({
@@ -19,6 +20,7 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+// mail on successfull registration
 const registerSuccess = async (email,username) => {
     const mailOptions = {
         from: '"Hyrivo" mike732000davis@gmail.com',
@@ -67,6 +69,32 @@ const registerSuccess = async (email,username) => {
                     <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /></p>
                 </div>
                 </div>`,
+    }
+    await transporter.sendMail(mailOptions)
+}
+
+const sendOTPEmail = async (email,otp) => {
+    const mailOptions = {
+        from: '"Hyrivo" mike732000davis@gmail.com',
+        to: email,
+        subject: 'OTP for your Hyrivo Login',
+        text:`Your OTP for Login is ${otp}`,
+        html: `<div style="font-family: system-ui, sans-serif, Arial; font-size: 14px">
+                <a style="text-decoration: none; outline: none" href="[Website Link]" target="_blank">
+                    <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826110/favicon_fjofxa.png" alt="logo" />
+                </a>
+                <p style="padding-top: 14px; border-top: 1px solid #eaeaea">
+                    To authenticate, please use the following One Time Password (OTP):
+                </p>
+                <p style="font-size: 22px"><strong>${otp}</strong></p>
+                <p>This OTP will be valid for 15 minutes <strong></strong>.</p>
+                <p>
+                    Do not share this OTP with anyone. If you didn't make this request, you can safely ignore this
+                    email.<br /><img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /> will never contact you about this email or ask for any login codes or
+                    links. Beware of phishing scams.
+                </p>
+                <p>Thanks for visiting <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" />!</p>
+                </div>` 
     }
     await transporter.sendMail(mailOptions)
 }
@@ -199,6 +227,46 @@ router.post('/login',async (req,res) => {
         })
     } catch (error) {
         res.status(500).json({error:error.message})
+    }
+})
+
+router.post('/send-otp',auth,async (req,res) => {
+    try {
+        const user = await User.findById(req.userId)
+        if(!user) return res.status(404).json({message: 'User not found'})
+        
+        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+        const otpExpiry = new Date(Date.now() + 15 * 60 * 1000)
+
+        await Otp.deleteMany({userId: user._id})
+        await Otp.create({userId: user._id,otp,otpExpiry})
+
+        await sendOTPEmail(user.email,otp)
+        res.status(200).json({message: 'OTP send Successfully', email: user.email})
+
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.post('/verify-otp',auth,async (req,res) => {
+    const {otp} = req.body
+    try {
+        const record = await Otp.findOne({ userId: req.userId }).sort({createdAt: -1})
+
+        if(!record) return res.status(404).json({message: 'No OTP Found'})
+
+        if(record.otpExpiry < Date.now()){
+            await Otp.deleteOne({_id: record._id})
+            return res.status(400).json({message: 'OTP Expired'})
+        }
+
+        if(record.otp !== otp) return res.status(400).json({message: "Invalid Otp"})
+        await Otp.deleteOne({_id: record._id})
+        
+        res.status(200).json({message:'OTP verified successfully👍'})
+    } catch (error) {
+        res.status(500).json({error: error.message})
     }
 })
 
