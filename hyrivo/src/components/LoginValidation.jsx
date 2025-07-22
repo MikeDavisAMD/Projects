@@ -14,6 +14,8 @@ export const LoginValidation = () => {
     const [email,setEmail] = useState('')
     const [isOtpSend,setIsOtpSend] = useState(false)
     const [counter,setCounter] = useState(0)
+    const [authMode,setAuthMode] = useState('otp')
+    const [authLoading,setAuthLoading] = useState(false)
 
     // hashing Email
     const maskEmail = (email) => {
@@ -78,7 +80,10 @@ export const LoginValidation = () => {
     const handleVerifyOtp = async () => {
         try {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-            const response = await axios.post('http://localhost:2000/user/verify-otp',{otp: otp.join('')},{
+            const endpoint = authMode === 'otp' 
+            ? 'http://localhost:2000/user/verify-otp' 
+            : 'http://localhost:2000/user/verify-auth'
+            const response = await axios.post(endpoint,{otp: otp.join('')},{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -110,13 +115,25 @@ export const LoginValidation = () => {
     const [show, setShow] = useState(false);
     const container = useRef(null);
 
-    const handleClickPortal = async () => {
-        setLoading(true)
+    const handleClickPortal = async (mode) => {
         try {
-            await handleSendOtp()
-            setShow(true)
+            if (mode === 'otp') {
+                setLoading(true)
+                await handleSendOtp()
+                setShow(true)
+            } else if (mode === 'auth') {
+                setAuthLoading(true)
+                setShow(true)
+            }
+        } catch (err) {
+            setError('Failed to enable Authentication')
+            setOpen(true)
         } finally {
-            setLoading(false)
+            if (mode === 'otp') {
+                setLoading(false)
+            } else if (mode === 'auth') {
+                setAuthLoading(false)
+            }
         }
     };
 
@@ -129,7 +146,7 @@ export const LoginValidation = () => {
             }, 1000);
         }
         return () => clearTimeout(timer)
-    },[counter])
+    },[counter])    
 
   return (
     <Grid container>
@@ -148,12 +165,15 @@ export const LoginValidation = () => {
               </Typography><br />
               <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
                 <Typography variant='body2' sx={{textAlign:'center',fontSize:{lg:'18px',md:'18px',sm:'15px',xs:'15px'},color:'#1A1A1A'}}>
-                    <span>{email? 'We have send the OTP to' : 'We have send OTP through your registered Email'}</span> <br />
+                    <span>{email? 'We have send the OTP to' : 'Send OTP to registered Email or use Authenticator app'}</span> <br />
                     <span style={{fontWeight:'bold'}}>{email ? maskEmail(email) : null}</span>
                 </Typography><br />
-                <Box>
+                <Box sx={{display:'flex',gap:2}}>
                     <Button variant='outlined' 
-                        onClick={handleClickPortal} disabled={loading || isOtpSend}
+                        onClick={async ()=>{
+                            setAuthMode('otp')
+                            await handleClickPortal('otp')
+                        }} disabled={loading || isOtpSend}
                         sx={{
                         color:'#00BFFF',
                         borderColor:'#00BFFF',
@@ -163,6 +183,20 @@ export const LoginValidation = () => {
                             color:'#fff'
                         }
                     }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'Send otp'}</Button>
+                    <Button variant='outlined' 
+                        onClick={async ()=>{
+                            setAuthMode('auth')
+                            await handleClickPortal('auth')
+                        }} disabled={authLoading || isOtpSend}
+                        sx={{
+                        color:'#00BFFF',
+                        borderColor:'#00BFFF',
+                        '&:hover':{
+                            backgroundColor:'#FF6EC7',
+                            borderColor:'#FF6EC7',
+                            color:'#fff'
+                        }
+                    }}>{authLoading ? <CircularProgress size={24} color="inherit"/> : 'use authenticator'}</Button>
                 </Box> <br />
                 <Box sx={{width:'100%',display:'flex',justifyContent:'center'}} ref={container} />
                 {show ? (
@@ -171,7 +205,7 @@ export const LoginValidation = () => {
                         border:'2px outset grey',p:2,borderRadius:'5px',boxShadow:'5px 5px 10px grey'
                     }}>
                     <Typography variant='span' sx={{fontSize:{lg:'18px',md:'18px',sm:'13px',xs:'12px'}}}>
-                        Enter the OTP received
+                        {authMode ? 'Enter the OTP received through Email' : 'Enter 6 digit code from authenticator app'}
                     </Typography>
                     <Box sx={{display:'flex',width:'100%',gap:1}}>
                     {otp.map((value,index)=>(
@@ -217,7 +251,7 @@ export const LoginValidation = () => {
                                 color:'#fff'
                             }
                             }}>{load ? <CircularProgress size={24} color="inherit"/> : 'verify otp'}</Button><br />
-                        {counter === 0 && isOtpSend ? <Link component='button' onClick={async () => {
+                        {authMode === 'otp' && (counter === 0 && isOtpSend ? <Link component='button' onClick={async () => {
                             setLd(true)
                             await handleSendOtp()
                             setLd(false)
@@ -226,7 +260,7 @@ export const LoginValidation = () => {
                     }}>{ld ? <CircularProgress size={24} color="inherit"/> : 'Resend OTP' }</Link> : 
                     <Typography>
                         <span>Resend OTP in {counter}s</span>
-                    </Typography>}
+                    </Typography>)}
                     </Box>
                 </Box>
                 </Portal>

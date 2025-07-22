@@ -10,6 +10,8 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Otp = require('../models/Otp');
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
 
 // Nodemailer function
 const transporter = nodemailer.createTransport({
@@ -196,9 +198,10 @@ router.get('/auth/google',
         user.isVerified = true
         user.verifyToken = undefined
         user.tokenExpiry = undefined
-        user.save()
-        await registerSuccess(user.email,user.username)
-        res.redirect('http://localhost:3000/')
+        await user.save()
+
+        const authToken = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:'15m'})
+        res.redirect(`http://localhost:3000/Enable2FA?token=${authToken}`)
     } catch (error) {
         res.status(500).json({error:error.message})
     }
@@ -268,6 +271,65 @@ router.post('/verify-otp',auth,async (req,res) => {
     } catch (error) {
         res.status(500).json({error: error.message})
     }
+})
+
+router.get('/enable-auth',auth,async (req,res) => {
+    try {
+        const user = await User.findById(req.userId)
+        if(user.isTwoFaEnabled) return res.json({alreadyEnabled: true})
+
+        const secret = speakeasy.generateSecret({
+            name: `Hyrivo (${user.email})`,
+            length: 20
+        })
+
+        const users = await User.findByIdAndUpdate(req.userId, {twoFaSecrets: secret.base32},{new:true})
+        if (!users) return res.status(400).json({ error: 'User not found' }) 
+
+        users.twoFaSecrets = secret.base32
+        await users.save()
+
+        const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url)
+        const manualCode = secret.base32.match(/.{1,4}/g).join(' ')
+        res.json({qrcode: qrCodeUrl, secret: secret.base32, manual: manualCode, accountName: `Hyrivo (${user.email})`})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.post('/enable-auth/done',auth,async (req,res) => {
+    try {
+        const user = await User.findById(req.userId)
+        if (!user || !user.twoFaSecrets) {
+            res.status(400).json({message: 'User or Secret not found'})
+        }
+
+         user.isTwoFaEnabled = true
+         await user.save()
+         await registerSuccess(user.email,user.username)
+
+        res.status(200).json({message: '2FA successfully enabled'})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.post('/verify-auth',auth,async (req,res) => {
+    const {otp} = req.body
+
+    const user = await User.findById(req.userId)
+    if(!user || !user.twoFaSecrets) return res.status(400).json({ message: '2FA not setup' })
+
+    const verified = speakeasy.totp.verify({
+        secret: user.twoFaSecrets,
+        encoding: 'base32',
+        token: otp,
+        window: 1
+    })
+
+    if(!verified) return res.status(400).json({message:'Invalid or expired OTP'})
+    
+    res.status(200).json({ message: 'Authenticator OTP verified successfully'})
 })
 
 router.get('/me',auth,async (req,res) => {

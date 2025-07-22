@@ -10,6 +10,7 @@ import { OAuthSuccess } from './components/OAuthSuccess'
 import { LoginValidation } from './components/LoginValidation'
 import { FPWVerification } from './components/FPWVerification'
 import { ChangePassword } from './components/ChangePassword'
+import { Enable2FA } from './components/Enable2FA'
 
 export const App = () => {
   return (
@@ -39,6 +40,7 @@ export const App = () => {
         }/>
         <Route path='/Signup' element={<Signup/>}/>
         <Route path='/oauthSuccess' element={<OAuthSuccess/>}/>
+        <Route path='Enable2FA' element={<Enable2FA/>}/>
       </Routes>
     </Router>
   )

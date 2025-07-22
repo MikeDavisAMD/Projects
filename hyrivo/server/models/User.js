@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
     verifyToken: String,
     tokenExpiry: Date,
     createdAt: {type: Date, default: Date.now},
+    twoFaSecrets: String,
+    isTwoFaEnabled: {type: Boolean, default: false}
 })
 
 // hashing password
