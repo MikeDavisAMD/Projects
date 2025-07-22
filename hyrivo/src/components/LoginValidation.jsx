@@ -205,7 +205,7 @@ export const LoginValidation = () => {
                         border:'2px outset grey',p:2,borderRadius:'5px',boxShadow:'5px 5px 10px grey'
                     }}>
                     <Typography variant='span' sx={{fontSize:{lg:'18px',md:'18px',sm:'13px',xs:'12px'}}}>
-                        {authMode ? 'Enter the OTP received through Email' : 'Enter 6 digit code from authenticator app'}
+                        {authMode === 'otp' ? 'Enter the OTP received through Email' : 'Enter 6 digit code from authenticator app'}
                     </Typography>
                     <Box sx={{display:'flex',width:'100%',gap:1}}>
                     {otp.map((value,index)=>(

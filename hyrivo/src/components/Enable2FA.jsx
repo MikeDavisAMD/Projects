@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardActions, CardContent, Divider, Grid, Link, Modal, Portal, Snackbar, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Link, Modal, Portal, Snackbar, Typography } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import SignupImg from '../Assets/Images/Signup.png'
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ const style = {
 
 export const Enable2FA = () => {
     const navigate = useNavigate()
+    const [loading,setLoading] = useState(false)
 
     // Portal
     const [show, setShow] = useState(false);
@@ -59,6 +60,7 @@ export const Enable2FA = () => {
             setOpen(true)
         }
 
+        setLoading(true)
         try {
             const response = await axios.post('http://localhost:2000/user/enable-auth/done',{secret},{
                 headers:{Authorization:`Bearer ${token}`}
@@ -71,6 +73,8 @@ export const Enable2FA = () => {
         } catch (error) {
             setError('Failed to Enable 2FA',error)
             setOpen(true)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -109,7 +113,7 @@ export const Enable2FA = () => {
   return (
     <Grid container>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
-        <Box sx={{display:'flex',justifyContent:{lg:'end',md:'center',sm:'center',xs:'center'},alignItems:'center',height:'600px'}}>
+        <Box sx={{display:'flex',justifyContent:{lg:'end',md:'center',sm:'center',xs:'center'},alignItems:'center',height: show ? '750px' :'600px'}}>
           <Card className='animate__animated animate__fadeInTopLeft' sx={{width:{lg:'90%',md:'70%',sm:'90%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>
             <CardContent>
               <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'40px',md:'40px',sm:'30px',xs:'30px'},color:'#1A1A1A'}}>
@@ -151,7 +155,7 @@ export const Enable2FA = () => {
                     borderColor:'#FF6EC7',
                     color:'#fff'
                   }
-                }}>Done</Button> <br />
+                }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'Done'}</Button> <br />
             </CardActions>
           </Card>
           <Modal

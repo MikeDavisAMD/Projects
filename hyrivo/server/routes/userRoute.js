@@ -12,6 +12,8 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Otp = require('../models/Otp');
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
+const useragent = require('useragent');
+const axios = require('axios');
 
 // Nodemailer function
 const transporter = nodemailer.createTransport({
@@ -21,6 +23,88 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASSWORD
     }
 })
+
+// device details
+const deviceDetails = async (req) => {
+    const agent = useragent.parse(req.headers['user-agent'])
+        const browser = agent.toAgent()
+        const os = agent.os.toString()
+        const platform = agent.platform
+
+        let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        if(ip.includes('::ffff:')) ip = ip.split('::ffff:')[1]
+
+        let city = 'unknown', region = 'unknown', country = 'unknown'
+        try {
+            const {data} = await axios.get(`http://ipapi.co/${ip}/json/`)
+            city = data.city
+            region = data.region
+            country = data.country_name
+        } catch (error) {
+            console.warn("Unable to get details")
+            console.error(error.message)
+        }
+
+        return {browser,os,platform,ip,city,country,region}
+}
+
+// Login success
+const loginSuccess = async (browser,os,platform,ip,city,country,region,username,email) => {
+    const mailOptions = {
+        from: '"Hyrivo" mike732000davis@gmail.com',
+        to: email,
+        subject: `Logged in from device ${ip}`,
+        text: `Hi ${username}!! Logged in to device`,
+        html:`<div style="font-family: system-ui, sans-serif, Arial; font-size: 16px">
+                <a style="text-decoration: none; outline: none" href="[Website Link]" target="_blank">
+                    <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826110/favicon_fjofxa.png" alt="logo" />
+                </a>
+                <p style="padding-top: 16px; border-top: 1px solid #eaeaea">Hi ${username},</p>
+                <p>
+                    Your account has been logged in from device with IP Address ${ip}. <br/><br/>
+                    <table>
+                    <tbody>
+                        <tr>
+                        <td><b>Browser</b></td>
+                        <td>:</td>
+                        <td>${browser}</td>
+                        </tr>
+                        <tr>
+                        <td><b>OS</b></td>
+                        <td>:</td>
+                        <td>${os}</td>
+                        </tr>
+                        <tr>
+                        <td><b>Platform</b></td>
+                        <td>:</td>
+                        <td>${platform}</td>
+                        </tr>
+                        <tr>
+                        <td><b>City</b></td>
+                        <td>:</td>
+                        <td>${city}</td>
+                        </tr>
+                        <tr>
+                        <td><b>Country</b></td>
+                        <td>:</td>
+                        <td>${country}</td>
+                        </tr>
+                        <tr>
+                        <td><b>Region</b></td>
+                        <td>:</td>
+                        <td>${region}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                    
+                </p>
+                <p style="padding-top: 16px; border-top: 1px solid #eaeaea">
+                    Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" />
+                </p>
+                </div>`
+    }
+    await transporter.sendMail(mailOptions)
+}
 
 // mail on successfull registration
 const registerSuccess = async (email,username) => {
@@ -266,6 +350,10 @@ router.post('/verify-otp',auth,async (req,res) => {
 
         if(record.otp !== otp) return res.status(400).json({message: "Invalid Otp"})
         await Otp.deleteOne({_id: record._id})
+
+        const user = await User.findById(req.userId)
+        const {browser,os,platform,ip,city,country,region} = await deviceDetails(req)
+        await loginSuccess(browser,os,platform,ip,city,country,region,user.username,user.email)
         
         res.status(200).json({message:'OTP verified successfully👍'})
     } catch (error) {
@@ -291,6 +379,7 @@ router.get('/enable-auth',auth,async (req,res) => {
 
         const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url)
         const manualCode = secret.base32.match(/.{1,4}/g).join(' ')
+
         res.json({qrcode: qrCodeUrl, secret: secret.base32, manual: manualCode, accountName: `Hyrivo (${user.email})`})
     } catch (error) {
         res.status(500).json({error: error.message})
@@ -326,6 +415,9 @@ router.post('/verify-auth',auth,async (req,res) => {
         token: otp,
         window: 1
     })
+
+    const {browser,os,platform,ip,city,country,region} = await deviceDetails(req)
+    await loginSuccess(browser,os,platform,ip,city,country,region,user.username,user.email)
 
     if(!verified) return res.status(400).json({message:'Invalid or expired OTP'})
     
