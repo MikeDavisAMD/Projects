@@ -57,9 +57,9 @@ export const Login = () => {
   }
 
   return (
-    <Grid container>
+    <Grid container sx={{minHeight:'100vh',alignItems:'center'}}>
       <Grid size={{lg:6,md:6,sm:6,xs:12}} sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>
-        <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'end',alignItems:'center',height:{lg:'550px',md:'550px',sm:'500px'}}}>
+        <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'end',alignItems:'center',height:{lg:'550px',md:'550px',sm:'500px'},alignContent:'center'}}>
           <Box component='img' src={LoginImg}
           height={{lg:'500px',md:'550px',sm:'400px'}}></Box>
         </Box>

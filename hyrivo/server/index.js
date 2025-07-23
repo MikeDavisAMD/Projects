@@ -16,7 +16,9 @@ app.use(cors())
 app.use(passport.initialize())
 
 const userRoute = require('./routes/userRoute')
+const forgetPWRoute = require('./routes/forgetPWRoute')
 
+app.use('/pw-reset',forgetPWRoute)
 app.use('/user',userRoute)
 
 app.get('/', (req,res)=>{

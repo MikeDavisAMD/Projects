@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router()
 const User = require('../models/User')
 const auth = require('../middleware/auth')
+const log = require('../middleware/log')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -214,10 +215,10 @@ try {
     }
 }));
  
-router.post('/register-temp',async (req,res) => {
+router.post('/register-temp',log,async (req,res) => {
     const {email,username,password,isCompany} = req.body
     try {
-        const exUser = await User.findOne({username})
+        const exUser = await User.findOne({$or : [{username},{email}]})
         if(exUser) return res.status(422).json({error:'User Already Exists'})
 
         const verifyToken = crypto.randomBytes(32).toString('hex')
@@ -233,10 +234,10 @@ router.post('/register-temp',async (req,res) => {
     }
 })
 
-router.post('/register',async (req,res) => {
+router.post('/register',log,async (req,res) => {
     const {email,username,password,isCompany} = req.body
     try {
-        const exUser = await User.findOne({username})
+        const exUser = await User.findOne({$or : [{username},{email}]})
         if(exUser) return res.status(422).json({error:'User Already Exists'})
 
         const user = new User({email,username,password,isCompany})
@@ -252,11 +253,11 @@ router.post('/register',async (req,res) => {
     }    
 })
 
-router.get('/auth/google',
+router.get('/auth/google',log,
     passport.authenticate('google', { scope: ['profile', 'email'] })
   );
   
-  router.get('/auth/google/callback',
+  router.get('/auth/google/callback',log,
     passport.authenticate('google', { session: false, failureRedirect: '/login' }),
     async (req, res) => {
       // Google profile is in req.user
@@ -266,7 +267,7 @@ router.get('/auth/google',
     }
   );
 
-  router.get('/verify',async (req,res) => {
+  router.get('/verify',log,async (req,res) => {
     const {token} = req.query
 
     if(!token) return res.status(400).json({message:'invalid or no token found'})
@@ -291,7 +292,7 @@ router.get('/auth/google',
     }
 })
 
-router.post('/login',async (req,res) => {
+router.post('/login',log,async (req,res) => {
     const {username,password} = req.body
     try {
         const user = await User.findOne({$or:[{username: username},{email: username}]})
@@ -317,7 +318,7 @@ router.post('/login',async (req,res) => {
     }
 })
 
-router.post('/send-otp',auth,async (req,res) => {
+router.post('/send-otp',log,auth,async (req,res) => {
     try {
         const user = await User.findById(req.userId)
         if(!user) return res.status(404).json({message: 'User not found'})
@@ -336,7 +337,7 @@ router.post('/send-otp',auth,async (req,res) => {
     }
 })
 
-router.post('/verify-otp',auth,async (req,res) => {
+router.post('/verify-otp',log,auth,async (req,res) => {
     const {otp} = req.body
     try {
         const record = await Otp.findOne({ userId: req.userId }).sort({createdAt: -1})
@@ -361,7 +362,7 @@ router.post('/verify-otp',auth,async (req,res) => {
     }
 })
 
-router.get('/enable-auth',auth,async (req,res) => {
+router.get('/enable-auth',log,auth,async (req,res) => {
     try {
         const user = await User.findById(req.userId)
         if(user.isTwoFaEnabled) return res.json({alreadyEnabled: true})
@@ -386,7 +387,7 @@ router.get('/enable-auth',auth,async (req,res) => {
     }
 })
 
-router.post('/enable-auth/done',auth,async (req,res) => {
+router.post('/enable-auth/done',log,auth,async (req,res) => {
     try {
         const user = await User.findById(req.userId)
         if (!user || !user.twoFaSecrets) {
@@ -403,7 +404,7 @@ router.post('/enable-auth/done',auth,async (req,res) => {
     }
 })
 
-router.post('/verify-auth',auth,async (req,res) => {
+router.post('/verify-auth',log,auth,async (req,res) => {
     const {otp} = req.body
 
     const user = await User.findById(req.userId)
@@ -424,7 +425,7 @@ router.post('/verify-auth',auth,async (req,res) => {
     res.status(200).json({ message: 'Authenticator OTP verified successfully'})
 })
 
-router.get('/me',auth,async (req,res) => {
+router.get('/me',log,auth,async (req,res) => {
     try {
         const user = await User.findById(req.userId)
         if(!user) return res.status(400).json({message:'user not found'})
@@ -434,7 +435,7 @@ router.get('/me',auth,async (req,res) => {
     }
 })
 
-router.get('/',auth,async (req,res) => {
+router.get('/',log,auth,async (req,res) => {
     try {
         const user = await User.find().select('username')
         res.json(user)
@@ -443,7 +444,7 @@ router.get('/',auth,async (req,res) => {
     }
 })
 
-router.put('/update',auth,async (req,res) => {
+router.put('/update',log,auth,async (req,res) => {
     const {username,password} = req.body
     try {
         const update = {}
@@ -460,7 +461,7 @@ router.put('/update',auth,async (req,res) => {
     }
 })
 
-router.get('/:id',async (req,res) => {
+router.get('/:id',log,async (req,res) => {
     try {
         const user = await User.findById(req.params.id)
         if(!user) return res.status(400).json({message:'User not found'})
@@ -470,7 +471,7 @@ router.get('/:id',async (req,res) => {
     }
 })
 
-router.delete('/:id',async (req,res) => {
+router.delete('/:id',log,async (req,res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id)
         if(!user) return res.status(400).json({message:'User not found'})

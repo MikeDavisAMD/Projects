@@ -95,7 +95,7 @@ export const Signup = () => {
   }
   
   return (
-    <Grid container>
+    <Grid container sx={{minHeight:'100vh',alignItems:'center'}}>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
         <Box sx={{display:'flex',justifyContent:{lg:'end',md:'center',sm:'center',xs:'center'},alignItems:'center',height:'600px'}}>
           <Card className='animate__animated animate__fadeInTopLeft' sx={{width:{lg:'70%',md:'70%',sm:'90%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}>

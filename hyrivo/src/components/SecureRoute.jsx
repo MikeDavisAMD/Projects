@@ -1,7 +1,11 @@
 import React from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
 export const RouteSecure = ({children}) => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-  return token ? children : <Navigate to="/Login" replace />
+  const location = useLocation()
+
+  const isPWResetPath = location.pathname === '/FPWVerification'
+
+  return !token && !isPWResetPath ? <Navigate to="/Login" replace /> : children
 }
