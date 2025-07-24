@@ -6,6 +6,7 @@ export const RouteSecure = ({children}) => {
   const location = useLocation()
 
   const isPWResetPath = location.pathname === '/FPWVerification'
+  const isChangePasswordPath = location.pathname === '/ChangePassword'
 
-  return !token && !isPWResetPath ? <Navigate to="/Login" replace /> : children
+  return !token && !isPWResetPath && !isChangePasswordPath ? <Navigate to="/Login" replace /> : children
 }

@@ -2,7 +2,7 @@ import { Alert, Box, Button, Card, CardContent, CircularProgress, Grid, Link, Po
 import React, { useEffect, useRef, useState } from 'react'
 import loginValidate from '../Assets/Images/forgotpw.png'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export const FPWVerification = () => {
     const navigate = useNavigate()
@@ -16,6 +16,7 @@ export const FPWVerification = () => {
     const [counter,setCounter] = useState(0)
     const [authMode,setAuthMode] = useState('otp')
     const [authLoading,setAuthLoading] = useState(false)
+    const [clicked,setClicked] = useState(false)
 
     // hashing Email
     const maskEmail = (email) => {
@@ -25,14 +26,11 @@ export const FPWVerification = () => {
     }
 
     // sending OTP
+    const location = useLocation()
+    const userId = location.state?.userId
     const handleSendOtp = async () => {
         try {
-            const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-            const response = await axios.post('http://localhost:2000/user/send-otp',{},{
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            })
+            const response = await axios.post('http://localhost:2000/pw-reset/send-reset-otp',{ userId })
             setSuccess(response.data.message)
             setEmail(response.data.email)
             setIsOtpSend(true)
@@ -79,18 +77,13 @@ export const FPWVerification = () => {
 
     const handleVerifyOtp = async () => {
         try {
-            const token = localStorage.getItem('token') || sessionStorage.getItem('token')
             const endpoint = authMode === 'otp' 
-            ? 'http://localhost:2000/user/verify-otp' 
-            : 'http://localhost:2000/user/verify-auth'
-            const response = await axios.post(endpoint,{otp: otp.join('')},{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            ? 'http://localhost:2000/pw-reset/verify-reset-otp' 
+            : 'http://localhost:2000/pw-reset/verify-auth'
+            const response = await axios.post(endpoint,{userId: userId,otp: otp.join('')})
             setSuccess(response.data.message)
             setLoad(true)
-            navigate('/')
+            navigate('/ChangePassword',{state: {userId}})
             setOpen(true)
         } catch (error) {
             setError(error.response?.data?.message || 'OTP verification failed')
@@ -121,9 +114,11 @@ export const FPWVerification = () => {
                 setLoading(true)
                 await handleSendOtp()
                 setShow(true)
+                setClicked(true)
             } else if (mode === 'auth') {
                 setAuthLoading(true)
                 setShow(true)
+                setClicked(true)
             }
         } catch (err) {
             setError('Failed to enable Authentication')
@@ -153,7 +148,7 @@ export const FPWVerification = () => {
       <Grid size={{lg:6,md:6,sm:6,xs:12}} sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'}}}>
         <Box className='animate__animated animate__fadeInTopLeft' sx={{display:'flex',justifyContent:'end',alignItems:'center',height:{lg:'550px',md:'550px',sm:'500px'}}}>
           <Box component='img' src={loginValidate}
-          height={{lg:'250px',md:'250px',sm:'200px'}}></Box>
+          height={{lg:'400px',md:'350px',sm:'250px'}}></Box>
         </Box>
       </Grid>
       <Grid size={{lg:6,md:6,sm:6,xs:12}}>
@@ -173,7 +168,7 @@ export const FPWVerification = () => {
                         onClick={async ()=>{
                             setAuthMode('otp')
                             await handleClickPortal('otp')
-                        }} disabled={loading || isOtpSend}
+                        }} disabled={loading || isOtpSend || clicked}
                         sx={{
                         color:'#00BFFF',
                         borderColor:'#00BFFF',
@@ -187,7 +182,7 @@ export const FPWVerification = () => {
                         onClick={async ()=>{
                             setAuthMode('auth')
                             await handleClickPortal('auth')
-                        }} disabled={authLoading || isOtpSend}
+                        }} disabled={authLoading || isOtpSend || clicked}
                         sx={{
                         color:'#00BFFF',
                         borderColor:'#00BFFF',

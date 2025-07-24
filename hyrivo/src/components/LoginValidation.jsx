@@ -16,6 +16,7 @@ export const LoginValidation = () => {
     const [counter,setCounter] = useState(0)
     const [authMode,setAuthMode] = useState('otp')
     const [authLoading,setAuthLoading] = useState(false)
+    const [clicked, setClicked] = useState(false)
 
     // hashing Email
     const maskEmail = (email) => {
@@ -123,9 +124,11 @@ export const LoginValidation = () => {
                 setLoading(true)
                 await handleSendOtp()
                 setShow(true)
+                setClicked(true)
             } else if (mode === 'auth') {
                 setAuthLoading(true)
                 setShow(true)
+                setClicked(true)
             }
         } catch (err) {
             setError('Failed to enable Authentication')
@@ -175,7 +178,7 @@ export const LoginValidation = () => {
                         onClick={async ()=>{
                             setAuthMode('otp')
                             await handleClickPortal('otp')
-                        }} disabled={loading || isOtpSend}
+                        }} disabled={loading || isOtpSend || clicked}
                         sx={{
                         color:'#00BFFF',
                         borderColor:'#00BFFF',
@@ -189,7 +192,7 @@ export const LoginValidation = () => {
                         onClick={async ()=>{
                             setAuthMode('auth')
                             await handleClickPortal('auth')
-                        }} disabled={authLoading || isOtpSend}
+                        }} disabled={authLoading || isOtpSend || clicked}
                         sx={{
                         color:'#00BFFF',
                         borderColor:'#00BFFF',

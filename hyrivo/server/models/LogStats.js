@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const LogStatsSchema = new mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null},
+    username: {type: String, default: null},
     route: String,
     date: String,
     count: {type: Number, default:1}

@@ -5,6 +5,7 @@ const logSchema = new mongoose.Schema({
     route: String,
     statusCode: Number,
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null},
+    username: {type: String, default: null},
     ip: String,
     userAgent: String,
     timestamp: {type: Date, default: Date.now,index:true},
