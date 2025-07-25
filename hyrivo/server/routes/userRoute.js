@@ -253,7 +253,7 @@ router.post('/register',log,async (req,res) => {
     }    
 })
 
-router.get('/auth/google',log,
+router.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
   );
   
@@ -262,6 +262,8 @@ router.get('/auth/google',log,
     async (req, res) => {
       // Google profile is in req.user
       const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      req.userId = req.user._id
 
       res.redirect(`http://localhost:3000/oauthSuccess?token=${token}`);
     }

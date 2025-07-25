@@ -8,7 +8,7 @@ const log = (req, res, next) => {
     const today = new Date().toISOString().slice(0,10)
 
     res.on('finish',async () => {
-        let userId = req.userId || null
+        let userId = req.userId || (req.user?._id) || null
         let username = null
 
         try {
