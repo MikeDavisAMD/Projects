@@ -188,9 +188,9 @@ const sendOTPEmail = async (email,otp) => {
 
 // Google OAuth authentication
 passport.use(new GoogleStrategy({
-clientID: process.env.GOOGLE_CLIENT_ID,  
-clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-callbackURL: '/user/auth/google/callback'
+    clientID: process.env.GOOGLE_CLIENT_ID,  
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: '/user/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
 try {
     let user = await User.findOne({ email: profile.emails[0].value });
@@ -214,6 +214,24 @@ try {
         return done(err, null);
     }
 }));
+
+router.post('/auth-consent',log,auth,async (req,res) => {
+    const {isCompany} = req.body
+
+    try {
+        const user = await User.findById(req.userId)
+        if(!user) return res.status(404).json({message: 'user not found'})
+
+        user.isCompany = isCompany
+        user.isExistingUser = true
+
+        await user.save()
+
+        res.status(200).json({message: 'Successfully Signed in with Google'})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
  
 router.post('/register-temp',log,async (req,res) => {
     const {email,username,password,isCompany} = req.body

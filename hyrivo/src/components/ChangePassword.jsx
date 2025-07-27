@@ -161,7 +161,7 @@ export const ChangePassword = () => {
                     )
                   }
                 }}/> <br />
-                <Button variant='outlined' size='large' onClick={handleClick}
+                <Button variant='outlined' size='large' onClick={handleClick} disabled={loading}
                 sx={{
                   color:'#00BFFF',
                   borderColor:'#00BFFF',
