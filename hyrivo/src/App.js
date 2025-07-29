@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { RouteSecure } from './components/SecureRoute'
 import { Login } from './components/Login'
 import { Signup } from './components/Signup'
@@ -11,10 +11,18 @@ import { LoginValidation } from './components/LoginValidation'
 import { FPWVerification } from './components/FPWVerification'
 import { ChangePassword } from './components/ChangePassword'
 import { Enable2FA } from './components/Enable2FA'
+import { Navbar } from './components/Navbar'
 
-export const App = () => {
+const AppContent = () => {
+
+  const location = useLocation()
+
+  const navbar = ['/']
+  const showNavbar = navbar.includes(location.pathname)
+  
   return (
-    <Router>
+    <>
+    {showNavbar && <Navbar/>}
       <Routes>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/' element={
@@ -42,6 +50,14 @@ export const App = () => {
         <Route path='/oauthSuccess' element={<OAuthSuccess/>}/>
         <Route path='Enable2FA' element={<Enable2FA/>}/>
       </Routes>
+    </>
+  )
+}
+
+export const App = () => {
+  return (
+    <Router>
+      <AppContent/>
     </Router>
   )
 }

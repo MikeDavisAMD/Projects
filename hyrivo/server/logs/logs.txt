@@ -62,3 +62,6 @@
 [2025-07-29] 68862c08d18e43200297f118 [User Anonymous] accessed /user/auth/google/callback?code=4%2F0AVMBsJil7Lh1CzdKd4tw-GnwNc-oE20LcSIjIZ6wuWpOhdNLMaPzCmh4V6V3KKKnHOFfEA&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=2&prompt=none (GET) 1 time(s)
 [2025-07-29] 68862c08d18e43200297f118 [User Anonymous] accessed /user/me (GET) 1 time(s)
 [2025-07-29] 68862c08d18e43200297f118 [User Anonymous] accessed /user/me (GET) 2 time(s)
+[2025-07-29] 68862c08d18e43200297f118 [User Anonymous] accessed /user/auth/google/callback?code=4%2F0AVMBsJjxR7jUeusPJ_iIh-dDmJJGZdFIKYm_SZknCaFjjdOTf8C7zfNMNHJ7zI0UwKAi_g&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=2&prompt=none (GET) 1 time(s)
+[2025-07-29] 68862c08d18e43200297f118 [User Anonymous] accessed /user/me (GET) 3 time(s)
+[2025-07-29] 68862c08d18e43200297f118 [User Anonymous] accessed /user/me (GET) 4 time(s)
