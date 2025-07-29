@@ -58,7 +58,7 @@ const loginSuccess = async (browser,os,platform,ip,city,country,region,username,
         text: `Hi ${username}!! Logged in to device`,
         html:`<div style="font-family: system-ui, sans-serif, Arial; font-size: 16px">
                 <a style="text-decoration: none; outline: none" href="[Website Link]" target="_blank">
-                    <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826110/favicon_fjofxa.png" alt="logo" />
+                    <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771099/favicon_rqa3fx.png" alt="logo" />
                 </a>
                 <p style="padding-top: 16px; border-top: 1px solid #eaeaea">Hi ${username},</p>
                 <p>
@@ -100,7 +100,7 @@ const loginSuccess = async (browser,os,platform,ip,city,country,region,username,
                     
                 </p>
                 <p style="padding-top: 16px; border-top: 1px solid #eaeaea">
-                    Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" />
+                    Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" />
                 </p>
                 </div>`
     }
@@ -120,11 +120,11 @@ const registerSuccess = async (email,username) => {
                     <img
                         style="height: 32px; vertical-align: middle"
                         height="32px"
-                        src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826110/favicon_fjofxa.png"
+                        src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771099/favicon_rqa3fx.png"
                         alt="logo"
                     />
                     </a>
-                    <p>Welcome to the <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /> family! We're excited to have you on board.</p>
+                    <p>Welcome to the <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" /> family! We're excited to have you on board.</p>
                     <p>
                     Your account has been successfully created, and you're now ready to explore all the great
                     features we offer.
@@ -153,7 +153,7 @@ const registerSuccess = async (email,username) => {
                         >hyrivo73@gmail.com</a
                     >. We're here to assist you every step of the way!
                     </p>
-                    <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /></p>
+                    <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" /></p>
                 </div>
                 </div>`,
     }
@@ -168,7 +168,7 @@ const sendOTPEmail = async (email,otp) => {
         text:`Your OTP for Login is ${otp}`,
         html: `<div style="font-family: system-ui, sans-serif, Arial; font-size: 14px">
                 <a style="text-decoration: none; outline: none" href="[Website Link]" target="_blank">
-                    <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826110/favicon_fjofxa.png" alt="logo" />
+                    <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771099/favicon_rqa3fx.png" alt="logo" />
                 </a>
                 <p style="padding-top: 14px; border-top: 1px solid #eaeaea">
                     To authenticate, please use the following One Time Password (OTP):
@@ -177,10 +177,10 @@ const sendOTPEmail = async (email,otp) => {
                 <p>This OTP will be valid for 15 minutes <strong></strong>.</p>
                 <p>
                     Do not share this OTP with anyone. If you didn't make this request, you can safely ignore this
-                    email.<br /><img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" /> will never contact you about this email or ask for any login codes or
+                    email.<br /><img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" /> will never contact you about this email or ask for any login codes or
                     links. Beware of phishing scams.
                 </p>
-                <p>Thanks for visiting <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1752826048/Hyrivo_copy_x9etkh.png" alt="logo" />!</p>
+                <p>Thanks for visiting <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" />!</p>
                 </div>` 
     }
     await transporter.sendMail(mailOptions)
