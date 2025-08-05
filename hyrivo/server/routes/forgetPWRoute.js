@@ -94,7 +94,7 @@ const passwordChangeMail = async (email,username) => {
     await transporter.sendMail(mailOptions)
 }
 
-router.post('/username',async (req,res) => {
+router.post('/username',log,async (req,res) => {
     const {username} = req.body
     try {
         const user = await User.findOne({$or:[{username},{email: username}]})
