@@ -9,9 +9,11 @@ const logSchema = new mongoose.Schema({
     ip: String,
     userAgent: String,
     timestamp: {type: Date, default: Date.now,index:true},
-    date: String
+    date: String,
+    count: {type: Number, default:1}
 })
 
 logSchema.index({timestamp: 1},{expireAfterSeconds: 259200})
+logSchema.index({userId: 1, route: 1, date: 1},{unique: true})
 
 module.exports = mongoose.model('Logs',logSchema)
