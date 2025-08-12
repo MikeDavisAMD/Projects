@@ -11,19 +11,27 @@ const log = (req, res, next) => {
         let username = null
 
         try {
-            if (!userId && (req.body?.username || req.body?.email || req.query?.email)) {
+            if (!userId && (req.body?.username || req.body?.email || req.query?.email || req.body?.userId || req.query?.userId)) {
 
-                const user = await User.findOne({
-                    $or: [
-                        {username: req.body.username},
-                        {email: req.body.email || req.query.email},
-                        {email: req.body.username}
-                    ]
-                }).select('_id username')
-
-                if (user) {
-                    userId = user._id
-                    username = user.username
+                if (req.body?.userId || req.query?.userId) {
+                    const user = await User.findById(req.body.userId || req.query.userId).select('_id username')
+                    if (user) {
+                        userId = user._id
+                        username = user.username
+                    }
+                } else {
+                    const user = await User.findOne({
+                        $or: [
+                            {username: req.body.username},
+                            {email: req.body.email || req.query.email},
+                            {email: req.body.username}
+                        ]
+                    }).select('_id username')
+    
+                    if (user) {
+                        userId = user._id
+                        username = user.username
+                    }
                 }
 
             } else if (userId && !username) {
