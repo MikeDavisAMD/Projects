@@ -1,6 +1,6 @@
-import React from 'react'
-import {AccountCircle, ExpandMore, Group, Home, Message, Notifications, Search, Work} from '@mui/icons-material'
-import { AppBar, Box, Button, ButtonBase, Container, InputBase, Menu, MenuItem, Toolbar } from '@mui/material'
+import React, { useState } from 'react'
+import { ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work} from '@mui/icons-material'
+import { AppBar, Avatar, Box, ButtonBase, Container, Divider, InputBase, Menu, MenuItem, Toolbar } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import logo from '../Assets/Images/Hyrivo copy.png'
 
@@ -27,21 +27,22 @@ const ME = () => {
 
   return(
     <Box>
-      <Button
+      <ButtonBase
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        sx={{padding:0,textTransform:'none',color:'black'}}
+        sx={{p: 0,textTransform:'none',color:'black'}}
       >
         <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-          <AccountCircle/>
-          <Box sx={{display:'flex'}}>
-            Me <ExpandMore/>
+          <Avatar sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}>U</Avatar>
+          <Box sx={{display:'flex',alignItems:'center'}}>
+            <Box component='span'>Me</Box>
+            {open ? <ExpandLess/> : <ExpandMore/>}
           </Box>
         </Box>
-      </Button>
+      </ButtonBase>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -53,20 +54,36 @@ const ME = () => {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
+          <Person/> 
+          My Account
+          </Box>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
+            <Settings/> 
+            Settings
+          </Box>
+        </MenuItem>
+        <Divider/>
+        <MenuItem onClick={handleClose}>
+          <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
+            <Logout/> 
+            Logout
+          </Box>
+        </MenuItem>
       </Menu>
     </Box>
   )
 }
 
 const options = [
-  {icon: <Home/>, name:'Home'},
-  {icon: <Group/>, name:'Connections'},
-  {icon: <Work/>, name:'Jobs'},
-  {icon: <Message/>, name:'Messages'},
-  {icon: <Notifications/>, name:'Notifications'}
+  {icon: <Home sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Home'},
+  {icon: <Group sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Connections'},
+  {icon: <Work sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Jobs'},
+  {icon: <Message sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Messages'},
+  {icon: <Notifications sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Notifications'}
 ]
 
 const SearchBar = styled('div')(({ theme }) => ({
@@ -129,13 +146,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 export const Navbar = () => {
+  const [activeTab,setActiveTab] = useState('Home')
   return (
     <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
       <Container maxWidth='xl'>
         <Toolbar>
           <Box sx={{display:'flex',gap:2,alignItems:'center'}}>
-            <Box component='img' src={logo} alt='Logo' height={{lg:'80px'}}></Box>
-            <SearchBar>
+            <Box component='img' src={logo} alt='Logo' height={{lg:'80px',md:'60px',sm:'45px',xs:'30px'}}></Box>
+            <SearchBar sx={{display:{lg:'block',md:'none',sm:'none',xs:'none'}}}>
               <SearchIconWrapper>
                 <Search/>
               </SearchIconWrapper>
@@ -144,10 +162,33 @@ export const Navbar = () => {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </SearchBar>
+            <Box sx={{display:{lg:'none',md:'block',sm:'block',xs:'none'}}}>
+              <ButtonBase sx={{display:'flex',
+                flexDirection:'column',
+                alignItems:'center', pb:0.5, px:1,
+                transition: 'all 0.3s ease',
+                color:COLORS.primaryText,
+                '&:hover': {
+                  color: COLORS.hoverAccent,
+                }
+              }}>
+                <Search sx={{width:{lg:30,md:25,sm:20},height:{lg:30,md:25,sm:20}}}/>
+                Search
+              </ButtonBase>
+            </Box>
           </Box>
           <Box sx={{display:'flex',width:'100%',justifyContent:'flex-end',alignItems:'center',gap:2}}>
             {options.map(data => (
-              <ButtonBase sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+              <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                flexDirection:'column',
+                alignItems:'center', pb:0.5, px:1,
+                color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  color: COLORS.hoverAccent,
+                }
+              }}>
                 {data.icon}
                 {data.name}
               </ButtonBase>
