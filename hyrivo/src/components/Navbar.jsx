@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work} from '@mui/icons-material'
-import { AppBar, Avatar, Box, ButtonBase, Container, Divider, InputBase, Menu, MenuItem, Toolbar } from '@mui/material'
+import { AppBar, Avatar, Box, ButtonBase, Container, Divider, Drawer, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import logo from '../Assets/Images/Hyrivo copy.png'
 
@@ -16,7 +16,7 @@ const COLORS = {
 };
 
 const ME = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -78,12 +78,61 @@ const ME = () => {
   )
 }
 
+const MEMOB = () => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {['My Account', 'Settings'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <Person /> : <Settings />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Logout/>
+            </ListItemIcon>
+            <ListItemText primary='Logout' />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Box>
+  );
+
+  return(
+    <Box>
+      <ButtonBase onClick={toggleDrawer(true)}>
+        <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+          <Avatar sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}>U</Avatar>
+        </Box>
+      </ButtonBase>
+      <Drawer anchor='bottom' open={open} onClose={toggleDrawer(false)}>
+        {DrawerList}
+      </Drawer>
+    </Box>
+  )
+}
+
 const options = [
-  {icon: <Home sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Home'},
-  {icon: <Group sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Connections'},
-  {icon: <Work sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Jobs'},
-  {icon: <Message sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Messages'},
-  {icon: <Notifications sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>, name:'Notifications'}
+  {icon: <Home sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Home'},
+  {icon: <Group sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Connections'},
+  {icon: <Work sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Jobs'},
+  {icon: <Message sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Messages'},
+  {icon: <Notifications sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Notifications'}
 ]
 
 const SearchBar = styled('div')(({ theme }) => ({
@@ -147,12 +196,54 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const [activeTab,setActiveTab] = useState('Home')
+  const [visibleOptions,setVisibleOptions] = useState(options)
+  const [overflowOptions,setOverflowOptions] = useState([])
+  const containerRef = useRef(null)
+
+  useEffect(()=>{
+    const handleResize = () => {
+      if (!containerRef.current) return
+
+      const containerWidth = containerRef.current.offsetWidth
+      let usedWidth = 0
+      const tempVisible = []
+      const tempOverflow = []
+
+      const fakeElement = document.createElement('div')
+      fakeElement.style.position = 'absolute'
+      fakeElement.style.visibility = 'hidden'
+      fakeElement.style.height = 'auto'
+
+      document.body.appendChild(fakeElement)
+
+      options.forEach((opt)=>{
+        fakeElement.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;padding:4px;">${opt.name}</div>`
+        const itemWidth = fakeElement.offsetWidth + 16
+        if (usedWidth + itemWidth < containerWidth - 40) {
+          tempVisible.push(opt)
+          usedWidth += itemWidth
+        } else {
+          tempOverflow.push(opt)
+        }
+      })
+
+      document.body.removeChild(fakeElement)
+
+      setVisibleOptions(tempVisible)
+      setOverflowOptions(tempOverflow)
+    }
+
+    handleResize()
+    window.addEventListener('resize',handleResize)
+    return () => window.removeEventListener('resize',handleResize)
+  })
+
   return (
     <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
       <Container maxWidth='xl'>
         <Toolbar>
-          <Box sx={{display:'flex',gap:2,alignItems:'center'}}>
-            <Box component='img' src={logo} alt='Logo' height={{lg:'80px',md:'60px',sm:'45px',xs:'30px'}}></Box>
+          <Box sx={{display:'flex',gap:2,alignItems:'center',width:'100%'}}>
+            <Box component='img' src={logo} alt='Logo' height={{lg:'80px',md:'60px',sm:'45px',xs:'35px'}}></Box>
             <SearchBar sx={{display:{lg:'block',md:'none',sm:'none',xs:'none'}}}>
               <SearchIconWrapper>
                 <Search/>
@@ -176,24 +267,56 @@ export const Navbar = () => {
                 Search
               </ButtonBase>
             </Box>
-          </Box>
-          <Box sx={{display:'flex',width:'100%',justifyContent:'flex-end',alignItems:'center',gap:2}}>
-            {options.map(data => (
-              <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
-                flexDirection:'column',
-                alignItems:'center', pb:0.5, px:1,
-                color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  color: COLORS.hoverAccent,
-                }
-              }}>
-                {data.icon}
-                {data.name}
-              </ButtonBase>
-            ))}
-            <ME/>
+            <Box sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'},flexGrow:1}}>
+              <Box sx={{display:'flex',width:'100%',justifyContent:'flex-end',alignItems:'center',gap:2}}>
+                {options.map(data => (
+                  <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                    flexDirection:'column',
+                    alignItems:'center', pb:0.5, px:1,
+                    color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                    borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      color: COLORS.hoverAccent,
+                    }
+                  }}>
+                    {data.icon}
+                    {data.name}
+                  </ButtonBase>
+                ))}
+                <ME/>
+              </Box>
+            </Box>
+            <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'},width:'100%'}}>
+              <Box sx={{display:'flex',gap:1,justifyContent:'flex-end'}}>
+                <ButtonBase sx={{display:'flex',
+                  flexDirection:'column',
+                  alignItems:'center', pb:0.5, px:1,
+                  transition: 'all 0.3s ease',
+                  color:COLORS.primaryText,
+                  '&:hover': {
+                    color: COLORS.hoverAccent,
+                  }
+                }}>
+                  <Search sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>
+                </ButtonBase>
+                  {options.map(data => (
+                    <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                      flexDirection:'column',
+                      alignItems:'center', pb:0.5, px:1,
+                      color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                      borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        color: COLORS.hoverAccent,
+                      }
+                    }}>
+                      {data.icon}
+                    </ButtonBase>
+                  ))}
+                  <MEMOB/>
+              </Box>
+            </Box>
           </Box>
         </Toolbar>
       </Container>
