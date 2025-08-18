@@ -195,7 +195,8 @@ export const Navbar = () => {
   const [activeTab,setActiveTab] = useState('Home')
   const [visibleOptions,setVisibleOptions] = useState(options)
   const [overflowOptions,setOverflowOptions] = useState([])
-  const containerRef = useRef(null)
+  const tabRef = useRef(null)
+  const mobRef = useRef(null)
 
   // more menu
   const [anchorEl, setAnchorEl] = useState(null);
@@ -205,9 +206,21 @@ export const Navbar = () => {
 
   useEffect(()=>{
     const handleResize = () => {
-      if (!containerRef.current) return
+      const width = window.innerWidth
 
-      const containerWidth = containerRef.current.offsetWidth
+      if (width >= 1200) {
+        setVisibleOptions(options)
+        setOverflowOptions([])
+        return
+      } else if (width >= 600 && width < 1200 && tabRef.current) {
+        calculateVisibleOptions(tabRef.current.offsetWidth)
+        return
+      } else if (width < 600 && mobRef.current) {
+        calculateVisibleOptions(mobRef.current.offsetWidth)
+      }
+    }
+
+    const calculateVisibleOptions = (containerWidth) => {
       let usedWidth = 0
       const tempVisible = []
       const tempOverflow = []
@@ -219,8 +232,8 @@ export const Navbar = () => {
 
       document.body.appendChild(fakeElement)
 
-      const meWidth = window.innerWidth < 600 ? 50 : 80
-      const moreWidth = window.innerWidth < 600 ? 30 : 60
+      const meWidth = 80
+      const moreWidth = 60
       const availableWidth = containerWidth - meWidth - moreWidth
 
       options.forEach((opt)=>{
@@ -229,7 +242,7 @@ export const Navbar = () => {
         flex-direction:column;
         align-items:center;
         padding:4px; 
-        font-family:'Urbanist', sans-serif;">${window.innerWidth < 600 ? '' : opt.name}</div>`
+        font-family:'Urbanist', sans-serif;">${opt.name}</div>`
         const itemWidth = fakeElement.offsetWidth + 16
         if (usedWidth + itemWidth < availableWidth) {
           tempVisible.push(opt)
@@ -248,7 +261,7 @@ export const Navbar = () => {
     handleResize()
     window.addEventListener('resize',handleResize)
     return () => window.removeEventListener('resize',handleResize)
-  })
+  },[])
 
   return (
     <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
@@ -292,7 +305,7 @@ export const Navbar = () => {
                 <Search sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>
               </ButtonBase>
             </Box>
-            <Box sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'},flexGrow:1}} ref={containerRef}>
+            <Box sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'},flexGrow:1}} ref={tabRef}>
               <Box sx={{display:'flex',width:'100%',justifyContent:'flex-end',alignItems:'center',gap:2}}>
                 {visibleOptions.map(data => (
                   <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
@@ -330,7 +343,7 @@ export const Navbar = () => {
                 <ME/>
               </Box>
             </Box>
-            <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'},flexGrow:1}}>
+            <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'},flexGrow:1}} ref={mobRef}>
               <Box sx={{display:'flex',gap:1,justifyContent:'flex-end',width:'100%',alignItems:'center'}}>
                   {visibleOptions.map(data => (
                     <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
