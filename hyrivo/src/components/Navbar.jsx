@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ExpandLess, ExpandMore, Group, Home, Logout, Message, MoreHoriz, Notifications, Person, Search, Settings, Work} from '@mui/icons-material'
-import { AppBar, Avatar, Box, ButtonBase, Container, Divider, Drawer, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
-import { styled } from '@mui/material/styles';
+import React, { useState } from 'react'
+import { AppBar, Avatar, Box, ButtonBase, Container, Divider, Drawer, Grid, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
+import { ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
 import logo from '../Assets/Images/Hyrivo copy.png'
+import { styled } from '@mui/material/styles';
 
 const COLORS = {
   primaryBg: '#FFFFFF',
@@ -193,92 +193,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const [activeTab,setActiveTab] = useState('Home')
-  const [visibleOptions,setVisibleOptions] = useState(options)
-  const [overflowOptions,setOverflowOptions] = useState([])
-  const tabRef = useRef(null)
-  const mobRef = useRef(null)
-
-  // more menu
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
-
-  useEffect(()=>{
-    const handleResize = () => {
-      const width = window.innerWidth
-
-      if (width >= 1200) {
-        setVisibleOptions(options)
-        setOverflowOptions([])
-        return
-      } else if (width >= 600 && width < 1200 && tabRef.current) {
-        calculateVisibleOptions(tabRef.current.offsetWidth)
-        return
-      } else if (width < 600 && mobRef.current) {
-        calculateVisibleOptions(mobRef.current.offsetWidth)
-      }
-    }
-
-    const calculateVisibleOptions = (containerWidth) => {
-      let usedWidth = 0
-      const tempVisible = []
-      const tempOverflow = []
-
-      const fakeElement = document.createElement('div')
-      fakeElement.style.position = 'absolute'
-      fakeElement.style.visibility = 'hidden'
-      fakeElement.style.height = 'auto'
-
-      document.body.appendChild(fakeElement)
-
-      const meWidth = 80
-      const moreWidth = 60
-      const availableWidth = containerWidth - meWidth - moreWidth
-
-      options.forEach((opt)=>{
-        fakeElement.innerHTML = `<div 
-        style="display:flex;
-        flex-direction:column;
-        align-items:center;
-        padding:4px; 
-        font-family:'Urbanist', sans-serif;">${opt.name}</div>`
-        const itemWidth = fakeElement.offsetWidth + 16
-        if (usedWidth + itemWidth < availableWidth) {
-          tempVisible.push(opt)
-          usedWidth += itemWidth
-        } else {
-          tempOverflow.push(opt)
-        }
-      })
-
-      document.body.removeChild(fakeElement)
-
-      setVisibleOptions(tempVisible)
-      setOverflowOptions(tempOverflow)
-    }
-
-    handleResize()
-    window.addEventListener('resize',handleResize)
-    return () => window.removeEventListener('resize',handleResize)
-  },[])
-
   return (
     <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
       <Container maxWidth='xl'>
-        <Toolbar>
-          <Box sx={{display:'flex',gap:2,alignItems:'center',width:'100%'}}>
-            <Box component='img' src={logo} alt='Logo' height={{lg:'80px',md:'60px',sm:'45px',xs:'35px'}}></Box>
-            <SearchBar sx={{display:{lg:'block',md:'none',sm:'none',xs:'none'}}}>
-              <SearchIconWrapper>
-                <Search/>
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </SearchBar>
-            <Box sx={{display:{lg:'none',md:'block',sm:'block',xs:'none'}}}>
+        <Toolbar disableGutters>
+          <Grid container spacing={4}>
+            <Grid size={{lg:3,md:3,sm:2,xs:3}}>
+              <Box component='img' src={logo} height={{lg:'80px',md:'60px',sm:'45px',xs:'35px'}}></Box>
+            </Grid>
+            <Grid size={4} sx={{display:{lg:'flex',md:'none',sm:'none',xs:'none'},alignItems:'center'}}>
+                <SearchBar>
+                  <SearchIconWrapper>
+                    <Search/>
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                  />
+                </SearchBar>
+            </Grid>
+            <Grid size={2} sx={{display:{lg:'none',md:'flex',sm:'flex',xs:'none'},alignItems:'center'}}>
               <ButtonBase sx={{display:'flex',
                 flexDirection:'column',
                 alignItems:'center', pb:0.5, px:1,
@@ -291,95 +225,45 @@ export const Navbar = () => {
                 <Search sx={{width:{lg:30,md:25,sm:20},height:{lg:30,md:25,sm:20}}}/>
                 Search
               </ButtonBase>
-            </Box>
-            <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'}}}>
+            </Grid>
+            <Grid size={2} sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},alignItems:'center'}}>
               <ButtonBase sx={{display:'flex',
                 flexDirection:'column',
                 alignItems:'center', pb:0.5, px:1,
+              }}>
+                <Search sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>
+              </ButtonBase>
+            </Grid>
+            <Grid size={{lg:4,md:6,sm:7}} sx={{display:{lg:'flex',md:'flex',sm:'flex',xs:'none'},alignItems:'center',gap:{lg:4,md:4,sm:2}}}>
+            {options.map(data => (
+              <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                flexDirection:'column',
+                alignItems:'center', pb:0.5, px:1,
+                color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
                 transition: 'all 0.3s ease',
-                color:COLORS.primaryText,
                 '&:hover': {
                   color: COLORS.hoverAccent,
                 }
               }}>
-                <Search sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>
+                {data.icon}
+                {data.name}
               </ButtonBase>
-            </Box>
-            <Box sx={{display:{lg:'block',md:'block',sm:'block',xs:'none'},flexGrow:1}} ref={tabRef}>
-              <Box sx={{display:'flex',width:'100%',justifyContent:'flex-end',alignItems:'center',gap:2}}>
-                {visibleOptions.map(data => (
-                  <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
-                    flexDirection:'column',
-                    alignItems:'center', pb:0.5, px:1,
-                    color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                    borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      color: COLORS.hoverAccent,
-                    }
-                  }}>
-                    {data.icon}
-                    {data.name}
-                  </ButtonBase>
-                ))}
-
-                {overflowOptions.length > 0 && (
-                  <>
-                  <ButtonBase onClick={handleMenuOpen}
-                  sx={{display:'flex',flexDirection:'column',alignItems:'center',px:1}}>
-                    <MoreHoriz/>
-                    More
-                  </ButtonBase>
-                  <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-                    {overflowOptions.map((data)=>(
-                      <MenuItem sx={{display:'flex',flexDirection:'column',fontFamily:"'Urbanist', sans-serif"}}>
-                        {data.icon}
-                        {data.name}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                  </>
-                )}
-                <ME/>
-              </Box>
-            </Box>
-            <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'},flexGrow:1}} ref={mobRef}>
-              <Box sx={{display:'flex',gap:1,justifyContent:'flex-end',width:'100%',alignItems:'center'}}>
-                  {visibleOptions.map(data => (
-                    <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
-                      flexDirection:'column',
-                      alignItems:'center', pb:0.5, px:1,
-                      color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                      borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
-                      transition: 'all 0.3s ease',  
-                      '&:hover': {
-                        color: COLORS.hoverAccent,
-                      }
-                    }}>
-                      {data.icon}
-                    </ButtonBase>
-                  ))}
-                  {overflowOptions.length > 0 && (
-                  <>
-                  <ButtonBase onClick={handleMenuOpen}
-                  sx={{display:'flex',flexDirection:'column',alignItems:'center',px:1}}>
-                    <MoreHoriz/>
-                    More
-                  </ButtonBase>
-                  <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-                    {overflowOptions.map((data)=>(
-                      <MenuItem sx={{display:'flex',flexDirection:'column',fontFamily:"'Urbanist', sans-serif"}}>
-                        {data.icon}
-                        {data.name}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                  </>
-                )}
-                  <ME/>
-              </Box>
-            </Box>
-          </Box>
+            ))}
+              <ME/>
+            </Grid>
+            <Grid size={6} sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},alignItems:'center'}}>
+              {options.map(data => (
+                <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                  flexDirection:'column',
+                  alignItems:'center', pb:0.5, px:1,
+                }}>
+                  {data.icon}
+                </ButtonBase>
+              ))}
+              <ME/>
+            </Grid>
+          </Grid>
         </Toolbar>
       </Container>
     </AppBar>
