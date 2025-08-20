@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { AppBar, Avatar, Box, ButtonBase, Container, Divider, Drawer, Grid, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
 import { ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
 import logo from '../Assets/Images/Hyrivo copy.png'
+import icon from '../Assets/Images/icon.jpg'
 import { styled } from '@mui/material/styles';
 
 const COLORS = {
@@ -193,16 +194,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const [activeTab,setActiveTab] = useState('Home')
+
   return (
     <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <Grid container spacing={4}>
-            <Grid size={{lg:3,md:3,sm:2,xs:3}}>
-              <Box component='img' src={logo} height={{lg:'80px',md:'60px',sm:'45px',xs:'35px'}}></Box>
-            </Grid>
-            <Grid size={4} sx={{display:{lg:'flex',md:'none',sm:'none',xs:'none'},alignItems:'center'}}>
-                <SearchBar>
+            <Grid size={7} sx={{display:{lg:'flex',md:'none',sm:'none',xs:'none'},alignItems:'center',gap:2}}>
+              <Box component='img' src={logo} height='80px'></Box>
+              <SearchBar>
                   <SearchIconWrapper>
                     <Search/>
                   </SearchIconWrapper>
@@ -212,7 +212,8 @@ export const Navbar = () => {
                   />
                 </SearchBar>
             </Grid>
-            <Grid size={2} sx={{display:{lg:'none',md:'flex',sm:'flex',xs:'none'},alignItems:'center'}}>
+            <Grid size={4} sx={{display:{lg:'none',md:'flex',sm:'none',xs:'none'},alignItems:'center',gap:1}}>
+              <Box component='img' src={logo} height={{md:'60px',sm:'45px'}}></Box>
               <ButtonBase sx={{display:'flex',
                 flexDirection:'column',
                 alignItems:'center', pb:0.5, px:1,
@@ -226,7 +227,23 @@ export const Navbar = () => {
                 Search
               </ButtonBase>
             </Grid>
-            <Grid size={2} sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},alignItems:'center'}}>
+            <Grid size={3} sx={{display:{lg:'none',md:'none',sm:'flex',xs:'none'},alignItems:'center',gap:1}}>
+              <Box component='img' src={icon} height={{md:'60px',sm:'45px'}}></Box>
+              <ButtonBase sx={{display:'flex',
+                flexDirection:'column',
+                alignItems:'center', pb:0.5, px:1,
+                transition: 'all 0.3s ease',
+                color:COLORS.primaryText,
+                '&:hover': {
+                  color: COLORS.hoverAccent,
+                }
+              }}>
+                <Search sx={{width:{lg:30,md:25,sm:20},height:{lg:30,md:25,sm:20}}}/>
+                Search
+              </ButtonBase>
+            </Grid>
+            <Grid size={4} sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},alignItems:'center'}}>
+              <Box component='img' src={icon} height='30px'></Box>
               <ButtonBase sx={{display:'flex',
                 flexDirection:'column',
                 alignItems:'center', pb:0.5, px:1,
@@ -234,7 +251,25 @@ export const Navbar = () => {
                 <Search sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>
               </ButtonBase>
             </Grid>
-            <Grid size={{lg:4,md:6,sm:7}} sx={{display:{lg:'flex',md:'flex',sm:'flex',xs:'none'},alignItems:'center',gap:{lg:4,md:4,sm:2}}}>
+            <Grid size={{lg:4,md:6,sm:7}} sx={{display:{lg:'flex',md:'flex',sm:'none',xs:'none'},alignItems:'center',gap:4}}>
+            {options.map(data => (
+              <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                flexDirection:'column',justifyContent:'flex-end',
+                alignItems:'center', pb:0.5, px:1,
+                color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  color: COLORS.hoverAccent,
+                }
+              }}>
+                {data.icon}
+                {data.name}
+              </ButtonBase>
+            ))}
+              <ME/>
+            </Grid>
+            <Grid size={7} sx={{display:{lg:'none',md:'none',sm:'flex',xs:'none'},alignItems:'center',gap:1}}>
             {options.map(data => (
               <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
                 flexDirection:'column',
@@ -252,7 +287,7 @@ export const Navbar = () => {
             ))}
               <ME/>
             </Grid>
-            <Grid size={6} sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},alignItems:'center'}}>
+            <Grid size={8} sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},alignItems:'center',justifyContent:'flex-end',gap:0.5}}>
               {options.map(data => (
                 <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
                   flexDirection:'column',
