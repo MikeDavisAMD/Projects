@@ -12,12 +12,17 @@ import { FPWVerification } from './components/FPWVerification'
 import { ChangePassword } from './components/ChangePassword'
 import { Enable2FA } from './components/Enable2FA'
 import { Navbar } from './components/Navbar'
+import { JobsUser } from './components/JobsUser'
+import { JobsOrg } from './components/JobsOrg'
+import { Connections } from './components/Connections'
+import { Messages } from './components/Messages'
+import { Notifications } from './components/Notifications'
 
 const AppContent = () => {
 
   const location = useLocation()
 
-  const navbar = ['/']
+  const navbar = ['/','/JobsUser','/JobsOrg','/Connections','/Messages','/Notifications']
   const showNavbar = navbar.includes(location.pathname)
   
   return (
@@ -28,6 +33,31 @@ const AppContent = () => {
         <Route path='/' element={
           <RouteSecure>
             <Home/>
+          </RouteSecure>
+        }/>
+        <Route path='/JobsUser' element={
+          <RouteSecure>
+            <JobsUser/>
+          </RouteSecure>
+        }/>
+        <Route path='/JobsOrg' element={
+          <RouteSecure>
+            <JobsOrg/>
+          </RouteSecure>
+        }/>
+        <Route path='/Connections' element={
+          <RouteSecure>
+            <Connections/>
+          </RouteSecure>
+        }/>
+        <Route path='/Messages' element={
+          <RouteSecure>
+            <Messages/>
+          </RouteSecure>
+        }/>
+        <Route path='/Notifications' element={
+          <RouteSecure>
+            <Notifications/>
           </RouteSecure>
         }/>
         <Route path='/LoginValidation' element={

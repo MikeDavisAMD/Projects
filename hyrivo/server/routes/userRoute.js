@@ -279,7 +279,7 @@ router.get('/auth/google',
     passport.authenticate('google', { session: false, failureRedirect: '/login' }),
     async (req, res) => {
       // Google profile is in req.user
-      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
       req.userId = req.user._id
 
@@ -323,7 +323,7 @@ router.post('/login',log,async (req,res) => {
         const pw = await user.matchPassword(password)
         if(!pw) return res.status(400).json({message:'Invalid username or Password'})
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '1h'})
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '30d'})
 
         res.json({
             token,

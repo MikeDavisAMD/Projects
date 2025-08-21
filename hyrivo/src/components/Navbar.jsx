@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AppBar, Avatar, Box, ButtonBase, Divider, Drawer, Grid, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
-import { ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
+import { ArrowBackIosNew, ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
 import logo from '../Assets/Images/Hyrivo copy.png'
 import icon from '../Assets/Images/icon.jpg'
 import { styled } from '@mui/material/styles';
+import { motion,AnimatePresence } from 'framer-motion'
+import { useLocation, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const COLORS = {
   primaryBg: '#FFFFFF',
@@ -16,7 +19,7 @@ const COLORS = {
   hoverAccent: '#FF6EC7',
 };
 
-const ME = () => {
+const ME = ({users}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -31,6 +34,12 @@ const ME = () => {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+
+  const getInitials = (name) => {
+    if (!name) return '+' 
+    const names = name.split(' ')
+    return names.length === 1 ? names[0][0].toUpperCase() : (names[0][0] + names[1][0]).toUpperCase()
+  }
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -72,7 +81,9 @@ const ME = () => {
         sx={{p: 0,textTransform:'none',color:'black'}}
       >
         <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-          <Avatar sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}>U</Avatar>
+          <Avatar sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
+            {getInitials(users)}
+          </Avatar>
           <Box sx={{display:'flex',alignItems:'center'}}>
             <Box component='span'>Me</Box>
             {open ? <ExpandLess/> : <ExpandMore/>}
@@ -114,7 +125,7 @@ const ME = () => {
     <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'}}}>
        <ButtonBase onClick={toggleDrawer(true)}>
          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-           <Avatar sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}>U</Avatar>
+           <Avatar sx={{width:20,height:20,fontSize:12}}>{getInitials(users)}</Avatar>
          </Box>
        </ButtonBase>
        <Drawer anchor='bottom' open={opn} onClose={toggleDrawer(false)}>
@@ -124,14 +135,6 @@ const ME = () => {
     </>
   )
 }
-
-const options = [
-  {icon: <Home sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Home'},
-  {icon: <Group sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Connections'},
-  {icon: <Work sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Jobs'},
-  {icon: <Message sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Messages'},
-  {icon: <Notifications sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>, name:'Notifications'}
-]
 
 const SearchBar = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -191,9 +194,70 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }));
 
-
 export const Navbar = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [showSearch,setShowSearch] = useState(false)
+  const [user,setUser] = useState([])
+
+  const fetchUser = async () => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    try {
+      const response = await axios.get('http://localhost:2000/user/me',{
+        headers: {Authorization:`Bearer ${token}`}
+      })
+      setUser(response.data)
+    } catch (error) {
+      console.error("User not found")
+    }
+  }
+
+  useEffect(()=>{fetchUser()},[])
+
+  const options = useMemo(()=>[
+    {icon: <Home sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Home' ,path:'/'},
+    {icon: <Group sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Connections', path:'/Connections'},
+    {icon: <Work sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Jobs', path: user?.isCompany ? '/JobsOrg' : '/JobsUser'},
+    {icon: <Message sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Messages', path:'/Messages'},
+    {icon: <Notifications sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Notifications', path:'/Notifications'}
+  ],[user?.isCompany])
+
+  
   const [activeTab,setActiveTab] = useState('Home')
+
+  // navigate to options
+  useEffect(()=>{
+    const current = options.find(opt => 
+      location.pathname === opt.path 
+    )
+    if (current) {
+      setActiveTab(current.name)
+    }
+  },[location.pathname, options])
+
+  // search animation
+  const searchRef = useRef(null)
+
+  useEffect(()=>{
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSearch(false)
+    }
+
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') setShowSearch(false)
+    }
+
+    if (showSearch) {
+      document.addEventListener("mousedown",handleClickOutside)
+      document.addEventListener("keydown",handleEsc)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown",handleClickOutside)
+      document.removeEventListener('keydown',handleEsc)
+    }
+
+  },[showSearch])
 
   return (
     <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
@@ -219,7 +283,8 @@ export const Navbar = () => {
             <Grid size={6}>
               <Box sx={{display:'flex',alignItems:'center',justifyContent:'flex-end',gap:{lg:2,md:1}}}>
                 {options.map(data => (
-                  <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
+                  <ButtonBase key={data.name} onClick={()=>navigate(data.path)} 
+                  sx={{display:'flex',
                     flexDirection:'column',justifyContent:'flex-end',
                     alignItems:'center', pb:0.5, px:1,
                     color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
@@ -233,75 +298,165 @@ export const Navbar = () => {
                     {data.name}
                   </ButtonBase>
                 ))}
-                <ME/>
+                <ME users={user.username}/>
               </Box>
             </Grid>
           </Grid>
         </Box>
         <Box sx={{flexGrow:1,display:{lg:'none',md:'none',sm:'block',xs:'none'}}}>
-          <Grid container spacing={3} alignItems='center'>
-            <Grid size={6}>
-              <Box component='img' src={logo} height='45px'></Box>
-            </Grid>
-            <Grid size={6}>
-              <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-                <ButtonBase sx={{display:'flex',
-                  flexDirection:'column',
-                  alignItems:'center', pb:0.5, px:1,
-                  transition: 'all 0.3s ease',
-                  color:COLORS.primaryText,
-                  '&:hover': {
-                    color: COLORS.hoverAccent,
-                  }
-                }}>
-                  <Search sx={{width:{lg:30,md:25,sm:20},height:{lg:30,md:25,sm:20}}}/>
-                  Search
-                </ButtonBase>
-                {options.map(data => (
-                  <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
-                    flexDirection:'column',
-                    alignItems:'center', pb:0.5, px:1,
-                    color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                    borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      color: COLORS.hoverAccent,
-                    }
-                  }}>
-                    {data.icon}
-                    {data.name}
+          <AnimatePresence mode='wait'>
+          {showSearch ? (
+            <motion.div
+              key="search-sm"
+              ref={searchRef}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Grid container spacing={2} alignItems='center' justifyContent='center'>
+                <Grid size={6}>
+                  <ButtonBase onClick={()=>setShowSearch(false)}>
+                    <ArrowBackIosNew/>
                   </ButtonBase>
-                ))}
-                <ME/>
-              </Box>
-            </Grid>
-          </Grid>
+                </Grid>
+                <Grid size={6}>
+                  <Box sx={{display:'flex',alignItems:'center'}}>
+                    <SearchBar>
+                      <SearchIconWrapper>
+                        <Search/>
+                      </SearchIconWrapper>
+                      <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                      />
+                    </SearchBar>
+                  </Box>
+                </Grid>
+              </Grid>
+            </motion.div>
+          ):(
+            <motion.div
+              key="normal-sm"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Grid container spacing={3} alignItems='center'>
+                <Grid size={6}>
+                  <Box component='img' src={logo} height='45px'></Box>
+                </Grid>
+                <Grid size={6}>
+                  <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                    <ButtonBase onClick={()=>setShowSearch(true)} sx={{display:'flex',
+                      flexDirection:'column',
+                      alignItems:'center', pb:0.5, px:1,
+                      transition: 'all 0.3s ease',
+                      color:COLORS.primaryText,
+                      '&:hover': {
+                        color: COLORS.hoverAccent,
+                      }
+                    }}>
+                      <Search sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>
+                      Search
+                    </ButtonBase>
+                    {options.map(data => (
+                      <ButtonBase key={data.name} onClick={()=>navigate(data.path)} sx={{ pb:0.5, px:1,
+                        color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                        borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          color: COLORS.hoverAccent,
+                        }
+                      }}>
+                        <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                          {data.icon}
+                          {data.name}
+                        </Box>
+                      </ButtonBase>
+                    ))}
+                    <ME users={user.username}/>
+                  </Box>
+                </Grid>
+              </Grid>
+            </motion.div>
+          )}
+          </AnimatePresence>
         </Box>
         <Box sx={{flexGrow:1,display:{lg:'none',md:'none',sm:'none',xs:'block'}}}>
-          <Grid container spacing={2} alignItems='center'>
-            <Grid size={3}>
-              <Box component='img' src={icon} height='30px'></Box>
-            </Grid>
-            <Grid size={9}>
-              <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-                <ButtonBase sx={{display:'flex',
-                  flexDirection:'column',
-                  alignItems:'center', pb:0.5, px:1,
-                }}>
-                  <Search sx={{width:{lg:30,md:25,sm:20,xs:20},height:{lg:30,md:25,sm:20,xs:20}}}/>
-                </ButtonBase>
-                {options.map(data => (
-                  <ButtonBase key={data.name} onClick={()=>setActiveTab(data.name)} sx={{display:'flex',
-                    flexDirection:'column',
-                    alignItems:'center', pb:0.5, px:1,
-                  }}>
-                    {data.icon}
-                  </ButtonBase>
-                ))}
-                <ME/>
-              </Box>
-            </Grid>
-          </Grid>
+          <AnimatePresence mode='wait'>
+            {showSearch ? (
+              <motion.div
+                key="search-xs"
+                ref={searchRef}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Grid container spacing={2} alignItems='center' justifyContent='center'>
+                  <Grid size={1}>
+                    <ButtonBase onClick={()=>setShowSearch(false)}>
+                      <ArrowBackIosNew/>
+                    </ButtonBase>
+                  </Grid>
+                  <Grid size={11}>
+                    <Box sx={{display:'flex',alignItems:'center'}}>
+                      <SearchBar>
+                        <SearchIconWrapper>
+                          <Search/>
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                          placeholder="Search…"
+                          inputProps={{ 'aria-label': 'search' }}
+                        />
+                      </SearchBar>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </motion.div>
+            ):(
+              <motion.div
+                key="normal-xs"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Grid container spacing={2} alignItems='center'>
+                  <Grid size={3}>
+                    <Box component='img' src={icon} height='30px'></Box>
+                  </Grid>
+                  <Grid size={9}>
+                    <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                      <ButtonBase onClick={()=>setShowSearch(true)} sx={{display:'flex',
+                        flexDirection:'column',
+                        alignItems:'center', pb:0.5, px:1,
+                      }}>
+                        <Search sx={{width:20,height:20}}/>
+                      </ButtonBase>
+                      {options.map(data => (
+                        <ButtonBase key={data.name} onClick={()=>navigate(data.path)} sx={{display:'flex',
+                          flexDirection:'column',
+                          alignItems:'center', pb:0.5, px:1,
+                          color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
+                          borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            color: COLORS.hoverAccent,
+                        }
+                        }}>
+                          {data.icon}
+                        </ButtonBase>
+                      ))}
+                      <ME users={user.username}/>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Box>
       </Toolbar>
     </AppBar>
