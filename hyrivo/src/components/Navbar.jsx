@@ -3,6 +3,7 @@ import { AppBar, Avatar, Box, ButtonBase, Divider, Drawer, Grid, InputBase, List
 import { ArrowBackIosNew, ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
 import logo from '../Assets/Images/Hyrivo copy.png'
 import icon from '../Assets/Images/icon.jpg'
+import { logout } from '../Utils/logout'
 import { styled } from '@mui/material/styles';
 import { motion,AnimatePresence } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -19,7 +20,8 @@ const COLORS = {
   hoverAccent: '#FF6EC7',
 };
 
-const ME = ({users}) => {
+const ME = ({users, logout}) => {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -46,7 +48,7 @@ const ME = ({users}) => {
       <List>
         {['My Account', 'Settings'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={()=>{index % 2 === 0 ? navigate('/Profile'): navigate('/Settings')}}>
               <ListItemIcon>
                 {index % 2 === 0 ? <Person /> : <Settings />}
               </ListItemIcon>
@@ -58,7 +60,7 @@ const ME = ({users}) => {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={logout}>
             <ListItemIcon>
               <Logout/>
             </ListItemIcon>
@@ -81,7 +83,7 @@ const ME = ({users}) => {
         sx={{p: 0,textTransform:'none',color:'black'}}
       >
         <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-          <Avatar sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
+          <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
             {getInitials(users)}
           </Avatar>
           <Box sx={{display:'flex',alignItems:'center'}}>
@@ -101,20 +103,55 @@ const ME = ({users}) => {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <Box sx={{flexGrow:1}}>
+          <Grid container sx={{alignItems:'center',justifyContent:'center'}}>
+            <Grid size={4}>
+              <Box sx={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Avatar 
+                sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
+                width:{lg:50,md:50,sm:45},
+                height:{lg:50,md:50,sm:45},
+                fontSize:20}}>{getInitials(users)}</Avatar>
+              </Box>
+            </Grid>
+            <Grid size={8}>
+              <Grid container spacing={1}>
+                <Grid size={12}>
+                  <span style={{fontWeight:'bolder'}}>{users}</span>
+                </Grid>
+                <Grid size={12}>
+                  <Box component='span'>
+                    Description
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+        <br /><Divider/>
+        <MenuItem onClick={()=>{
+          handleClose()
+          navigate('/Profile')
+        }}>
           <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
           <Person/> 
           My Account
           </Box>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={()=>{
+          handleClose()
+          navigate('/Settings')
+        }}>
           <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
             <Settings/> 
             Settings
           </Box>
         </MenuItem>
         <Divider/>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={() => {
+          handleClose()
+          logout()
+        }}>
           <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
             <Logout/> 
             Logout
@@ -125,10 +162,20 @@ const ME = ({users}) => {
     <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'}}}>
        <ButtonBase onClick={toggleDrawer(true)}>
          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-           <Avatar sx={{width:20,height:20,fontSize:12}}>{getInitials(users)}</Avatar>
+           <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:20,height:20,fontSize:12}}>{getInitials(users)}</Avatar>
          </Box>
        </ButtonBase>
        <Drawer anchor='bottom' open={opn} onClose={toggleDrawer(false)}>
+          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:2}}>
+            <br /><Avatar 
+            sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
+            width:80,
+            height:80,
+            fontSize:40}}>{getInitials(users)}</Avatar>
+            <span style={{fontWeight:'bolder',fontSize:30}}>{users}</span>
+            <span style={{fontSize:20}}>Description</span>
+          </Box>
+          <br /><Divider/>
          {DrawerList}
        </Drawer>
     </Box>
@@ -298,7 +345,7 @@ export const Navbar = () => {
                     {data.name}
                   </ButtonBase>
                 ))}
-                <ME users={user.username}/>
+                <ME users={user.username} logout={() => logout(navigate,setUser)}/>
               </Box>
             </Grid>
           </Grid>
@@ -376,7 +423,7 @@ export const Navbar = () => {
                         </Box>
                       </ButtonBase>
                     ))}
-                    <ME users={user.username}/>
+                    <ME users={user.username} logout={() => logout(navigate,setUser)}/>
                   </Box>
                 </Grid>
               </Grid>
@@ -450,7 +497,7 @@ export const Navbar = () => {
                           {data.icon}
                         </ButtonBase>
                       ))}
-                      <ME users={user.username}/>
+                      <ME users={user.username} logout={() => logout(navigate,setUser)}/>
                     </Box>
                   </Grid>
                 </Grid>

@@ -17,6 +17,8 @@ import { JobsOrg } from './components/JobsOrg'
 import { Connections } from './components/Connections'
 import { Messages } from './components/Messages'
 import { Notifications } from './components/Notifications'
+import { Profile } from './components/Profile'
+import { Settings } from './components/Settings'
 
 const AppContent = () => {
 
@@ -63,6 +65,16 @@ const AppContent = () => {
         <Route path='/LoginValidation' element={
           <RouteSecure>
             <LoginValidation/>
+          </RouteSecure>
+        }/>
+        <Route path='/Profile' element={
+          <RouteSecure>
+            <Profile/>
+          </RouteSecure>
+        }/>
+        <Route path='/Settings' element={
+          <RouteSecure>
+            <Settings/>
           </RouteSecure>
         }/>
         <Route path='/ForgotPassword' element={<ForgotPassword/>}/>

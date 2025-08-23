@@ -39,7 +39,7 @@ export const Login = () => {
       const response = await axios.post("http://localhost:2000/user/login",{
         username,
         password,
-        rememberMe
+        remember: rememberMe
       })
       const {token} = response.data
       if (rememberMe) {

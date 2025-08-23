@@ -15,6 +15,7 @@ const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
 const useragent = require('useragent');
 const axios = require('axios');
+const BlacklistsToken = require('../models/BlacklistsToken');
 
 // Nodemailer function
 const transporter = nodemailer.createTransport({
@@ -313,7 +314,7 @@ router.get('/auth/google',
 })
 
 router.post('/login',log,async (req,res) => {
-    const {username,password} = req.body
+    const {username,password,remember} = req.body
     try {
         const user = await User.findOne({$or:[{username: username},{email: username}]})
         
@@ -323,7 +324,7 @@ router.post('/login',log,async (req,res) => {
         const pw = await user.matchPassword(password)
         if(!pw) return res.status(400).json({message:'Invalid username or Password'})
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: user.remember ? '30d' : '1h'})
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: remember ? '30d' : '1h'})
 
         res.json({
             token,
@@ -476,6 +477,27 @@ router.put('/update',log,auth,async (req,res) => {
         })
         if(!user) return res.status(400).json({message:'User not found'})
         res.json({message:'Updated Successfully'})
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+})
+
+router.post('/logout',log,auth,async (req, res) => {
+    try {
+        const authHead = req.headers.authorization
+        if (!authHead || !authHead.startsWith("Bearer ")) return res.status(401).json({message:'No or invalid Token'})
+        
+        const token = authHead.split(" ")[1]
+        const decoded = jwt.decode(token)
+
+        if (!decoded || !decoded.exp) return res.status(400).json({message:'Invalid Token'})
+
+        await BlacklistsToken.create({
+            token,
+            expiry: new Date(decoded.exp * 1000)
+        })
+
+        return res.json({message: "Logged out successfully"})
     } catch (error) {
         res.status(500).json({error:error.message})
     }

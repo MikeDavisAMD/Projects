@@ -49,7 +49,7 @@ function checkToken(token, secret) {
 }
 
 // Example usage:
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OTE4YmI2MzhmYmQ3OGQ2ZWU1YTIxMCIsImlhdCI6MTc1NTgzMjc5NSwiZXhwIjoxNzU1ODM2Mzk1fQ.GeWDsQrstvrH7hku4P7vO5jqwUuhc_rtMHJOnm9xs8k';
+const token = process.env.TOKEN
 const result = checkToken(token, process.env.JWT_SECRET);
 
 console.log(result);
