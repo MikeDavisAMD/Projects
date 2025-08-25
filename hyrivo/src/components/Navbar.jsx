@@ -8,17 +8,7 @@ import { styled } from '@mui/material/styles';
 import { motion,AnimatePresence } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-
-const COLORS = {
-  primaryBg: '#FFFFFF',
-  secondaryBg: '#F5F7FA',
-  cardBorder: '#E0E0E0',
-  primaryText: '#1A1A1A',
-  secondaryText: '#4F4F4F',
-  mutedText: '#828282',
-  primaryAccent: '#00BFFF',
-  hoverAccent: '#FF6EC7',
-};
+import { COLORS } from '../Utils/colors'
 
 const ME = ({users, logout}) => {
   const navigate = useNavigate()
@@ -307,7 +297,7 @@ export const Navbar = () => {
   },[showSearch])
 
   return (
-    <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
+    <AppBar position='static' sx={{backgroundColor:COLORS.background,backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
       <Toolbar>
         <Box sx={{flexGrow:1,display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
           <Grid container spacing={4} alignItems='center'>

@@ -18,7 +18,7 @@ import { Connections } from './components/Connections'
 import { Messages } from './components/Messages'
 import { Notifications } from './components/Notifications'
 import { Profile } from './components/Profile'
-import { Settings } from './components/Settings'
+import { Setting } from './components/Setting'
 
 const AppContent = () => {
 
@@ -74,7 +74,7 @@ const AppContent = () => {
         }/>
         <Route path='/Settings' element={
           <RouteSecure>
-            <Settings/>
+            <Setting/>
           </RouteSecure>
         }/>
         <Route path='/ForgotPassword' element={<ForgotPassword/>}/>
