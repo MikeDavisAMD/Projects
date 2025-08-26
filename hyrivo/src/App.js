@@ -19,6 +19,7 @@ import { Messages } from './components/Messages'
 import { Notifications } from './components/Notifications'
 import { Profile } from './components/Profile'
 import { Setting } from './components/Setting'
+import { ThemeProvider } from './Utils/ThemeContext'
 
 const AppContent = () => {
 
@@ -90,7 +91,7 @@ const AppContent = () => {
         }/>
         <Route path='/Signup' element={<Signup/>}/>
         <Route path='/oauthSuccess' element={<OAuthSuccess/>}/>
-        <Route path='Enable2FA' element={<Enable2FA/>}/>
+        <Route path='/Enable2FA' element={<Enable2FA/>}/>
       </Routes>
     </>
   )
@@ -99,7 +100,9 @@ const AppContent = () => {
 export const App = () => {
   return (
     <Router>
-      <AppContent/>
+      <ThemeProvider>
+        <AppContent/>
+      </ThemeProvider>
     </Router>
   )
 }

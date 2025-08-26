@@ -1,27 +1,74 @@
 import React, { useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, ButtonBase, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ArrowBackIos, ExpandMore, Menu, Settings } from '@mui/icons-material'
-import { COLORS } from '../Utils/colors'
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, ButtonBase, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { ArrowBackIos, Delete, Download, ExpandMore, Menu, PersonOff, Settings, SwapHoriz } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { useThemeContext } from '../Utils/ThemeContext'
 
 const General = () => {
+    const {theme} = useThemeContext()
     return (
-        <Box>
-            General
+        <Box sx={{flexGrow:1}}>
+            <Grid container>
+                <Grid size={12}>
+                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
+                        General Preferences
+                    </Box><br /><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Preferred Feed View</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Select your Prefered View. 
+                                </Box>
+                                <FormControl>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        defaultValue="Most Relevant Posts"
+                                        name="radio-buttons-group"
+                                    >
+                                        <FormControlLabel value="Most Relevant Posts" control={<Radio />} label="Most Relevant Posts (Recommended)" />
+                                        <FormControlLabel value="Most Recent posts" control={<Radio />} label="Most Recent posts" />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box>
+                </Grid>
+            </Grid>
         </Box>
     )
 }
 
 const Display = () => {
+    const {themeMode, setThemeMode} = useThemeContext()
+
+    const {theme} = useThemeContext()
+
     return (
         <Box sx={{flexGrow:1}}>
             <Grid container>
                 <Grid size={12}>
-                    <Box component='span' sx={{fontWeight:'bolder'}}>
+                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
                         Display
                     </Box><br /><br />
                     <Box>
-                    <Accordion>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
                         <AccordionSummary
                         expandIcon={<ExpandMore/>}
                         aria-controls="panel1-content"
@@ -37,7 +84,8 @@ const Display = () => {
                                 <FormControl>
                                     <RadioGroup
                                         aria-labelledby="demo-radio-buttons-group-label"
-                                        defaultValue="Always Off"
+                                        value={themeMode}
+                                        onChange={(e) => setThemeMode(e.target.value)}
                                         name="radio-buttons-group"
                                     >
                                         <FormControlLabel value="Device Settings" control={<Radio />} label="Device Settings" />
@@ -56,17 +104,173 @@ const Display = () => {
 }
 
 const Account = () => {
+    const {theme} = useThemeContext()
     return (
-        <Box>
-            Account
+        <Box sx={{flexGrow:1}}>
+            <Grid container>
+                <Grid size={12}>
+                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
+                        Account Management
+                    </Box><br /><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Change Account Type</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Change the type of account of the current user. 
+                                </Box><br />
+                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                            <SwapHoriz/> Change
+                                        </Box></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Close Account</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Choose how your Hyrivo experience looks for this device. 
+                                </Box>
+                                <Box sx={{display:{lg:'flex',md:'flex',sm:'none',xs:'none'},justifyContent:'flex-end',gap:1}}>
+                                    <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                            <PersonOff/> Disable Account
+                                        </Box></Button>
+                                      <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.error,
+                                        borderColor:theme.error,
+                                        '&:hover':{
+                                          backgroundColor:theme.errorHover,
+                                          borderColor:theme.errorHover,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Delete/> Delete Account
+                                        </Box></Button>
+                                </Box>
+                                <Box sx={{display:{lg:'none',md:'none',sm:'flex',xs:'flex'},justifyContent:'flex-end',gap:1}}>
+                                    <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><PersonOff/></Button>
+                                      <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.error,
+                                        borderColor:theme.error,
+                                        '&:hover':{
+                                          backgroundColor:theme.errorHover,
+                                          borderColor:theme.errorHover,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Delete/></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box>
+                </Grid>
+            </Grid>
         </Box>
     )
 }
 
 const Activities = () => {
+    const {theme} = useThemeContext()
     return (
-        <Box>
-            Activities
+        <Box sx={{flexGrow:1}}>
+            <Grid container>
+                <Grid size={12}>
+                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
+                        Activities
+                    </Box><br /><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Activities</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Download your account activities like Logging etc.,. 
+                                </Box>
+                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Download/> Download
+                                        </Box></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box>
+                </Grid>
+            </Grid>
         </Box>
     )
 }
@@ -80,6 +284,9 @@ const COMPONENTS = [
 
 export const Setting = () => {
     const navigate = useNavigate()
+
+    const {theme} = useThemeContext()
+    
     const [active,setActive] = useState("General")
 
     const [open, setOpen] = React.useState(false);
@@ -96,19 +303,19 @@ export const Setting = () => {
                 <ListItemButton selected={active === data.name} onClick={()=>setActive(data.name)}
                 sx={{
                     "&.Mui-selected": {
-                        backgroundColor: COLORS.primaryAccent,
-                        color: COLORS.primaryText,
+                        backgroundColor: theme.primaryAccent,
+                        color: theme.primaryText,
                         "& .MuiListItemText-root": {
-                            color: COLORS.primaryBg,
+                            color: theme.primaryBg,
                         },
                     },
                     "&.Mui-selected:hover": {
-                        backgroundColor: COLORS.hoverAccent,
-                        color:COLORS.primaryText
+                        backgroundColor: theme.hoverAccent,
+                        color:theme.primaryText
                     },
                     "&:hover": {
-                        backgroundColor: COLORS.secondaryBg,
-                        color:COLORS.hoverAccent
+                        backgroundColor: theme.secondaryBg,
+                        color:theme.hoverAccent
                     },
                 }}>
                     <ListItemText primary={data.name} />
@@ -122,13 +329,13 @@ export const Setting = () => {
   const isSmall = useMediaQuery(useTheme().breakpoints.down('md'))
 
   return (
-    <Box sx={{flexGrow: 1}}>
+    <Box sx={{flexGrow: 1, minHeight: '100vh', backgroundColor: theme.primaryBg, color: theme.primaryText}}>
       <Grid container spacing={2}>
         <Grid size={12}>
-          <AppBar position={isSmall ? "static" : "fixed"} sx={{backgroundColor:COLORS.background,
+          <AppBar position={isSmall ? "static" : "fixed"} sx={{backgroundColor:theme.background,
             backdropFilter:'blur(10px)',
-            borderBottom:'1px solid #E0E0E0', 
-            color:'#1A1A1A',
+            borderBottom:`1px solid ${theme.cardBorder}`, 
+            color:theme.primaryText,
             zIndex: (theme) => theme.zIndex.drawer + 1}}>
             <Toolbar>
               <Box sx={{flexGrow:1}}>
@@ -140,7 +347,7 @@ export const Setting = () => {
                             alignItems:'center', pb:0.5, px:1,
                             transition: 'all 0.3s ease',
                             '&:hover': {
-                            color: COLORS.hoverAccent,
+                            color: theme.hoverAccent,
                             }
                         }}>
                             <ArrowBackIos/>
@@ -163,7 +370,7 @@ export const Setting = () => {
                             alignItems:'center', pb:0.5, px:1,
                             transition: 'all 0.3s ease',
                             '&:hover': {
-                                color: COLORS.hoverAccent,
+                                color: theme.hoverAccent,
                             }
                         }}>
                             <Menu/>
@@ -183,7 +390,11 @@ export const Setting = () => {
                 sx={{
                 width: 240,
                 flexShrink: 0,
-                [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
+                [`& .MuiDrawer-paper`]: { 
+                    width: 240, boxSizing: 'border-box',
+                    backgroundColor:theme.primaryBg,
+                    color: theme.primaryText
+                 },
                 }}
             >
                 <Toolbar />
@@ -194,19 +405,19 @@ export const Setting = () => {
                         <ListItemButton selected={active === data.name} onClick={()=>setActive(data.name)}
                         sx={{
                             "&.Mui-selected": {
-                                backgroundColor: COLORS.primaryAccent,
-                                color: COLORS.primaryText,
+                                backgroundColor: theme.primaryAccent,
+                                color: theme.primaryText,
                                 "& .MuiListItemText-root": {
-                                    color: COLORS.primaryBg,
+                                    color: theme.primaryBg,
                                 },
                             },
                             "&.Mui-selected:hover": {
-                                backgroundColor: COLORS.hoverAccent,
-                                color:COLORS.primaryText
+                                backgroundColor: theme.hoverAccent,
+                                color:theme.primaryText
                             },
                             "&:hover": {
-                                backgroundColor: COLORS.secondaryBg,
-                                color:COLORS.hoverAccent
+                                backgroundColor: theme.secondaryBg,
+                                color:theme.hoverAccent
                             },
                         }}>
                             <ListItemText primary={data.name} />
