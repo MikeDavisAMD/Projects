@@ -8,9 +8,10 @@ import { styled } from '@mui/material/styles';
 import { motion,AnimatePresence } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { COLORS } from '../Utils/colors'
+import { useThemeContext } from '../Utils/ThemeContext'
 
 const ME = ({users, logout}) => {
+  const {theme} = useThemeContext()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -40,7 +41,7 @@ const ME = ({users, logout}) => {
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={()=>{index % 2 === 0 ? navigate('/Profile'): navigate('/Settings')}}>
               <ListItemIcon>
-                {index % 2 === 0 ? <Person /> : <Settings />}
+                {index % 2 === 0 ? <Person sx={{color:theme.primaryText}}/> : <Settings sx={{color:theme.primaryText}} />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -52,7 +53,7 @@ const ME = ({users, logout}) => {
         <ListItem disablePadding>
           <ListItemButton onClick={logout}>
             <ListItemIcon>
-              <Logout/>
+              <Logout sx={{color:theme.primaryText}}/>
             </ListItemIcon>
             <ListItemText primary='Logout' />
           </ListItemButton>
@@ -70,15 +71,15 @@ const ME = ({users, logout}) => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        sx={{p: 0,textTransform:'none',color:'black'}}
+        sx={{p: 0,textTransform:'none',color:theme.primaryText}}
       >
         <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
           <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
             {getInitials(users)}
           </Avatar>
           <Box sx={{display:'flex',alignItems:'center'}}>
-            <Box component='span'>Me</Box>
-            {open ? <ExpandLess/> : <ExpandMore/>}
+            <Box component='span' sx={{color:theme.primaryText}}>Me</Box>
+            {open ? <ExpandLess sx={{color:theme.primaryText}}/> : <ExpandMore sx={{color:theme.primaryText}}/>}
           </Box>
         </Box>
       </ButtonBase>
@@ -91,7 +92,14 @@ const ME = ({users, logout}) => {
           list: {
             'aria-labelledby': 'basic-button',
           },
+          paper:{
+            sx: {
+              backgroundColor: theme.primaryBg,
+              color:theme.primaryText
+            }
+          }
         }}
+        paper
       >
         <Box sx={{flexGrow:1}}>
           <Grid container sx={{alignItems:'center',justifyContent:'center'}}>
@@ -155,7 +163,15 @@ const ME = ({users, logout}) => {
            <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:20,height:20,fontSize:12}}>{getInitials(users)}</Avatar>
          </Box>
        </ButtonBase>
-       <Drawer anchor='bottom' open={opn} onClose={toggleDrawer(false)}>
+       <Drawer anchor='bottom' open={opn} onClose={toggleDrawer(false)} 
+       slotProps={{
+        paper: {
+          sx: {
+            backgroundColor:theme.primaryBg,
+            color: theme.primaryText
+          }
+        }
+       }}>
           <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:2}}>
             <br /><Avatar 
             sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
@@ -173,69 +189,77 @@ const ME = ({users, logout}) => {
   )
 }
 
-const SearchBar = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: 50,
-  backgroundColor: COLORS.secondaryBg,
-  border: `1px solid ${COLORS.cardBorder}`,
-  transition: 'all 0.3s ease',
-  boxShadow:'0 2px 6px rgba(0,0,0,0.04)',
-  '&:hover': {
-    backgroundColor: COLORS.hoverAccent,
-    boxShadow:'0 4px 12px rgba(0,191,255,0.15)'
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color:COLORS.secondaryText,
-  transition:'color 0.3s ease',
-  [`${SearchBar}:hover &`]: {
-    color:COLORS.primaryAccent
-  }
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color:COLORS.secondaryText,
-  fontFamily: "'Urbanist', sans-serif",
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1.2, 1, 1.2, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+const SearchBar = styled('div')(({ theme }) => {
+  const {theme: appTheme} = useThemeContext()
+  return {
+    position: 'relative',
+    borderRadius: 50,
+    backgroundColor: appTheme.secondaryBg,
+    border: `1px solid ${appTheme.cardBorder}`,
     transition: 'all 0.3s ease',
+    boxShadow:'0 2px 6px rgba(0,0,0,0.04)',
+    '&:hover': {
+      backgroundColor: appTheme.hoverAccent,
+      boxShadow:'0 4px 12px rgba(0,191,255,0.15)'
+    },
+    marginLeft: 0,
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
-      width: '14ch',
-      '&:focus': {
-        width: '22ch',
-        backgroundColor: COLORS.primaryBg,
-        borderRadius: 50,
-        boxShadow:`0 0 0 2px ${COLORS.primaryAccent}`
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  }
+});
+
+const SearchIconWrapper = styled('div')(({ theme }) => {
+  const {theme: appTheme} = useThemeContext()
+  return{
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color:appTheme.secondaryText,
+    transition:'color 0.3s ease',
+    [`${SearchBar}:hover &`]: {
+      color:appTheme.primaryAccent
+    }
+  }});
+
+const StyledInputBase = styled(InputBase)(({ theme }) => {
+  const {theme: appTheme} = useThemeContext()
+  return{
+    color:appTheme.secondaryText,
+    fontFamily: "'Urbanist', sans-serif",
+    width: '100%',
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1.2, 1, 1.2, 0),
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: 'all 0.3s ease',
+      [theme.breakpoints.up('sm')]: {
+        width: '14ch',
+        '&:focus': {
+          width: '22ch',
+          backgroundColor: appTheme.primaryBg,
+          borderRadius: 50,
+          boxShadow:`0 0 0 2px ${appTheme.primaryAccent}`
+        },
       },
     },
-  },
-  '& .MuiInputBase-input::placeholder':{
-    color: COLORS.mutedText,
-    opacity: 1
-  }
-}));
+    '& .MuiInputBase-input::placeholder':{
+      color: appTheme.mutedText,
+      opacity: 1
+    }
+  }});
 
 export const Navbar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [showSearch,setShowSearch] = useState(false)
   const [user,setUser] = useState([])
+  const {theme} = useThemeContext()
 
   const fetchUser = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -276,28 +300,23 @@ export const Navbar = () => {
   const searchRef = useRef(null)
 
   useEffect(()=>{
-    const handleClickOutside = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSearch(false)
-    }
 
     const handleEsc = (e) => {
       if (e.key === 'Escape') setShowSearch(false)
     }
 
     if (showSearch) {
-      document.addEventListener("mousedown",handleClickOutside)
       document.addEventListener("keydown",handleEsc)
-    }
 
-    return () => {
-      document.removeEventListener("mousedown",handleClickOutside)
-      document.removeEventListener('keydown',handleEsc)
+      return () => {
+        document.removeEventListener('keydown',handleEsc)
+      }
     }
 
   },[showSearch])
 
   return (
-    <AppBar position='static' sx={{backgroundColor:COLORS.background,backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
+    <AppBar position='static' sx={{backgroundColor:theme.background,backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
       <Toolbar>
         <Box sx={{flexGrow:1,display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
           <Grid container spacing={4} alignItems='center'>
@@ -324,11 +343,11 @@ export const Navbar = () => {
                   sx={{display:'flex',
                     flexDirection:'column',justifyContent:'flex-end',
                     alignItems:'center', pb:0.5, px:1,
-                    color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                    borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                    color: activeTab === data.name ? theme.hoverAccent : theme.primaryText,
+                    borderBottom: activeTab === data.name ? `3px solid ${theme.hoverAccent}` : `3px solid transparent`,
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                      color: COLORS.hoverAccent,
+                      color: theme.hoverAccent,
                     }
                   }}>
                     {data.icon}
@@ -390,9 +409,9 @@ export const Navbar = () => {
                       flexDirection:'column',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
-                      color:COLORS.primaryText,
+                      color:theme.primaryText,
                       '&:hover': {
-                        color: COLORS.hoverAccent,
+                        color: theme.hoverAccent,
                       }
                     }}>
                       <Search sx={{width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25}}}/>
@@ -400,11 +419,11 @@ export const Navbar = () => {
                     </ButtonBase>
                     {options.map(data => (
                       <ButtonBase key={data.name} onClick={()=>navigate(data.path)} sx={{ pb:0.5, px:1,
-                        color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                        borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                        color: activeTab === data.name ? theme.hoverAccent : theme.primaryText,
+                        borderBottom: activeTab === data.name ? `3px solid ${theme.hoverAccent}` : `3px solid transparent`,
                         transition: 'all 0.3s ease',
                         '&:hover': {
-                          color: COLORS.hoverAccent,
+                          color: theme.hoverAccent,
                         }
                       }}>
                         <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
@@ -477,11 +496,11 @@ export const Navbar = () => {
                         <ButtonBase key={data.name} onClick={()=>navigate(data.path)} sx={{display:'flex',
                           flexDirection:'column',
                           alignItems:'center', pb:0.5, px:1,
-                          color: activeTab === data.name ? COLORS.hoverAccent : COLORS.primaryText,
-                          borderBottom: activeTab === data.name ? `3px solid ${COLORS.hoverAccent}` : `3px solid transparent`,
+                          color: activeTab === data.name ? theme.hoverAccent : theme.primaryText,
+                          borderBottom: activeTab === data.name ? `3px solid ${theme.hoverAccent}` : `3px solid transparent`,
                           transition: 'all 0.3s ease',
                           '&:hover': {
-                            color: COLORS.hoverAccent,
+                            color: theme.hoverAccent,
                         }
                         }}>
                           {data.icon}
