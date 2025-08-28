@@ -23,6 +23,6 @@ export const COLORS = {
     hoverAccent: '#FF66CC',     
     error: '#FF2E63',           
     errorHover: '#CC204F',
-    background: 'rgba(13, 13, 13, 0.95)' 
+    background: 'rgba(13, 13, 13, 0.9)' 
   };
   

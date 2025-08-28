@@ -243,7 +243,7 @@ router.post('/register-temp',log,async (req,res) => {
         const verifyToken = crypto.randomBytes(32).toString('hex')
         const tokenExpiry = new Date(Date.now()+(60*60*1000))
 
-        const user = new User({email,username,password,isCompany,isVerified:false,verifyToken,tokenExpiry})
+        const user = new User({email,username,password,isCompany,isExistingUser: false,isVerified:false,verifyToken,tokenExpiry})
         await user.save()
         const verifyLink = `http://localhost:2000/user/verify?token=${verifyToken}`
 
@@ -302,6 +302,7 @@ router.get('/auth/google',
         if(!user) return res.status(400).json('Invalid or expired verification link')
 
         user.isVerified = true
+        user.isExistingUser = true
         user.verifyToken = undefined
         user.tokenExpiry = undefined
         await user.save()
@@ -513,7 +514,24 @@ router.get('/:id',log,async (req,res) => {
     }
 })
 
-router.delete('/:id',log,async (req,res) => {
+router.put('/change-type',log,auth,async (req,res) => {
+    const user = await User.findById(req.userId)
+    if (!user) return res.status(400).json({ message: "User not found" })
+
+    user.isCompany = !user.isCompany
+    await user.save()
+
+    res.json({
+        message: "Account type changed successfully",
+        user: {
+            id: user._id,
+            username: user.username,
+            isCompany: user.isCompany
+        }
+    })
+})
+
+router.delete('/:id',log,auth,async (req,res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id)
         if(!user) return res.status(400).json({message:'User not found'})

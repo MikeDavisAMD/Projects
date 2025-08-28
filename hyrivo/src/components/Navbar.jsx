@@ -103,7 +103,7 @@ const ME = ({users, logout}) => {
       >
         <Box sx={{flexGrow:1}}>
           <Grid container sx={{alignItems:'center',justifyContent:'center'}}>
-            <Grid size={4}>
+            <Grid size={5}>
               <Box sx={{display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <Avatar 
                 sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
@@ -112,17 +112,19 @@ const ME = ({users, logout}) => {
                 fontSize:20}}>{getInitials(users)}</Avatar>
               </Box>
             </Grid>
-            <Grid size={8}>
-              <Grid container spacing={1}>
-                <Grid size={12}>
-                  <span style={{fontWeight:'bolder'}}>{users}</span>
+            <Grid size={7}>
+              <Box sx={{flexGrow:1}}>
+                <Grid container spacing={1}>
+                  <Grid size={12}>
+                    <span style={{fontWeight:'bolder'}}>{users}</span>
+                  </Grid>
+                  <Grid size={12}>
+                    <Box component='span'>
+                      Description
+                    </Box>
+                  </Grid>
                 </Grid>
-                <Grid size={12}>
-                  <Box component='span'>
-                    Description
-                  </Box>
-                </Grid>
-              </Grid>
+              </Box>
             </Grid>
           </Grid>
         </Box>
@@ -263,6 +265,7 @@ export const Navbar = () => {
 
   const fetchUser = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) return
     try {
       const response = await axios.get('http://localhost:2000/user/me',{
         headers: {Authorization:`Bearer ${token}`}
@@ -316,12 +319,12 @@ export const Navbar = () => {
   },[showSearch])
 
   return (
-    <AppBar position='static' sx={{backgroundColor:theme.background,backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
+    <AppBar position='static' sx={{backgroundColor:theme.background,backdropFilter:'blur(10px)',borderBottom:`1px solid ${theme.cardBorder}`, color:theme.primaryText}}>
       <Toolbar>
         <Box sx={{flexGrow:1,display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
           <Grid container spacing={4} alignItems='center'>
             <Grid size={{lg:3,md:2}}>
-              <Box component='img' src={logo} height={{lg:'80px',md:'60px'}}></Box>
+              <Box component='img' src={logo} height={{lg:'55px',md:'40px'}} sx={{p:1}}></Box>
             </Grid>
             <Grid size={{lg:3,md:4}}>
               <Box sx={{display:'flex',alignItems:'center'}}>
@@ -373,7 +376,7 @@ export const Navbar = () => {
               <Grid container spacing={2} alignItems='center' justifyContent='center'>
                 <Grid size={6}>
                   <ButtonBase onClick={()=>setShowSearch(false)}>
-                    <ArrowBackIosNew/>
+                    <ArrowBackIosNew sx={{color:theme.primaryText}}/>
                   </ButtonBase>
                 </Grid>
                 <Grid size={6}>
@@ -401,7 +404,7 @@ export const Navbar = () => {
             >
               <Grid container spacing={3} alignItems='center'>
                 <Grid size={6}>
-                  <Box component='img' src={logo} height='45px'></Box>
+                  <Box component='img' src={logo} height='35px'></Box>
                 </Grid>
                 <Grid size={6}>
                   <Box sx={{display:'flex',justifyContent:'flex-end'}}>
@@ -454,14 +457,14 @@ export const Navbar = () => {
                 <Grid container spacing={2} alignItems='center' justifyContent='center'>
                   <Grid size={1}>
                     <ButtonBase onClick={()=>setShowSearch(false)}>
-                      <ArrowBackIosNew/>
+                      <ArrowBackIosNew sx={{color:theme.primaryText}}/>
                     </ButtonBase>
                   </Grid>
                   <Grid size={11}>
                     <Box sx={{display:'flex',alignItems:'center'}}>
                       <SearchBar>
                         <SearchIconWrapper>
-                          <Search/>
+                          <Search sx={{color:theme.primaryText}}/>
                         </SearchIconWrapper>
                         <StyledInputBase
                           placeholder="Search…"
@@ -490,7 +493,7 @@ export const Navbar = () => {
                         flexDirection:'column',
                         alignItems:'center', pb:0.5, px:1,
                       }}>
-                        <Search sx={{width:20,height:20}}/>
+                        <Search sx={{width:20,height:20,color:theme.primaryText}}/>
                       </ButtonBase>
                       {options.map(data => (
                         <ButtonBase key={data.name} onClick={()=>navigate(data.path)} sx={{display:'flex',

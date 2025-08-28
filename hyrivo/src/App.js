@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import { RouteSecure } from './components/SecureRoute'
+import { RouteSecure } from './Utils/SecureRoute'
 import { Login } from './components/Login'
 import { Signup } from './components/Signup'
 import { Home } from './components/Home'

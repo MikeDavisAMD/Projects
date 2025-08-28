@@ -1,7 +1,11 @@
-import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, Snackbar, Typography } from '@mui/material';
+import { Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Grid, Snackbar, TextField, Toolbar } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
+import { COLORS } from '../Utils/colors';
+import { Save } from '@mui/icons-material';
+import { AddDetails } from '../Utils/add';
+import { UploadResume } from '../Utils/UploadResume';
 
 export const OAuthSuccess = () => {
     const navigate = useNavigate();
@@ -78,38 +82,163 @@ export const OAuthSuccess = () => {
     }
   
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Box sx={{ height: '100vh' }}>
       {showConsent ? 
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Card sx={{width:{lg:'70%',md:'80%',sm:'95%',xs:'90%'},boxShadow:'5px 5px 10px grey'}}> 
-          <CardContent>
-            <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'40px',md:'40px',sm:'30px',xs:'30px'},color:'#1A1A1A'}}>
-              <span>Would you like to sign in as an organization?</span>
-            </Typography>
-          </CardContent>
-          <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
-          <Button variant='outlined' size='large' onClick={()=>handleConsent(false)} disabled={loading}
-              sx={{
-                color:'#00BFFF',
-                borderColor:'#00BFFF',
-                '&:hover':{
-                  backgroundColor:'#FF6EC7',
-                  borderColor:'#FF6EC7',
-                  color:'#fff'
-                }
-              }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'no'}</Button> <br /> 
-            <Button variant='outlined' size='large' onClick={()=>handleConsent(true)} disabled={loading}
-              sx={{
-                color:'#00BFFF',
-                borderColor:'#00BFFF',
-                '&:hover':{
-                  backgroundColor:'#FF6EC7',
-                  borderColor:'#FF6EC7',
-                  color:'#fff'
-                }
-              }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'yes'}</Button> <br /> 
-          </CardActions>
-        </Card>
+      <Box sx={{flexGrow: 1}}>
+        <AppBar position='static' sx={{backgroundColor:COLORS.background,backdropFilter:'blur(10px)',borderBottom:`1px solid ${COLORS.cardBorder}`, color:COLORS.primaryText}}>
+          <Toolbar>
+            <Box sx={{flexGrow:1}}>
+              <Grid container spacing={2} sx={{alignItems:'center'}}>
+                <Grid size={{lg:6,md:6,sm:6,xs:9}}>
+                  <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'18px'}}}>
+                      Fill Details to continue
+                  </Box>
+                </Grid>
+                <Grid size={{lg:6,md:6,sm:6,xs:3}}>
+                  <Box sx={{display:{lg:'flex',md:'flex',sm:'flex',xs:'none'},justifyContent:'flex-end'}}>
+                  <Button variant='outlined' size='large'
+                  startIcon={
+                    loading ? (
+                      <CircularProgress size={24} color="inherit"/>
+                    ) : (
+                      <Save/>
+                    )
+                  } 
+                  sx={{
+                      color:COLORS.primaryAccent,
+                      borderColor:COLORS.primaryAccent,
+                      '&:hover':{
+                        backgroundColor:COLORS.hoverAccent,
+                        borderColor:COLORS.hoverAccent,
+                        color:COLORS.primaryBg
+                      }
+                    }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                       {loading ? 'Loading...' : 'Save'}
+                      </Box></Button>
+                  </Box>
+                  <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},justifyContent:'flex-end',p:1}}>
+                  <ButtonBase  
+                  sx={{
+                      borderRadius:2,
+                      color:COLORS.primaryAccent,
+                      borderColor:COLORS.primaryAccent,
+                      backgroundColor:COLORS.primaryBg,
+                      '&:hover':{
+                        backgroundColor:COLORS.hoverAccent,
+                        borderColor:COLORS.hoverAccent,
+                        color:COLORS.primaryBg
+                      }
+                    }}>{loading ? <CircularProgress color='inherit'/> : <Save/>}</ButtonBase>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </Toolbar>
+        </AppBar><br />
+        <Grid container spacing={2}>
+          <Grid size={{lg:6,md:6,sm:12,xs:12}}>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Name:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='First Name' fullWidth/>
+                <TextField variant='outlined' label='Last Name' fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Description:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='Enter Your Short Description' rows={4} multiline fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  About:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='Enter about yourself' rows={8} multiline fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Skills:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex',justifyContent:'center',p:5,
+                border:`1px solid ${COLORS.cardBorder}`,
+                borderRadius:2,backgroundColor:COLORS.secondaryBg, gap:2}}>
+                <AddDetails/>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid size={{lg:6,md:6,sm:12,xs:12}}>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Experience:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex',justifyContent:'center',p:5,
+                border:`1px solid ${COLORS.cardBorder}`,
+                borderRadius:2,backgroundColor:COLORS.secondaryBg, gap:2}}>
+                <AddDetails/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Education:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex',justifyContent:'center',p:5,
+                border:`1px solid ${COLORS.cardBorder}`,
+                borderRadius:2,backgroundColor:COLORS.secondaryBg, gap:2}}>
+                <AddDetails/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Licenses & Certifications:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex',justifyContent:'center',p:5,
+                border:`1px solid ${COLORS.cardBorder}`,
+                borderRadius:2,backgroundColor:COLORS.secondaryBg, gap:2}}>
+                <AddDetails/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Projects:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex',justifyContent:'center',p:5,
+                border:`1px solid ${COLORS.cardBorder}`,
+                borderRadius:2,backgroundColor:COLORS.secondaryBg, gap:2}}>
+                <AddDetails/>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid size={12}>
+            <Box sx={{p:1, textAlign:'center'}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Upload Your Resume:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex',justifyContent:'center',p:10,
+                border:`1px solid ${COLORS.cardBorder}`,
+                borderRadius:2,backgroundColor:COLORS.secondaryBg, gap:2}}>
+                <Box>
+                  <UploadResume/>
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </Box> : <CircularProgress />}
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} variant='filled' severity='error'

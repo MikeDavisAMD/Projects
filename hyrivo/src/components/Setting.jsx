@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, ButtonBase, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ArrowBackIos, Delete, Download, ExpandMore, Menu, PersonOff, Settings, SwapHoriz } from '@mui/icons-material'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Snackbar, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { ArrowBackIos, Close, Delete, Download, ExpandMore, Menu, Settings, SwapHoriz, TaskAlt } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useThemeContext } from '../Utils/ThemeContext'
+import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 
 const General = () => {
     const {theme} = useThemeContext()
@@ -20,7 +22,7 @@ const General = () => {
                         border: `1px solid ${theme.cardBorder}`
                     }}>
                         <AccordionSummary
-                        expandIcon={<ExpandMore/>}
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
@@ -37,8 +39,8 @@ const General = () => {
                                         defaultValue="Most Relevant Posts"
                                         name="radio-buttons-group"
                                     >
-                                        <FormControlLabel value="Most Relevant Posts" control={<Radio />} label="Most Relevant Posts (Recommended)" />
-                                        <FormControlLabel value="Most Recent posts" control={<Radio />} label="Most Recent posts" />
+                                        <FormControlLabel value="Most Relevant Posts" control={<Radio sx={{color:theme.primaryText}} />} label="Most Relevant Posts (Recommended)" />
+                                        <FormControlLabel value="Most Recent posts" control={<Radio sx={{color:theme.primaryText}} />} label="Most Recent posts" />
                                     </RadioGroup>
                                 </FormControl>
                             </Box>
@@ -70,7 +72,7 @@ const Display = () => {
                         border: `1px solid ${theme.cardBorder}`
                     }}>
                         <AccordionSummary
-                        expandIcon={<ExpandMore/>}
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
@@ -88,9 +90,9 @@ const Display = () => {
                                         onChange={(e) => setThemeMode(e.target.value)}
                                         name="radio-buttons-group"
                                     >
-                                        <FormControlLabel value="Device Settings" control={<Radio />} label="Device Settings" />
-                                        <FormControlLabel value="Always On" control={<Radio />} label="Always On" />
-                                        <FormControlLabel value="Always Off" control={<Radio />} label="Always Off" />
+                                        <FormControlLabel value="Device Settings" control={<Radio sx={{color:theme.primaryText}}/>} label="Device Settings" />
+                                        <FormControlLabel value="Always On" control={<Radio sx={{color:theme.primaryText}}/>} label="Always On" />
+                                        <FormControlLabel value="Always Off" control={<Radio sx={{color:theme.primaryText}}/>} label="Always Off" />
                                     </RadioGroup>
                                 </FormControl>
                             </Box>
@@ -105,6 +107,84 @@ const Display = () => {
 
 const Account = () => {
     const {theme} = useThemeContext()
+    const [loading,setLoading] = useState(false)
+    const [delLoad,setdelLoad] = useState(false)
+    const navigate = useNavigate()
+
+    // Snackbar
+    const [open,setOpen] = useState(false)
+    const [error,setError] = useState('')
+    const [success,setSuccess] = useState('')
+
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+
+    setOpen(false);
+    };
+
+    // dialog box
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+
+    const handleChangeType = async () => {
+        setLoading(true)
+        try {
+            const response = await axios.put('http://localhost:2000/user/change-type',{},{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+                }
+            })
+
+            const updatedUser = response.data.user
+            setOpen(true)
+            setSuccess(`Account type changed to ${updatedUser.isCompany ? "Organization" : "Job Seeker"}`)
+        } catch (error) {
+            setOpen(true)
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleDeleteAccount = async () => {
+        setdelLoad(true)
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+        if (!token) {
+            setOpen(true)
+            setError("Invalid or No token found")
+        }
+
+        const decoded = jwtDecode(token)
+        const userId = decoded.id || decoded._id || decoded.userId
+
+        try {
+            await axios.delete(`http://localhost:2000/user/${userId}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            localStorage.removeItem('token') || sessionStorage.removeItem('token')
+            setOpen(true)
+            setSuccess("Account Deleted Successfully")
+            navigate('/')
+        } catch (error) {
+            setOpen(true)
+            setError(error.message)
+        } finally {
+            setdelLoad(false)
+        }
+    }
+
     return (
         <Box sx={{flexGrow:1}}>
             <Grid container>
@@ -119,7 +199,7 @@ const Account = () => {
                         border: `1px solid ${theme.cardBorder}`
                     }}>
                         <AccordionSummary
-                        expandIcon={<ExpandMore/>}
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
@@ -131,7 +211,15 @@ const Account = () => {
                                 Change the type of account of the current user. 
                                 </Box><br />
                                 <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-                                    <Button variant='outlined' size='large' 
+                                    <Button variant='outlined' size='large' disabled={loading}
+                                    onClick={handleChangeType}
+                                    startIcon={
+                                        loading ? (
+                                            <CircularProgress size={24} color="inherit"/>
+                                        ) : (
+                                            <SwapHoriz/>
+                                        )
+                                    }
                                     sx={{
                                         color:theme.primaryAccent,
                                         borderColor:theme.primaryAccent,
@@ -141,7 +229,7 @@ const Account = () => {
                                           color:theme.primaryBg
                                         }
                                       }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                            <SwapHoriz/> Change
+                                            {loading ? 'Changing...'  :  'Change'}
                                         </Box></Button>
                                 </Box>
                             </Box>
@@ -155,7 +243,7 @@ const Account = () => {
                         border: `1px solid ${theme.cardBorder}`
                     }}>
                         <AccordionSummary
-                        expandIcon={<ExpandMore/>}
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
@@ -165,54 +253,22 @@ const Account = () => {
                             <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
                                 <Box component='span'>
                                 Choose how your Hyrivo experience looks for this device. 
-                                </Box>
-                                <Box sx={{display:{lg:'flex',md:'flex',sm:'none',xs:'none'},justifyContent:'flex-end',gap:1}}>
-                                    <Button variant='outlined' size='large' 
-                                    sx={{
-                                        color:theme.primaryAccent,
-                                        borderColor:theme.primaryAccent,
-                                        '&:hover':{
-                                          backgroundColor:theme.hoverAccent,
-                                          borderColor:theme.hoverAccent,
-                                          color:theme.primaryBg
-                                        }
-                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                            <PersonOff/> Disable Account
+                                </Box><br />
+                                <Box sx={{display:'flex',justifyContent:'flex-end',gap:1}}>
+                                      <Button variant='outlined' size='large' disabled={delLoad}
+                                      onClick={handleClickOpen}
+                                      startIcon={<Delete/>}
+                                        sx={{
+                                            color:theme.error,
+                                            borderColor:theme.error,
+                                            '&:hover':{
+                                            backgroundColor:theme.errorHover,
+                                            borderColor:theme.errorHover,
+                                            color:theme.primaryBg
+                                            }
+                                        }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                             {delLoad ? 'Deleting...' : 'Delete Account'}
                                         </Box></Button>
-                                      <Button variant='outlined' size='large' 
-                                    sx={{
-                                        color:theme.error,
-                                        borderColor:theme.error,
-                                        '&:hover':{
-                                          backgroundColor:theme.errorHover,
-                                          borderColor:theme.errorHover,
-                                          color:theme.primaryBg
-                                        }
-                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                        <Delete/> Delete Account
-                                        </Box></Button>
-                                </Box>
-                                <Box sx={{display:{lg:'none',md:'none',sm:'flex',xs:'flex'},justifyContent:'flex-end',gap:1}}>
-                                    <Button variant='outlined' size='large' 
-                                    sx={{
-                                        color:theme.primaryAccent,
-                                        borderColor:theme.primaryAccent,
-                                        '&:hover':{
-                                          backgroundColor:theme.hoverAccent,
-                                          borderColor:theme.hoverAccent,
-                                          color:theme.primaryBg
-                                        }
-                                      }}><PersonOff/></Button>
-                                      <Button variant='outlined' size='large' 
-                                    sx={{
-                                        color:theme.error,
-                                        borderColor:theme.error,
-                                        '&:hover':{
-                                          backgroundColor:theme.errorHover,
-                                          borderColor:theme.errorHover,
-                                          color:theme.primaryBg
-                                        }
-                                      }}><Delete/></Button>
                                 </Box>
                             </Box>
                         </AccordionDetails>
@@ -220,6 +276,64 @@ const Account = () => {
                     </Box>
                 </Grid>
             </Grid>
+            <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+                <Alert onClose={handleClose} variant='filled' severity={error ? 'error' : 'success'}
+                sx={{
+                backgroundColor: error ? '#FF4D6D' : '#1BC47D'
+                }}>
+                {error || success}
+                </Alert>
+            </Snackbar>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                {"Are you Sure to Delete Account?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                Are you sure you want to permanently delete your account? 
+                This action cannot be undone and all your data will be lost.
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button variant='outlined' size='large' 
+                onClick={handleCloseDialog}
+                startIcon={<Close/>}
+                sx={{
+                    color:theme.error,
+                    borderColor:theme.error,
+                    '&:hover':{
+                    backgroundColor:theme.errorHover,
+                    borderColor:theme.errorHover,
+                    color:theme.primaryBg
+                    }
+                }}>Cancel</Button>
+                <Button variant='outlined' size='large' disabled={delLoad}
+                onClick={handleDeleteAccount}
+                startIcon={
+                delLoad ? (
+                    <CircularProgress size={24} color="inherit"/>
+                ) : (
+                    <TaskAlt/>
+                )
+                }
+                sx={{
+                    color:theme.primaryAccent,
+                    borderColor:theme.primaryAccent,
+                    '&:hover':{
+                      backgroundColor:theme.hoverAccent,
+                      borderColor:theme.hoverAccent,
+                      color:theme.primaryBg
+                    }
+                  }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                        {delLoad ? 'Deleting...' : 'Proceed'}
+                </Box></Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
@@ -240,7 +354,7 @@ const Activities = () => {
                         border: `1px solid ${theme.cardBorder}`
                     }}>
                         <AccordionSummary
-                        expandIcon={<ExpandMore/>}
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
