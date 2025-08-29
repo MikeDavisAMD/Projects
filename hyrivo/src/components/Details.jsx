@@ -1,102 +1,31 @@
-import { Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Grid, Modal, Snackbar, TextField, Toolbar, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
-import { COLORS } from '../Utils/colors';
-import { Save } from '@mui/icons-material';
-import { AddUi } from '../Utils/AddUI';
-import { UploadFileUi } from '../Utils/UploadFileUI';
+import { AppBar, Box, Button, ButtonBase, CircularProgress, Grid, Modal, TextField, Toolbar, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import { COLORS } from '../Utils/colors'
+import { Save } from '@mui/icons-material'
+import { AddUi } from '../Utils/AddUI'
 import { AddSkills } from '../Utils/AddSkills'
+import { UploadFileUi } from '../Utils/UploadFileUI'
+import { useNavigate } from 'react-router-dom'
 import { AddExp } from '../Utils/AddExp'
 import { AddEdu } from '../Utils/AddEdu'
 import { AddCert } from '../Utils/AddCert'
 import { AddProjects } from '../Utils/AddProjects'
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: {lg:400,md:400,sm:300,xs:200},
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: {lg:400,md:400,sm:300,xs:200},
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
-export const OAuthSuccess = () => {
+export const Details = () => {
     const navigate = useNavigate();
     const [loading,setLoading] = useState(false)
-    const [showConsent,setShowConsent] = useState(false)
-
-    // Snackbar
-    const [open,setOpen] = useState(false)
-    const [error,setError] = useState('')
-  
-    const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
-  
-    setOpen(false);
-    };
-
-    useEffect(() => {
-      const checkUser = async () => {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
-    
-        if(!token) return navigate('/Login')
-
-        localStorage.setItem('token',token)
-
-        setLoading(true)
-        try {
-          const response = await axios.get('http://localhost:2000/user/me',{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          })
-
-          if (!response.data.isExistingUser) {
-            setTimeout(() => {
-              setShowConsent(true)
-            }, 500);
-          } else {
-            setTimeout(() => {
-              navigate('/')
-            }, 500);
-          }
-        } catch (error) {
-          setError(error.message)
-          setOpen(true)
-          navigate('/Login')
-        } finally {
-          setLoading(false)
-        }
-      }
-      checkUser()
-    }, [navigate]);
-
-    const handleConsent = async (value) => {
-      setLoading(true)
-      try {
-        const token = localStorage.getItem('token')
-        await axios.post('http://localhost:2000/user/auth-consent',{isCompany: value},{
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        })
-        setTimeout(() => {
-          navigate('/')
-        }, 500);
-      } catch (error) {
-        setError(error.message)
-        setOpen(true)
-      } finally {
-        setLoading(false)
-      }
-    }
 
     // Skills 
     const [openSkills, setOpenSkills] = useState(false);
@@ -124,16 +53,14 @@ export const OAuthSuccess = () => {
     const handleCloseProjects = () => setOpenProjects(false);
 
     const MODAL = [
-      {name: 'Experience:', open: openExp, openModal: handleOpenExp, closeModal: handleCloseExp, component:<AddExp/> },
-      {name: 'Education:', open: openEdu, openModal: handleOpenEdu, closeModal: handleCloseEdu, component: <AddEdu/>},
-      {name: 'Licenses & Certifications:', open: openCert, openModal: handleOpenCert, closeModal: handleCloseCert, component: <AddCert/>},
-      {name: 'Projects:', open: openProjects, openModal: handleOpenProjects, closeModal: handleCloseProjects, component: <AddProjects/>}
+        {name: 'Experience:', open: openExp, openModal: handleOpenExp, closeModal: handleCloseExp, component:<AddExp/> },
+        {name: 'Education:', open: openEdu, openModal: handleOpenEdu, closeModal: handleCloseEdu, component: <AddEdu/>},
+        {name: 'Licenses & Certifications:', open: openCert, openModal: handleOpenCert, closeModal: handleCloseCert, component: <AddCert/>},
+        {name: 'Projects:', open: openProjects, openModal: handleOpenProjects, closeModal: handleCloseProjects, component: <AddProjects/>}
     ]
-  
+
   return (
-    <Box sx={{ height: '100vh' }}>
-      {showConsent ? 
-      <Box sx={{flexGrow: 1}}>
+    <Box sx={{flexGrow: 1}}>
         <AppBar position='static' sx={{backgroundColor:COLORS.background,backdropFilter:'blur(10px)',borderBottom:`1px solid ${COLORS.cardBorder}`, color:COLORS.primaryText}}>
           <Toolbar>
             <Box sx={{flexGrow:1}}>
@@ -287,17 +214,6 @@ export const OAuthSuccess = () => {
             </Box>
           </Grid>
         </Grid>
-      </Box> : <Box sx={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh'}}>
-         <CircularProgress />
-        </Box>}
-      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-        <Alert onClose={handleClose} variant='filled' severity='error'
-        sx={{
-            backgroundColor: '#FF4D6D'
-        }}>
-            {error}
-        </Alert>
-      </Snackbar>
-    </Box>
+      </Box>
   )
 }
