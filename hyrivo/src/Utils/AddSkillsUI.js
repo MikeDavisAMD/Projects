@@ -1,4 +1,15 @@
-export const AddSkillsUi = () => {
+export const AddSkillsUi = ({onAdd}) => {
+    const handleAdd = () => {
+        const inputEl = document.getElementById("input-field")
+        const skill = inputEl.value.trim()
+
+        if (skill) {
+            onAdd(skill)
+            inputEl.value = ""
+            inputEl.focus()
+        }
+    }
+
     return (
         <>
         <style>{`
@@ -61,7 +72,7 @@ export const AddSkillsUi = () => {
         color:  #ffffff;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
         #input-field {
             width: 180px; 
         }
@@ -79,8 +90,9 @@ export const AddSkillsUi = () => {
         `}</style>
 
         <div className="input-group">
-            <input placeholder="Enter your skills here" type="text" id="input-field"/>
-            <button className="submit-button"><span>ADD</span></button>
+            <input placeholder="Enter your skills here" type="text" id="input-field"
+            onKeyDown={(e) => e.key === "Enter" && handleAdd()}/>
+            <button className="submit-button" onClick={handleAdd}><span>ADD</span></button>
         </div>
         </>
     )

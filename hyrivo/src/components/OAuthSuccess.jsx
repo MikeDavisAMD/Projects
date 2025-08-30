@@ -78,26 +78,6 @@ export const OAuthSuccess = () => {
       checkUser()
     }, [navigate]);
 
-    const handleConsent = async (value) => {
-      setLoading(true)
-      try {
-        const token = localStorage.getItem('token')
-        await axios.post('http://localhost:2000/user/auth-consent',{isCompany: value},{
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        })
-        setTimeout(() => {
-          navigate('/')
-        }, 500);
-      } catch (error) {
-        setError(error.message)
-        setOpen(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     // Skills 
     const [openSkills, setOpenSkills] = useState(false);
     const handleOpenSkills = () => setOpenSkills(true);
