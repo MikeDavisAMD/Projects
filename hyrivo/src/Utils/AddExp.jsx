@@ -1,6 +1,8 @@
 import { Box, Checkbox, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { COLORS } from './colors';
+import { DatePicker, Space } from 'antd'
+const { RangePicker } = DatePicker
 
 export const AddExp = () => {
   // Employee type
@@ -59,6 +61,7 @@ export const AddExp = () => {
           </Box>
         </Grid>
         <Grid size={12}>
+          <Box sx={{flexGrow:1}}>
           <Grid container spacing={2}>
               <Grid size={12}>
                 <Box sx={{display:'flex', alignItems:'center', gap:1}}>
@@ -76,13 +79,16 @@ export const AddExp = () => {
                   <Box component='span'>Currently Working on this Role</Box>
                 </Box>
               </Grid>
-                <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-                  
-                </Grid>
-                <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-
-                </Grid>
+              <Grid size={12}>
+                <Space direction='vertical' size={12} style={{display:'flex', flexGrow:1}}>
+                  <RangePicker
+                  getPopupContainer={(trigger) => document.body}
+                  popupStyle={{ zIndex: 2000 }} 
+                  style={{ width: '100%' }}/>
+                </Space>
+              </Grid>
           </Grid>
+          </Box>
         </Grid>
       </Grid>
     </Box>
