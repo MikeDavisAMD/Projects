@@ -39,6 +39,15 @@ export const getTheme = (palette, isDark) => {
                         }
                     }
                 }
+            },
+            MuiIconButton:{
+                styleOverrides: {
+                    root:{
+                        borderRadius: "50%",
+                        minWidth:'auto',
+                        padding:'6px'
+                    }
+                }
             }
         }
     })

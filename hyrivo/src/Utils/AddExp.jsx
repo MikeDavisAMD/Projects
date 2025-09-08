@@ -1,11 +1,14 @@
 import { Box, Button, Checkbox, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Portal, Select, TextField } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { COLORS } from './colors';
 import { DatePickerUi } from './DatePickerUi';
 import { List, Save } from '@mui/icons-material';
 import { ListExp } from './ListExp';
 
-export const AddExp = () => {
+export const AddExp = ({ experience, setExperience, handleCloseModal, skills }) => {
+  // Title
+  const [title, setTitle] = useState('')
+
   // Employee type
   const [EmpType, setEmpType] = useState('');
 
@@ -22,6 +25,12 @@ export const AddExp = () => {
     {value: 'Internship', name: 'Internship'},
     {value: 'Trainee', name: 'Trainee'},
   ]
+
+  // company
+  const [company, setCompany] = useState('')
+
+  // Location
+  const [location, setLocation] = useState('')
 
   // Location type
   const [LocType, setLocType] = useState('');
@@ -57,7 +66,6 @@ export const AddExp = () => {
     },
   };
 
-  const [skills, setSkills] = useState([])
   const [skillset, setSkillset] = useState([])
 
   const handleChangeSkills = (event) => {
@@ -69,9 +77,23 @@ export const AddExp = () => {
     );
   };
 
-  useEffect(() => {
-    setSkills(['HTML','CSS','ReactJs','ExpressJs','MongoDB'])
-  },[])
+  // save button
+  const handleSave = () => {
+    const exp = {
+      title,
+      EmpType,
+      company,
+      isCurrentRole,
+      startDate,
+      endDate,
+      skills: skillset,
+      location,
+      LocType
+    }
+
+    setExperience([...experience,exp])
+    handleCloseModal()
+  }
 
   // List portal
   const [showPortal, setShowPortal] = useState(false);
@@ -85,7 +107,7 @@ export const AddExp = () => {
         <Grid size={12}>
           <Box>
             <TextField label='Title' placeholder='Ex: Software Engineer, Web Developer, etc.' fullWidth
-            helperText='Enter the Job Title from Previous Role'/>
+            helperText='Enter the Job Title from Previous Role' value={title} onChange={e => setTitle(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -110,7 +132,7 @@ export const AddExp = () => {
         <Grid size={12}>
           <Box>
             <TextField label='Company or Organization' placeholder='Ex: ABC Technologies' fullWidth
-            helperText='Enter the previous company name'/>
+            helperText='Enter the previous company name' value={company} onChange={e => setCompany(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -139,7 +161,7 @@ export const AddExp = () => {
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
           <Box>
             <TextField label='Location' placeholder='Ex: Nagercoil, Tamil-Nadu' fullWidth 
-            helperText='Previous job Location'/>
+            helperText='Previous job Location' value={location} onChange={e => setLocation(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
@@ -198,6 +220,7 @@ export const AddExp = () => {
                       list
                     </Box></Button>
                     <Button variant='outlined' size='large' startIcon={<Save/>}
+                    onClick={handleSave}
                 sx={{
                     color:COLORS.primaryAccent,
                     borderColor:COLORS.primaryAccent,

@@ -32,6 +32,45 @@ export const OAuthSuccess = () => {
     const [loading,setLoading] = useState(false)
     const [showConsent,setShowConsent] = useState(false)
 
+    // getting profile details
+    const [firstName, setFirstname] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [description, setDescription] = useState('')
+    const [about, setAbout] = useState('')
+    const [skills, setSkills] = useState([])
+    const [experience, setExperience] = useState([])
+    const [education, setEducation] = useState([])
+    const [certificates, setCertificates] = useState([])
+    const [projects, setProjects] = useState([])
+
+    const handleSave = async () => {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      if (!token) return navigate('/')
+      setLoading(true)
+
+      try {
+        await axios.post("http://localhost:2000/profile/",{
+          firstName,
+          lastName,
+          description,
+          about,
+          skills,
+          experience,
+          education,
+          certificates,
+          projects
+        },{
+          headers: {Authorization: `Bearer ${token}`}
+        })
+        navigate('/')
+      } catch (error) {
+        !token ? setError("Invalid Token or Token Expired") : setError('Something went wrong')
+        setOpen(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     // Snackbar
     const [open,setOpen] = useState(false)
     const [error,setError] = useState('')
@@ -107,10 +146,15 @@ export const OAuthSuccess = () => {
     const handleCloseProjects = () => setOpenProjects(false);
 
     const MODAL = [
-      {name: 'Experience:', open: openExp, openModal: handleOpenExp, closeModal: handleCloseExp, component:<AddExp/> },
-      {name: 'Education:', open: openEdu, openModal: handleOpenEdu, closeModal: handleCloseEdu, component: <AddEdu/>},
-      {name: 'Licenses & Certifications:', open: openCert, openModal: handleOpenCert, closeModal: handleCloseCert, component: <AddCert/>},
-      {name: 'Projects:', open: openProjects, openModal: handleOpenProjects, closeModal: handleCloseProjects, component: <AddProjects/>}
+      {name: 'Experience:', open: openExp, openModal: handleOpenExp, closeModal: handleCloseExp, 
+        component:<AddExp experience={experience} setExperience={setExperience} 
+        handleCloseModal={handleCloseExp} skills={skills}/> },
+      {name: 'Education:', open: openEdu, openModal: handleOpenEdu, closeModal: handleCloseEdu, 
+        component: <AddEdu education={education} setEducation={setEducation} handleCloseModal={handleCloseEdu}/>},
+      {name: 'Licenses & Certifications:', open: openCert, openModal: handleOpenCert, closeModal: handleCloseCert, 
+        component: <AddCert certificates={certificates} setCertificates={setCertificates} handleCloseModal={handleCloseCert}/>},
+      {name: 'Projects:', open: openProjects, openModal: handleOpenProjects, closeModal: handleCloseProjects, 
+        component: <AddProjects projects={projects} setProjects={setProjects} handleCloseModal={handleCloseProjects}/>}
     ]
   
   return (
@@ -128,7 +172,7 @@ export const OAuthSuccess = () => {
                 </Grid>
                 <Grid size={{lg:6,md:6,sm:6,xs:3}}>
                   <Box sx={{display:{lg:'flex',md:'flex',sm:'flex',xs:'none'},justifyContent:'flex-end'}}>
-                  <Button variant='outlined' size='large'
+                  <Button variant='outlined' size='large' onClick={handleSave}
                   startIcon={
                     loading ? (
                       <CircularProgress size={24} color="inherit"/>
@@ -175,8 +219,10 @@ export const OAuthSuccess = () => {
               </Box>
               <br /><br />
               <Box sx={{display:'flex', gap:2}}>
-                <TextField variant='outlined' label='First Name' fullWidth/>
-                <TextField variant='outlined' label='Last Name' fullWidth/>
+                <TextField variant='outlined' label='First Name' value={firstName} 
+                onChange={e => setFirstname(e.target.value)} fullWidth/>
+                <TextField variant='outlined' label='Last Name' value={lastName} 
+                onChange={e => setLastName(e.target.value)} fullWidth/>
               </Box>
             </Box>
             <Box sx={{p:1}}>
@@ -185,7 +231,9 @@ export const OAuthSuccess = () => {
               </Box>
               <br /><br />
               <Box sx={{display:'flex', gap:2}}>
-                <TextField variant='outlined' label='Enter Your Short Description' rows={4} multiline fullWidth/>
+                <TextField variant='outlined' label='Enter Your Short Description' 
+                value={description} onChange={e => setDescription(e.target.value)}
+                rows={4} multiline fullWidth/>
               </Box>
             </Box>
             <Box sx={{p:1}}>
@@ -194,7 +242,9 @@ export const OAuthSuccess = () => {
               </Box>
               <br /><br />
               <Box sx={{display:'flex', gap:2}}>
-                <TextField variant='outlined' label='Enter about yourself' rows={8} multiline fullWidth/>
+                <TextField variant='outlined' label='Enter about yourself' 
+                value={about} onChange={e => setAbout(e.target.value)}
+                rows={8} multiline fullWidth/>
               </Box>
             </Box>
             <Box sx={{p:1}}>
@@ -219,7 +269,7 @@ export const OAuthSuccess = () => {
                   Add your relevant Skills
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  <AddSkills/>
+                  <AddSkills skills={skills} setSkills={setSkills} handleCloseModal={handleCloseSkills}/>
                 </Typography>
               </Box>
             </Modal>
@@ -274,7 +324,7 @@ export const OAuthSuccess = () => {
          <CircularProgress />
         </Box>}
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-        <Alert onClose={handleClose} variant='filled' severity='error'
+        <Alert onClose={handleClose} variant='filled' severity='error' 
         sx={{
             backgroundColor: '#FF4D6D'
         }}>

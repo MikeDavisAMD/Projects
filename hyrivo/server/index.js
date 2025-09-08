@@ -16,10 +16,12 @@ app.use(cors())
 app.use(passport.initialize())
 
 const userRoute = require('./routes/userRoute')
+const profileRoute = require('./routes/profileRoute')
 const forgetPWRoute = require('./routes/forgetPWRoute')
 
 app.use('/pw-reset',forgetPWRoute)
 app.use('/user',userRoute)
+app.use('/profile',profileRoute)
 
 app.get('/', (req,res)=>{
     res.send("Welcome to Hyrivo")

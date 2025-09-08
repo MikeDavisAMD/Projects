@@ -8,7 +8,8 @@ import { DatePickerUi } from './DatePickerUi';
 
 export const AddEdu = () => {
 
-   // Employee type
+
+   // Degree and field of study type
   const [Degree, setDegree] = useState('');
   const [Field, setField] = useState('')
 

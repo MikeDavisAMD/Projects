@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     createdAt: {type: Date, default: Date.now},
     twoFaSecrets: String,
     isTwoFaEnabled: {type: Boolean, default: false},
-    isExistingUser: {type: Boolean, default: false}
+    isExistingUser: {type: Boolean, default: false},
+    profileId: {type: mongoose.Schema.Types.ObjectId, ref: 'Profile'}
 })
 
 // hashing password

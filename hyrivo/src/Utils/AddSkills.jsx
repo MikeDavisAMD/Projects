@@ -1,11 +1,10 @@
 import { Box, Button, Chip, Divider, Grid, Stack } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { AddSkillsUi } from './AddSkillsUI'
 import { COLORS } from './colors'
 import { Save } from '@mui/icons-material'
 
-export const AddSkills = () => {
-  const [skills, setSkills] = useState([])
+export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
 
   const handleAddSkills = (skill) => {
     if (skill && !skills.includes(skill)) {
@@ -45,7 +44,7 @@ export const AddSkills = () => {
         <Grid size={12}>
             <Divider/><br />
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'}}}>
-            <Button variant='outlined' size='large' startIcon={<Save/>}
+            <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleCloseModal}
               sx={{
                   color:COLORS.primaryAccent,
                   borderColor:COLORS.primaryAccent,
