@@ -236,7 +236,7 @@ export const AddExp = ({ experience, setExperience, handleCloseModal, skills }) 
             {showPortal ? (
               <Portal container={() => container.current}>
                 <br />
-                <ListExp/>
+                <ListExp experience={experience}/>
               </Portal>
             ) : null}
             <Box ref={container} />

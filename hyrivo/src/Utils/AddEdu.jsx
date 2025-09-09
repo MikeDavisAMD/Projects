@@ -6,8 +6,10 @@ import { COLORS } from './colors';
 import { List, Save } from '@mui/icons-material';
 import { DatePickerUi } from './DatePickerUi';
 
-export const AddEdu = () => {
+export const AddEdu = ({education, setEducation, handleCloseModal}) => {
 
+  // college name
+  const [college, setCollege] = useState('')
 
    // Degree and field of study type
   const [Degree, setDegree] = useState('');
@@ -32,11 +34,29 @@ export const AddEdu = () => {
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
 
+  // Grade
+  const [grade, setGrade] = useState('')
+
   // List portal
     const [showPortal, setShowPortal] = useState(false);
     const container = useRef(null);
   
-    const handleClickPortal = () => {setShowPortal(!showPortal);};
+    const handleClickPortal = () => {setShowPortal(!showPortal)};
+
+  // save button
+    const handleSave = () => {
+      const edu = {
+        college,
+        Degree,
+        Field,
+        isStudying,
+        startDate,
+        endDate,
+        grade
+      }
+      setEducation([...education,edu])
+      handleCloseModal()
+    }
   
   return (
     <Box sx={{flexGrow:1}}>
@@ -44,7 +64,8 @@ export const AddEdu = () => {
         <Grid size={12}>
           <Box>
             <TextField label='University or College or Institute' placeholder='Ex: ABC College, City, State, Country' fullWidth
-            helperText='Enter the college/ university/ institute name with location'/>
+            helperText='Enter the college/ university/ institute name with location' value={college} 
+            onChange={e => setCollege(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -70,7 +91,8 @@ export const AddEdu = () => {
           {selectedDegree?.degree === "Short-term certifications" ? (
             <Box>
               <TextField label='Field of certification' placeholder='Ex: Fullstack development, Data Science, Digital marketing, etc.' fullWidth
-              helperText='Which field certification is done like IT, AI, Data Science, etc.'/>
+              helperText='Which field certification is done like IT, AI, Data Science, etc.' value={Field} 
+              onChange={e => setField(e.target.value)}/>
             </Box>
           ):(
             <Box>
@@ -118,13 +140,8 @@ export const AddEdu = () => {
         <Grid size={12}>
           <Box>
             <TextField label='Grade' placeholder='Enter the Grade' fullWidth
-            helperText='Enter the Grade Out of 10' disabled={isStudying}/>
-          </Box>
-        </Grid>
-        <Grid size={12}>
-          <Box>
-            <TextField variant='outlined' label='Activities & Societies' rows={6} multiline fullWidth
-            helperText="Give us details about club activities or other bodies that you have participated during studies"/>
+            helperText='Enter the Grade Out of 10' disabled={isStudying} value={grade} 
+            onChange={e => setGrade(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -142,23 +159,23 @@ export const AddEdu = () => {
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       list
                     </Box></Button>
-                    <Button variant='outlined' size='large' startIcon={<Save/>}
-                sx={{
-                    color:COLORS.primaryAccent,
-                    borderColor:COLORS.primaryAccent,
-                    '&:hover':{
-                      backgroundColor:COLORS.hoverAccent,
-                      borderColor:COLORS.hoverAccent,
-                      color:COLORS.primaryBg
-                    }
-                  }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                      save
+                    <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleSave}
+                    sx={{
+                        color:COLORS.primaryAccent,
+                        borderColor:COLORS.primaryAccent,
+                        '&:hover':{
+                          backgroundColor:COLORS.hoverAccent,
+                          borderColor:COLORS.hoverAccent,
+                          color:COLORS.primaryBg
+                        }
+                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                          save
                     </Box></Button>
             </Box>
             {showPortal ? (
               <Portal container={() => container.current}>
                 <br />
-                <ListEdu/>
+                <ListEdu education={education}/>
               </Portal>
             ) : null}
             <Box ref={container} />

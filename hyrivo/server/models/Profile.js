@@ -26,7 +26,6 @@ const profileSchema = new mongoose.Schema({
         startDate: { type: Date, required: true },
         endDate: Date,
         grade: { type: Number, min: 0, max: 10 },
-        activities: String
     }],
     certificates: [{
         name: { type: String, required: true },
@@ -50,7 +49,8 @@ const profileSchema = new mongoose.Schema({
             enum: ["Educational Project", "Live Project", "Standalone Project"],
             required: true
         },
-        assn: [{type: String, required: true}]
+        assn: [{type: String, required: true}],
+        link: String
     }]
 })
 

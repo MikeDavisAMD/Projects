@@ -188,6 +188,12 @@ export const AddProjects = () => {
           )}
         </Grid>
         <Grid size={12}>
+          <Box>
+            <TextField label='Project URL' placeholder='Ex: https://projectname.com' fullWidth
+            helperText='Enter the URL of the hosted project'/>
+          </Box>
+        </Grid>
+        <Grid size={12}>
           <Divider/><br />
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'},gap:1}}>
               <Button variant='outlined' size='large' startIcon={<List/>} onClick={handleClickPortal}
