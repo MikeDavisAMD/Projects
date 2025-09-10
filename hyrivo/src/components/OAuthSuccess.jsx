@@ -152,9 +152,12 @@ export const OAuthSuccess = () => {
       {name: 'Education:', open: openEdu, openModal: handleOpenEdu, closeModal: handleCloseEdu, 
         component: <AddEdu education={education} setEducation={setEducation} handleCloseModal={handleCloseEdu}/>},
       {name: 'Licenses & Certifications:', open: openCert, openModal: handleOpenCert, closeModal: handleCloseCert, 
-        component: <AddCert certificates={certificates} setCertificates={setCertificates} handleCloseModal={handleCloseCert}/>},
+        component: <AddCert certificates={certificates} setCertificates={setCertificates} 
+        handleCloseModal={handleCloseCert} skills={skills}/>},
       {name: 'Projects:', open: openProjects, openModal: handleOpenProjects, closeModal: handleCloseProjects, 
-        component: <AddProjects projects={projects} setProjects={setProjects} handleCloseModal={handleCloseProjects}/>}
+        component: <AddProjects projects={projects} setProjects={setProjects} 
+        handleCloseModal={handleCloseProjects} skills={skills} 
+        college={education.map(c => c.college)} work={experience.map(w => w.company)}/>}
     ]
   
   return (

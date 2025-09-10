@@ -1,11 +1,17 @@
 import { Box, Button, Checkbox, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Portal, Select, TextField } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { DatePickerUi } from './DatePickerUi'
 import { COLORS } from './colors'
 import { List, Save } from '@mui/icons-material'
 import { ListProjects } from './ListProjects'
 
-export const AddProjects = () => {
+export const AddProjects = ({projects, setProjects, handleCloseModal, skills, college, work}) => {
+
+  // Project Name
+  const [projectName, setProjectName] = useState('')
+
+  // Description
+  const [description, setDescription] = useState('')
 
   // Skills and organization for project association Selector
   const ITEM_HEIGHT = 48;
@@ -19,11 +25,8 @@ export const AddProjects = () => {
     },
   };
 
-  const [skills, setSkills] = useState([])
   const [skillset, setSkillset] = useState([])
   const [assn, setAssn] = useState([])
-  const [college, setCollege] = useState([])
-  const [work, setWork] = useState([])
 
   const handleChangeSkills = (event) => {
     const {
@@ -42,12 +45,6 @@ export const AddProjects = () => {
       typeof value === 'string' ? value.split(',') : value,
     );
   };
-  
-  useEffect(() => {
-    setSkills(['HTML','CSS','ReactJs','ExpressJs','MongoDB'])
-    setCollege(['College1','College2','College3'])
-    setWork(['Work1','Work2','Work3'])
-  },[])
 
   // currently Working on this project
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -63,6 +60,9 @@ export const AddProjects = () => {
 
   const handleClickPortal = () => {setShowPortal(!showPortal);};
 
+  // Link
+  const [link, setLink] = useState('')
+
   // Select Instituition for project associated with
   const [org, setOrg] = useState('');
 
@@ -70,19 +70,38 @@ export const AddProjects = () => {
     setOrg(event.target.value);
   };
 
+  // save button save
+  const handleSave = () => {
+    const pro = {
+      projectName,
+      description,
+      skills: skillset,
+      isProgress,
+      startDate,
+      endDate,
+      org,
+      assn,
+      link
+    }
+    setProjects([...projects,pro])
+    handleCloseModal()
+  }
+
   return (
     <Box sx={{flexGrow:1}}>
       <Grid container spacing={2}>
         <Grid size={12}>
           <Box>
             <TextField label='Name of the Project' placeholder='Ex: ABCD Project' fullWidth
-            helperText='Enter the name of the project'/>
+            helperText='Enter the name of the project' value={projectName} 
+            onChange={e => setProjectName(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
           <Box>
             <TextField variant='outlined' label='Description' rows={6} multiline fullWidth
-            helperText="Give us details about the project here."/>
+            helperText="Give us details about the project here." value={description}
+            onChange={e => setDescription(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -157,14 +176,18 @@ export const AddProjects = () => {
             </Box>
           ):(
             <FormControl sx={{ width: '100%' }}>
-            <InputLabel id="demo-multiple-checkbox-label">{org === "Live Project" ? "Select Associated Organization" : "Select Associated Educational Institute"}</InputLabel>
+            <InputLabel id="demo-multiple-checkbox-label">{
+              org === "Live Project" ? "Select Associated Organization" : 
+              org === "Educational Project" ? "Select Associated Educational Institute" : "Select association"}</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
               value={assn}
               onChange={handleChangeAssn}
-              input={<OutlinedInput label={org === "Live Project" ? "Select Associated Organization" : "Select Associated Educational Institute"} />}
+              input={<OutlinedInput label={
+                org === "Live Project" ? "Select Associated Organization" : 
+                org === "Educational Project" ? "Select Associated Educational Institute" : "Select association"} />}
               renderValue={(selected) => selected.join(', ')}
               MenuProps={MenuProps}
             >
@@ -174,13 +197,17 @@ export const AddProjects = () => {
                     <Checkbox checked={assn.includes(name)} />
                     <ListItemText primary={name} />
                   </MenuItem>
-                )):
+                )): org === "Educational Project" ?
                 college.map((name) => (
                   <MenuItem key={name} value={name}>
                     <Checkbox checked={assn.includes(name)} />
                     <ListItemText primary={name} />
                   </MenuItem>
-                ))
+                )) : (
+                  <MenuItem disabled value="">
+                    <ListItemText primary="No option selected"/>
+                  </MenuItem>
+                )
               }
             </Select>
             <FormHelperText>Select the association of your {org}</FormHelperText>
@@ -190,7 +217,7 @@ export const AddProjects = () => {
         <Grid size={12}>
           <Box>
             <TextField label='Project URL' placeholder='Ex: https://projectname.com' fullWidth
-            helperText='Enter the URL of the hosted project'/>
+            helperText='Enter the URL of the hosted project' value={link} onChange={e => setLink(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -208,7 +235,7 @@ export const AddProjects = () => {
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       list
                     </Box></Button>
-                    <Button variant='outlined' size='large' startIcon={<Save/>}
+                    <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleSave}
                 sx={{
                     color:COLORS.primaryAccent,
                     borderColor:COLORS.primaryAccent,
@@ -224,7 +251,7 @@ export const AddProjects = () => {
             {showPortal ? (
               <Portal container={() => container.current}>
                 <br />
-                <ListProjects/>
+                <ListProjects projects={projects}/>
               </Portal>
             ) : null}
             <Box ref={container} />

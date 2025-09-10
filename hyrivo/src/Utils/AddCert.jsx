@@ -1,11 +1,16 @@
 import { Box, Button, Checkbox, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Portal, Select, TextField } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { DatePickerUi } from './DatePickerUi'
 import { COLORS } from './colors'
 import { List, Save } from '@mui/icons-material'
 import { ListCert } from './ListCert'
 
-export const AddCert = () => {
+export const AddCert = ({certificates, setCertificates, handleCloseModal, skills}) => {
+  // Certificate Name
+  const [cname, setCName] = useState('')
+
+  // issued organization
+  const [issuedBy, setIssuedBy] = useState('')
 
   // Expiry Date checkbox
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -27,7 +32,6 @@ export const AddCert = () => {
     },
   };
 
-  const [skills, setSkills] = useState([])
   const [skillset, setSkillset] = useState([])
 
   const handleChangeSkills = (event) => {
@@ -38,10 +42,29 @@ export const AddCert = () => {
       typeof value === 'string' ? value.split(',') : value,
     );
   };
-  
-  useEffect(() => {
-    setSkills(['HTML','CSS','ReactJs','ExpressJs','MongoDB'])
-  },[])
+
+  // Credential ID
+  const [credID, setCredID] = useState('')
+
+  // credential URL
+  const [credURL, setCredURL] = useState('')
+
+  // save button function
+  const handleSave = () => {
+    const cert  = {
+      cname,
+      issuedBy,
+      isexpiry,
+      IssueDate,
+      ExpiryDate,
+      credID,
+      credURL,
+      skills: skillset
+    }
+
+    setCertificates([...certificates,cert])
+    handleCloseModal()
+  }
 
   // List portal
   const [showPortal, setShowPortal] = useState(false);
@@ -55,13 +78,15 @@ export const AddCert = () => {
         <Grid size={12}>
           <Box>
             <TextField label='Certificate or License Name' placeholder='Full Name of the certification or license as per the issued organization' fullWidth
-            helperText='Enter the Full Name of the certification or license as per the issued organization'/>
+            helperText='Enter the Full Name of the certification or license as per the issued organization'
+            value={cname} onChange={e => setCName(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
           <Box>
             <TextField label='Issuing Organization' placeholder='Ex: ABC organization, City, State, Country' fullWidth
-            helperText='Enter the name of the Organization that issued certificate or license with location'/>
+            helperText='Enter the name of the Organization that issued certificate or license with location'
+            value={issuedBy} onChange={e => setIssuedBy(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -90,13 +115,15 @@ export const AddCert = () => {
         <Grid size={12}>
           <Box>
             <TextField label='Credential ID' placeholder='Ex: ABC123456' fullWidth
-            helperText='Enter the Credential ID as in the certificate or license'/>
+            helperText='Enter the Credential ID as in the certificate or license' 
+            value={credID} onChange={e => setCredID(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
         <Box>
             <TextField label='Credential URL' placeholder='Ex: https//:credentialurl.com' fullWidth
-            helperText='Enter the Credential URL as in the certificate or license'/>
+            helperText='Enter the Credential URL as in the certificate or license'
+            value={credURL} onChange={e => setCredURL(e.target.value)}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -137,23 +164,23 @@ export const AddCert = () => {
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       list
                     </Box></Button>
-                    <Button variant='outlined' size='large' startIcon={<Save/>}
-                sx={{
-                    color:COLORS.primaryAccent,
-                    borderColor:COLORS.primaryAccent,
-                    '&:hover':{
-                      backgroundColor:COLORS.hoverAccent,
-                      borderColor:COLORS.hoverAccent,
-                      color:COLORS.primaryBg
-                    }
-                  }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                      save
+                    <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleSave}
+                    sx={{
+                        color:COLORS.primaryAccent,
+                        borderColor:COLORS.primaryAccent,
+                        '&:hover':{
+                          backgroundColor:COLORS.hoverAccent,
+                          borderColor:COLORS.hoverAccent,
+                          color:COLORS.primaryBg
+                        }
+                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                          save
                     </Box></Button>
             </Box>
             {showPortal ? (
               <Portal container={() => container.current}>
                 <br />
-                <ListCert/>
+                <ListCert certificates={certificates}/>
               </Portal>
             ) : null}
             <Box ref={container} />
