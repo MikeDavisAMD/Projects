@@ -73,10 +73,10 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
   // save button save
   const handleSave = () => {
     const pro = {
-      projectName,
+      name: projectName,
       description,
       skills: skillset,
-      isProgress,
+      isInProgress: isProgress,
       startDate,
       endDate,
       org,

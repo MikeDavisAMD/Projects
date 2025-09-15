@@ -81,14 +81,14 @@ export const AddExp = ({ experience, setExperience, handleCloseModal, skills }) 
   const handleSave = () => {
     const exp = {
       title,
-      EmpType,
+      empType: EmpType,
       company,
       isCurrentRole,
       startDate,
       endDate,
       skills: skillset,
       location,
-      LocType
+      locType: LocType
     }
 
     setExperience([...experience,exp])

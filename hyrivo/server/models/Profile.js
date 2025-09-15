@@ -12,8 +12,8 @@ const profileSchema = new mongoose.Schema({
         empType: { type: String, required: true },
         company: { type: String, required: true },
         isCurrentRole: { type: Boolean, default: true },
-        startDate: { type: Date, required: true },
-        endDate: Date,
+        startDate: { type: Date, required: false, default: null },
+        endDate: {type: Date, default: null},
         skills: [{ type: String, required: true }],
         location: { type: String, required: true },
         locType: { type: String, required: true },
@@ -23,15 +23,15 @@ const profileSchema = new mongoose.Schema({
         degree: { type: String, required: true },
         fieldOfStudy: String,
         isStudying: { type: Boolean, default: false },
-        startDate: { type: Date, required: true },
-        endDate: Date,
+        startDate: { type: Date, required: false, default: null },
+        endDate: {type: Date, default: null},
         grade: { type: Number, min: 0, max: 10 },
     }],
     certificates: [{
         name: { type: String, required: true },
         issuingOrg: { type: String, required: true },
-        issueDate: { type: Date, required: true },
-        expiryDate: Date,
+        issueDate: { type: Date, required: false, default: null },
+        expiryDate: {type: Date, default: null},
         hasNoExpiry: { type: Boolean, default: false },
         credId: String,
         credUrl: String,
@@ -42,15 +42,20 @@ const profileSchema = new mongoose.Schema({
         description: { type: String, required: true },
         skills: [{ type: String, required: true }],
         isInProgress: { type: Boolean, default: false },
-        startDate: { type: Date, required: true },
-        endDate: { type: Date },
+        startDate: { type: Date, required: false, default: null },
+        endDate: {type: Date, default: null},
         org: {
             type: String,
             enum: ["Educational Project", "Live Project", "Standalone Project"],
             required: true
         },
-        assn: [{type: String, required: true}],
+        assn: [{type: String}],
         link: String
+    }],
+    resumes: [{
+        url: { type: String, required: true },
+        public_id: { type: String, required: true },
+        uploadedAt: { type: Date, default: Date.now }
     }]
 })
 

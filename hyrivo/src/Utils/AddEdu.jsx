@@ -46,9 +46,9 @@ export const AddEdu = ({education, setEducation, handleCloseModal}) => {
   // save button
     const handleSave = () => {
       const edu = {
-        college,
-        Degree,
-        Field,
+        institute: college,
+        degree: Degree,
+        fieldOfStudy: Field,
         isStudying,
         startDate,
         endDate,

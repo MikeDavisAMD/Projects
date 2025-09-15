@@ -19,12 +19,12 @@ export const ListExp = ({experience}) => {
                 <Box component="span" sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}>
                   •
                 </Box>
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>{data.EmpType}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>{data.empType}</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.location}</Box>
                 <Box component="span" sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}>
                   •
                 </Box>
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.LocType}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.locType}</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.startDate ? data.startDate.toLocaleDateString() : "N/A" }</Box>
                 <Box component="span" sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}>
                   -
@@ -32,7 +32,7 @@ export const ListExp = ({experience}) => {
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.isCurrentRole ? "Present" : data.endDate ? data.endDate.toLocaleDateString() : "N/A"}</Box><br />
                 {data.skills && data.skills.length > 0 && (
                   <Stack direction='row' flexWrap='wrap' gap={1} justifyContent='center'
-                    sx={{display:'grid',gridTemplateColumns:{lg:'repeat(4, 1fr)',md:'repeat(4, 1fr)',sm:'repeat(3, 1fr)',xs:'repeat(2, 1fr)'}, 
+                    sx={{display:'grid',gridTemplateColumns:{lg:'repeat(3, 1fr)',md:'repeat(3, 1fr)',sm:'repeat(2, 1fr)',xs:'repeat(1, 1fr)'}, 
                     gap:{lg:2,md:2,sm:2,xs:0.5}, maxHeight:'150px', overflowY:'auto',p:0.5}}>
                       {data.skills.map((skill, index) => (
                         <Chip key={index} label={skill} 

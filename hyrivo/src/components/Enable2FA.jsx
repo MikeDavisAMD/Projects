@@ -53,9 +53,9 @@ export const Enable2FA = () => {
 
     const handleDone = async () => {
         const params = new URLSearchParams(window.location.search)
-        const token = params.get('token')
+        const tempToken = params.get('token')
 
-        if (!token) {
+        if (!tempToken) {
             setError("No Token Found")
             setOpen(true)
         }
@@ -63,12 +63,13 @@ export const Enable2FA = () => {
         setLoading(true)
         try {
             const response = await axios.post('http://localhost:2000/user/enable-auth/done',{secret},{
-                headers:{Authorization:`Bearer ${token}`}
+                headers:{Authorization:`Bearer ${tempToken}`}
             })
+            localStorage.setItem("token",response.data.token)
             setSuccess(response.data.message)
             handleOpenModal()
             setTimeout(() => {
-                navigate('/')
+                navigate('/Details')
             }, 5000);
         } catch (error) {
             setError('Failed to Enable 2FA',error)
@@ -85,7 +86,8 @@ export const Enable2FA = () => {
         if (!token) {
             setError("No Token Found")
             setOpen(true)
-        }
+        } 
+
         const fetchQR = async () => {
             try {
                 const response = await axios.get(`http://localhost:2000/user/enable-auth`,{

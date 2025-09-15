@@ -14,13 +14,13 @@ export const ListCert = ({certificates}) => {
           <Grid size={12}>
             {certificates.map((data, index) => (
               <Box key={index} sx={{m:1, p:1, background:COLORS.secondaryBg, borderRadius:2}}>
-                <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:22,md:22,sm:20,xs:18}}}>{data.cname}</Box><br />
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>Issued By {data.issuedBy}</Box><br />
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>Credential ID - {data.credID}</Box><br />
+                <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:22,md:22,sm:20,xs:18}}}>{data.name}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>Issued By {data.issuingOrg}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>Credential ID - {data.credId}</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>Credential URL - 
                   <Link sx={{pl:0.5}}>{data.credURL}</Link></Box><br />
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>Issued On - {data.IssueDate ? data.IssueDate.toLocaleDateString() : "N/A" }</Box><br />
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.isexpiry ? "" : `Expires On - ${data.ExpiryDate ? data.ExpiryDate.toLocaleDateString() : "N/A"}`}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>Issued On - {data.issueDate ? data.issueDate.toLocaleDateString() : "N/A" }</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:COLORS.secondaryText}}>{data.hasNoExpiry ? "" : `Expires On - ${data.expiryDate ? data.expiryDate.toLocaleDateString() : "N/A"}`}</Box><br />
                 {data.skills && data.skills.length > 0 && (
                   <Stack direction='row' flexWrap='wrap' gap={1} justifyContent='center'
                     sx={{display:'grid',gridTemplateColumns:{lg:'repeat(4, 1fr)',md:'repeat(4, 1fr)',sm:'repeat(3, 1fr)',xs:'repeat(2, 1fr)'}, 

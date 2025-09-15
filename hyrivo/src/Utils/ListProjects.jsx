@@ -14,7 +14,7 @@ export const ListProjects = ({ projects }) => {
         <Grid size={12}>
           {projects.map((data,index) => (
             <Box key={index} sx={{m:1,p:1,background:COLORS.secondaryBg,borderRadius:2}}>
-              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:22,md:22,sm:20,xs:18}}}>{data.projectName}</Box><br />
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:22,md:22,sm:20,xs:18}}}>{data.name}</Box><br />
               <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:COLORS.secondaryText}}>
                 Associated with {data.assn} as a {data.org}</Box><br /><br />
                 <Divider/><br />

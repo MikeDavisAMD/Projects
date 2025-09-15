@@ -52,13 +52,13 @@ export const AddCert = ({certificates, setCertificates, handleCloseModal, skills
   // save button function
   const handleSave = () => {
     const cert  = {
-      cname,
-      issuedBy,
-      isexpiry,
-      IssueDate,
-      ExpiryDate,
-      credID,
-      credURL,
+      name: cname,
+      issuingOrg: issuedBy,
+      hasNoExpiry: isexpiry,
+      issueDate: IssueDate,
+      expiryDate: ExpiryDate,
+      credId: credID,
+      credUrl: credURL,
       skills: skillset
     }
 

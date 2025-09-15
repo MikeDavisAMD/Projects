@@ -1,16 +1,16 @@
-import { Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Grid, Modal, Snackbar, TextField, Toolbar, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Grid, Modal, Snackbar, TextField, Toolbar, Typography } from '@mui/material'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Save } from '@mui/icons-material';
-import { AddUi } from '../Utils/AddUI';
-import { UploadFileUi } from '../Utils/UploadFileUI';
+import { Save } from '@mui/icons-material'
+import { AddUi } from '../Utils/AddUI'
 import { AddSkills } from '../Utils/AddSkills'
+import { UploadFileUi } from '../Utils/UploadFileUI'
+import { useNavigate } from 'react-router-dom'
 import { AddExp } from '../Utils/AddExp'
 import { AddEdu } from '../Utils/AddEdu'
 import { AddCert } from '../Utils/AddCert'
 import { AddProjects } from '../Utils/AddProjects'
-import { useThemeContext } from '../Utils/ThemeContext';
+import { useThemeContext } from '../Utils/ThemeContext'
 
 const style = {
   position: 'absolute',
@@ -27,7 +27,7 @@ const style = {
   overflowY: 'auto'
 };
 
-export const OAuthSuccess = () => {
+export const Detailsform = () => {
     const navigate = useNavigate();
     const [loading,setLoading] = useState(false)
     const [showConsent,setShowConsent] = useState(false)
@@ -69,6 +69,7 @@ export const OAuthSuccess = () => {
             uploadedAt: new Date()
           }
         }
+
         await axios.post("http://localhost:2000/profile/",{
           firstName,
           lastName,
@@ -106,12 +107,9 @@ export const OAuthSuccess = () => {
 
     useEffect(() => {
       const checkUser = async () => {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
+        const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     
         if(!token) return navigate('/Login')
-
-        localStorage.setItem('token',token)
 
         setLoading(true)
         try {
@@ -182,7 +180,7 @@ export const OAuthSuccess = () => {
     ]
 
     const {theme} = useThemeContext()
-  
+
   return (
     <Box sx={{ height: '100vh' }}>
       {showConsent ? 
@@ -215,7 +213,7 @@ export const OAuthSuccess = () => {
                         color:theme.primaryBg
                       }
                     }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                       {loading ? 'Loading...' : 'Save'}
+                        {loading ? 'Loading...' : 'Save'}
                       </Box></Button>
                   </Box>
                   <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'flex'},justifyContent:'flex-end',p:1}}>
@@ -340,14 +338,14 @@ export const OAuthSuccess = () => {
                 border:`1px solid ${theme.cardBorder}`,
                 borderRadius:2,backgroundColor:theme.secondaryBg, gap:2}}>
                 <Box>
-                 <UploadFileUi setResume={f => setResume(f)}/>
+                  <UploadFileUi setResume={f => setResume(f)}/>
                 </Box>
               </Box>
             </Box>
           </Grid>
         </Grid>
       </Box> : <Box sx={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh'}}>
-         <CircularProgress />
+          <CircularProgress />
         </Box>}
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <Alert variant='filled' severity='error' 

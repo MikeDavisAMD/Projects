@@ -108,59 +108,6 @@ const loginSuccess = async (browser,os,platform,ip,city,country,region,username,
     await transporter.sendMail(mailOptions)
 }
 
-// mail on successfull registration
-const registerSuccess = async (email,username) => {
-    const mailOptions = {
-        from: '"Hyrivo" mike732000davis@gmail.com',
-        to: email,
-        subject: `Welcome to Hyrivo, ${username}`,
-        text: `Hi ${username}!! Your Account has been registered successfully`,
-        html: `<div style="font-family: system-ui, sans-serif, Arial; font-size: 16px; background-color: #E4F7FF">
-                <div style="max-width: 600px; margin: auto; padding: 16px">
-                    <a style="text-decoration: none; outline: none" href="" target="_blank">
-                    <img
-                        style="height: 32px; vertical-align: middle"
-                        height="32px"
-                        src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771099/favicon_rqa3fx.png"
-                        alt="logo"
-                    />
-                    </a>
-                    <p>Welcome to the <img style="height: 32px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" /> family! We're excited to have you on board.</p>
-                    <p>
-                    Your account has been successfully created, and you're now ready to explore all the great
-                    features we offer.
-                    </p>
-                    <p>
-                    <a
-                        style="
-                        display: inline-block;
-                        text-decoration: none;
-                        outline: none;
-                        color: #fff;
-                        background-color: #00BFFF;
-                        padding: 8px 16px;
-                        border-radius: 30px;
-                        "
-                        href=""
-                        target="_blank"
-                    >
-                        Open Hyrivo
-                    </a>
-                    </p>
-                    <p>
-                    If you have any questions or need help getting started, our support team is just an email away
-                    at
-                    <a href="mailto:hyrivo73@gmail.com" style="text-decoration: none; outline: none; color: #00BFFF"
-                        >hyrivo73@gmail.com</a
-                    >. We're here to assist you every step of the way!
-                    </p>
-                    <p>Thank you from team,<br /><img style="height: 42px; vertical-align: middle" height="32px" src="https://res.cloudinary.com/ddxvuspzg/image/upload/v1753771997/Hyrivo_copy_zrnnzn.png" alt="logo" /></p>
-                </div>
-                </div>`,
-    }
-    await transporter.sendMail(mailOptions)
-}
-
 const sendOTPEmail = async (email,otp) => {
     const mailOptions = {
         from: '"Hyrivo" mike732000davis@gmail.com',
@@ -284,7 +231,6 @@ router.get('/auth/google',
         if(!user) return res.status(400).json('Invalid or expired verification link')
 
         user.isVerified = true
-        user.isExistingUser = true
         user.verifyToken = undefined
         user.tokenExpiry = undefined
         await user.save()
@@ -400,9 +346,17 @@ router.post('/enable-auth/done',log,auth,async (req,res) => {
 
          user.isTwoFaEnabled = true
          await user.save()
-         await registerSuccess(user.email,user.username)
 
-        res.status(200).json({message: '2FA successfully enabled'})
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+
+        res.status(200).json({message: '2FA successfully enabled',token,
+            user:{
+                id: user._id,
+                username: user.username,
+                isCompany: user.isCompany,
+                isTwoFaEnabled: user.isTwoFaEnabled
+            }
+        })
     } catch (error) {
         res.status(500).json({error: error.message})
     }

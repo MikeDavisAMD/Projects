@@ -1,5 +1,27 @@
-export const UploadFileUi = () => {
+import { useState } from "react"
+
+export const UploadFileUi = ({setResume}) => {
+    const [loading, setLoading] = useState(false)
+    const [filename, setFilename] = useState("Choose a file")
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        setLoading(true)
+        setResume({
+            file,
+            url: file.name,
+            type: file.type,
+            uploadedAt: new Date()
+        })
+
+        setFilename(file.name)
+        setLoading(false)
+    }
+
     return (
+
         <>
         <style>
             {`
@@ -138,8 +160,8 @@ export const UploadFileUi = () => {
             <div className="back-side cover"></div>
         </div>
         <label className="custom-file-upload">
-            <input className="title" type="file" />
-            Choose a file
+            <input className="title" type="file" onChange={handleFileChange}/>
+            {loading ? "Uploading..." : filename}
         </label>
         </div>
         </>

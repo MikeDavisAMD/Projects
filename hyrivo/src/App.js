@@ -19,6 +19,7 @@ import { Messages } from './components/Messages'
 import { Notifications } from './components/Notifications'
 import { Profile } from './components/Profile'
 import { Setting } from './components/Setting'
+import { Detailsform } from './components/Detailsform'
 import { ThemeProvider } from './Utils/ThemeContext'
 
 const AppContent = () => {
@@ -87,6 +88,11 @@ const AppContent = () => {
         <Route path='/ChangePassword' element={
           <RouteSecure>
             <ChangePassword/>
+          </RouteSecure>
+        }/>
+        <Route path='/Details' element={
+          <RouteSecure>
+            <Detailsform/>
           </RouteSecure>
         }/>
         <Route path='/Signup' element={<Signup/>}/>
