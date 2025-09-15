@@ -121,7 +121,7 @@ export const OAuthSuccess = () => {
             }
           })
 
-          if (!response.data.isExistingUser) {
+          if (!response.data.user.isExistingUser) {
             setTimeout(() => {
               setShowConsent(true)
             }, 500);

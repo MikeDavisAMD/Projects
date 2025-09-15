@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useThemeContext } from '../Utils/ThemeContext'
 
-const ME = ({users, logout}) => {
+const ME = ({users, desc, logout}) => {
   const {theme} = useThemeContext()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null);
@@ -102,28 +102,24 @@ const ME = ({users, logout}) => {
         paper
       >
         <Box sx={{flexGrow:1}}>
-          <Grid container sx={{alignItems:'center',justifyContent:'center'}}>
+          <Grid container sx={{alignItems:'center',justifyContent:'center',mt:2}}>
             <Grid size={5}>
               <Box sx={{display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <Avatar 
                 sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
-                width:{lg:50,md:50,sm:45},
-                height:{lg:50,md:50,sm:45},
+                width:{lg:50,md:50,sm:55},
+                height:{lg:50,md:50,sm:55},
                 fontSize:20}}>{getInitials(users)}</Avatar>
               </Box>
             </Grid>
             <Grid size={7}>
-              <Box sx={{flexGrow:1}}>
-                <Grid container spacing={1}>
-                  <Grid size={12}>
-                    <span style={{fontWeight:'bolder'}}>{users}</span>
-                  </Grid>
-                  <Grid size={12}>
-                    <Box component='span'>
-                      Description
-                    </Box>
-                  </Grid>
-                </Grid>
+              <span style={{fontWeight:'bolder'}}>{users}</span>
+            </Grid>
+          </Grid>
+          <Grid container sx={{alignItems:'center',justifyContent:'center',mt:2}}>
+            <Grid size={12}>
+              <Box component='span' sx={{maxWidth:200, display: 'block', wordWrap:'break-word',textAlign:'center'}}>
+                {desc}
               </Box>
             </Grid>
           </Grid>
@@ -174,14 +170,14 @@ const ME = ({users, logout}) => {
           }
         }
        }}>
-          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:2}}>
+          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:2,textAlign:'center'}}>
             <br /><Avatar 
             sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
             width:80,
             height:80,
             fontSize:40}}>{getInitials(users)}</Avatar>
             <span style={{fontWeight:'bolder',fontSize:30}}>{users}</span>
-            <span style={{fontSize:20}}>Description</span>
+            <span style={{fontSize:20}}>{desc}</span>
           </Box>
           <br /><Divider/>
          {DrawerList}
@@ -270,7 +266,7 @@ export const Navbar = () => {
       const response = await axios.get('http://localhost:2000/user/me',{
         headers: {Authorization:`Bearer ${token}`}
       })
-      setUser(response.data)
+      setUser(response.data.profile)
     } catch (error) {
       console.error("User not found")
     }
@@ -357,7 +353,7 @@ export const Navbar = () => {
                     {data.name}
                   </ButtonBase>
                 ))}
-                <ME users={user.username} logout={() => logout(navigate,setUser)}/>
+                <ME users={`${user?.firstName} ${user?.lastName}`} desc={user.description} logout={() => logout(navigate,setUser)}/>
               </Box>
             </Grid>
           </Grid>
@@ -435,7 +431,7 @@ export const Navbar = () => {
                         </Box>
                       </ButtonBase>
                     ))}
-                    <ME users={user.username} logout={() => logout(navigate,setUser)}/>
+                    <ME users={`${user?.firstName} ${user?.lastName}`} desc={user.description} logout={() => logout(navigate,setUser)}/>
                   </Box>
                 </Grid>
               </Grid>
@@ -509,7 +505,7 @@ export const Navbar = () => {
                           {data.icon}
                         </ButtonBase>
                       ))}
-                      <ME users={user.username} logout={() => logout(navigate,setUser)}/>
+                      <ME users={`${user?.firstName} ${user?.lastName}`} desc={user.description} logout={() => logout(navigate,setUser)}/>
                     </Box>
                   </Grid>
                 </Grid>

@@ -16,6 +16,7 @@ const qrcode = require('qrcode');
 const useragent = require('useragent');
 const axios = require('axios');
 const BlacklistsToken = require('../models/BlacklistsToken');
+const Profile = require('../models/Profile');
 
 // Nodemailer function
 const transporter = nodemailer.createTransport({
@@ -386,8 +387,10 @@ router.post('/verify-auth',log,auth,async (req,res) => {
 router.get('/me',log,auth,async (req,res) => {
     try {
         const user = await User.findById(req.userId)
+        const profile = await Profile.findOne({ userId: req.userId })
         if(!user) return res.status(400).json({message:'user not found'})
-        res.json(user)
+        if(!profile) return res.status(400).json({message: "profile not found"})
+        res.json({user, profile})
     } catch (error) {
         res.status(500).json({error:error.message})
     }
