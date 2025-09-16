@@ -1,6 +1,6 @@
-import { Box, Grid, Link, Typography } from '@mui/material'
-import project from '../Assets/Images/project.jpg'
+import { Box, Grid, Typography } from '@mui/material'
 import React from 'react'
+import { ProjectsUi } from '../utils/ProjectsUi'
 
 export const Projects = React.forwardRef((props,ref) => {
   return (
@@ -15,29 +15,9 @@ export const Projects = React.forwardRef((props,ref) => {
         </Box>
       </Grid>
       <Grid size={12}>
-        <Box sx={{display:'flex',justifyContent:'center',backgroundColor:'#F5F7FA',p:4}}>
-        <Box sx={{position:'relative',
-          overflow:'hidden',cursor:'pointer',
-          '&:hover .image': {
-            transform: 'scale(1.8)',
-          },
-          '&:hover .overlay': {
-            opacity: 0.7,
-          },
-        }}>
-            <Box component='img' src={project} alt='Project' className='image'
-            sx={{height:{lg:'400px',md:'400px',sm:'400px',xs:'200px'},
-            width:{lg:'auto',md:'auto',sm:'auto',xs:'100%'},transition:'transform 0.5s ease'}}></Box>
-            <Box className='overlay' sx={{position:'absolute',width:'100%',height:'100%',
-            bgcolor: '#F9AB00',display:'flex',alignItems:'center',justifyContent:'center',top:0,opacity: 0,
-            transition: 'opacity 0.3s ease'
-            }}>
-              <Link href={'https://falconcams.web.app/'}
-              sx={{textDecoration:'none',color:'#212121',fontSize:'22px',
-              fontWeight:'bold',textShadow:'0 4px 8px #34A853',opacity:1}}>Falcon Camera</Link>
-            </Box>
-          </Box>
-        </Box>
+        <Box sx={{p:4,backgroundColor:'#F5F7FA'}}>
+          <ProjectsUi/>
+        </Box>   
       </Grid>
     </Grid>
   )
