@@ -422,6 +422,58 @@ router.put('/update',log,auth,async (req,res) => {
     }
 })
 
+router.put('/update/username',log,auth,async (req, res) => {
+    const {username} = req.body
+    try {
+        if (!username) return res.status(400).json({message: "Username not found"})
+        
+        const existingUser = await User.findOne({username})
+        if (existingUser && existingUser._id.toString() !== req.userId.toString()) {
+            return res.status(400).json({message: "Username already taken"})
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.userId,
+            { $set: {username} },
+            { new: true, runValidators: true }
+        )
+
+        if (!user) return res.status(400).json({message: "User not found"})
+
+        res.json({message: 'Username updated successfully', username: user.username})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.put('update/email',log,auth,async (req,res) => {
+    const {email} = req.body
+    try {
+        if (!email) return res.status(400).json({message: "Email not found"})
+
+        const user = await User.findByIdAndUpdate(
+            req.userId,
+            { $set: {email} },
+            { new: true, runValidators: true }
+        )
+
+        if (!user) return res.status(400).json({message: "User not found"})
+
+        res.json({message: "Email updated successfully", email: user.email})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.put('/update/password',log,auth,async (req,res) => {
+    const {password} = req.body
+    try {
+        
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
 router.post('/logout',log,auth,async (req, res) => {
     try {
         const authHead = req.headers.authorization

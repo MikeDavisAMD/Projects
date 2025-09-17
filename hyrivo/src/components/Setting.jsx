@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Snackbar, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ArrowBackIos, Close, Delete, Download, ExpandMore, Menu, Settings, SwapHoriz, TaskAlt } from '@mui/icons-material'
+import React, { useEffect, useState } from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Snackbar, TextField, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { ArrowBackIos, Close, Delete, Download, Edit, ExpandMore, Menu, Save, Settings, SwapHoriz, TaskAlt } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useThemeContext } from '../Utils/ThemeContext'
 import axios from 'axios'
@@ -389,11 +389,244 @@ const Activities = () => {
     )
 }
 
+const Sign = () => {
+    const {theme} = useThemeContext()
+    const [loading,setLoading] = useState(false)
+
+    // Snackbar
+    const [open,setOpen] = useState(false)
+    const [error,setError] = useState('')
+    const [success,setSuccess] = useState('')
+
+    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const [editUsername, setEditUsername] = useState(false)
+
+    const [userId, setUserId] = useState('')
+
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+
+    setOpen(false);
+    };
+
+    const fetchUser = async () => {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+        if (!token) {
+            setOpen(true)
+            setError("No token ot Invalid Token")
+        }
+
+        const decoded = jwtDecode(token)
+        const userId = decoded.id || decoded._id || decoded.userId
+
+        try {
+            const response = await axios.get("http://localhost:2000/user/me",{
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const users = response.data.user
+            setUsername(users.username)
+            setEmail(users.email)
+            setUserId(userId)
+        } catch (error) {
+            setOpen(true)
+            setError(error.message)
+        } 
+    }
+
+    const handleChangeUsername = async () => {
+        if (!editUsername) {
+            setEditUsername(true)
+            return
+        }
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+            await axios.put("http://localhost:2000/user/update/username",{username},{
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setSuccess("Username updated successfully")
+            setOpen(true)
+            setEditUsername(false)
+        } catch (error) {
+            setOpen(true)
+            setError(error.response?.data?.message || error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleChangeEmail = async () => {
+        setLoading(true)
+    }
+
+    const handleChangePassword = async () => {
+        setLoading(true)
+    }
+
+    useEffect(()=>{fetchUser()},[])
+    return (
+        <Box sx={{flexGrow:1}}>
+            <Grid container>
+                <Grid size={12}>
+                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
+                        Sign-In
+                    </Box><br /><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Change Email</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                change your current Email: {email}
+                                </Box>
+                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' size='large' onClick={handleChangeEmail}
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Edit/> {loading ? <CircularProgress size={24} color="inherit"/> : 'Change Email'}
+                                        </Box></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Change Username</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                {editUsername ? (
+                                    <TextField variant='standard' value={username} 
+                                    onChange={e => setUsername(e.target.value)} autoFocus
+                                    slotProps={{
+                                        input: {
+                                            style: {
+                                                width: `${Math.max(username.length,4)}ch`
+                                            }
+                                        }
+                                    }}/>
+                                ) : (
+                                    <Box component='span'>
+                                    Change your current username: {username}
+                                    </Box>
+                                )}
+                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' size='large' onClick={handleChangeUsername}
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}>{editUsername ? (
+                                        <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Save/> {loading ? <CircularProgress size={24} color="inherit"/> : 'Save Username'}
+                                        </Box>
+                                      ):(
+                                        <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Edit/> Change Username
+                                        </Box>
+                                      )}</Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Change Password</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Change your current password
+                                </Box>
+                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' size='large' onClick={handleChangePassword}
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Edit/> {loading ? <CircularProgress size={24} color="inherit"/> :'Change Password'}
+                                        </Box></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box>
+                </Grid>
+            </Grid>
+            <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+                <Alert onClose={handleClose} variant='filled' severity={error ? 'error' : 'success'}
+                sx={{
+                backgroundColor: error ? '#FF4D6D' : '#1BC47D'
+                }}>
+                {error || success}
+                </Alert>
+            </Snackbar>
+        </Box>
+    )
+}
+
 const COMPONENTS = [
     {name: 'General', component:<General/>},
     {name: 'Display', component:<Display/>},
     {name: 'Activities', component:<Activities/>},
-    {name: 'Account', component:<Account/>}
+    {name: 'Sign In', component: <Sign/>},
+    {name: 'Account', component:<Account/>},
 ]
 
 export const Setting = () => {
