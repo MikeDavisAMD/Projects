@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Box, Button, ButtonBase, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, Grid, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Snackbar, TextField, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ArrowBackIos, Close, Delete, Download, Edit, ExpandMore, Menu, Save, Settings, SwapHoriz, TaskAlt } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Backdrop, Box, Button, ButtonBase, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Drawer, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemText, Portal, Radio, RadioGroup, Snackbar, TextField, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { ArrowBackIos, Close, Delete, Download, Edit, ExpandMore, Menu, Save, Settings, SwapHoriz, TaskAlt, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Link, useNavigate } from 'react-router-dom'
 import { useThemeContext } from '../Utils/ThemeContext'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
+import { COLORS } from '../Utils/colors'
 
 const General = () => {
     const {theme} = useThemeContext()
@@ -391,20 +392,25 @@ const Activities = () => {
 
 const Sign = () => {
     const {theme} = useThemeContext()
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     const [loading,setLoading] = useState(false)
+
+    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
+    const [currentPassword, setCurrentPassword] = useState()
+    const [newPassword, setNewPassword] = useState('')
+
+    const [editUsername, setEditUsername] = useState(false)
+    const [editEmail, setEditEmail] = useState(false)
+    const [editPassword, setEditPassword] = useState(false)
+
+    const [showCPw,setShowCPw] = useState(false)
+    const [showNPW, setShowNPW] = useState(false)
 
     // Snackbar
     const [open,setOpen] = useState(false)
     const [error,setError] = useState('')
     const [success,setSuccess] = useState('')
-
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-
-    const [editUsername, setEditUsername] = useState(false)
-
-    const [userId, setUserId] = useState('')
 
     const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -414,27 +420,45 @@ const Sign = () => {
     setOpen(false);
     };
 
-    const fetchUser = async () => {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    // backdrop
+    const [openBD, setOpenBD] = useState(false);
+    const handleCloseBD = () => {
+        setOpenBD(false);
+    };
+    const handleOpenBD = () => {
+        setOpenBD(true);
+    };
 
-        if (!token) {
+    // QR code and Manual Code
+    const [qrcode,setQrCode] = useState('')
+    const [manualCode,setManualCode] = useState('')
+    const [accountName, setAccName] = useState('')
+
+    // Portal for TOTP 
+    const [show, setShow] = useState(false);
+    const container = useRef(null);
+
+    const handleClickPortal = () => {
+        setShow(true);
+    };
+
+    const fetchUser = async () => {
+        const Token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+        if (!Token) {
             setOpen(true)
             setError("No token ot Invalid Token")
         }
 
-        const decoded = jwtDecode(token)
-        const userId = decoded.id || decoded._id || decoded.userId
-
         try {
             const response = await axios.get("http://localhost:2000/user/me",{
                 headers:{
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${Token}`
                 }
             })
             const users = response.data.user
             setUsername(users.username)
             setEmail(users.email)
-            setUserId(userId)
         } catch (error) {
             setOpen(true)
             setError(error.message)
@@ -448,7 +472,6 @@ const Sign = () => {
         }
         setLoading(true)
         try {
-            const token = localStorage.getItem('token') || sessionStorage.getItem('token')
             await axios.put("http://localhost:2000/user/update/username",{username},{
                 headers:{
                     Authorization: `Bearer ${token}`
@@ -466,11 +489,72 @@ const Sign = () => {
     }
 
     const handleChangeEmail = async () => {
+        if (!editEmail) {
+            setEditEmail(true)
+            return
+        }
         setLoading(true)
+        try {
+            const response = await axios.put("http://localhost:2000/user/update/email",{email},{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            setEmail(response.data.email)
+
+            if (response.data.qrcode) {
+                setQrCode(response.data.qrcode)
+                setManualCode(response.data.manual || "")
+                setAccName(response.data.accountName || "")
+                handleOpenBD()
+            } else {
+                setSuccess("Email updated successfully")
+                setOpen(true)
+            }
+            
+            setEditEmail(false)
+        } catch (error) {
+            setOpen(true)
+            setError(error.response?.data?.message || error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleDone = () => {
+        handleCloseBD()
+        setSuccess("Email changed and 2FA assigned for new Email")
+        setOpen(true)
     }
 
     const handleChangePassword = async () => {
+        if (!editPassword) {
+            setEditPassword(true)
+            return
+        }
+        if (!newPassword && !currentPassword) {
+            setOpen(true)
+            setError("Both Field are required")
+        }
         setLoading(true)
+        try {
+            await axios.put("http://localhost:2000/user/update/password",{currentPassword,newPassword},{
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setSuccess("Password updated successfully")
+            setOpen(true)
+            setEditPassword(false)
+            setCurrentPassword('')
+            setNewPassword('')
+        } catch (error) {
+            setOpen(true)
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(()=>{fetchUser()},[])
@@ -486,6 +570,12 @@ const Sign = () => {
                         backgroundColor:theme.secondaryBg,
                         color: theme.primaryText,
                         border: `1px solid ${theme.cardBorder}`
+                    }}
+                    onChange={(e,expand)=>{
+                        if (!expand) {
+                            setEditEmail(false)
+                            fetchUser()
+                        }
                     }}>
                         <AccordionSummary
                         expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
@@ -496,9 +586,32 @@ const Sign = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
-                                <Box component='span'>
-                                change your current Email: {email}
-                                </Box>
+                                {editEmail ? (
+                                    <TextField variant='standard' value={email}
+                                    onChange={e=>setEmail(e.target.value)} autoFocus
+                                    sx={{
+                                        '& .MuiInputBase-input': {
+                                          color: theme.primaryText,
+                                        },
+                                        '& .MuiInput-underline:before': {
+                                          borderBottomColor: theme.cardBorder,
+                                        },
+                                        '& .MuiInput-underline:after': {
+                                          borderBottomColor: theme.primaryAccent,
+                                        },
+                                      }}
+                                    slotProps={{
+                                        input: {
+                                            style: {
+                                                width: `${Math.max(email.length,4)}ch`
+                                            }
+                                        }
+                                    }}/>
+                                ):(
+                                    <Box component='span'>
+                                    change your current Email: {email}
+                                    </Box>
+                                )}
                                 <Box sx={{display:'flex',justifyContent:'flex-end'}}>
                                     <Button variant='outlined' size='large' onClick={handleChangeEmail}
                                     sx={{
@@ -509,19 +622,73 @@ const Sign = () => {
                                           borderColor:theme.hoverAccent,
                                           color:theme.primaryBg
                                         }
-                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                        <Edit/> {loading ? <CircularProgress size={24} color="inherit"/> : 'Change Email'}
-                                        </Box></Button>
+                                      }}>{editEmail ? (
+                                        <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Save/> {loading ? <CircularProgress size={24} color="inherit"/> : 'Save Email'}
+                                        </Box>
+                                      ) : (
+                                        <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Edit/> Change Email
+                                        </Box>
+                                      )}</Button>
                                 </Box>
                             </Box>
                         </AccordionDetails>
                     </Accordion>
+                    <Backdrop
+                        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1, backgroundColor: 'rgba(83, 83, 83, 0.8)' })}
+                        open={openBD}
+                        onClick={handleCloseBD}
+                    >
+                        <Box onClick={e => e.stopPropagation()}>
+                        <Typography variant='body2' sx={{fontSize:{lg:'18px',md:'18px',sm:'13px',xs:'12px'},textAlign:'center'}}>
+                            <span>Scan the QR code with your Authenticator app to change TOTP for new email.</span>
+                            </Typography><br />
+                        <Box sx={{display:'flex',alignItems:'center',flexDirection:'column'}}>
+                            <Box component='img' src={qrcode} alt='Authenticator QR Code'></Box>
+                        </Box><br />
+                        <Divider><span>or</span></Divider><br />
+                        <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                            <Link component='button' color='inherit' onClick={handleClickPortal} style={{textDecoration:'none',color:COLORS.primaryAccent,
+                                '&:hover':{color:COLORS.hoverAccent}
+                            }}>Generate Manual Code</Link> <br />
+                            <Box sx={{width:'100%',display:'flex',justifyContent:'center'}} ref={container} />
+                            {show ? <Portal container={()=> container.current}>
+                                <Box>
+                                    <Box>
+                                        <Typography variant='body2' sx={{textAlign:'center',fontWeight:'bold',fontSize:{lg:'40px',md:'40px',sm:'30px',xs:'30px'}}}>
+                                            <span style={{fontWeight:'bold'}}>{manualCode}</span>
+                                        </Typography>    
+                                    </Box><br />
+                                    <Typography variant='body2' sx={{fontSize:{lg:'18px',md:'18px',sm:'13px',xs:'12px'},textAlign:'center'}}>
+                                        <span>Name: {accountName}</span>
+                                    </Typography>
+                                </Box><br />
+                            </Portal> : null}
+                            <br />
+                            <Button variant='outlined' size='large' onClick={handleDone}
+                            sx={{
+                                color:'#00BFFF',
+                                borderColor:'#00BFFF',
+                                '&:hover':{
+                                backgroundColor:'#FF6EC7',
+                                borderColor:'#FF6EC7',
+                                color:'#fff'
+                                }
+                            }}>{loading ? <CircularProgress size={24} color="inherit"/> : 'Done'}</Button> <br />
+                        </Box>
+                        </Box>
+                    </Backdrop>
                     </Box><br />
                     <Box>
                     <Accordion sx={{
                         backgroundColor:theme.secondaryBg,
                         color: theme.primaryText,
                         border: `1px solid ${theme.cardBorder}`
+                    }}
+                    onChange={(e, expand) => {
+                        setEditUsername(false)
+                        fetchUser()
                     }}>
                         <AccordionSummary
                         expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
@@ -538,7 +705,7 @@ const Sign = () => {
                                     slotProps={{
                                         input: {
                                             style: {
-                                                width: `${Math.max(username.length,4)}ch`
+                                                width: `${Math.max(username.length,6)}ch`
                                             }
                                         }
                                     }}/>
@@ -576,6 +743,9 @@ const Sign = () => {
                         backgroundColor:theme.secondaryBg,
                         color: theme.primaryText,
                         border: `1px solid ${theme.cardBorder}`
+                    }}
+                    onChange={(e,expand) => {
+                        setEditPassword(false)
                     }}>
                         <AccordionSummary
                         expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
@@ -586,9 +756,106 @@ const Sign = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
-                                <Box component='span'>
-                                Change your current password
-                                </Box>
+                                {editPassword ? (
+                                    <Box sx={{display: 'flex', flexDirection:'column', alignItems:'center', gap:2}}>
+                                    <TextField variant='outlined' label="Current Password" placeholder='Enter your current password'
+                                    value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
+                                    type={showCPw ? 'text' : 'password'}
+                                    sx={{width:'80%',
+                                        "& .MuiInputBase-input": {
+                                            color: theme.primaryText, // input text color
+                                            "&::placeholder": {
+                                                color: theme.secondaryText, // placeholder color
+                                                opacity: 1, // ensures custom color shows
+                                            },
+                                        },
+                                        "& .MuiInputLabel-root": {
+                                            color: theme.secondaryText, // default label color
+                                        },
+                                        "& .MuiInputLabel-root.Mui-focused": {
+                                            color: theme.primaryAccent, // focused label color
+                                        },
+                                        "& .MuiOutlinedInput-root": {
+                                            "& fieldset": {
+                                                borderColor: theme.primaryAccent, // default border
+                                            },
+                                            "&:hover fieldset": {
+                                                borderColor: theme.hoverAccent, // hover border
+                                            },
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: theme.primaryAccent, // focus border
+                                            },
+                                        },
+                                        '& label.Mui-focused':{ //label on clicking
+                                          color:theme.primaryAccent
+                                        },
+                                        '&:hover label:not(.Mui-focused)':{
+                                          color:theme.primaryAccent
+                                        }
+                                      }}
+                                      slotProps={{
+                                        input:{
+                                            endAdornment:(
+                                            <InputAdornment position='end'>
+                                                <IconButton onClick={()=>setShowCPw((prev)=>!prev)}>
+                                                {showCPw ? <VisibilityOff/> : <Visibility/>}
+                                                </IconButton>
+                                            </InputAdornment>
+                                            )
+                                        }
+                                        }}/>
+                                    <TextField variant='outlined' label="New Password" placeholder='Enter new password'
+                                    value={newPassword} onChange={e => setNewPassword(e.target.value)}
+                                    type={showNPW ? 'text' : 'password'}
+                                    sx={{width:'80%',
+                                        "& .MuiInputBase-input": {
+                                            color: theme.primaryText, // input text color
+                                            "&::placeholder": {
+                                                color: theme.secondaryText, // placeholder color
+                                                opacity: 1, // ensures custom color shows
+                                            },
+                                        },
+                                        "& .MuiInputLabel-root": {
+                                            color: theme.secondaryText, // default label color
+                                        },
+                                        "& .MuiInputLabel-root.Mui-focused": {
+                                            color: theme.primaryAccent, // focused label color
+                                        },
+                                        "& .MuiOutlinedInput-root": {
+                                            "& fieldset": {
+                                                borderColor: theme.primaryAccent, // default border
+                                            },
+                                            "&:hover fieldset": {
+                                                borderColor: theme.hoverAccent, // hover border
+                                            },
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: theme.primaryAccent, // focus border
+                                            },
+                                        },
+                                        '& label.Mui-focused':{ //label on clicking
+                                          color:theme.primaryText
+                                        },
+                                        '&:hover label:not(.Mui-focused)':{
+                                          color:theme.primaryText
+                                        }
+                                      }}
+                                      slotProps={{
+                                        input:{
+                                          endAdornment:(
+                                            <InputAdornment position='end'>
+                                              <IconButton onClick={()=>setShowNPW((prev)=>!prev)}>
+                                                {showNPW ? <VisibilityOff/> : <Visibility/>}
+                                              </IconButton>
+                                            </InputAdornment>
+                                          )
+                                        }
+                                      }}/>
+                                    </Box>
+                                ):(
+                                    <Box component='span'>
+                                    Change your current password
+                                    </Box>
+                                )}
                                 <Box sx={{display:'flex',justifyContent:'flex-end'}}>
                                     <Button variant='outlined' size='large' onClick={handleChangePassword}
                                     sx={{
@@ -599,9 +866,15 @@ const Sign = () => {
                                           borderColor:theme.hoverAccent,
                                           color:theme.primaryBg
                                         }
-                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                        <Edit/> {loading ? <CircularProgress size={24} color="inherit"/> :'Change Password'}
-                                        </Box></Button>
+                                      }}>{editPassword ? (
+                                        <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Save/> {loading ? <CircularProgress size={24} color="inherit"/> :'Save Password'}
+                                        </Box>
+                                      ):(
+                                        <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Edit/> Change Password
+                                        </Box>
+                                      )}</Button>
                                 </Box>
                             </Box>
                         </AccordionDetails>
@@ -643,7 +916,7 @@ export const Setting = () => {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: 250, backgroundColor: theme.secondaryBg, height:'100vh', color: theme.primaryText }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {COMPONENTS.map((data) => (
             <ListItem key={data.name} disablePadding>

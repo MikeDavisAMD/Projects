@@ -129,7 +129,7 @@ export const Enable2FA = () => {
               </Box><br />
               <Divider><span>or</span></Divider><br />
               <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                <Link component='button' onClick={handleClickPortal} sx={{textDecoration:'none',color:'#00BFFF',
+                <Link component='button' onClick={handleClickPortal} style={{textDecoration:'none',color:'#00BFFF',
                     '&:hover':{color:'#FF6EC7'}
                   }}>Generate Manual Code</Link> <br />
                   <Box sx={{width:'100%',display:'flex',justifyContent:'center'}} ref={container} />

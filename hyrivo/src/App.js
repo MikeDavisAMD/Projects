@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { RouteSecure } from './Utils/SecureRoute'
 import { Login } from './components/Login'
@@ -21,10 +21,24 @@ import { Profile } from './components/Profile'
 import { Setting } from './components/Setting'
 import { Detailsform } from './components/Detailsform'
 import { ThemeProvider } from './Utils/ThemeContext'
+import { Loading } from './components/Loading'
 
 const AppContent = () => {
 
   const location = useLocation()
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 2000);
+    return clearTimeout(timer)
+  }, [])
+
+  if (loading) {
+    <Loading/>
+  }
 
   const navbar = ['/','/JobsUser','/JobsOrg','/Connections','/Messages','/Notifications']
   const showNavbar = navbar.includes(location.pathname)

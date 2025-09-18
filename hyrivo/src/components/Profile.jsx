@@ -3,15 +3,18 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { COLORS } from '../Utils/colors'
 import { ArrowBackIos, Person } from '@mui/icons-material'
+import { useThemeContext } from '../Utils/ThemeContext'
+import { ProfileUI } from '../Utils/ProfileUI'
 
 export const Profile = () => {
+  const {theme} = useThemeContext()
   const navigate = useNavigate()
 
   return (
-    <Box sx={{flexGrow: 1}}>
+    <Box sx={{flexGrow: 1, minHeight: '100vh', background:theme.primaryBg, color: theme.primaryText}}>
       <Grid container spacing={2}>
         <Grid size={12}>
-          <AppBar position='static' sx={{backgroundColor:'rgba(255, 255, 255, 0.9)',backdropFilter:'blur(10px)',borderBottom:'1px solid #E0E0E0', color:'#1A1A1A'}}>
+          <AppBar position='static' sx={{backgroundColor:theme.background,backdropFilter:'blur(10px)',borderBottom:`1px solid ${theme.cardBorder}`, color:theme.primaryText}}>
             <Toolbar>
               <Grid container sx={{alignItems:'center'}}>
                 <Grid size={4}>
@@ -44,6 +47,11 @@ export const Profile = () => {
               </Grid>
             </Toolbar>
           </AppBar>
+        </Grid>
+        <Grid size={6}>
+          <Box sx={{display:'flex', justifyContent:'center'}}>
+            <ProfileUI/>
+          </Box>
         </Grid>
       </Grid>
     </Box>

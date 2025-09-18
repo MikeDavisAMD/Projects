@@ -256,7 +256,7 @@ router.post('/login',log,async (req,res) => {
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: remember ? '30d' : '1h'})
 
-        res.json({
+        res.status(200).json({
             token,
             user: {
                 id: user._id,
@@ -332,7 +332,7 @@ router.get('/enable-auth',log,auth,async (req,res) => {
         const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url)
         const manualCode = secret.base32.match(/.{1,4}/g).join(' ')
 
-        res.json({qrcode: qrCodeUrl, secret: secret.base32, manual: manualCode, accountName: `Hyrivo (${user.email})`})
+        res.status(200).json({qrcode: qrCodeUrl, secret: secret.base32, manual: manualCode, accountName: `Hyrivo (${user.email})`})
     } catch (error) {
         res.status(500).json({error: error.message})
     }
@@ -390,7 +390,7 @@ router.get('/me',log,auth,async (req,res) => {
         const profile = await Profile.findOne({ userId: req.userId })
         if(!user) return res.status(400).json({message:'user not found'})
         if(!profile) return res.status(400).json({message: "profile not found"})
-        res.json({user, profile})
+        res.status(200).json({user, profile})
     } catch (error) {
         res.status(500).json({error:error.message})
     }
@@ -399,7 +399,7 @@ router.get('/me',log,auth,async (req,res) => {
 router.get('/',log,auth,async (req,res) => {
     try {
         const user = await User.find().select('username')
-        res.json(user)
+        res.status(200).json(user)
     } catch (error) {
         res.status(500).json({error:error.message})
     }
@@ -416,7 +416,7 @@ router.put('/update',log,auth,async (req,res) => {
             runValidators:true
         })
         if(!user) return res.status(400).json({message:'User not found'})
-        res.json({message:'Updated Successfully'})
+        res.status(200).json({message:'Updated Successfully'})
     } catch (error) {
         res.status(500).json({error:error.message})
     }
@@ -440,16 +440,21 @@ router.put('/update/username',log,auth,async (req, res) => {
 
         if (!user) return res.status(400).json({message: "User not found"})
 
-        res.json({message: 'Username updated successfully', username: user.username})
+        res.status(200).json({message: 'Username updated successfully', username: user.username})
     } catch (error) {
         res.status(500).json({error: error.message})
     }
 })
 
-router.put('update/email',log,auth,async (req,res) => {
+router.put('/update/email',log,auth,async (req,res) => {
     const {email} = req.body
     try {
         if (!email) return res.status(400).json({message: "Email not found"})
+
+        const users = await User.findById(req.userId)
+        if (!users) return res.status(400).json({message: "User not found or Invalid User ID"})
+        
+        if (users.email === email) return res.json({ message: "Email not changed", email: users.email })
 
         const user = await User.findByIdAndUpdate(
             req.userId,
@@ -459,16 +464,58 @@ router.put('update/email',log,auth,async (req,res) => {
 
         if (!user) return res.status(400).json({message: "User not found"})
 
-        res.json({message: "Email updated successfully", email: user.email})
+        let response
+
+        if (user.isTwoFaEnabled) {
+            const secret = speakeasy.generateSecret({
+                name: `Hyrivo (${email})`,
+                length: 20
+            })
+
+            user.twoFaSecrets = secret.base32
+
+            const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url)
+            const manualCode = secret.base32.match(/.{1,4}/g).join('')
+
+            await user.save()
+
+            response = {
+                message: "Email updated & 2FA updated for new email successfully",
+                email: user.email,
+                accountName:`Hyrivo ${email}`,
+                qrcode: qrCodeUrl,
+                manual: manualCode,
+                secret: secret.base32
+            }
+        } else {
+            response = { message: "Email updated successfully", email: user.email }
+        }
+        
+        await user.save()
+
+        res.status(200).json(response)
     } catch (error) {
         res.status(500).json({error: error.message})
     }
 })
 
 router.put('/update/password',log,auth,async (req,res) => {
-    const {password} = req.body
+    const {newPassword, currentPassword} = req.body
     try {
+        if (!newPassword) return res.status(400).json({ message: "No new Password provided" })
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(400).json({message: "No user found"})
         
+        if (currentPassword) {
+            const isMatch = await user.matchPassword(currentPassword)
+            if (!isMatch) return res.status(400).json({message: "Current Password is incorrect"})
+        }
+
+        user.password = newPassword
+        await user.save()
+
+        res.status(200).json({message:"Password updated successfully"})                
     } catch (error) {
         res.status(500).json({error: error.message})
     }
