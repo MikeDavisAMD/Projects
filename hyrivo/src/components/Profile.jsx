@@ -1,7 +1,6 @@
 import { AppBar, Box, ButtonBase, Grid, Toolbar } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { COLORS } from '../Utils/colors'
 import { ArrowBackIos, Person } from '@mui/icons-material'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { ProfileUI } from '../Utils/ProfileUI'
@@ -24,7 +23,7 @@ export const Profile = () => {
                     alignItems:'center', pb:0.5, px:1,
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                      color: COLORS.hoverAccent,
+                      color: theme.hoverAccent,
                     }
                   }}>
                       <ArrowBackIos/>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AppBar, Avatar, Box, ButtonBase, Divider, Drawer, Grid, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
-import { ArrowBackIosNew, ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
+import { ArrowBackIosNew, Close, ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
 import logo from '../Assets/Images/Hyrivo copy.png'
 import icon from '../Assets/Images/icon.jpg'
 import { logout } from '../Utils/logout'
@@ -104,10 +104,10 @@ const ME = ({users, desc, profileType ,logout}) => {
         }}
         paper
       >
-        <Box sx={{flexGrow:1}}>
+        <Box sx={{flexGrow:1, maxWidth:300}}>
           <Grid container sx={{alignItems:'center',justifyContent:'center',mt:2}}>
             <Grid size={5}>
-              <Box sx={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <Box sx={{display:'flex',alignItems:'center',justifyContent:'flex-end',pr:2}}>
                 <Avatar 
                 sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
                 width:{lg:50,md:50,sm:55},
@@ -119,13 +119,15 @@ const ME = ({users, desc, profileType ,logout}) => {
               <span style={{fontWeight:'bolder'}}>{users}</span>
             </Grid>
           </Grid>
-          <Grid container sx={{alignItems:'center',justifyContent:'center',mt:2}}>
+          <Box sx={{flexGrow:1}}>
+          <Grid container sx={{alignItems:'center',justifyContent:'center',mt:1,p:2}}>
             <Grid size={12}>
-              <Box component='span' sx={{maxWidth:200, display: 'block', wordWrap:'break-word',textAlign:'center'}}>
+              <Box component='span' sx={{maxWidth:300, display: 'block', wordWrap:'break-word',textAlign:'center'}}>
                 {desc}
               </Box>
             </Grid>
           </Grid>
+          </Box>
         </Box>
         <br /><Divider/>
         <MenuItem onClick={()=>{
@@ -173,8 +175,18 @@ const ME = ({users, desc, profileType ,logout}) => {
           }
         }
        }}>
-          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:2,textAlign:'center'}}>
-            <br /><Avatar 
+          <Box sx={{display:'flex',justifyContent:'flex-end',p:2}}>
+            <ButtonBase 
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={toggleDrawer(false)}
+              sx={{p: 0,textTransform:'none',color:theme.primaryText}}
+            ><Close/></ButtonBase>
+          </Box>
+          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:2,textAlign:'center',p:2}}>
+            <Avatar 
             sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
             width:80,
             height:80,
