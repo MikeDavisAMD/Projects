@@ -22,6 +22,8 @@ import { Setting } from './components/Setting'
 import { Detailsform } from './components/Detailsform'
 import { ThemeProvider } from './Utils/ThemeContext'
 import { Loading } from './components/Loading'
+import { DetailsOrg } from './components/DetailsOrg'
+import { ProfileOrg } from './components/ProfileOrg'
 
 const AppContent = () => {
 
@@ -88,6 +90,11 @@ const AppContent = () => {
             <Profile/>
           </RouteSecure>
         }/>
+        <Route path='/ProfileOrg' element={
+          <RouteSecure>
+            <ProfileOrg/>
+          </RouteSecure>
+        }/>
         <Route path='/Settings' element={
           <RouteSecure>
             <Setting/>
@@ -107,6 +114,11 @@ const AppContent = () => {
         <Route path='/Details' element={
           <RouteSecure>
             <Detailsform/>
+          </RouteSecure>
+        }/>
+        <Route path='/DetailsOrg' element={
+          <RouteSecure>
+            <DetailsOrg/>
           </RouteSecure>
         }/>
         <Route path='/Signup' element={<Signup/>}/>

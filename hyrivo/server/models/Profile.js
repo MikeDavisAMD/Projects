@@ -2,10 +2,15 @@ const mongoose = require('mongoose')
 
 const profileSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
     description: String,
     about: String,
+}, { discriminatorKey: 'profileType', timestamps: true })
+
+const Profile = mongoose.model('Profile',profileSchema)
+
+const userProfile = Profile.discriminator('Individual', new mongoose.Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     skills: [{ type: String, required: true }],
     experience: [{
         title: { type: String, required: true },
@@ -57,6 +62,16 @@ const profileSchema = new mongoose.Schema({
         public_id: { type: String, required: true },
         uploadedAt: { type: Date, default: Date.now }
     }]
-})
+}))
 
-module.exports = mongoose.model('Profile',profileSchema)
+const orgProfile = Profile.discriminator('Organization', new mongoose.Schema({
+    companyName: {type: String, required: true},
+    industry: {type: String, required: true},
+    founded: Date,
+    size: {type: String},
+    website: String,
+    headquarters: String,
+    specialities: [String],
+}))
+
+module.exports = { Profile, userProfile, orgProfile }

@@ -148,7 +148,7 @@ export const Login = () => {
                   sx={{borderRadius:'20px',
                     color:'#00BFFF',
                     borderColor:'#00BFFF',
-                    '&:hover':{
+                    '&:hover':{ 
                       backgroundColor:'#FF6EC7',
                       borderColor:'#FF6EC7',
                       color:'#fff'

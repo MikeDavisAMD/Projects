@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router()
-const Profile = require("../models/Profile")
+const {userProfile, orgProfile} = require("../models/Profile")
 const User = require("../models/User")
 const auth = require("../middleware/auth")
 const log = require("../middleware/log")
@@ -118,20 +118,26 @@ router.post('/',log,auth, async (req, res) => {
     try {
         cleanDates(req.body)
         const user = await User.findById(req.userId)
-        const { firstName, lastName, description, about,
-            skills, experience, education, certificates, projects, resumes } = req.body
+        if (!user) return res.status(400).json({ message: "User not found" })
 
-            let profile = await Profile.findOne({ userId: req.userId })
+        let profile 
+        let isNew
+
+        if (!user.isCompany) {
+            const { firstName, lastName, description, about,
+            skills, experience, education, certificates, projects, resumes } = req.body
+    
+            profile = await userProfile.findOne({ userId: req.userId })
 
             if (!profile) {
-                profile = new Profile({
+                profile = new userProfile({
                     userId: req.userId,
                     firstName,lastName,
                     description, about, skills, experience, 
                     education, certificates, projects,
                     resumes: resumes?.filter(r => r.url && r.public_id) || []
                 })
-                await profile.save()
+                isNew = true
             } else {
                 profile.firstName = firstName
                 profile.lastName = lastName
@@ -145,13 +151,41 @@ router.post('/',log,auth, async (req, res) => {
                 if (resumes && resumes.length > 0) {
                     profile.resumes = resumes
                 }
-
-                await profile.save()
             }
+        } else {
+            const {companyName, description, about, industry, 
+            founded,size,website,headquarters,specialities} = req.body
 
-            await linkProfileToUser(req.userId, profile._id)
+            profile = await orgProfile.findOne({userId: user._id})
+
+            if (!profile) {
+                profile = new orgProfile({
+                    userId: req.userId,
+                    companyName, description, about,
+                    industry, founded, size, website, 
+                    headquarters, specialities
+                })
+                isNew = true
+            } else {
+                profile.companyName = companyName;
+                profile.description = description;
+                profile.about = about;
+                profile.industry = industry;
+                profile.founded = founded;
+                profile.size = size;
+                profile.website = website;
+                profile.headquarters = headquarters;
+                profile.specialities = specialities;
+            }
+        }
+
+        if (isNew) {
             await registerSuccess(user.email,user.username)
-            res.status(200).json({ profile, message: "Profile updated successfully" })
+        }
+
+        await profile.save()
+        await linkProfileToUser(req.userId, profile._id)
+        res.status(200).json({ profile, message: "Profile updated successfully" })
     } catch (error) {
         console.error("Profile Save Error:", error);
         res.status(500).json({ error: error.message })
@@ -178,10 +212,17 @@ router.post('/upload/resume',log,auth,upload.single("file"),async (req, res) => 
 
 router.get('/me',log,auth, async (req, res) => {
     try {
-        const profile = await Profile.findOne({ userId: req.userId })
+        const user = await User.findById(req.userId)
+        let profile
+        
+        if (!user.isCompany) {
+            profile = await userProfile.findOne({userId: req.userId})
+        } else {
+            profile = await orgProfile.findOne({userId: req.userId})
+        }
 
-        if (!profile) return res.status(400).json({ profile: null })
-        res.status(200).json({ profile })
+        if (!profile) return res.status(400).json({profile: null})
+        res.status(200).json({profile})
     } catch (error) {
         res.status(500).json({ error: error.message })
     }

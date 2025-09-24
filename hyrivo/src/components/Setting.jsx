@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Backdrop, Box, Button, ButtonBase, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Drawer, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemText, Portal, Radio, RadioGroup, Snackbar, TextField, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ArrowBackIos, Close, Delete, Download, Edit, ExpandMore, Menu, Save, Settings, SwapHoriz, TaskAlt, Visibility, VisibilityOff } from '@mui/icons-material'
+import { ArrowBackIos, Close, Delete, Download, Edit, ExpandMore, Menu, Save, Settings, TaskAlt, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useThemeContext } from '../Utils/ThemeContext'
 import axios from 'axios'
@@ -108,7 +108,22 @@ const Display = () => {
 
 const Account = () => {
     const {theme} = useThemeContext()
+
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     const [loading,setLoading] = useState(false)
+
+    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
+    const [currentPassword, setCurrentPassword] = useState()
+    const [newPassword, setNewPassword] = useState('')
+
+    const [editUsername, setEditUsername] = useState(false)
+    const [editEmail, setEditEmail] = useState(false)
+    const [editPassword, setEditPassword] = useState(false)
+
+    const [showCPw,setShowCPw] = useState(false)
+    const [showNPW, setShowNPW] = useState(false)
+
     const [delLoad,setdelLoad] = useState(false)
     const navigate = useNavigate()
 
@@ -136,289 +151,6 @@ const Account = () => {
         setOpenDialog(false);
     };
 
-
-    const handleChangeType = async () => {
-        setLoading(true)
-        try {
-            const response = await axios.put('http://localhost:2000/user/change-type',{},{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
-                }
-            })
-
-            const updatedUser = response.data.user
-            setOpen(true)
-            setSuccess(`Account type changed to ${updatedUser.isCompany ? "Organization" : "Job Seeker"}`)
-        } catch (error) {
-            setOpen(true)
-            setError(error.message)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const handleDeleteAccount = async () => {
-        setdelLoad(true)
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-        if (!token) {
-            setOpen(true)
-            setError("Invalid or No token found")
-        }
-
-        const decoded = jwtDecode(token)
-        const userId = decoded.id || decoded._id || decoded.userId
-
-        try {
-            await axios.delete(`http://localhost:2000/user/${userId}`,{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            localStorage.removeItem('token') || sessionStorage.removeItem('token')
-            setOpen(true)
-            setSuccess("Account Deleted Successfully")
-            navigate('/')
-        } catch (error) {
-            setOpen(true)
-            setError(error.message)
-        } finally {
-            setdelLoad(false)
-        }
-    }
-
-    return (
-        <Box sx={{flexGrow:1}}>
-            <Grid container>
-                <Grid size={12}>
-                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
-                        Account Management
-                    </Box><br /><br />
-                    <Box>
-                    <Accordion sx={{
-                        backgroundColor:theme.secondaryBg,
-                        color: theme.primaryText,
-                        border: `1px solid ${theme.cardBorder}`
-                    }}>
-                        <AccordionSummary
-                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
-                        aria-controls="panel1-content"
-                        id="panel1-header"
-                        >
-                        <Typography component="span">Change Account Type</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
-                                <Box component='span'>
-                                Change the type of account of the current user. 
-                                </Box><br />
-                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-                                    <Button variant='outlined' size='large' disabled={loading}
-                                    onClick={handleChangeType}
-                                    startIcon={
-                                        loading ? (
-                                            <CircularProgress size={24} color="inherit"/>
-                                        ) : (
-                                            <SwapHoriz/>
-                                        )
-                                    }
-                                    sx={{
-                                        color:theme.primaryAccent,
-                                        borderColor:theme.primaryAccent,
-                                        '&:hover':{
-                                          backgroundColor:theme.hoverAccent,
-                                          borderColor:theme.hoverAccent,
-                                          color:theme.primaryBg
-                                        }
-                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                            {loading ? 'Changing...'  :  'Change'}
-                                        </Box></Button>
-                                </Box>
-                            </Box>
-                        </AccordionDetails>
-                    </Accordion>
-                    </Box><br />
-                    <Box>
-                    <Accordion sx={{
-                        backgroundColor:theme.secondaryBg,
-                        color: theme.primaryText,
-                        border: `1px solid ${theme.cardBorder}`
-                    }}>
-                        <AccordionSummary
-                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
-                        aria-controls="panel1-content"
-                        id="panel1-header"
-                        >
-                        <Typography component="span">Close Account</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
-                                <Box component='span'>
-                                Choose how your Hyrivo experience looks for this device. 
-                                </Box><br />
-                                <Box sx={{display:'flex',justifyContent:'flex-end',gap:1}}>
-                                      <Button variant='outlined' size='large' disabled={delLoad}
-                                      onClick={handleClickOpen}
-                                      startIcon={<Delete/>}
-                                        sx={{
-                                            color:theme.error,
-                                            borderColor:theme.error,
-                                            '&:hover':{
-                                            backgroundColor:theme.errorHover,
-                                            borderColor:theme.errorHover,
-                                            color:theme.primaryBg
-                                            }
-                                        }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                             {delLoad ? 'Deleting...' : 'Delete Account'}
-                                        </Box></Button>
-                                </Box>
-                            </Box>
-                        </AccordionDetails>
-                    </Accordion>
-                    </Box>
-                </Grid>
-            </Grid>
-            <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} variant='filled' severity={error ? 'error' : 'success'}
-                sx={{
-                backgroundColor: error ? '#FF4D6D' : '#1BC47D'
-                }}>
-                {error || success}
-                </Alert>
-            </Snackbar>
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                {"Are you Sure to Delete Account?"}
-                </DialogTitle>
-                <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                Are you sure you want to permanently delete your account? 
-                This action cannot be undone and all your data will be lost.
-                </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                <Button variant='outlined' size='large' 
-                onClick={handleCloseDialog}
-                startIcon={<Close/>}
-                sx={{
-                    color:theme.error,
-                    borderColor:theme.error,
-                    '&:hover':{
-                    backgroundColor:theme.errorHover,
-                    borderColor:theme.errorHover,
-                    color:theme.primaryBg
-                    }
-                }}>Cancel</Button>
-                <Button variant='outlined' size='large' disabled={delLoad}
-                onClick={handleDeleteAccount}
-                startIcon={
-                delLoad ? (
-                    <CircularProgress size={24} color="inherit"/>
-                ) : (
-                    <TaskAlt/>
-                )
-                }
-                sx={{
-                    color:theme.primaryAccent,
-                    borderColor:theme.primaryAccent,
-                    '&:hover':{
-                      backgroundColor:theme.hoverAccent,
-                      borderColor:theme.hoverAccent,
-                      color:theme.primaryBg
-                    }
-                  }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                        {delLoad ? 'Deleting...' : 'Proceed'}
-                </Box></Button>
-                </DialogActions>
-            </Dialog>
-        </Box>
-    )
-}
-
-const Activities = () => {
-    const {theme} = useThemeContext()
-    return (
-        <Box sx={{flexGrow:1}}>
-            <Grid container>
-                <Grid size={12}>
-                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
-                        Activities
-                    </Box><br /><br />
-                    <Box>
-                    <Accordion sx={{
-                        backgroundColor:theme.secondaryBg,
-                        color: theme.primaryText,
-                        border: `1px solid ${theme.cardBorder}`
-                    }}>
-                        <AccordionSummary
-                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
-                        aria-controls="panel1-content"
-                        id="panel1-header"
-                        >
-                        <Typography component="span">Activities</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
-                                <Box component='span'>
-                                Download your account activities like Logging etc.,. 
-                                </Box>
-                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-                                    <Button variant='outlined' size='large' 
-                                    sx={{
-                                        color:theme.primaryAccent,
-                                        borderColor:theme.primaryAccent,
-                                        '&:hover':{
-                                          backgroundColor:theme.hoverAccent,
-                                          borderColor:theme.hoverAccent,
-                                          color:theme.primaryBg
-                                        }
-                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                                        <Download/> Download
-                                        </Box></Button>
-                                </Box>
-                            </Box>
-                        </AccordionDetails>
-                    </Accordion>
-                    </Box>
-                </Grid>
-            </Grid>
-        </Box>
-    )
-}
-
-const Sign = () => {
-    const {theme} = useThemeContext()
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-    const [loading,setLoading] = useState(false)
-
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [currentPassword, setCurrentPassword] = useState()
-    const [newPassword, setNewPassword] = useState('')
-
-    const [editUsername, setEditUsername] = useState(false)
-    const [editEmail, setEditEmail] = useState(false)
-    const [editPassword, setEditPassword] = useState(false)
-
-    const [showCPw,setShowCPw] = useState(false)
-    const [showNPW, setShowNPW] = useState(false)
-
-    // Snackbar
-    const [open,setOpen] = useState(false)
-    const [error,setError] = useState('')
-    const [success,setSuccess] = useState('')
-
-    const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
-
-    setOpen(false);
-    };
 
     // backdrop
     const [openBD, setOpenBD] = useState(false);
@@ -558,12 +290,42 @@ const Sign = () => {
     }
 
     useEffect(()=>{fetchUser()},[])
+
+    const handleDeleteAccount = async () => {
+        setdelLoad(true)
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+        if (!token) {
+            setOpen(true)
+            setError("Invalid or No token found")
+        }
+
+        const decoded = jwtDecode(token)
+        const userId = decoded.id || decoded._id || decoded.userId
+
+        try {
+            await axios.delete(`http://localhost:2000/user/${userId}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            localStorage.removeItem('token') || sessionStorage.removeItem('token')
+            setOpen(true)
+            setSuccess("Account Deleted Successfully")
+            navigate('/')
+        } catch (error) {
+            setOpen(true)
+            setError(error.message)
+        } finally {
+            setdelLoad(false)
+        }
+    }
+
     return (
         <Box sx={{flexGrow:1}}>
             <Grid container>
                 <Grid size={12}>
                     <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
-                        Sign-In
+                        Account Management
                     </Box><br /><br />
                     <Box>
                     <Accordion sx={{
@@ -879,6 +641,44 @@ const Sign = () => {
                             </Box>
                         </AccordionDetails>
                     </Accordion>
+                    </Box><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Close Account</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Close the Hyrivo account. 
+                                </Box><br />
+                                <Box sx={{display:'flex',justifyContent:'flex-end',gap:1}}>
+                                      <Button variant='outlined' size='large' disabled={delLoad}
+                                      onClick={handleClickOpen}
+                                      startIcon={<Delete/>}
+                                        sx={{
+                                            color:theme.error,
+                                            borderColor:theme.error,
+                                            '&:hover':{
+                                            backgroundColor:theme.errorHover,
+                                            borderColor:theme.errorHover,
+                                            color:theme.primaryBg
+                                            }
+                                        }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                             {delLoad ? 'Deleting...' : 'Delete Account'}
+                                        </Box></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
                     </Box>
                 </Grid>
             </Grid>
@@ -890,6 +690,107 @@ const Sign = () => {
                 {error || success}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                {"Are you Sure to Delete Account?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                Are you sure you want to permanently delete your account? 
+                This action cannot be undone and all your data will be lost.
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button variant='outlined' size='large' 
+                onClick={handleCloseDialog}
+                startIcon={<Close/>}
+                sx={{
+                    color:theme.error,
+                    borderColor:theme.error,
+                    '&:hover':{
+                    backgroundColor:theme.errorHover,
+                    borderColor:theme.errorHover,
+                    color:theme.primaryBg
+                    }
+                }}>Cancel</Button>
+                <Button variant='outlined' size='large' disabled={delLoad}
+                onClick={handleDeleteAccount}
+                startIcon={
+                delLoad ? (
+                    <CircularProgress size={24} color="inherit"/>
+                ) : (
+                    <TaskAlt/>
+                )
+                }
+                sx={{
+                    color:theme.primaryAccent,
+                    borderColor:theme.primaryAccent,
+                    '&:hover':{
+                      backgroundColor:theme.hoverAccent,
+                      borderColor:theme.hoverAccent,
+                      color:theme.primaryBg
+                    }
+                  }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                        {delLoad ? 'Deleting...' : 'Proceed'}
+                </Box></Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
+    )
+}
+
+const Activities = () => {
+    const {theme} = useThemeContext()
+    return (
+        <Box sx={{flexGrow:1}}>
+            <Grid container>
+                <Grid size={12}>
+                    <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'30px',md:'25px',sm:'20px',xs:'20px'}}}>
+                        Activities
+                    </Box><br /><br />
+                    <Box>
+                    <Accordion sx={{
+                        backgroundColor:theme.secondaryBg,
+                        color: theme.primaryText,
+                        border: `1px solid ${theme.cardBorder}`
+                    }}>
+                        <AccordionSummary
+                        expandIcon={<ExpandMore sx={{color:theme.primaryText}}/>}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        >
+                        <Typography component="span">Activities</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display:'flex',flexDirection:'column',gap:1}}>
+                                <Box component='span'>
+                                Download your account activities like Logging etc.,. 
+                                </Box>
+                                <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' size='large' 
+                                    sx={{
+                                        color:theme.primaryAccent,
+                                        borderColor:theme.primaryAccent,
+                                        '&:hover':{
+                                          backgroundColor:theme.hoverAccent,
+                                          borderColor:theme.hoverAccent,
+                                          color:theme.primaryBg
+                                        }
+                                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                        <Download/> Download
+                                        </Box></Button>
+                                </Box>
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    </Box>
+                </Grid>
+            </Grid>
         </Box>
     )
 }
@@ -898,7 +799,6 @@ const COMPONENTS = [
     {name: 'General', component:<General/>},
     {name: 'Display', component:<Display/>},
     {name: 'Activities', component:<Activities/>},
-    {name: 'Sign In', component: <Sign/>},
     {name: 'Account', component:<Account/>},
 ]
 

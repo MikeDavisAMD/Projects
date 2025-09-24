@@ -16,7 +16,7 @@ const qrcode = require('qrcode');
 const useragent = require('useragent');
 const axios = require('axios');
 const BlacklistsToken = require('../models/BlacklistsToken');
-const Profile = require('../models/Profile');
+const {Profile} = require('../models/Profile');
 
 // Nodemailer function
 const transporter = nodemailer.createTransport({
@@ -203,7 +203,7 @@ router.post('/register',log,async (req,res) => {
 })
 
 router.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
+    passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' })
   );
   
   router.get('/auth/google/callback',log,
@@ -389,9 +389,9 @@ router.get('/me',log,auth,async (req,res) => {
         const user = await User.findById(req.userId)
         const profile = await Profile.findOne({ userId: req.userId })
         if(!user) return res.status(400).json({message:'user not found'})
-        if(!profile) return res.status(400).json({message: "profile not found"})
-        res.status(200).json({user, profile})
+        res.status(200).json({user: user, profile: profile, })
     } catch (error) {
+        console.error(error.message)
         res.status(500).json({error:error.message})
     }
 })
@@ -420,6 +420,22 @@ router.put('/update',log,auth,async (req,res) => {
     } catch (error) {
         res.status(500).json({error:error.message})
     }
+})
+
+router.put('/update/org',log,auth,async (req, res) => {
+    const { isCompany } = req.body
+    const user = await User.findById(req.userId)
+    if (!user) return res.status(400).json({ message: "User not found" })
+    user.isCompany = isCompany
+    await user.save()
+    res.json({
+        message: "Account type updated successfully",
+        user: {
+            id: user._id,
+            username: user.username,
+            isCompany: user.isCompany
+        }
+    })
 })
 
 router.put('/update/username',log,auth,async (req, res) => {

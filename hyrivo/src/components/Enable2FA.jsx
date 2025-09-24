@@ -19,6 +19,7 @@ const style = {
 export const Enable2FA = () => {
     const navigate = useNavigate()
     const [loading,setLoading] = useState(false)
+    const [isCompany,setisCompany] = useState(false)
 
     // Portal
     const [show, setShow] = useState(false);
@@ -69,7 +70,7 @@ export const Enable2FA = () => {
             setSuccess(response.data.message)
             handleOpenModal()
             setTimeout(() => {
-                navigate('/Details')
+                navigate(isCompany ? '/DetailsOrg' : '/Details')
             }, 5000);
         } catch (error) {
             setError('Failed to Enable 2FA',error)
@@ -109,6 +110,22 @@ export const Enable2FA = () => {
                 setOpen(true)
             }
         }
+
+        const fetchUser = async () => {
+          try {
+             const response = await axios.get('http://localhost:2000/user/me',{
+              headers: {
+                Authorization:`Bearer ${token}`
+              }
+             })
+             setisCompany(response.data.user.isCompany)
+          } catch (error) {
+            setError("Failed to get user details",error)
+            setOpen(true)
+          }
+        }
+
+        fetchUser()
         fetchQR()
     },[navigate])        
 
@@ -131,7 +148,7 @@ export const Enable2FA = () => {
               <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                 <Link component='button' onClick={handleClickPortal} style={{textDecoration:'none',color:'#00BFFF',
                     '&:hover':{color:'#FF6EC7'}
-                  }}>Generate Manual Code</Link> <br />
+                  }}>QR code not scanning?</Link> <br />
                   <Box sx={{width:'100%',display:'flex',justifyContent:'center'}} ref={container} />
                 {show ? <Portal container={()=> container.current}>
                 <Box>

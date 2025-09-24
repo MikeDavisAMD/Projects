@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useThemeContext } from '../Utils/ThemeContext'
 
-const ME = ({users, desc, logout}) => {
+const ME = ({users, desc, profileType ,logout}) => {
   const {theme} = useThemeContext()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null);
@@ -31,7 +31,8 @@ const ME = ({users, desc, logout}) => {
   const getInitials = (name) => {
     if (!name) return '+' 
     const names = name.split(' ')
-    return names.length === 1 ? names[0][0].toUpperCase() : (names[0][0] + names[1][0]).toUpperCase()
+    if (names.length === 1) return names[0][0].toUpperCase() 
+    return (names[0][0] + names[1]?.[0] || "").toUpperCase()
   }
 
   const DrawerList = (
@@ -39,7 +40,9 @@ const ME = ({users, desc, logout}) => {
       <List>
         {['My Account', 'Settings'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton onClick={()=>{index % 2 === 0 ? navigate('/Profile'): navigate('/Settings')}}>
+            <ListItemButton onClick={()=>{index % 2 === 0 ? 
+              navigate(profileType === "Organization" ? '/ProfileOrg' : '/Profile'): 
+              navigate('/Settings')}}>
               <ListItemIcon>
                 {index % 2 === 0 ? <Person sx={{color:theme.primaryText}}/> : <Settings sx={{color:theme.primaryText}} />}
               </ListItemIcon>
@@ -96,7 +99,7 @@ const ME = ({users, desc, logout}) => {
             sx: {
               backgroundColor: theme.primaryBg,
               color:theme.primaryText
-            }
+            } 
           }
         }}
         paper
@@ -127,7 +130,7 @@ const ME = ({users, desc, logout}) => {
         <br /><Divider/>
         <MenuItem onClick={()=>{
           handleClose()
-          navigate('/Profile')
+          navigate(profileType === "Organization" ? '/ProfileOrg' : '/Profile')
         }}>
           <Box sx={{display:'flex',gap:1,justifyContent:'center'}}>
           <Person/> 
@@ -277,10 +280,10 @@ export const Navbar = () => {
   const options = useMemo(()=>[
     {icon: <Home sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Home' ,path:'/'},
     {icon: <Group sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Connections', path:'/Connections'},
-    {icon: <Work sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Jobs', path: user?.isCompany ? '/JobsOrg' : '/JobsUser'},
+    {icon: <Work sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Jobs', path: user?.profileType === 'Organization' ? '/JobsOrg' : '/JobsUser'},
     {icon: <Message sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Messages', path:'/Messages'},
     {icon: <Notifications sx={{width:{lg:30,md:25,sm:25,xs:20},height:{lg:30,md:25,sm:25,xs:20}}}/>, name:'Notifications', path:'/Notifications'}
-  ],[user?.isCompany])
+  ],[user?.profileType])
 
   
   const [activeTab,setActiveTab] = useState('Home')
@@ -353,7 +356,9 @@ export const Navbar = () => {
                     {data.name}
                   </ButtonBase>
                 ))}
-                <ME users={`${user?.firstName} ${user?.lastName}`} desc={user.description} logout={() => logout(navigate,setUser)}/>
+                <ME users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
+                    desc={user.description} profileType={user.profileType}
+                    logout={() => logout(navigate,setUser)}/>
               </Box>
             </Grid>
           </Grid>
@@ -431,7 +436,9 @@ export const Navbar = () => {
                         </Box>
                       </ButtonBase>
                     ))}
-                    <ME users={`${user?.firstName} ${user?.lastName}`} desc={user.description} logout={() => logout(navigate,setUser)}/>
+                    <ME users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
+                    desc={user.description} profileType={user.profileType}
+                    logout={() => logout(navigate,setUser)}/>
                   </Box>
                 </Grid>
               </Grid>
@@ -505,7 +512,9 @@ export const Navbar = () => {
                           {data.icon}
                         </ButtonBase>
                       ))}
-                      <ME users={`${user?.firstName} ${user?.lastName}`} desc={user.description} logout={() => logout(navigate,setUser)}/>
+                      <ME users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
+                    desc={user.description} profileType={user.profileType}
+                    logout={() => logout(navigate,setUser)}/>
                     </Box>
                   </Grid>
                 </Grid>

@@ -103,7 +103,7 @@ export const ProfileUI = () => {
                 <span>George Johnson</span>
                 <p>Support Specialist</p>
             </div>
-            <a href="#" class="button">Folow</a>
+            <a href="#" class="button">Add Profile Picture</a>
         </div>
         </>
     )
