@@ -1,10 +1,11 @@
 import { Box, Button, Chip, Divider, Grid, Stack } from '@mui/material'
 import React from 'react'
 import { AddSkillsUi } from './AddSkillsUI'
-import { COLORS } from './colors'
 import { Save } from '@mui/icons-material'
+import { useThemeContext } from './ThemeContext'
 
 export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
+  const {theme} = useThemeContext()
 
   const handleAddSkills = (skill) => {
     if (skill && !skills.includes(skill)) {
@@ -17,15 +18,15 @@ export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
   }
 
   return (
-    <Box sx={{flexGrow:1}}>
+    <Box sx={{flexGrow:1, background:theme.primaryBg}}>
       <Grid container spacing={2}>
         <Grid size={12}>
           <AddSkillsUi onAdd={handleAddSkills}/>
           <br /><Divider/>
         </Grid>
         <Grid size={12}>
-          <Box sx={{m:1, backgroundColor: COLORS.secondaryBg, color:COLORS.secondaryText, minHeight:'150px', 
-            textAlign:'center', alignContent:'center', borderRadius:5, border: `1px solid ${COLORS.cardBorder}`}}>
+          <Box sx={{m:1, backgroundColor: theme.secondaryBg, color:theme.secondaryText, minHeight:'150px', 
+            textAlign:'center', alignContent:'center', borderRadius:5, border: `1px solid ${theme.cardBorder}`}}>
             {skills.length === 0 ? (
               <Box component='span'>No Skills Added</Box>
             ) : (
@@ -35,7 +36,14 @@ export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
                 {skills.map((skill, index) => (
                   <Chip key={index} label={skill} 
                   onDelete={() => handleDelSkills(skill)}
-                  sx={{ backgroundColor: COLORS.cardBg, color:COLORS.primaryText, border:`1px solid ${COLORS.cardBorder}` }}/>
+                  sx={{ backgroundColor: theme.cardBg, color:theme.primaryText, border:`1px solid ${theme.cardBorder}`,
+                  '& .MuiChip-deleteIcon': {
+                    color:theme.primaryText,
+                  },
+                  '& .MuiChip-deleteIcon:hover': {
+                    color: theme.primaryAccent, 
+                  }
+                }}/>
                 ))}
               </Stack>
             )}
@@ -46,12 +54,12 @@ export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'}}}>
             <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleCloseModal}
               sx={{
-                  color:COLORS.primaryAccent,
-                  borderColor:COLORS.primaryAccent,
+                  color:theme.primaryAccent,
+                  borderColor:theme.primaryAccent,
                   '&:hover':{
-                    backgroundColor:COLORS.hoverAccent,
-                    borderColor:COLORS.hoverAccent,
-                    color:COLORS.primaryBg
+                    backgroundColor:theme.hoverAccent,
+                    borderColor:theme.hoverAccent,
+                    color:theme.primaryBg
                   }
                 }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
                     save
