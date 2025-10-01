@@ -35,6 +35,8 @@ export const Detailsform = () => {
     // getting profile details
     const [firstName, setFirstname] = useState('')
     const [lastName, setLastName] = useState('')
+    const [mobile, setMobile] = useState('')
+    const [location, setLocation] = useState('')
     const [description, setDescription] = useState('')
     const [about, setAbout] = useState('')
     const [skills, setSkills] = useState([])
@@ -66,6 +68,7 @@ export const Detailsform = () => {
           uploadedResume = {
             url: uploadRes.data.url,
             public_id: uploadRes.data.public_id,
+            fileName: resume.file.name,
             uploadedAt: new Date()
           }
         }
@@ -73,6 +76,8 @@ export const Detailsform = () => {
         await axios.post("http://localhost:2000/profile/",{
           firstName,
           lastName,
+          mobile,
+          location,
           description,
           about,
           skills,
@@ -165,6 +170,9 @@ export const Detailsform = () => {
     const handleCloseProjects = () => setOpenProjects(false);
 
     const MODAL = [
+      {name: 'Skills:', open: openSkills, openModal: handleOpenSkills, closeModal: handleCloseSkills,
+        component:<AddSkills skills={skills} setSkills={setSkills} handleCloseModal={handleCloseSkills}/>
+      },
       {name: 'Experience:', open: openExp, openModal: handleOpenExp, closeModal: handleCloseExp, 
         component:<AddExp experience={experience} setExperience={setExperience} 
         handleCloseModal={handleCloseExp} skills={skills}/> },
@@ -251,13 +259,33 @@ export const Detailsform = () => {
             </Box>
             <Box sx={{p:1}}>
               <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Mobile:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='Enter mobile with code eg: +971234567' value={mobile} 
+                onChange={e => setMobile(e.target.value)} fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Location:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='Location in format city, state, country' value={location} 
+                onChange={e => setLocation(e.target.value)} fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
                   Description:
               </Box>
               <br /><br />
               <Box sx={{display:'flex', gap:2}}>
                 <TextField variant='outlined' label='Enter Your Short Description' 
                 value={description} onChange={e => setDescription(e.target.value)}
-                rows={4} multiline fullWidth/>
+                rows={6} multiline fullWidth/>
               </Box>
             </Box>
             <Box sx={{p:1}}>
@@ -268,35 +296,9 @@ export const Detailsform = () => {
               <Box sx={{display:'flex', gap:2}}>
                 <TextField variant='outlined' label='Enter about yourself' 
                 value={about} onChange={e => setAbout(e.target.value)}
-                rows={8} multiline fullWidth/>
+                rows={12} multiline fullWidth/>
               </Box>
             </Box>
-            <Box sx={{p:1}}>
-              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
-                  Skills:
-              </Box>
-              <br /><br />
-              <Box sx={{display:'flex',justifyContent:'center',p:5,
-                border:`1px solid ${theme.cardBorder}`,
-                borderRadius:2,backgroundColor:theme.secondaryBg, gap:2}}>
-                <AddUi onAdd={handleOpenSkills}/>
-              </Box>
-            </Box>
-            <Modal
-              open={openSkills}
-              onClose={handleCloseSkills}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
-                  Add your relevant Skills
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  <AddSkills skills={skills} setSkills={setSkills} handleCloseModal={handleCloseSkills}/>
-                </Typography>
-              </Box>
-            </Modal>
           </Grid>
           <Grid size={{lg:6,md:6,sm:12,xs:12}}>
             {MODAL.map((data) => (

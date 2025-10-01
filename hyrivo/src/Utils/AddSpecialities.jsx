@@ -30,7 +30,7 @@ export const AddSpecialities = ({specialities, setSpecialities, handleCloseModal
               <Box component='span'>No Specialities Added</Box>
             ) : (
               <Stack direction='row' flexWrap='wrap' gap={1} justifyContent='center'
-              sx={{display:'grid',gridTemplateColumns:{lg:'repeat(3, 1fr)',md:'repeat(3, 1fr)',sm:'repeat(2, 1fr)',xs:'repeat(1, 1fr)'}, 
+              sx={{display:'flex',flexWrap:'wrap', 
               gap:{lg:2,md:2,sm:2,xs:0.5}, maxHeight:'150px', overflowY:'auto',p:0.5}}>
                 {specialities.map((skill, index) => (
                   <Chip key={index} label={skill} 

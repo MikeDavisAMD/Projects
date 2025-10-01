@@ -57,7 +57,6 @@ export const ProfileUI = ({name, desc, username, theme}) => {
                 font-size: 24px;
                 color: theme.primaryText;
                 margin-top: 15px;
-                line-height: 5px;
             }
 
             .card-info p {
@@ -81,6 +80,7 @@ export const ProfileUI = ({name, desc, username, theme}) => {
             .card:hover .card-info span {
                 transform: translateY(15px);
                 transition: all 0.5s ease;
+                max-width:300px
             }
 
             .card:hover .card-info p {

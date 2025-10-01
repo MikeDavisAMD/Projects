@@ -1,7 +1,7 @@
-import { Alert, AppBar, Box, ButtonBase, Card, CardActions, CardContent, Chip, Grid, Link, Modal, Snackbar, Stack, Toolbar, Typography } from '@mui/material'
+import { Alert, AppBar, Box, Button, ButtonBase, Card, CardActions, CardContent, Chip, CircularProgress, Divider, FormControl, FormControlLabel, Grid, Link, Modal, Radio, RadioGroup, Snackbar, Stack, Toolbar, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Add, ArrowBackIos, Delete, Edit, LinkRounded, Mail, Person } from '@mui/icons-material'
+import { Add, ArrowBackIos, Delete, Download, Edit, LinkRounded, Mail, Person, Place, Preview, Save, Smartphone } from '@mui/icons-material'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { ProfileUI } from '../Utils/ProfileUI'
 import axios from 'axios'
@@ -12,6 +12,8 @@ import { ListProjects } from '../Utils/ListProjects'
 import { ListCert } from '../Utils/ListCert'
 import { AddExp } from '../Utils/AddExp'
 import { EditExp } from '../Utils/EditExp'
+import { UploadFileUi } from '../Utils/UploadFileUI'
+import { saveAs } from 'file-saver'
 
 export const Profile = () => {
   const {theme} = useThemeContext()
@@ -35,6 +37,8 @@ export const Profile = () => {
 
   const [firstname, setFirstName] = useState('')
   const [lastname, setLastName] = useState('')
+  const [mobile, setMobile] = useState('')
+  const [location, setLocation] = useState('')
   const [desc, setDesc] = useState('')
   const [about, setAbout] = useState('')
   const [email,setEmail] = useState('')
@@ -44,11 +48,12 @@ export const Profile = () => {
   const [edu,setEdu] = useState([])
   const [projects,setProjects] = useState([])
   const [cert,setCert] = useState([])
-  // const [resumeLink, setResumeLink] = useState('')
+  const [resumeLink, setResumeLink] = useState([])
 
   // Snackbar
   const [open,setOpen] = useState(false)
   const [error,setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleClose = (event, reason) => {
   if (reason === 'clickaway') {
@@ -57,6 +62,116 @@ export const Profile = () => {
 
   setOpen(false);
   };
+
+  // new resume adding
+  const [resume, setResume] = useState('')
+
+  const handleAddResume = async () => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) return navigate('/')
+    setLoading(true)
+
+    try {
+      let uploadedResume = null
+
+        if (resume?.file) {
+          const formData = new FormData()
+          formData.append("file", resume.file)
+
+          const uploadRes = await axios.post("http://localhost:2000/profile/upload/resume",formData,{
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data"
+            }
+          })
+
+          uploadedResume = {
+            url: uploadRes.data.url,
+            public_id: uploadRes.data.public_id,
+            fileName: resume.file.name,
+            uploadedAt: new Date()
+          }
+        }
+
+        if (uploadedResume) {
+          const res = await axios.post("http://localhost:2000/profile/resume",uploadedResume,{
+            headers: {Authorization: `Bearer ${token}`}
+          })
+          setResumeLink(prev => [...prev,res.data])
+        }
+        
+        await fetchUser()
+        handleCloseResume()
+    } catch (error) {
+      !token ? setError("Invalid Token or Token Expired") : setError('Something went wrong')
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Download Resume
+  const handleDownloadResume = async () => {
+    const resume = resumeLink.find(r => r.public_id === selectedResume)
+    if (!resume) {
+      setError("Resume not found")
+      setOpen(true)
+      return
+    }
+
+    const url = resume.url
+    const fileName = resume.fileName
+
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      saveAs(blob, fileName)
+    } catch (error) {
+      setError("Failed to download resume")
+      setOpen(true)
+    }
+  }
+
+  // Preview resume
+  const handlePreviewResume = () => {
+    const resume = resumeLink.find(r => r.public_id === selectedResume)
+    if (!resume) {
+      setError("Cannot Open Resume")
+      setOpen(true)
+      return
+    }
+    window.open(resume.url,"_blank")
+  }
+
+  // Delete Resume
+  const handleDeleteResume = async () => {
+    if (!selectedResume) {
+      setError("No resume found")
+      setOpen(true)
+      return
+    }
+
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) return
+
+    try {
+      await axios.delete(`http://localhost:2000/profile/delete/resume/${encodeURIComponent(selectedResume)}`,{
+        headers: {Authorization: `Bearer ${token}`}
+      })
+
+      setResumeLink(prev => prev.filter(r => r.public_id !== selectedResume))
+
+      if (resumeLink.length > 1) {
+        const newSelected = resumeLink.find(r => r.public_id !== selectedResume)?.public_id
+        setSelectedResume(newSelected || "")
+      } else {
+        setSelectedResume("")
+      }
+    } catch (error) {
+      setError("Failed to resume resume")
+      setOpen(true)
+    } 
+  }
 
   // Skills 
   const [openSkills, setOpenSkills] = useState(false);
@@ -87,6 +202,20 @@ export const Profile = () => {
   const handleOpenProjects = () => setOpenProjects(true);
   const handleCloseProjects = () => setOpenProjects(false);
 
+  // Resume
+  const [openResume, setOpenResume] = useState(false);
+  const handleOpenResume = () => setOpenResume(true);
+  const handleCloseResume = () => setOpenResume(false);
+
+  // selected resume for default resume
+  const [selectedResume, setSelectedResume] = useState("");
+
+  useEffect(() => {
+    if (resumeLink.length > 0) {
+      setSelectedResume(resumeLink[0].public_id);
+    }
+  }, [resumeLink]);
+
   const fetchUser = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     if (!token) return
@@ -100,6 +229,8 @@ export const Profile = () => {
       const users = response.data.user
       setFirstName(user.firstName)
       setLastName(user.lastName)
+      setMobile(user.mobile)
+      setLocation(user.location)
       setDesc(user.description)
       setAbout(user.about)
       setEmail(users.email)
@@ -109,6 +240,7 @@ export const Profile = () => {
       setEdu(user.education)
       setCert(user.certificates)
       setProjects(user.projects)
+      setResumeLink(user.resumes)
     } catch (error) {
       setError(error.message)
       setOpen(true)
@@ -116,9 +248,6 @@ export const Profile = () => {
   }
 
   useEffect(() => {fetchUser()},[])
-
-  console.log(firstname)
-  console.log(lastname)
 
   return (
     <Box sx={{flexGrow: 1, minHeight: '100vh', background:theme.primaryBg, color: theme.primaryText}}>
@@ -166,12 +295,22 @@ export const Profile = () => {
         <Grid size={12}>
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
               <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
+                <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
+                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                      flexDirection:'column',justifyContent:'flex-end',
+                      alignItems:'center', pb:0.5, px:1,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        color: theme.hoverAccent,
+                      }
+                    }}><Edit/></ButtonBase>
+                </CardActions>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                       <span style={{fontWeight:"bolder", color:theme.primaryText}}>Personnal Details</span>
                   </Typography>
                   <Typography variant="body2" sx={{ color: theme.secondaryText }}>
-                    <Box sx={{display:'flex',alignItems:'center',gap:2}}>
+                    <Box sx={{display:'flex',alignItems:'center',flexWrap:'wrap',gap:2}}>
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       <Mail/>
                       :
@@ -179,12 +318,24 @@ export const Profile = () => {
                       </Box>
                       <Box>|</Box>
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                      <Smartphone/>
+                      :
+                      <span>{mobile}</span>
+                      </Box> 
+                      <Box>|</Box>
+                      <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                      <Place/>
+                      :
+                      <span>{location}</span>
+                      </Box> 
+                      <Box>|</Box>
+                      <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       <LinkRounded/>
                       :
                       <Link sx={{textDecoration:'none',color:theme.primaryAccent,
                     '&:hover':{color:theme.hoverAccent}
                   }}>http://localhost:3000</Link>
-                      </Box>
+                      </Box> 
                     </Box>
                   </Typography>
                 </CardContent>
@@ -473,7 +624,23 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
-                    <ButtonBase onClick={handleOpenSkills} sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={handlePreviewResume} sx={{display:'flex',color: theme.primaryText, 
+                      flexDirection:'column',justifyContent:'flex-end',
+                      alignItems:'center', pb:0.5, px:1,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        color: theme.hoverAccent,
+                      }
+                    }}><Preview/></ButtonBase>
+                    <ButtonBase onClick={handleDownloadResume} sx={{display:'flex',color: theme.primaryText, 
+                      flexDirection:'column',justifyContent:'flex-end',
+                      alignItems:'center', pb:0.5, px:1,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        color: theme.hoverAccent,
+                      }
+                    }}><Download/></ButtonBase>
+                    <ButtonBase onClick={handleOpenResume} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -481,7 +648,7 @@ export const Profile = () => {
                         color: theme.hoverAccent,
                       }
                     }}><Add/></ButtonBase>
-                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={handleDeleteResume} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -494,24 +661,59 @@ export const Profile = () => {
                   <Typography gutterBottom variant="h5" component="div">
                     <span style={{fontWeight:"bolder", color:theme.primaryText}}>Resumes</span>
                   </Typography>
-                  
+                  <FormControl sx={{ml:4}}>
+                    <RadioGroup
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      value={selectedResume}
+                      onChange={e => setSelectedResume(e.target.value)}
+                      name="radio-buttons-group"
+                    >
+                      {resumeLink.map((res,index)=>(
+                         <FormControlLabel sx={{color: theme.primaryText}}
+                         key={index || res._id} value={res.public_id} control={<Radio />} label={res.fileName} />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
                 </CardContent>
               </Card>
-              {/* <Modal
-                open={openSkills}
-                onClose={handleCloseSkills}
+              <Modal
+                open={openResume}
+                onClose={handleCloseResume}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
                   <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
                     Add additional resumes
-                  </Typography>
+                  </Typography><br />
+                  <Divider color={theme.secondaryText}/><br /><br />
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    
-                  </Typography>
+                    <UploadFileUi setResume={f => setResume(f)}/>
+                  </Typography><br />
+                  <Divider color={theme.secondaryText}/><br />
+                  <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'}}}>
+                  <Button variant='outlined' size='large' onClick={handleAddResume}
+                    startIcon={
+                      loading ? (
+                        <CircularProgress size={24} color="inherit"/>
+                      ) : (
+                        <Save/>
+                      )
+                    }          
+                    sx={{
+                        color:theme.primaryAccent,
+                        borderColor:theme.primaryAccent,
+                        '&:hover':{
+                          backgroundColor:theme.hoverAccent,
+                          borderColor:theme.hoverAccent,
+                          color:theme.primaryBg
+                        }
+                      }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                          {loading? "Loading..." :"save"}
+                        </Box></Button>
+                  </Box>
                 </Box>
-              </Modal> */}
+              </Modal>
             </Box>
         </Grid> 
         <br />

@@ -124,7 +124,7 @@ router.post('/',log,auth, async (req, res) => {
         let isNew
 
         if (!user.isCompany) {
-            const { firstName, lastName, description, about,
+            const { firstName, lastName, description, about, mobile, location,
             skills, experience, education, certificates, projects, resumes } = req.body
     
             profile = await userProfile.findOne({ userId: req.userId })
@@ -132,7 +132,7 @@ router.post('/',log,auth, async (req, res) => {
             if (!profile) {
                 profile = new userProfile({
                     userId: req.userId,
-                    firstName,lastName,
+                    firstName,lastName, mobile, location,
                     description, about, skills, experience, 
                     education, certificates, projects,
                     resumes: resumes?.filter(r => r.url && r.public_id) || []
@@ -143,6 +143,8 @@ router.post('/',log,auth, async (req, res) => {
                 profile.lastName = lastName
                 profile.description = description
                 profile.about = about
+                profile.mobile = mobile
+                profile.location = location
                 profile.skills = skills
                 profile.experience = experience
                 profile.education = education
@@ -153,7 +155,7 @@ router.post('/',log,auth, async (req, res) => {
                 }
             }
         } else {
-            const {companyName, description, about, industry, 
+            const {companyName, description, about, industry, mobile, location, 
             founded,size,website,headquarters,specialities} = req.body
 
             profile = await orgProfile.findOne({userId: user._id})
@@ -161,8 +163,8 @@ router.post('/',log,auth, async (req, res) => {
             if (!profile) {
                 profile = new orgProfile({
                     userId: req.userId,
-                    companyName, description, about,
-                    industry, founded, size, website, 
+                    companyName, description, mobile, location,
+                    about, industry, founded, size, website, 
                     headquarters, specialities
                 })
                 isNew = true
@@ -170,6 +172,8 @@ router.post('/',log,auth, async (req, res) => {
                 profile.companyName = companyName;
                 profile.description = description;
                 profile.about = about;
+                profile.mobile = mobile;
+                profile.location = location;
                 profile.industry = industry;
                 profile.founded = founded;
                 profile.size = size;
@@ -195,6 +199,7 @@ router.post('/',log,auth, async (req, res) => {
 router.post('/upload/resume',log,auth,upload.single("file"),async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "No file uploaded" })
+        if (req.file.mimetype !== "application/pdf") return res.status(400).json({ error: "Uploaded file is not a pdf file" })
 
         const user = await User.findById(req.userId)
         if(!user) res.status(400).json({error: "User not found"})
@@ -202,10 +207,58 @@ router.post('/upload/resume',log,auth,upload.single("file"),async (req, res) => 
         const result = await streamUpload(req.file.buffer, user.username)
         return res.status(200).json({
             url: result.secure_url,
-            public_id: result.public_id
+            public_id: result.public_id,
+            fileName: req.file.originalname
         })
     } catch (error) {
         console.error("Resume upload error", error)
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.post('/resume',log,auth,async (req,res) => {
+    try {
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(400).json({ message: "User not found" })
+
+        const { url, public_id, fileName } = req.body
+
+        if (!url || !public_id || !fileName) 
+            return res.status(400).json({ message: "Resume details are incomplete" })
+
+        const profile = await userProfile.findOne({ userId: req.userId })
+        if (!profile) return res.status(400).json({ message: "Profile not found" })
+
+        profile.resumes.push({
+            url,
+            public_id,
+            fileName,
+            uploadedAt: new Date()
+        })
+
+        await profile.save()
+
+        res.status(200).json({ message: "New resume added successfully" })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.delete('/delete/resume/:public_id',log,auth,async (req,res) => {
+    try {
+        const { public_id } = req.params
+
+        await cloudinary.uploader.destroy(public_id, { resource_type:'raw' })
+
+        const profile = await userProfile.findOne({ userId: req.userId })
+        if (!profile) return res.status(400).json({ message: "Profile details not found" })
+        
+        profile.resumes = profile.resumes.filter(r => r.public_id !== public_id)
+        await profile.save()
+
+        return res.status(200).json({ message: "User deleted successfully" })
+    } catch (error) {
+        console.error("Delete error",error.message)
         res.status(500).json({error: error.message})
     }
 })

@@ -15,6 +15,7 @@ export const logout = async (navigate, setUser) => {
     }
 
     localStorage.removeItem('token') || sessionStorage.removeItem('token')
+    localStorage.removeItem('theme') || sessionStorage.removeItem('theme')
     if (setUser) setUser([])
     
     navigate('/')

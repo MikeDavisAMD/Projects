@@ -29,6 +29,8 @@ export const DetailsOrg = () => {
     
         // getting profile details
         const [companyName, setCompanyName] = useState('')
+        const [mobile, setMobile] = useState('')
+        const [location, setLocation] = useState('')
         const [description, setDescription] = useState('')
         const [about, setAbout] = useState('')
         const [industry,setIndustry] = useState('')
@@ -47,6 +49,8 @@ export const DetailsOrg = () => {
             await axios.post("http://localhost:2000/profile/",{
               companyName,
               industry,
+              mobile,
+              location,
               about,
               description,
               founded,
@@ -186,6 +190,16 @@ export const DetailsOrg = () => {
             </Box>
             <Box sx={{p:1}}>
               <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Mobile:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='Mobile number with code eg. +184353453' value={mobile} 
+                onChange={e => setMobile(e.target.value)} fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
                   Description:
               </Box>
               <br /><br />
@@ -208,7 +222,7 @@ export const DetailsOrg = () => {
             </Box>
           </Grid>
           <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-          <Box sx={{p:1}}>
+            <Box sx={{p:1}}>
               <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
                   Industry:
               </Box>
@@ -256,6 +270,16 @@ export const DetailsOrg = () => {
               <Box sx={{display:'flex', gap:2}}>
                 <TextField variant='outlined' label='Company Headquarters Location' value={headquarters} 
                 onChange={e => setHeadquarters(e.target.value)} fullWidth/>
+              </Box>
+            </Box>
+            <Box sx={{p:1}}>
+              <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:'25px',md:'20px',sm:'18px',xs:'15px'}}}>
+                  Office Location:
+              </Box>
+              <br /><br />
+              <Box sx={{display:'flex', gap:2}}>
+                <TextField variant='outlined' label='Location' value={location} 
+                onChange={e => setLocation(e.target.value)} fullWidth/>
               </Box>
             </Box>
           </Grid>

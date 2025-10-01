@@ -4,6 +4,8 @@ const profileSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     description: String,
     about: String,
+    mobile: { type: String, required: true},
+    location: { type: String, required: true},
 }, { discriminatorKey: 'profileType', timestamps: true })
 
 const Profile = mongoose.model('Profile',profileSchema)
@@ -13,19 +15,19 @@ const userProfile = Profile.discriminator('Individual', new mongoose.Schema({
     lastName: { type: String, required: true },
     skills: [{ type: String, required: true }],
     experience: [{
-        title: { type: String, required: true },
-        empType: { type: String, required: true },
-        company: { type: String, required: true },
+        title: String,
+        empType: String,
+        company: String,
         isCurrentRole: { type: Boolean, default: true },
         startDate: { type: Date, required: false, default: null },
         endDate: {type: Date, default: null},
-        skills: [{ type: String, required: true }],
-        location: { type: String, required: true },
-        locType: { type: String, required: true },
+        skills: [{ type: String }],
+        location: String,
+        locType: String,
     }],
     education: [{
-        institute: { type: String, required: true },
-        degree: { type: String, required: true },
+        institute: String,
+        degree: String,
         fieldOfStudy: String,
         isStudying: { type: Boolean, default: false },
         startDate: { type: Date, required: false, default: null },
@@ -33,8 +35,8 @@ const userProfile = Profile.discriminator('Individual', new mongoose.Schema({
         grade: { type: Number, min: 0, max: 10 },
     }],
     certificates: [{
-        name: { type: String, required: true },
-        issuingOrg: { type: String, required: true },
+        name: String,
+        issuingOrg: String,
         issueDate: { type: Date, required: false, default: null },
         expiryDate: {type: Date, default: null},
         hasNoExpiry: { type: Boolean, default: false },
@@ -43,16 +45,15 @@ const userProfile = Profile.discriminator('Individual', new mongoose.Schema({
         skills: [{ type: String }]
     }],
     projects: [{
-        name: { type: String, required: true },
-        description: { type: String, required: true },
-        skills: [{ type: String, required: true }],
+        name: String,
+        description: String,
+        skills: [{ type: String }],
         isInProgress: { type: Boolean, default: false },
         startDate: { type: Date, required: false, default: null },
         endDate: {type: Date, default: null},
         org: {
             type: String,
             enum: ["Educational Project", "Live Project", "Standalone Project"],
-            required: true
         },
         assn: [{type: String}],
         link: String
@@ -60,6 +61,7 @@ const userProfile = Profile.discriminator('Individual', new mongoose.Schema({
     resumes: [{
         url: { type: String, required: true },
         public_id: { type: String, required: true },
+        fileName: { type: String, required: true },
         uploadedAt: { type: Date, default: Date.now }
     }]
 }))
