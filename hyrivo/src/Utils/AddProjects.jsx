@@ -1,12 +1,12 @@
 import { Box, Button, Checkbox, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Portal, Select, TextField } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { DatePickerUi } from './DatePickerUi'
-import { COLORS } from './colors'
 import { List, Save } from '@mui/icons-material'
 import { ListProjects } from './ListProjects'
+import { useThemeContext } from './ThemeContext'
 
 export const AddProjects = ({projects, setProjects, handleCloseModal, skills, college, work}) => {
-
+  const {theme} = useThemeContext()
   // Project Name
   const [projectName, setProjectName] = useState('')
 
@@ -18,9 +18,21 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
     PaperProps: {
-      style: {
+      sx: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
         width: 250,
+        backgroundColor: theme.primaryBg,
+        "& .MuiMenuItem-root": {
+          color: theme.primaryText,
+          "&:hover": {
+            backgroundColor: theme.hoverAccent,
+            color: theme.primaryAccent,
+          },
+          "&.Mui-selected": {
+            backgroundColor: theme.primaryAccent + "22",
+            color: theme.primaryAccent,
+          },
+        },
       },
     },
   };
@@ -94,18 +106,141 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
           <Box>
             <TextField label='Name of the Project' placeholder='Ex: ABCD Project' fullWidth
             helperText='Enter the name of the project' value={projectName} 
-            onChange={e => setProjectName(e.target.value)}/>
+            onChange={e => setProjectName(e.target.value)}
+            sx={{"& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+        }}/>
           </Box>
         </Grid>
         <Grid size={12}>
           <Box>
             <TextField variant='outlined' label='Description' rows={6} multiline fullWidth
             helperText="Give us details about the project here." value={description}
-            onChange={e => setDescription(e.target.value)}/>
+            onChange={e => setDescription(e.target.value)}
+            sx={{"& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+        }}/>
           </Box>
         </Grid>
         <Grid size={12}>
-          <FormControl sx={{ width: '100%' }}>
+          <FormControl sx={{ width:'100%',
+            "& .MuiInputBase-input": {
+                  color: theme.primaryText, // input text color
+                  "&::placeholder": {
+                      color: theme.secondaryText, // placeholder color
+                      opacity: 1, // ensures custom color shows
+                  },
+              },
+              "& .MuiInputLabel-root": {
+                  color: theme.secondaryText, // default label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                  color: theme.primaryAccent, // focused label color
+              },
+              "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                      borderColor: theme.primaryAccent, // default border
+                  },
+                  "&:hover fieldset": {
+                      borderColor: theme.hoverAccent, // hover border
+                  },
+                  "&.Mui-focused fieldset": {
+                      borderColor: theme.primaryAccent, // focus border
+                  },
+              },
+              '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+              },
+              '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+              },
+              '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+              },
+              "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                  backgroundColor: theme.hoverAccent,
+                  color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                  backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                  color: theme.primaryAccent,
+                },
+              },
+              "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+              "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+              },
+              "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+              },
+            }}>
             <InputLabel id="demo-multiple-checkbox-label">Skills</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
@@ -119,8 +254,19 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
             >
               {skills.map((name) => (
                 <MenuItem key={name} value={name}>
-                  <Checkbox checked={skillset.includes(name)} />
-                  <ListItemText primary={name} />
+                  <Checkbox checked={skillset.includes(name)} 
+                  sx={{
+                    color: theme.secondaryText,
+                    "&.Mui-checked": {
+                      color: theme.primaryAccent,
+                    },
+                  }}/>
+                  <ListItemText primary={name} 
+                  slotProps={{
+                    primary:{
+                      sx:{color: theme.primaryText}
+                    }
+                  }}/>
                 </MenuItem>
               ))}
             </Select>
@@ -132,27 +278,81 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
             <Checkbox {...label} checked={isProgress} 
             onChange={(e) => setIsProgress(e.target.checked)}
             sx={{
-              color: COLORS.primaryText,
+              color: theme.primaryText,
               '&.Mui-checked': {
-                color: COLORS.primaryAccent,
+                color: theme.primaryAccent,
               },
               '&:hover': {
-                color: COLORS.primaryAccent,   
+                color: theme.primaryAccent,   
                 bgcolor: 'transparent',        
               }
             }}/>
-            <Box component='span'>Currently Working on this Project</Box>
+            <Box component='span' sx={{color: theme.secondaryText}}>Currently Working on this Project</Box>
           </Box>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-            <DatePickerUi label='Start Date' value={startDate} onChange={setStartDate}/>
+            <DatePickerUi label='Start Date' value={startDate} onChange={setStartDate} theme={theme}/>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-            <DatePickerUi label='End Date' value={endDate} onChange={setEndDate} disabled={isProgress}/>
+            <DatePickerUi label='End Date' value={endDate} onChange={setEndDate} disabled={isProgress} theme={theme}/>
         </Grid>
         <Grid size={12}>
           <Box>
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{"& .MuiInputBase-input": {
+                  color: theme.primaryText, // input text color
+                  "&::placeholder": {
+                      color: theme.secondaryText, // placeholder color
+                      opacity: 1, // ensures custom color shows
+                  },
+              },
+              "& .MuiInputLabel-root": {
+                  color: theme.secondaryText, // default label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                  color: theme.primaryAccent, // focused label color
+              },
+              "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                      borderColor: theme.primaryAccent, // default border
+                  },
+                  "&:hover fieldset": {
+                      borderColor: theme.hoverAccent, // hover border
+                  },
+                  "&.Mui-focused fieldset": {
+                      borderColor: theme.primaryAccent, // focus border
+                  },
+              },
+              '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+              },
+              '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+              },
+              '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+              },
+              "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                  backgroundColor: theme.hoverAccent,
+                  color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                  backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                  color: theme.primaryAccent,
+                },
+              },
+              "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+              "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+              },
+              "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+              },
+            }}>
             <InputLabel id="demo-simple-select-label">Project Associated with</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -160,6 +360,24 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
               value={org}
               label="Project Associated with"
               onChange={handleChangeOrg}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: theme.primaryBg,
+                    "& .MuiMenuItem-root": {
+                      color: theme.primaryText,
+                      "&:hover": {
+                        backgroundColor: theme.hoverAccent,
+                        color: theme.primaryAccent,
+                      },
+                      "&.Mui-selected": {
+                        backgroundColor: theme.primaryAccent + "22",
+                        color: theme.primaryAccent,
+                      },
+                    },
+                  },
+                },
+              }}
             >
               <MenuItem value="Educational Project">Educational Project</MenuItem>
               <MenuItem value="Live Project">Live Project</MenuItem>
@@ -171,11 +389,66 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
         </Grid>
         <Grid size={12}>
           {org === "Standalone Project" ? (
-            <Box component='span' sx={{color: COLORS.secondaryText, textAlign:'center',width:'100%'}}>
+            <Box component='span' sx={{color: theme.secondaryText, textAlign:'center',width:'100%'}}>
               This is a Standalone Project
             </Box>
           ):(
-            <FormControl sx={{ width: '100%' }}>
+            <FormControl sx={{ width:'100%',
+              "& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          '& .MuiSelect-select':{
+            color:theme.primaryText,
+            background:theme.primaryBg
+          },
+          "& .MuiMenuItem-root": {
+            color: theme.primaryText,
+            "&:hover": {
+              backgroundColor: theme.hoverAccent,
+              color: theme.primaryAccent,
+            },
+            "&.Mui-selected": {
+              backgroundColor: theme.primaryAccent + "22", // translucent highlight
+              color: theme.primaryAccent,
+            },
+          },
+          "& .MuiFormHelperText-root": {
+            color: theme.secondaryText,
+          },
+          "& .MuiSelect-icon": {
+            color: theme.primaryText, // arrow color
+          },
+          "& .MuiSelect-iconOpen": {
+            color: theme.hoverAccent,   // when dropdown is open
+          },
+        }}>
             <InputLabel id="demo-multiple-checkbox-label">{
               org === "Live Project" ? "Select Associated Organization" : 
               org === "Educational Project" ? "Select Associated Educational Institute" : "Select association"}</InputLabel>
@@ -194,18 +467,45 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
               {org === "Live Project" ? 
                 work.map((name) => (
                   <MenuItem key={name} value={name}>
-                    <Checkbox checked={assn.includes(name)} />
-                    <ListItemText primary={name} />
+                    <Checkbox checked={assn.includes(name)} 
+                    sx={{
+                      color: theme.secondaryText,
+                      "&.Mui-checked": {
+                        color: theme.primaryAccent,
+                      },
+                    }}/>
+                    <ListItemText primary={name} 
+                    slotProps={{
+                      primary:{
+                        sx:{color: theme.primaryText}
+                      }
+                    }}/>
                   </MenuItem>
                 )): org === "Educational Project" ?
                 college.map((name) => (
                   <MenuItem key={name} value={name}>
-                    <Checkbox checked={assn.includes(name)} />
-                    <ListItemText primary={name} />
+                    <Checkbox checked={assn.includes(name)} 
+                    sx={{
+                      color: theme.secondaryText,
+                      "&.Mui-checked": {
+                        color: theme.primaryAccent,
+                      },
+                    }}/>
+                    <ListItemText primary={name} 
+                    slotProps={{
+                      primary:{
+                        sx:{color: theme.primaryText}
+                      }
+                    }}/>
                   </MenuItem>
                 )) : (
                   <MenuItem disabled value="">
-                    <ListItemText primary="No option selected"/>
+                    <ListItemText primary="No option selected"
+                    slotProps={{
+                      primary:{
+                        sx:{color: theme.primaryText}
+                      }
+                    }}/>
                   </MenuItem>
                 )
               }
@@ -217,32 +517,66 @@ export const AddProjects = ({projects, setProjects, handleCloseModal, skills, co
         <Grid size={12}>
           <Box>
             <TextField label='Project URL' placeholder='Ex: https://projectname.com' fullWidth
-            helperText='Enter the URL of the hosted project' value={link} onChange={e => setLink(e.target.value)}/>
+            helperText='Enter the URL of the hosted project' value={link} onChange={e => setLink(e.target.value)}
+            sx={{"& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+        }}/>
           </Box>
         </Grid>
         <Grid size={12}>
-          <Divider/><br />
+          <Divider color={theme.secondaryText}/><br />
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'},gap:1}}>
               <Button variant='outlined' size='large' startIcon={<List/>} onClick={handleClickPortal}
                 sx={{
-                    color:COLORS.primaryAccent,
-                    borderColor:COLORS.primaryAccent,
+                    color:theme.primaryAccent,
+                    borderColor:theme.primaryAccent,
                     '&:hover':{
-                      backgroundColor:COLORS.hoverAccent,
-                      borderColor:COLORS.hoverAccent,
-                      color:COLORS.primaryBg
+                      backgroundColor:theme.hoverAccent,
+                      borderColor:theme.hoverAccent,
+                      color:theme.primaryBg
                     }
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       list
                     </Box></Button>
                     <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleSave}
                 sx={{
-                    color:COLORS.primaryAccent,
-                    borderColor:COLORS.primaryAccent,
+                    color:theme.primaryAccent,
+                    borderColor:theme.primaryAccent,
                     '&:hover':{
-                      backgroundColor:COLORS.hoverAccent,
-                      borderColor:COLORS.hoverAccent,
-                      color:COLORS.primaryBg
+                      backgroundColor:theme.hoverAccent,
+                      borderColor:theme.hoverAccent,
+                      color:theme.primaryBg
                     }
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       save

@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import { CalendarMonth, Close } from '@mui/icons-material';
 import { Box } from '@mui/material';
 
-export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
+export const DatePickerUi = ({value, onChange, label, disabled = false, theme}) => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -14,10 +14,10 @@ export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
       if (wrapper) {
         wrapper.style.minWidth = '0';
         wrapper.style.width = '100%';
-        wrapper.style.borderRadius = '12px';
-        wrapper.style.border = '1.5px solid #ddd';
+        wrapper.style.borderRadius = '2px';
+        wrapper.style.border = disabled ? `1.5px solid transparent` : `1.5px solid ${theme.primaryAccent}` ;
         wrapper.style.boxShadow = 'none';
-        wrapper.style.background = '#fff';
+        wrapper.style.background = theme.primaryBg;
         wrapper.style.display = 'flex';
         wrapper.style.alignItems = 'center';
         wrapper.style.padding = '0 6px';
@@ -29,11 +29,12 @@ export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
         inputGroup.style.justifyContent = 'flex-start';
         inputGroup.style.alignItems = 'center';
         inputGroup.style.fontSize = '17px';
+        inputGroup.style.color = theme.primaryText;
       }
       const iconButtonStyle = {
         outline: 'none',
         border: 'none',
-        background: '#fafafa',
+        background: theme.primaryBg,
         width: '35px',
         height: '35px',
         borderRadius: '50%',
@@ -55,10 +56,45 @@ export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
         Object.assign(clearButton.style, iconButtonStyle);
       }
     }
-  }, []);
+  }, [theme,disabled]);
+
+  
   
   useEffect(() => {
     const observer = new MutationObserver(() => {
+
+      const calendars = document.querySelectorAll('.react-calendar');
+      calendars.forEach(cal => {
+        cal.style.background = theme.primaryBg;
+        cal.style.border = `1.5px solid ${theme.primaryAccent}`;
+        cal.style.borderRadius = '12px';
+        cal.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+
+        // Weekday labels
+        const weekdays = cal.querySelectorAll('.react-calendar__month-view__weekdays__weekday');
+        weekdays.forEach(day => {
+          day.style.color = theme.secondaryText;
+          day.style.fontWeight = '500';
+        });
+
+        // Days
+        const days = cal.querySelectorAll('.react-calendar__tile');
+        days.forEach(day => {
+          day.style.color = theme.primaryText;
+          day.style.background = 'transparent';
+          day.style.borderRadius = '6px';
+          day.onmouseover = () => (day.style.background = theme.hoverAccent || 'rgba(0,0,0,0.05)');
+          day.onmouseout = () => (day.style.background = 'transparent');
+        });
+
+        // Active/selected day
+        const activeDays = cal.querySelectorAll('.react-calendar__tile--active');
+        activeDays.forEach(day => {
+          day.style.background = theme.primaryAccent;
+          day.style.color = theme.primaryBg;
+        });
+      });
+
       const navArrows = document.querySelectorAll('.react-calendar__navigation button');
       navArrows.forEach(btn => {
         btn.style.width = '28px';
@@ -68,7 +104,8 @@ export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
         btn.style.alignItems = 'center';
         btn.style.justifyContent = 'center';
         btn.style.margin = '0 2px';
-        btn.style.background = '#fafafa';
+        btn.style.background = theme.primaryBg;
+        btn.style.color = theme.secondaryText
         btn.style.border = 'none';
         btn.style.boxShadow = '0 0.5px 2px rgba(0,0,0,0.04)';
         btn.style.cursor = 'pointer';
@@ -84,7 +121,7 @@ export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
     observer.observe(document.body, { subtree: true, childList: true });
   
     return () => observer.disconnect();
-  }, []);
+  }, [theme]);
 
   return (
     <div
@@ -96,14 +133,14 @@ export const DatePickerUi = ({value, onChange, label, disabled = false}) => {
         gap: 6,
       }}
     >
-      <Box component="span" >
+      <Box component="span" sx={{color:theme.primaryText}}>
         {label}
       </Box>
       <DatePicker
         onChange={onChange}
         value={value}
-        calendarIcon={<CalendarMonth style={{ fontSize: 26 }} />}
-        clearIcon={<Close style={{ fontSize: 26 }} />}
+        calendarIcon={<CalendarMonth style={{ fontSize: 26, color:theme.secondaryText }} />}
+        clearIcon={<Close style={{ fontSize: 26,color:theme.secondaryText }} />}
         format="dd/MM/yyyy"
         disabled={disabled}
       />

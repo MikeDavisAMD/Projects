@@ -14,6 +14,9 @@ import { AddExp } from '../Utils/AddExp'
 import { EditExp } from '../Utils/EditExp'
 import { UploadFileUi } from '../Utils/UploadFileUI'
 import { saveAs } from 'file-saver'
+import { AddEdu } from '../Utils/AddEdu'
+import { AddProjects } from '../Utils/AddProjects'
+import { AddCert } from '../Utils/AddCert'
 
 export const Profile = () => {
   const {theme} = useThemeContext()
@@ -378,7 +381,7 @@ export const Profile = () => {
                         color: theme.hoverAccent,
                       }
                     }}><Add/></ButtonBase>
-                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase  sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -454,7 +457,7 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder', color:theme.primaryText}}>
                     Add experience details
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -469,7 +472,7 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder', color:theme.primaryText}}>
                     Edit experience details
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -516,11 +519,11 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
                     Add Education details
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    
+                    <AddEdu education={edu} setEducation={setEdu} handleCloseModal={handleCloseEdu}/>
                   </Typography>
                 </Box>
               </Modal>
@@ -563,11 +566,12 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
                     Add more projects
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    
+                    <AddProjects projects={projects} setProjects={setProjects} handleCloseModal={handleCloseProjects}
+                    skills={skills} college={edu.map(c => c.institute)} work={exp.map(w => w.company)}/>
                   </Typography>
                 </Box>
               </Modal>
@@ -610,11 +614,11 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
                     Add More Certificates or License
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    
+                    <AddCert certificates={cert} setCertificates={setCert} handleCloseModal={handleCloseCert} skills={skills}/>
                   </Typography>
                 </Box>
               </Modal>
@@ -670,7 +674,7 @@ export const Profile = () => {
                     >
                       {resumeLink.map((res,index)=>(
                          <FormControlLabel sx={{color: theme.primaryText}}
-                         key={index || res._id} value={res.public_id} control={<Radio />} label={res.fileName} />
+                         key={index || res._id} value={res.public_id} control={<Radio/>} label={res.fileName} />
                       ))}
                     </RadioGroup>
                   </FormControl>
@@ -683,7 +687,7 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder'}}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
                     Add additional resumes
                   </Typography><br />
                   <Divider color={theme.secondaryText}/><br /><br />

@@ -17,7 +17,10 @@ export const ListProjects = ({ projects }) => {
             <Box key={index} sx={{m:1,p:1,background:theme.secondaryBg,borderRadius:2}}>
               <Box component='span' sx={{fontWeight:'bolder',fontSize:{lg:22,md:22,sm:20,xs:18},color:theme.primaryText}}>{data.name}</Box><br />
               <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:theme.secondaryText}}>
-                Associated with {data.assn} as a {data.org}</Box><br /><br />
+                Associated with {data.assn} as a {data.org}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:theme.secondaryText}}>
+                {data.startDate ? new Date(data.startDate).toLocaleDateString() : "N/A" } - {data.isinProgress ? "Present" : data.endDate ? new Date(data.endDate).toLocaleDateString() : "Present"}
+                </Box><br /><br />
                 <Divider color={theme.secondaryText}/><br />
                 <Box component='span' sx={{fontSize: {lg:17,md:17,sm:14,xs:16}, fontWeight:'bolder',color:theme.primaryText}}>
                 <u>Project Description</u></Box><br />
@@ -35,7 +38,9 @@ export const ListProjects = ({ projects }) => {
                 </Stack>
               )}
               <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:theme.secondaryText}}>
-              Project Link - <Link>{data.link}</Link>
+              Project Link - <Link sx={{textDecoration:'none',color:theme.primaryAccent,
+                    '&:hover':{color:theme.hoverAccent}
+                  }}>{data.link}</Link>
               </Box>
             </Box>
           ))}

@@ -19,7 +19,9 @@ export const ListCert = ({certificates}) => {
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:theme.secondaryText}}>Issued By {data.issuingOrg}</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:theme.secondaryText}}>Credential ID - {data.credId}</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:12,xs:13}, color:theme.secondaryText}}>Credential URL - 
-                  <Link sx={{pl:0.5}}>{data.credUrl}</Link></Box><br />
+                  <Link sx={{pl:0.5,textDecoration:'none',color:theme.primaryAccent,
+                    '&:hover':{color:theme.hoverAccent}
+                  }}>{data.credUrl}</Link></Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>Issued On - {data.issueDate ? new Date(data.issueDate).toLocaleDateString() : "N/A" }</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>{data.hasNoExpiry ? "" : `Expires On - ${data.expiryDate ? new Date(data.expiryDate).toLocaleDateString() : "N/A"}`}</Box><br />
                 {data.skills && data.skills.length > 0 && (
