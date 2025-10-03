@@ -63,9 +63,21 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
     PaperProps: {
-        style: {
+        sx: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
         width: 250,
+        backgroundColor: theme.primaryBg,
+          "& .MuiMenuItem-root": {
+            color: theme.primaryText,
+            "&:hover": {
+              backgroundColor: theme.hoverAccent,
+              color: theme.primaryAccent,
+            },
+            "&.Mui-selected": {
+              backgroundColor: theme.primaryAccent + "22",
+              color: theme.primaryAccent,
+            },
+          },
         },
     },
     };
@@ -128,7 +140,61 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
       <Grid container spacing={2}>
       <Grid size={12}>
           <Box>
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{"& .MuiInputBase-input": {
+                  color: theme.primaryText, // input text color
+                  "&::placeholder": {
+                      color: theme.secondaryText, // placeholder color
+                      opacity: 1, // ensures custom color shows
+                  },
+              },
+              "& .MuiInputLabel-root": {
+                  color: theme.secondaryText, // default label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                  color: theme.primaryAccent, // focused label color
+              },
+              "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                      borderColor: theme.primaryAccent, // default border
+                  },
+                  "&:hover fieldset": {
+                      borderColor: theme.hoverAccent, // hover border
+                  },
+                  "&.Mui-focused fieldset": {
+                      borderColor: theme.primaryAccent, // focus border
+                  },
+              },
+              '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+              },
+              '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+              },
+              '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+              },
+              "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                  backgroundColor: theme.hoverAccent,
+                  color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                  backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                  color: theme.primaryAccent,
+                },
+              },
+              "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+              "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+              },
+              "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+              },
+            }}>
             <InputLabel id="demo-simple-select-label">Select Experience</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -136,6 +202,24 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
               value={selectedIndex !== null ? selectedIndex : ''}
               label="Select Experience"
               onChange={handleSelectExperience}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: theme.primaryBg,
+                    "& .MuiMenuItem-root": {
+                      color: theme.primaryText,
+                      "&:hover": {
+                        backgroundColor: theme.hoverAccent,
+                        color: theme.primaryAccent,
+                      },
+                      "&.Mui-selected": {
+                        backgroundColor: theme.primaryAccent + "22",
+                        color: theme.primaryAccent,
+                      },
+                    },
+                  },
+                },
+              }}
             >
               {experience.map((type,index) => (
                 <MenuItem key={index} value={index}>{type.company} at {type.company}</MenuItem>
@@ -148,12 +232,100 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
         <Grid size={12}>
           <Box>
             <TextField label='Title' placeholder='Ex: Software Engineer, Web Developer, etc.' fullWidth
-            helperText='Enter the Job Title from Previous Role' value={title} onChange={e => setTitle(e.target.value)}/>
+            helperText='Enter the Job Title from Previous Role' value={title} onChange={e => setTitle(e.target.value)}
+            sx={{"& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          "& .MuiFormHelperText-root": {
+            color: theme.secondaryText,
+          },
+        }}/>
           </Box>
         </Grid>
         <Grid size={12}>
           <Box>
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{"& .MuiInputBase-input": {
+                  color: theme.primaryText, // input text color
+                  "&::placeholder": {
+                      color: theme.secondaryText, // placeholder color
+                      opacity: 1, // ensures custom color shows
+                  },
+              },
+              "& .MuiInputLabel-root": {
+                  color: theme.secondaryText, // default label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                  color: theme.primaryAccent, // focused label color
+              },
+              "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                      borderColor: theme.primaryAccent, // default border
+                  },
+                  "&:hover fieldset": {
+                      borderColor: theme.hoverAccent, // hover border
+                  },
+                  "&.Mui-focused fieldset": {
+                      borderColor: theme.primaryAccent, // focus border
+                  },
+              },
+              '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+              },
+              '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+              },
+              '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+              },
+              "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                  backgroundColor: theme.hoverAccent,
+                  color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                  backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                  color: theme.primaryAccent,
+                },
+              },
+              "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+              "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+              },
+              "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+              },
+            }}>
             <InputLabel id="demo-simple-select-label">Employee Type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -161,6 +333,24 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
               value={EmpType}
               label="Employee Type"
               onChange={handleChange}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: theme.primaryBg,
+                    "& .MuiMenuItem-root": {
+                      color: theme.primaryText,
+                      "&:hover": {
+                        backgroundColor: theme.hoverAccent,
+                        color: theme.primaryAccent,
+                      },
+                      "&.Mui-selected": {
+                        backgroundColor: theme.primaryAccent + "22",
+                        color: theme.primaryAccent,
+                      },
+                    },
+                  },
+                },
+              }}
             >
               {EMPTYPE.map((type,index) => (
                 <MenuItem key={index} value={type.value}>{type.name}</MenuItem>
@@ -173,7 +363,41 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
         <Grid size={12}>
           <Box>
             <TextField label='Company or Organization' placeholder='Ex: ABC Technologies' fullWidth
-            helperText='Enter the previous company name' value={company} onChange={e => setCompany(e.target.value)}/>
+            helperText='Enter the previous company name' value={company} onChange={e => setCompany(e.target.value)}
+            sx={{"& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          "& .MuiFormHelperText-root": {
+            color: theme.secondaryText,
+          },
+        }}/>
           </Box>
         </Grid>
         <Grid size={12}>
@@ -190,23 +414,111 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
                 bgcolor: 'transparent',        
               }
             }}/>
-            <Box component='span'>Currently Working on this Role</Box>
+            <Box component='span' sx={{color: theme.secondaryText}}>Currently Working on this Role</Box>
           </Box>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-            <DatePickerUi label='Start Date' value={startDate} onChange={setStartDate}/>
+            <DatePickerUi label='Start Date' value={startDate} onChange={setStartDate} theme={theme}/>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-            <DatePickerUi label='End Date' value={endDate} onChange={setEndDate} disabled={isCurrentRole}/>
+            <DatePickerUi label='End Date' value={endDate} onChange={setEndDate} disabled={isCurrentRole} theme={theme}/>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
           <Box>
             <TextField label='Location' placeholder='Ex: Nagercoil, Tamil-Nadu' fullWidth 
-            helperText='Previous job Location' value={location} onChange={e => setLocation(e.target.value)}/>
+            helperText='Previous job Location' value={location} onChange={e => setLocation(e.target.value)}
+            sx={{"& .MuiInputBase-input": {
+              color: theme.primaryText, // input text color
+              "&::placeholder": {
+                  color: theme.secondaryText, // placeholder color
+                  opacity: 1, // ensures custom color shows
+              },
+          },
+          "& .MuiInputLabel-root": {
+              color: theme.secondaryText, // default label color
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+              color: theme.primaryAccent, // focused label color
+          },
+          "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                  borderColor: theme.primaryAccent, // default border
+              },
+              "&:hover fieldset": {
+                  borderColor: theme.hoverAccent, // hover border
+              },
+              "&.Mui-focused fieldset": {
+                  borderColor: theme.primaryAccent, // focus border
+              },
+          },
+          '& label.Mui-focused':{ //label on clicking
+            color:theme.primaryAccent
+          },
+          '&:hover label:not(.Mui-focused)':{
+            color:theme.primaryAccent
+          },
+          "& .MuiFormHelperText-root": {
+            color: theme.secondaryText,
+          },
+        }}/>
           </Box>
         </Grid>
         <Grid size={{lg:6,md:6,sm:12,xs:12}}>
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{"& .MuiInputBase-input": {
+                  color: theme.primaryText, // input text color
+                  "&::placeholder": {
+                      color: theme.secondaryText, // placeholder color
+                      opacity: 1, // ensures custom color shows
+                  },
+              },
+              "& .MuiInputLabel-root": {
+                  color: theme.secondaryText, // default label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                  color: theme.primaryAccent, // focused label color
+              },
+              "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                      borderColor: theme.primaryAccent, // default border
+                  },
+                  "&:hover fieldset": {
+                      borderColor: theme.hoverAccent, // hover border
+                  },
+                  "&.Mui-focused fieldset": {
+                      borderColor: theme.primaryAccent, // focus border
+                  },
+              },
+              '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+              },
+              '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+              },
+              '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+              },
+              "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                  backgroundColor: theme.hoverAccent,
+                  color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                  backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                  color: theme.primaryAccent,
+                },
+              },
+              "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+              "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+              },
+              "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+              },
+            }}>
             <InputLabel id="demo-simple-select-label">Location Type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -214,6 +526,24 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
               value={LocType}
               label="Employee Type"
               onChange={handleChangelt}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: theme.primaryBg,
+                    "& .MuiMenuItem-root": {
+                      color: theme.primaryText,
+                      "&:hover": {
+                        backgroundColor: theme.hoverAccent,
+                        color: theme.primaryAccent,
+                      },
+                      "&.Mui-selected": {
+                        backgroundColor: theme.primaryAccent + "22",
+                        color: theme.primaryAccent,
+                      },
+                    },
+                  },
+                },
+              }}
             >
               {LOCTYPE.map((type,index) => (
                 <MenuItem key={index} value={type.value}>{type.name}</MenuItem>
@@ -223,7 +553,62 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
           </FormControl>
         </Grid>
         <Grid size={12}>
-          <FormControl sx={{ width: '100%' }}>
+          <FormControl sx={{ width:'100%',
+            "& .MuiInputBase-input": {
+                  color: theme.primaryText, // input text color
+                  "&::placeholder": {
+                      color: theme.secondaryText, // placeholder color
+                      opacity: 1, // ensures custom color shows
+                  },
+              },
+              "& .MuiInputLabel-root": {
+                  color: theme.secondaryText, // default label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                  color: theme.primaryAccent, // focused label color
+              },
+              "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                      borderColor: theme.primaryAccent, // default border
+                  },
+                  "&:hover fieldset": {
+                      borderColor: theme.hoverAccent, // hover border
+                  },
+                  "&.Mui-focused fieldset": {
+                      borderColor: theme.primaryAccent, // focus border
+                  },
+              },
+              '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+              },
+              '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+              },
+              '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+              },
+              "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                  backgroundColor: theme.hoverAccent,
+                  color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                  backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                  color: theme.primaryAccent,
+                },
+              },
+              "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+              },
+              "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+              },
+              "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+              },
+            }}>
             <InputLabel id="demo-multiple-checkbox-label">Skills</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
@@ -237,8 +622,19 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
             >
               {skills.map((name) => (
                 <MenuItem key={name} value={name}>
-                  <Checkbox checked={skillset.includes(name)} />
-                  <ListItemText primary={name} />
+                  <Checkbox checked={skillset.includes(name)} 
+                  sx={{
+                    color: theme.secondaryText,
+                    "&.Mui-checked": {
+                      color: theme.primaryAccent,
+                    },
+                  }}/>
+                  <ListItemText primary={name} 
+                  slotProps={{
+                    primary:{
+                      sx:{color: theme.primaryText}
+                    }
+                  }}/>
                 </MenuItem>
               ))}
             </Select>

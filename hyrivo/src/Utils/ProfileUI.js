@@ -3,120 +3,79 @@ export const ProfileUI = ({name, desc, username, theme}) => {
         <>
         <style>{`
             .card {
-                width: 80%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                gap: 10px;
-                background-color: theme.cardBg;
-                border-radius: 15px;
-                position: relative;
-                overflow: hidden;
-                padding: 20px;
-            }
-
-            .card::before {
-                content: "";
-                width: 100%;
-                height: 100px;
-                position: absolute;
-                top: 0;
-                border-top-left-radius: 15px;
-                border-top-right-radius: 15px;
-                border-bottom: 3px solid #fefefe;
-                background: linear-gradient(40deg, rgba(131,58,180,1) 0%, #00bfff 50%, #bf00ff 100%);
-                transition: all 0.5s ease;
-            }
-
-            .card * {
-                z-index: 1;
-            }
-
-            .image {
-                width: 90px;
-                height: 90px;
-                background-color:rgb(191, 74, 20);
-                border-radius: 50%;
-                border: 4px solid #fefefe;
-                margin-top: 30px;
-                transition: all 0.5s ease;
-            }
-
-            .card-info {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-                transition: all 0.5s ease;
-            }
-
-            .card-info span {
-                font-weight: 600;
-                font-size: 24px;
-                color: theme.primaryText;
-                margin-top: 15px;
-            }
-
-            .card-info p {
-                color: theme.secondaryText;
-                padding: 0px 20px;
-            }
-
-            .card:hover::before {
-                width: 350px;
+                width: 82%;
                 height: 100%;
-                border-bottom: none;
-                border-bottom-left-radius: 15px;
-                border-bottom-right-radius: 15px;
-                transform: scale(0.95);
+                background: ${theme.cardBg};
+                transition: 1s ease-in-out;
+                clip-path: polygon(30px 0%, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0% 30px);
+                border-top-right-radius: 20px;
+                border-bottom-left-radius: 20px;
+                display: flex;
+                flex-direction: column;
             }
 
-            .card:hover .card-info {
-                transform: translate(0%,-25%);
+            .card span {
+                font-weight: bolder;
+                color: ${theme.primaryText};
+                text-align: center;
+                display: block;
+                font-size: 40px
             }
 
-            .card:hover .card-info span {
-                transform: translateY(15px);
-                transition: all 0.5s ease;
-                max-width:300px
+            .card .username {
+                display: flex;
+                color: ${theme.secondaryText};
+                justify-content: center;
             }
 
-            .card:hover .card-info p {
-                transform: translateY(10px);
-                transition: all 0.5s ease;
-                max-width:300px
+            .card .info {
+                font-weight: 400;
+                color: ${theme.secondaryText};
+                display: block;
+                text-align: center;
+                font-size: 1em;
+                margin: 1em;
             }
 
-            .card:hover .image {
-                transform: scale(2) translate(-60%,-40%);
+            .card .img {
+                width: 4.8em;
+                height: 4.8em;
+                background: white;
+                border-radius: 15px;
+                margin: auto;
+                margin-bottom: 12px;
             }
 
-            .button {
-                text-decoration: none;
-                background-color: #1468BF;
-                color: white;
-                padding: 5px 20px;
-                border-radius: 5px;
-                border: 1px solid white;
-                transition: all 0.5s ease;
+            .card .share {
+                margin: 1em;
+                display: flex;
+                justify-content: flex-end;
+                gap: 1em;
             }
-            .button:hover {
-                background-color: #FF6EC7;
-                transform: scale(1.1);
+
+            .card a {
+                color: ${theme.secondaryText};
+                transition: .4s ease-in-out;
+            }
+
+            .card a:hover {
+                color: ${theme.hoverAccent};
             }
         `}</style>
 
-        <div className="card">
-            <div className="image"></div>
-            <div className="card-info">
-                <br/><br/>
-                <span>{name}</span>
-                <p>@ {username}</p>
-                <p>{desc}</p>
-            </div>
-            <button className='button'>Edit</button>
+        <div class="card">
+        <div class="share">
+            <a href="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+            </svg>
+            </a>
+        </div>
+        <div class="img"></div>
+        <span>{name}</span>
+        <p class="username">@ {username}</p>
+        <p class="info">{desc}</p>
         </div>
         </>
     )
