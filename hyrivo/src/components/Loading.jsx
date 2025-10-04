@@ -9,7 +9,7 @@ export const Loading = () => {
         <LinearProgress/>
         </Box>
         <br />
-        <Box component="img" src={hyrivoLogo} alt='Hyrivo Loading...' sx={{height: 100}}></Box> 
+        <Box component="img" src={hyrivoLogo} alt='Hyrivo Loading...' sx={{height: 80}}></Box> 
         <br />
         <Box sx={{width:'350px'}}>
         <LinearProgress/>

@@ -38,6 +38,7 @@ export const Profile = () => {
 
   const navigate = useNavigate()
 
+  const [userId, setUserId] = useState('')
   const [firstname, setFirstName] = useState('')
   const [lastname, setLastName] = useState('')
   const [mobile, setMobile] = useState('')
@@ -230,6 +231,7 @@ export const Profile = () => {
       })
       const user = response.data.profile
       const users = response.data.user
+      setUserId(user.userId)
       setFirstName(user.firstName)
       setLastName(user.lastName)
       setMobile(user.mobile)
@@ -292,7 +294,8 @@ export const Profile = () => {
         </Grid>
         <Grid size={12}>
           <Box sx={{display:'flex', justifyContent:'center'}}>
-            <ProfileUI name={`${firstname} ${lastname}`} desc={desc} username={username} theme={theme}/>
+            <ProfileUI name={`${firstname} ${lastname}`} desc={desc} username={username} 
+            theme={theme} setError={setError} setOpen={setOpen} userId={userId} fetchUser={fetchUser}/>
           </Box>
         </Grid>
         <Grid size={12}>

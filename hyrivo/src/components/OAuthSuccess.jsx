@@ -1,8 +1,9 @@
-import { Alert, Box, CircularProgress, Snackbar } from '@mui/material';
+import { Alert, Box, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { GoogleOrgUserUI } from '../Utils/GoogleOrgUserUI';
+import {Loading} from './Loading'
 
 export const OAuthSuccess = () => {
     const navigate = useNavigate();
@@ -57,7 +58,7 @@ export const OAuthSuccess = () => {
   return (
     <Box sx={{ height: '100vh' }}>
       <Box sx={{height:'100vh',display:'flex',justifyContent:'center',alignItems:'center'}}>
-        {showConsent ? <GoogleOrgUserUI/> : <CircularProgress/>}  
+        {showConsent ? <GoogleOrgUserUI/> : <Loading/>}  
       </Box>
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <Alert variant='filled' severity='error' 

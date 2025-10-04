@@ -244,6 +244,37 @@ router.post('/resume',log,auth,async (req,res) => {
     }
 })
 
+router.put('/update/profileCard/:userId', log, auth, async (req,res) => {
+    try {
+        const {userId} = req.params
+        const {firstName, lastName, description, username} = req.body
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {username},
+            {new: true}
+        )
+
+        if (!updatedUser) return res.status(400).json({ message: "User not found" })
+
+        const updatedProfile = await userProfile.findOneAndUpdate(
+            { userId },
+            {firstName, lastName, description},
+            {new: true}
+        )
+
+        if (!updatedProfile) return res.status(400).json({message:"Profile not found"})
+
+        res.status(200).json({
+            message:"Profile updated successfully",
+            user: updatedUser,
+            profile: updatedProfile
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 router.delete('/delete/resume/:public_id',log,auth,async (req,res) => {
     try {
         const { public_id } = req.params
@@ -256,7 +287,7 @@ router.delete('/delete/resume/:public_id',log,auth,async (req,res) => {
         profile.resumes = profile.resumes.filter(r => r.public_id !== public_id)
         await profile.save()
 
-        return res.status(200).json({ message: "User deleted successfully" })
+        return res.status(200).json({ message: "Resume deleted successfully" })
     } catch (error) {
         console.error("Delete error",error.message)
         res.status(500).json({error: error.message})

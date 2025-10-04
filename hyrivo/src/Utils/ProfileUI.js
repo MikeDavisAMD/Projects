@@ -1,4 +1,53 @@
-export const ProfileUI = ({name, desc, username, theme}) => {
+import { Done, Edit } from "@mui/icons-material"
+import { ButtonBase, CircularProgress, TextField } from "@mui/material"
+import axios from "axios"
+import { useEffect, useState } from "react"
+
+export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userId, fetchUser}) => {
+    const [isEditing, setIsEditing] = useState(false)
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [user, setUser] = useState("")
+    const [description, setDescription] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        const parts = name ? name.split(' ') : []
+        setFirstName(parts[0] || '')
+        setLastName(parts[1] || '')
+        setUser(username || "")
+        setDescription(desc || "")
+    },[name,username,desc])
+
+    const getInitials = (name) => {
+        if (!name) return '+' 
+        const names = name.split(' ')
+        if (names.length === 1) return names[0][0].toUpperCase() 
+        return (names[0][0] + names[1]?.[0] || "").toUpperCase()
+    }
+
+    const handleSave = async () => {    
+        try {
+            setLoading(true)
+
+            await axios.put(`http://localhost:2000/profile/update/profileCard/${userId}`,{
+                firstName,
+                lastName,
+                description,
+                username: user
+            },{
+                headers:{ Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` }
+            })
+
+            setIsEditing(false)
+            fetchUser()
+        } catch (error) {
+            setError("Failed to edit details")
+            setOpen(true)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <>
         <style>{`
@@ -40,10 +89,58 @@ export const ProfileUI = ({name, desc, username, theme}) => {
             .card .img {
                 width: 4.8em;
                 height: 4.8em;
-                background: white;
+                background: ${theme.primaryAccent};
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 border-radius: 15px;
                 margin: auto;
                 margin-bottom: 12px;
+            }
+
+            .card .name {
+                width: 4.4em;
+                height: 4.4em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 15px;
+                color: ${theme.primaryText};
+                background: linear-gradient(135deg, #00BFFF, #1BC47D);
+                font-size: 1em;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .card .name b {
+                transform: scale(1.6);
+                display: inline-block;
+                transition: opacity 0.3s ease;
+                z-index: 1; 
+            }
+
+            .card .edit-icon {
+                position: absolute;
+                inset: 0;                           
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: rgba(0, 0, 0, 0.5);   
+                color: white;
+                opacity: 0;
+                transition: all 0.3s ease;
+                z-index: 2;
+                font-size: 1.8em;
+            }
+
+            .card .name:hover .edit-icon {
+                opacity: 1;                          
+                transform: scale(1.2);             
+            }
+
+            .card .name:hover b {
+                opacity: 0.3;                        
             }
 
             .card .share {
@@ -52,30 +149,122 @@ export const ProfileUI = ({name, desc, username, theme}) => {
                 justify-content: flex-end;
                 gap: 1em;
             }
-
-            .card a {
-                color: ${theme.secondaryText};
-                transition: .4s ease-in-out;
-            }
-
-            .card a:hover {
-                color: ${theme.hoverAccent};
-            }
         `}</style>
 
         <div class="card">
         <div class="share">
-            <a href="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-            </svg>
-            </a>
+            <ButtonBase onClick={() => isEditing ? handleSave() : setIsEditing(true)} sx={{display:'flex',color: theme.primaryText,
+                flexDirection:'column',justifyContent:'flex-end',
+                alignItems:'center', pb:0.5, px:1,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                color: theme.hoverAccent,
+                }
+            }}>{isEditing ? loading ? <CircularProgress size={24} color="inherit"/> : <Done/> : <Edit/>}</ButtonBase>
         </div>
-        <div class="img"></div>
-        <span>{name}</span>
-        <p class="username">@ {username}</p>
-        <p class="info">{desc}</p>
+        <div class="img">
+            <div class="name">
+                <ButtonBase className="edit-icon" sx={{display:'flex',color: theme.secondaryText,
+                    flexDirection:'column',justifyContent:'flex-end',
+                    alignItems:'center', pb:0.5, px:1,
+                    transition: '.4s ease-in-out',
+                    '&:hover': {
+                        color: theme.hoverAccent,
+                    }
+                }}><Edit/></ButtonBase>
+                <b>{getInitials(name)}</b>
+            </div>
+        </div>
+        {isEditing ? (
+            <span>
+            <TextField variant='standard' value={firstName}
+                onChange={e=>setFirstName(e.target.value)} autoFocus
+                sx={{
+                    '& .MuiInputBase-input': {
+                        color: theme.primaryText,
+                    },
+                    '& .MuiInput-underline:before': {
+                        borderBottomColor: theme.cardBorder,
+                    },
+                    '& .MuiInput-underline:after': {
+                        borderBottomColor: theme.primaryAccent,
+                    },
+                    }}
+                slotProps={{
+                    input: {
+                        style: {
+                            width: `${Math.max(firstName.length,4)}ch`
+                        }
+                    }
+                }}/>
+                <TextField variant='standard' value={lastName}
+                onChange={e=>setLastName(e.target.value)} autoFocus
+                sx={{
+                    '& .MuiInputBase-input': {
+                        color: theme.primaryText,
+                    },
+                    '& .MuiInput-underline:before': {
+                        borderBottomColor: theme.cardBorder,
+                    },
+                    '& .MuiInput-underline:after': {
+                        borderBottomColor: theme.primaryAccent,
+                    },
+                    }}
+                slotProps={{
+                    input: {
+                        style: {
+                            width: `${Math.max(lastName.length,4)}ch`
+                        }
+                    }
+                }}/><br/>
+                <TextField variant='standard' value={user}
+                onChange={e=>setUser(e.target.value)} autoFocus
+                sx={{
+                    '& .MuiInputBase-input': {
+                        color: theme.primaryText,
+                    },
+                    '& .MuiInput-underline:before': {
+                        borderBottomColor: theme.cardBorder,
+                    },
+                    '& .MuiInput-underline:after': {
+                        borderBottomColor: theme.primaryAccent,
+                    },
+                    }}
+                slotProps={{
+                    input: {
+                        style: {
+                            width: `${Math.max(user.length,4)}ch`
+                        }
+                    }
+                }}/><br/>
+                <TextField variant='standard' value={description}
+                onChange={e=>setDescription(e.target.value)} autoFocus
+                sx={{
+                    '& .MuiInputBase-input': {
+                        color: theme.primaryText,
+                    },
+                    '& .MuiInput-underline:before': {
+                        borderBottomColor: theme.cardBorder,
+                    },
+                    '& .MuiInput-underline:after': {
+                        borderBottomColor: theme.primaryAccent,
+                    },
+                    }}
+                slotProps={{
+                    input: {
+                        style: {
+                            width: `${Math.max(description.length,4)}ch`
+                        }
+                    }
+                }}/>
+            </span>
+        ) : (
+            <>
+            <span>{name}</span>
+            <p class="username">@ {username}</p>
+            <p class="info">{desc}</p>
+            </>
+        )}
         </div>
         </>
     )
