@@ -24,6 +24,7 @@ import { ThemeProvider } from './Utils/ThemeContext'
 import { Loading } from './components/Loading'
 import { DetailsOrg } from './components/DetailsOrg'
 import { ProfileOrg } from './components/ProfileOrg'
+import { EditDP } from './Utils/EditDP'
 
 const AppContent = () => {
 
@@ -88,6 +89,11 @@ const AppContent = () => {
         <Route path='/Profile' element={
           <RouteSecure>
             <Profile/>
+          </RouteSecure>
+        }/>
+        <Route path='/Profile/EditDP' element={
+          <RouteSecure>
+            <EditDP/>
           </RouteSecure>
         }/>
         <Route path='/ProfileOrg' element={

@@ -6,7 +6,33 @@ const profileSchema = new mongoose.Schema({
     about: String,
     mobile: { type: String, required: true},
     location: { type: String, required: true},
+    dp:[{
+        name: { type:String, default: null },
+        url: { type: String, default:null }
+    }],
+    currentDp: { type: String, default: null }
 }, { discriminatorKey: 'profileType', timestamps: true })
+
+profileSchema.pre('save', function(next) {
+    if (this.currentDp) return null
+
+    let initials = '+'
+
+        if (this.profileType === 'Individual') {
+            const firstName = this.firstName || ''
+            const lastName = this.lastName || ''
+            if (firstName && lastName) initials = (firstName[0] + lastName[0]).toUpperCase()
+            else if (firstName) initials = firstName[0].toUpperCase()
+        } else if (this.profileType === 'Organization') {
+            const name = this.companyName || ''
+            const parts = name.split(' ')
+            if (parts.length === 1) initials = parts[0][0]?.toUpperCase() || '+'
+            else initials = (parts[0][0] + parts[1][0])?.toUpperCase()
+        }
+
+        this.currentDp = initials
+        next()
+})
 
 const Profile = mongoose.model('Profile',profileSchema)
 

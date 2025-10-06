@@ -353,7 +353,7 @@ export const AddEdu = ({education, setEducation, handleCloseModal}) => {
         </Grid>
         <Grid size={12}>
           <Box>
-            <TextField label='Grade' placeholder='Enter the Grade' fullWidth
+            <TextField label={isStudying ? 'Studying' : 'Grade'} placeholder='Enter the Grade' fullWidth
             helperText='Enter the Grade Out of 10' disabled={isStudying} value={grade} 
             onChange={e => setGrade(e.target.value)}
             sx={{"& .MuiInputBase-input": {

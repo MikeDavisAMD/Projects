@@ -2,8 +2,10 @@ import { Done, Edit } from "@mui/icons-material"
 import { ButtonBase, CircularProgress, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userId, fetchUser}) => {
+export const ProfileUI = ({dp, name, desc, username, theme, setError, setOpen, userId, fetchUser}) => {
+    const navigate = useNavigate()
     const [isEditing, setIsEditing] = useState(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
@@ -18,13 +20,6 @@ export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userI
         setUser(username || "")
         setDescription(desc || "")
     },[name,username,desc])
-
-    const getInitials = (name) => {
-        if (!name) return '+' 
-        const names = name.split(' ')
-        if (names.length === 1) return names[0][0].toUpperCase() 
-        return (names[0][0] + names[1]?.[0] || "").toUpperCase()
-    }
 
     const handleSave = async () => {    
         try {
@@ -113,7 +108,7 @@ export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userI
                 transition: all 0.3s ease;
             }
 
-            .card .name b {
+            .card .name .dp {
                 transform: scale(1.6);
                 display: inline-block;
                 transition: opacity 0.3s ease;
@@ -139,7 +134,7 @@ export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userI
                 transform: scale(1.2);             
             }
 
-            .card .name:hover b {
+            .card .name:hover .dp {
                 opacity: 0.3;                        
             }
 
@@ -164,7 +159,7 @@ export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userI
         </div>
         <div class="img">
             <div class="name">
-                <ButtonBase className="edit-icon" sx={{display:'flex',color: theme.secondaryText,
+                <ButtonBase onClick={()=>navigate('/Profile/EditDP')} className="edit-icon" sx={{display:'flex',color: theme.secondaryText,
                     flexDirection:'column',justifyContent:'flex-end',
                     alignItems:'center', pb:0.5, px:1,
                     transition: '.4s ease-in-out',
@@ -172,7 +167,7 @@ export const ProfileUI = ({name, desc, username, theme, setError, setOpen, userI
                         color: theme.hoverAccent,
                     }
                 }}><Edit/></ButtonBase>
-                <b>{getInitials(name)}</b>
+                <div class='dp'>{dp}</div>
             </div>
         </div>
         {isEditing ? (

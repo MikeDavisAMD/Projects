@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useThemeContext } from '../Utils/ThemeContext'
 
-const ME = ({users, desc, profileType ,logout}) => {
+const ME = ({dp, users, desc, profileType ,logout}) => {
   const {theme} = useThemeContext()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null);
@@ -27,13 +27,6 @@ const ME = ({users, desc, profileType ,logout}) => {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
-
-  const getInitials = (name) => {
-    if (!name) return '+' 
-    const names = name.split(' ')
-    if (names.length === 1) return names[0][0].toUpperCase() 
-    return (names[0][0] + names[1]?.[0] || "").toUpperCase()
-  }
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -78,7 +71,7 @@ const ME = ({users, desc, profileType ,logout}) => {
       >
         <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
           <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
-            {getInitials(users)}
+            {dp}
           </Avatar>
           <Box sx={{display:'flex',alignItems:'center'}}>
             <Box component='span' sx={{color:theme.primaryText}}>Me</Box>
@@ -112,7 +105,7 @@ const ME = ({users, desc, profileType ,logout}) => {
                 sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
                 width:{lg:50,md:50,sm:55},
                 height:{lg:50,md:50,sm:55},
-                fontSize:20}}>{getInitials(users)}</Avatar>
+                fontSize:20}}>{dp}</Avatar>
               </Box>
             </Grid>
             <Grid size={7}>
@@ -163,7 +156,7 @@ const ME = ({users, desc, profileType ,logout}) => {
     <Box sx={{display:{lg:'none',md:'none',sm:'none',xs:'block'}}}>
        <ButtonBase onClick={toggleDrawer(true)}>
          <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-           <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:20,height:20,fontSize:12}}>{getInitials(users)}</Avatar>
+           <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:20,height:20,fontSize:12}}>{dp}</Avatar>
          </Box>
        </ButtonBase>
        <Drawer anchor='bottom' open={opn} onClose={toggleDrawer(false)} 
@@ -190,7 +183,7 @@ const ME = ({users, desc, profileType ,logout}) => {
             sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',
             width:80,
             height:80,
-            fontSize:40}}>{getInitials(users)}</Avatar>
+            fontSize:40}}>{dp}</Avatar>
             <span style={{fontWeight:'bolder',fontSize:30}}>{users}</span>
             <span style={{fontSize:20}}>{desc}</span>
           </Box>
@@ -368,7 +361,7 @@ export const Navbar = () => {
                     {data.name}
                   </ButtonBase>
                 ))}
-                <ME users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
+                <ME dp={user.currentDp} users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
                     desc={user.description} profileType={user.profileType}
                     logout={() => logout(navigate,setUser)}/>
               </Box>
@@ -448,7 +441,7 @@ export const Navbar = () => {
                         </Box>
                       </ButtonBase>
                     ))}
-                    <ME users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
+                    <ME dp={user.currentDp} users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
                     desc={user.description} profileType={user.profileType}
                     logout={() => logout(navigate,setUser)}/>
                   </Box>
@@ -524,7 +517,7 @@ export const Navbar = () => {
                           {data.icon}
                         </ButtonBase>
                       ))}
-                      <ME users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
+                      <ME dp={user.currentDp} users={user.profileType === 'Organization' ? user?.companyName :`${user?.firstName} ${user?.lastName}`} 
                     desc={user.description} profileType={user.profileType}
                     logout={() => logout(navigate,setUser)}/>
                     </Box>
