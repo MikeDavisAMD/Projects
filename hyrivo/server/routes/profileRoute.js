@@ -114,6 +114,20 @@ const streamUpload = (fileBuffer, username) => {
     })
 }
 
+const streamUploadProfile = (fileBuffer,username) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({
+            folder:`Hyrivo/Profile/${username}`,
+            format:'png',
+            transformation: [{width:500, height:500, crop:'limit'}]
+        }, (error, result) => {
+            if (result) resolve(result)
+            else reject(error)
+        })
+        streamifier.createReadStream(fileBuffer).pipe(stream)
+    })
+}
+
 router.post('/',log,auth, async (req, res) => {
     try {
         cleanDates(req.body)
@@ -193,6 +207,99 @@ router.post('/',log,auth, async (req, res) => {
     } catch (error) {
         console.error("Profile Save Error:", error);
         res.status(500).json({ error: error.message })
+    }
+})
+
+router.post('/upload/dp',log,auth,upload.single("file"),async (req,res) => {
+    try {
+        if (!req.file) return res.status(400).json({error:"No file uploaded"})
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({error:'user not found'})
+
+        let profile = !user.isCompany 
+            ? await userProfile.findOne({userId: req.userId})
+            : await orgProfile.findOne({userId: req.userId})
+
+        if (!profile) return res.status(404).json({error:'Profile not found'})
+
+        const result = await streamUploadProfile(req.file.buffer, user.username)
+
+        profile.dp.push({ name: req.file.originalname, url: result.secure_url })
+        profile.currentDp = result.secure_url
+
+        await profile.save()
+
+        return res.status(200).json({message: "Display Picture uploaded successfully"})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.put('/update/dp',log,auth, async (req, res) => {
+    try {
+        const { url } = req.body
+        if (!url) return res.status(400).json({ error: "No image source found"})
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({error:'user not found'})
+
+        let profile = !user.isCompany 
+            ? await userProfile.findOne({userId: req.userId})
+            : await orgProfile.findOne({userId: req.userId})
+
+        if (!profile) return res.status(404).json({error:'Profile not found'})
+
+        profile.currentDp = url
+        await profile.save()
+
+        res.status(200).json({message: "Current display picture updated"})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+
+router.delete('/delete/dp',log,auth,async (req, res) => {
+    try {
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({error:'user not found'})
+
+        let profile = !user.isCompany 
+            ? await userProfile.findOne({userId: req.userId})
+            : await orgProfile.findOne({userId: req.userId})
+
+        if (!profile) return res.status(404).json({error:'Profile not found'})
+
+        const currentDpUrl = profile.currentDp
+        if (!currentDpUrl) return res.status(404).json({error:"No image source found"})
+
+        if (currentDpUrl.startsWith("https://res.cloudinary.com")) {
+            const match = currentDpUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.[^.]+$/)
+            const publicId = match ? match[1] : null
+
+            if (publicId) {
+                try {
+                    await cloudinary.uploader.destroy(publicId)
+                } catch (error) {
+                    console.error("Cloudinary delete error:", error.message)
+                }
+            } else {
+                console.warn("⚠️ Could not extract Cloudinary public_id from URL:", currentDpUrl)
+            }
+
+            profile.dp = profile.dp.filter(dp => dp.url !== currentDpUrl)
+
+            if (profile.dp.length > 0) {
+                profile.currentDp = profile.dp[profile.dp.length - 1].url
+            } else {
+                profile.currentDp = null
+            }
+
+            await profile.save()
+            return res.status(200).json({message: "Display picture deleted successfully"})
+        }
+    } catch (error) {
+        res.status(500).json({error: error.message})
     }
 })
 

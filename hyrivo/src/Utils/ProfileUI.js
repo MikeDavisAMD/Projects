@@ -167,7 +167,11 @@ export const ProfileUI = ({dp, name, desc, username, theme, setError, setOpen, u
                         color: theme.hoverAccent,
                     }
                 }}><Edit/></ButtonBase>
-                <div class='dp'>{dp}</div>
+                {dp && dp.startsWith('https://') ? (
+                    <img src={dp} height='100%' width='100%' alt="Display Pic"/>
+                ):(
+                    <div class='dp'>{dp}</div>
+                )}
             </div>
         </div>
         {isEditing ? (

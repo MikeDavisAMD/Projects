@@ -14,24 +14,24 @@ const profileSchema = new mongoose.Schema({
 }, { discriminatorKey: 'profileType', timestamps: true })
 
 profileSchema.pre('save', function(next) {
-    if (this.currentDp) return null
+    if (this.currentDp && this.currentDp.startsWith('https://')) return next()
 
     let initials = '+'
 
-        if (this.profileType === 'Individual') {
-            const firstName = this.firstName || ''
-            const lastName = this.lastName || ''
-            if (firstName && lastName) initials = (firstName[0] + lastName[0]).toUpperCase()
-            else if (firstName) initials = firstName[0].toUpperCase()
-        } else if (this.profileType === 'Organization') {
-            const name = this.companyName || ''
-            const parts = name.split(' ')
-            if (parts.length === 1) initials = parts[0][0]?.toUpperCase() || '+'
-            else initials = (parts[0][0] + parts[1][0])?.toUpperCase()
-        }
+    if (this.profileType === 'Individual') {
+        const firstName = this.firstName || ''
+        const lastName = this.lastName || ''
+        if (firstName && lastName) initials = (firstName[0] + lastName[0]).toUpperCase()
+        else if (firstName) initials = firstName[0].toUpperCase()
+    } else if (this.profileType === 'Organization') {
+        const name = this.companyName || ''
+        const parts = name.split(' ')
+        if (parts.length === 1) initials = parts[0][0]?.toUpperCase() || '+'
+        else initials = (parts[0][0] + parts[1][0])?.toUpperCase()
+    }
 
-        this.currentDp = initials
-        next()
+    this.currentDp = initials
+    next()
 })
 
 const Profile = mongoose.model('Profile',profileSchema)
