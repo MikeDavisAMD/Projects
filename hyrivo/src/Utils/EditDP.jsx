@@ -478,7 +478,7 @@ export const EditDP = () => {
                                 borderColor:theme.errorHover,
                                 color:theme.primaryBg
                                 }
-                            }}>Delete</Button>
+                            }}>{loading ? 'Deleting...' :'Delete'}</Button>
                     </DialogActions>
                 </Dialog>
             </Grid>

@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver'
 import { AddEdu } from '../Utils/AddEdu'
 import { AddProjects } from '../Utils/AddProjects'
 import { AddCert } from '../Utils/AddCert'
+import { EditDetails } from '../Utils/EditDetails'
 
 export const Profile = () => {
   const {theme} = useThemeContext()
@@ -192,6 +193,11 @@ export const Profile = () => {
   const handleOpenEditExp = () => setOpenEditExp(true);
   const handleCloseEditExp = () => setOpenEditExp(false);
 
+  // Edit Details
+  const [openEditDetails, setOpenEditDetails] = useState(false)
+  const handleOpenEditDetails = () => setOpenEditDetails(true);
+  const handleCloseEditDetails = () => setOpenEditDetails(false);
+
   // Education
   const [openEdu, setOpenEdu] = useState(false);
   const handleOpenEdu = () => setOpenEdu(true);
@@ -304,7 +310,7 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
               <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
                 <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
-                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={handleOpenEditDetails} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -348,6 +354,22 @@ export const Profile = () => {
                   </Typography>
                 </CardContent>
               </Card>
+              <Modal
+                open={openEditDetails}
+                onClose={handleCloseEditDetails}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" 
+                  sx={{fontWeight:'bolder',background:theme.primaryBg,color:theme.primaryText}}>
+                    Edit Personal Details
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <EditDetails/>
+                  </Typography>
+                </Box>
+              </Modal>
             </Box>
         </Grid>
         <Grid size={12}>
