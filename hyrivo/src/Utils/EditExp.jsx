@@ -1,8 +1,9 @@
-import { Box, Button, Checkbox, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, TextField } from '@mui/material'
+import { Alert, Box, Button, Checkbox, CircularProgress, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, Snackbar, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { useThemeContext } from './ThemeContext'
 import { DatePickerUi } from './DatePickerUi'
 import { Delete, Save } from '@mui/icons-material'
+import axios from 'axios'
 
 export const EditExp = ({experience, setExperience, handleCloseModal, skills}) => {
     const {theme} = useThemeContext()
@@ -112,8 +113,17 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
     }
 
     // save button
-    const handleSave = () => {
-    const exp = {
+    const [saveLoading, setSaveLoading] = useState(false)
+    const handleSave = async () => {
+      if (selectedIndex === null) {
+        setError("Select existing experience to update")
+        setOpen(true)
+        return
+      }
+
+      const selectedExp = experience[selectedIndex]
+
+      const exp = {
         title,
         empType: EmpType,
         company,
@@ -123,17 +133,61 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
         skills: skillset,
         location,
         locType: LocType
+      }
+
+      setSaveLoading(true)
+      try {
+        const response = await axios.put(`http://localhost:2000/profile/update/experience/${selectedExp._id}`,exp,{
+          headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+        })
+
+        const updated = [...experience]
+        updated[selectedIndex] = response.data.updatedExperience
+        setExperience(updated)
+      } catch (error) {
+        setError('Unable to update selected Experience')
+        setOpen(true)
+      } finally {
+        setSaveLoading(false)
+        handleCloseModal()
+      }
     }
 
-    let updated = [...experience]
-    if (selectedIndex !== null) {
-        updated[selectedIndex] = exp
-    } else {
-        updated.push(exp)
+    const handleDelete = async () => {
+      if (selectedIndex !== null) {
+        const selectedExp = experience[selectedIndex]
+        setLoading(true)
+
+        try {
+          await axios.delete(`http://localhost:2000/profile/delete/experience/${selectedExp._id}`,{
+            headers:{Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+          })
+
+          const updated = [...experience]
+          updated.splice(selectedIndex,1)
+          setExperience(updated)
+        } catch (error) {
+          setError("Error while deleting selected experience")
+          setOpen(true)
+        } finally {
+          setLoading(false)
+          handleCloseModal()
+        }
+      }
     }
-    setExperience(updated)
-    handleCloseModal()
+
+    // Snackbar
+    const [open,setOpen] = useState(false)
+    const [error,setError] = useState('')
+    const [loading, setLoading] = useState(false)
+  
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
     }
+  
+    setOpen(false);
+    };
 
   return (
     <Box sx={{flexGrow:1}}>
@@ -222,7 +276,7 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
               }}
             >
               {experience.map((type,index) => (
-                <MenuItem key={index} value={index}>{type.company} at {type.company}</MenuItem>
+                <MenuItem key={index} value={index}>{type.title} at {type.company}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Select what type of employee were you</FormHelperText>
@@ -644,7 +698,8 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
         <Grid size={12}>
           <Divider/><br />
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'},gap:1}}>
-              <Button variant='outlined' size='large' startIcon={<Delete/>} 
+              <Button variant='outlined' size='large' onClick={handleDelete}
+              startIcon={loading ? <CircularProgress size={24} color="inherit"/> :<Delete/>} 
                 sx={{
                     color:theme.error,
                     borderColor:theme.error,
@@ -654,10 +709,10 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
                       color:theme.primaryBg
                     }
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                      Delete
+                      {loading ? "Deleting..." : "Delete"}
                     </Box></Button>
-                    <Button variant='outlined' size='large' startIcon={<Save/>}
-                    onClick={handleSave}
+                    <Button variant='outlined' size='large' onClick={handleSave}
+                    startIcon={saveLoading ? <CircularProgress size={24} color="inherit"/> : <Save/>}
                     sx={{
                         color:theme.primaryAccent,
                         borderColor:theme.primaryAccent,
@@ -667,11 +722,19 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
                         color:theme.primaryBg
                         }
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                      save
+                      {saveLoading ? "Saving..." : "save"}
                     </Box></Button>
             </Box>
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} variant='filled' severity='error'
+        sx={{
+          backgroundColor: '#FF4D6D'
+        }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

@@ -1,6 +1,6 @@
 export const COLORS = {
     primaryBg: '#FFFFFF',
-    secondaryBg: '#F5F7FA',
+    secondaryBg: '#EEF3FB',
     cardBorder: '#E0E0E0',
     primaryText: '#1A1A1A',
     secondaryText: '#4F4F4F',

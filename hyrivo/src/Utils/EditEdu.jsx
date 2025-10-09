@@ -1,51 +1,64 @@
-import { Box, Button, Checkbox, Divider, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Portal, Select, TextField } from '@mui/material'
-import React, { useRef, useState } from 'react'
-import { DEGREE } from './degree';
-import { ListEdu } from './ListEdu';
-import { List, Save } from '@mui/icons-material';
-import { DatePickerUi } from './DatePickerUi';
+import React, { useState } from 'react'
 import { useThemeContext } from './ThemeContext';
+import { DEGREE } from './degree';
+import { Alert, Box, Button, Checkbox, CircularProgress, Divider, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from '@mui/material';
+import { Delete, Save } from '@mui/icons-material';
+import { DatePickerUi } from './DatePickerUi';
 
-export const AddEdu = ({education, setEducation, handleCloseModal}) => {
-  const {theme} = useThemeContext()
-  // college name
-  const [college, setCollege] = useState('')
+export const EditEdu = ({ education, setEducation, handleCloseModal }) => {
+    const {theme} = useThemeContext()
 
-   // Degree and field of study type
-  const [Degree, setDegree] = useState('');
-  const [Field, setField] = useState('')
+    // Select Education index
+    const [selectedIndex, setSelectedIndex] = useState(null)
 
-  const handleChangeDegree = (event) => {
+    // college name
+    const [college, setCollege] = useState('')
+
+    // Degree and field of study type
+    const [Degree, setDegree] = useState('');
+    const [Field, setField] = useState('')
+
+    const handleChangeDegree = (event) => {
     setDegree(event.target.value);
     setField('')
-  };
+    };
 
-  const handleChangeField = (event) => {
+    const handleChangeField = (event) => {
     setField(event.target.value);
-  };
+    };
 
-  const selectedDegree = DEGREE.find(d => d.degree === Degree)
+    const selectedDegree = DEGREE.find(d => d.degree === Degree)
 
-  // currently studying
+    // currently studying
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const [isStudying, setIsStudying] = useState(false)
 
-  // Start and end date date picker
+    // Start and end date date picker
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
 
-  // Grade
-  const [grade, setGrade] = useState('')
+    // Grade
+    const [grade, setGrade] = useState('')
 
-  // List portal
-    const [showPortal, setShowPortal] = useState(false);
-    const container = useRef(null);
-  
-    const handleClickPortal = () => {setShowPortal(!showPortal)};
+    // Select Experience
+    const handleSelectEducation = (event) => {
+        const index = event.target.value
+        setSelectedIndex(index)
+        const edu = education[index]
+        if (edu) {
+            setCollege(edu.institute)
+            setDegree(edu.degree)
+            setField(edu.fieldOfStudy)
+            setIsStudying(edu.isStudying)
+            setStartDate(edu.startDate)
+            setEndDate(edu.endDate)
+            setGrade(edu.grade)
+        }
+    }
 
-  // save button
+    // save button
     const handleSave = () => {
-      const edu = {
+        const edu = {
         institute: college,
         degree: Degree,
         fieldOfStudy: Field,
@@ -53,14 +66,119 @@ export const AddEdu = ({education, setEducation, handleCloseModal}) => {
         startDate,
         endDate,
         grade
-      }
-      setEducation([...education,edu])
-      handleCloseModal()
+        }
+        setEducation([...education,edu])
+        handleCloseModal()
     }
-  
+
+    // Snackbar
+    const [open,setOpen] = useState(false)
+    const [error,setError] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [dLoading, setDLoading] = useState(false)
+    
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    
+    setOpen(false);
+    };
+
   return (
     <Box sx={{flexGrow:1}}>
       <Grid container spacing={2}>
+        <Grid size={12}>
+            <Box>
+            <FormControl fullWidth sx={{"& .MuiInputBase-input": {
+                    color: theme.primaryText, // input text color
+                    "&::placeholder": {
+                        color: theme.secondaryText, // placeholder color
+                        opacity: 1, // ensures custom color shows
+                    },
+                },
+                "& .MuiInputLabel-root": {
+                    color: theme.secondaryText, // default label color
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                    color: theme.primaryAccent, // focused label color
+                },
+                "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                        borderColor: theme.primaryAccent, // default border
+                    },
+                    "&:hover fieldset": {
+                        borderColor: theme.hoverAccent, // hover border
+                    },
+                    "&.Mui-focused fieldset": {
+                        borderColor: theme.primaryAccent, // focus border
+                    },
+                },
+                '& label.Mui-focused':{ //label on clicking
+                color:theme.primaryAccent
+                },
+                '&:hover label:not(.Mui-focused)':{
+                color:theme.primaryAccent
+                },
+                '& .MuiSelect-select':{
+                color:theme.primaryText,
+                background:theme.primaryBg
+                },
+                "& .MuiMenuItem-root": {
+                color: theme.primaryText,
+                "&:hover": {
+                    backgroundColor: theme.hoverAccent,
+                    color: theme.primaryAccent,
+                },
+                "&.Mui-selected": {
+                    backgroundColor: theme.primaryAccent + "22", // translucent highlight
+                    color: theme.primaryAccent,
+                },
+                },
+                "& .MuiFormHelperText-root": {
+                color: theme.secondaryText,
+                },
+                "& .MuiSelect-icon": {
+                color: theme.primaryText, // arrow color
+                },
+                "& .MuiSelect-iconOpen": {
+                color: theme.hoverAccent,   // when dropdown is open
+                },
+            }}>
+            <InputLabel id="demo-simple-select-label">Select Experience</InputLabel>
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedIndex !== null ? selectedIndex : ''}
+                label="Select Experience"
+                onChange={handleSelectEducation}
+                MenuProps={{
+                PaperProps: {
+                    sx: {
+                    backgroundColor: theme.primaryBg,
+                    "& .MuiMenuItem-root": {
+                        color: theme.primaryText,
+                        "&:hover": {
+                        backgroundColor: theme.hoverAccent,
+                        color: theme.primaryAccent,
+                        },
+                        "&.Mui-selected": {
+                        backgroundColor: theme.primaryAccent + "22",
+                        color: theme.primaryAccent,
+                        },
+                    },
+                    },
+                },
+                }}
+            >
+                {education.map((type,index) => (
+                <MenuItem key={index} value={index}>{type.degree}</MenuItem>
+                ))}
+            </Select>
+            <FormHelperText>Select what type of employee were you</FormHelperText>
+            </FormControl>
+            </Box>
+        </Grid>
         <Grid size={12}>
           <Box>
             <TextField label='University or College or Institute' placeholder='Ex: ABC College, City, State, Country' fullWidth
@@ -401,19 +519,21 @@ export const AddEdu = ({education, setEducation, handleCloseModal}) => {
         <Grid size={12}>
           <Divider color={theme.secondaryText}/><br />
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'},gap:1}}>
-              <Button variant='outlined' size='large' startIcon={<List/>} onClick={handleClickPortal}
+              <Button variant='outlined' size='large' 
+              startIcon={dLoading ? <CircularProgress size={24} color="inherit"/> : <Delete/>} 
                 sx={{
-                    color:theme.primaryAccent,
-                    borderColor:theme.primaryAccent,
+                    color:theme.error,
+                    borderColor:theme.error,
                     '&:hover':{
-                      backgroundColor:theme.hoverAccent,
-                      borderColor:theme.hoverAccent,
+                      backgroundColor:theme.errorHover,
+                      borderColor:theme.errorHover,
                       color:theme.primaryBg
                     }
                   }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                      list
+                      {dLoading ? 'deleting...' : 'delete'}
                     </Box></Button>
-                    <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleSave}
+                    <Button variant='outlined' size='large' onClick={handleSave}
+                    startIcon={loading ? <CircularProgress size={24} color="inherit"/> : <Save/>} 
                     sx={{
                         color:theme.primaryAccent,
                         borderColor:theme.primaryAccent,
@@ -423,18 +543,19 @@ export const AddEdu = ({education, setEducation, handleCloseModal}) => {
                           color:theme.primaryBg
                         }
                       }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
-                          save
+                          {loading ? 'saving...' : 'save'}
                     </Box></Button>
             </Box>
-            {showPortal ? (
-              <Portal container={() => container.current}>
-                <br />
-                <ListEdu education={education}/>
-              </Portal>
-            ) : null}
-            <Box ref={container} />
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} variant='filled' severity='error'
+            sx={{
+            backgroundColor: '#FF4D6D'
+            }}>
+            {error}
+            </Alert>
+        </Snackbar>
     </Box>
   )
 }

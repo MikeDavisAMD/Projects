@@ -303,6 +303,189 @@ router.delete('/delete/dp',log,auth,async (req, res) => {
     }
 })
 
+router.put('/update/profileCard/:userId', log, auth, async (req,res) => {
+    try {
+        const {userId} = req.params
+        const {firstName, lastName, description, username} = req.body
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {username},
+            {new: true}
+        )
+
+        if (!updatedUser) return res.status(400).json({ message: "User not found" })
+
+        const updatedProfile = await userProfile.findOneAndUpdate(
+            { userId },
+            {firstName, lastName, description},
+            {new: true}
+        )
+
+        if (!updatedProfile) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            user: updatedUser,
+            profile: updatedProfile
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/details/:userId',log,auth, async (req,res) => {
+    try {
+        const {userId} = req.params
+        const {mobile, location} = req.body
+
+        const user = await User.findById(userId)
+        if (!user) return res.status(400).json({error: "user not found"})
+
+        const updatedDetails = !user.isCompany 
+            ? await userProfile.findOneAndUpdate(
+                {userId},
+                {mobile, location},
+                {new: true}
+            ) 
+            : await orgProfile.findOneAndUpdate(
+                {userId},
+                {mobile, location},
+                {new: true}
+            )
+
+        if (!updatedDetails) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: updatedDetails
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/about/:userId',log,auth,async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {about} = req.body
+
+        const user = await User.findById(userId)
+        if (!user) return res.status(404).json({error: "user not found"})
+        
+        const updatedAbout = !user.isCompany
+            ? await userProfile.findOneAndUpdate(
+                {userId},
+                {about},
+                {new: true}
+            )
+            : await orgProfile.findOneAndUpdate(
+                {userId},
+                {about},
+                {new: true}
+            )
+        
+        if (!updatedAbout) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: updatedAbout
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/skills/:userId',log,auth,async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {skills} = req.body
+
+        const updatedSkills = await userProfile.findOneAndUpdate(
+            {userId},
+            {skills},
+            {new: true}
+        )
+
+        if (!updatedSkills) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: updatedSkills
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/add/new/experience/:userId',log,auth,async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {experience} = req.body
+
+        const newExp = await userProfile.findOneAndUpdate(
+            {userId},
+            {experience},
+            {new: true}
+        )
+
+        if (!newExp) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: newExp
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/experience/:expId',log,auth,async (req,res) => {
+    try {
+        const { expId } = req.params
+        const updates = req.body
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        const exp = profile.experience.id(expId)
+        if (!exp) return res.status(404).json({ error: "Experience not found" })
+        
+        Object.assign(exp, updates)
+        await profile.save()
+
+        const updatedExperience = profile.experience.id(expId)
+
+        return res.status(200).json({ message: "Selected Experience updated successfully", updatedExperience })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.delete('/delete/experience/:expId',log,auth, async (req, res) => {
+    try {
+        const { expId } = req.params
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        profile.experience = profile.experience.filter(e => e._id.toString() !== expId)
+
+        await profile.save()
+
+        return res.status(200).json({ message: "Selected Experience Deleted Successfully" })
+    } catch (error) {
+        console.error("unable to delete",error.message)
+        res.status(500).json({ error: error.message })
+    }
+})
+
 router.post('/upload/resume',log,auth,upload.single("file"),async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "No file uploaded" })
@@ -346,37 +529,6 @@ router.post('/resume',log,auth,async (req,res) => {
         await profile.save()
 
         res.status(200).json({ message: "New resume added successfully" })
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-})
-
-router.put('/update/profileCard/:userId', log, auth, async (req,res) => {
-    try {
-        const {userId} = req.params
-        const {firstName, lastName, description, username} = req.body
-
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {username},
-            {new: true}
-        )
-
-        if (!updatedUser) return res.status(400).json({ message: "User not found" })
-
-        const updatedProfile = await userProfile.findOneAndUpdate(
-            { userId },
-            {firstName, lastName, description},
-            {new: true}
-        )
-
-        if (!updatedProfile) return res.status(400).json({message:"Profile not found"})
-
-        res.status(200).json({
-            message:"Profile updated successfully",
-            user: updatedUser,
-            profile: updatedProfile
-        })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }

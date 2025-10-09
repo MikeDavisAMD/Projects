@@ -1,6 +1,7 @@
 import { Box, Chip, Grid, Link, Stack } from '@mui/material'
 import React from 'react'
 import { useThemeContext } from './ThemeContext'
+import { Star } from '@mui/icons-material'
 
 export const ListCert = ({certificates}) => {
   const {theme} = useThemeContext()
@@ -24,16 +25,20 @@ export const ListCert = ({certificates}) => {
                   }}>{data.credUrl}</Link></Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>Issued On - {data.issueDate ? new Date(data.issueDate).toLocaleDateString() : "N/A" }</Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>{data.hasNoExpiry ? "" : `Expires On - ${data.expiryDate ? new Date(data.expiryDate).toLocaleDateString() : "N/A"}`}</Box><br />
-                {data.skills && data.skills.length > 0 && (
-                  <Stack direction='row' flexWrap='wrap' gap={1} justifyContent='center'
-                    sx={{display:'grid',gridTemplateColumns:{lg:'repeat(4, 1fr)',md:'repeat(4, 1fr)',sm:'repeat(3, 1fr)',xs:'repeat(2, 1fr)'}, 
-                    gap:{lg:2,md:2,sm:2,xs:0.5}, maxHeight:'150px', overflowY:'auto',p:0.5}}>
-                      {data.skills.map((skill, index) => (
-                        <Chip key={index} label={skill} 
-                        sx={{ backgroundColor: theme.cardBg, color:theme.primaryText, border:`1px solid ${theme.cardBorder}` }}/>
-                      ))}
-                  </Stack>
-                )}
+                <Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                  <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.primaryAccent}}><Star/></Box><br />
+                  <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>-</Box><br />
+                    {data.skills && data.skills.length > 0 && (
+                      <Stack direction='row'
+                        sx={{display:'flex', flexWrap:'wrap',
+                        gap:{lg:2,md:2,sm:2,xs:0.5}, maxHeight:'150px', overflowY:'auto',p:0.5}}>
+                          {data.skills.map((skill, index) => (
+                            <Chip key={index} label={skill} 
+                            sx={{ backgroundColor: theme.cardBg, color:theme.primaryText, border:`1px solid ${theme.cardBorder}` }}/>
+                          ))}
+                      </Stack>
+                    )}
+                </Box>
               </Box>
             ))}
           </Grid>

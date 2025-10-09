@@ -37,7 +37,7 @@ export const ProfileUI = ({dp, name, desc, username, theme, setError, setOpen, u
             setIsEditing(false)
             fetchUser()
         } catch (error) {
-            setError("Failed to edit details")
+            setError("Failed to edit details",error.message)
             setOpen(true)
         } finally {
             setLoading(false)
@@ -237,7 +237,7 @@ export const ProfileUI = ({dp, name, desc, username, theme, setError, setOpen, u
                     }
                 }}/><br/>
                 <TextField variant='standard' value={description}
-                onChange={e=>setDescription(e.target.value)} autoFocus
+                onChange={e=>setDescription(e.target.value)} autoFocus multiline fullWidth
                 sx={{
                     '& .MuiInputBase-input': {
                         color: theme.primaryText,
@@ -248,14 +248,7 @@ export const ProfileUI = ({dp, name, desc, username, theme, setError, setOpen, u
                     '& .MuiInput-underline:after': {
                         borderBottomColor: theme.primaryAccent,
                     },
-                    }}
-                slotProps={{
-                    input: {
-                        style: {
-                            width: `${Math.max(description.length,4)}ch`
-                        }
-                    }
-                }}/>
+                    }}/>
             </span>
         ) : (
             <>

@@ -1,7 +1,7 @@
-import { Alert, AppBar, Box, Button, ButtonBase, Card, CardActions, CardContent, Chip, CircularProgress, Divider, FormControl, FormControlLabel, Grid, Link, Modal, Radio, RadioGroup, Snackbar, Stack, Toolbar, Typography } from '@mui/material'
+import { Alert, AppBar, Box, Button, ButtonBase, Card, CardActions, CardContent, Chip, CircularProgress, Divider, FormControl, FormControlLabel, Grid, Link, Modal, Radio, RadioGroup, Snackbar, Stack, TextField, Toolbar, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Add, ArrowBackIos, Delete, Download, Edit, LinkRounded, Mail, Person, Place, Preview, Save, Smartphone } from '@mui/icons-material'
+import { Add, ArrowBackIos, Delete, Done, Download, Edit, LinkRounded, Mail, Person, Place, Preview, Save, Smartphone } from '@mui/icons-material'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { ProfileUI } from '../Utils/ProfileUI'
 import axios from 'axios'
@@ -17,7 +17,9 @@ import { saveAs } from 'file-saver'
 import { AddEdu } from '../Utils/AddEdu'
 import { AddProjects } from '../Utils/AddProjects'
 import { AddCert } from '../Utils/AddCert'
-import { EditDetails } from '../Utils/EditDetails'
+import { EditEdu } from '../Utils/EditEdu'
+import { EditProjects } from '../Utils/EditProjects'
+import { EditCert } from '../Utils/EditCert'
 
 export const Profile = () => {
   const {theme} = useThemeContext()
@@ -179,39 +181,134 @@ export const Profile = () => {
     } 
   }
 
+  // Edit Details
+  const [editMobile, setEditMobile] = useState('')
+  const [editLocation, setEditLocation] = useState('')
+  const [isEditDetails, setIsEditDetails] = useState(false)
+
+  const handleSaveDetails = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/update/details/${userId}`,{
+        mobile: editMobile,
+        location: editLocation
+      },{
+        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setIsEditDetails(false)
+      fetchUser()
+    } catch (error) {
+      setError("Failed to edit details",error.message)
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Edit About
+  const [editAbout, setEditAbout] = useState('')
+  const [isEditAbout, setIsEditAbout] = useState(false)
+
+  const handleSaveAbout = async () => {
+    try {
+      setLoading(true)
+      
+      await axios.put(`http://localhost:2000/profile/update/about/${userId}`,{about: editAbout},{
+        headers:{ Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` }
+      })
+
+      setIsEditAbout(false)
+      fetchUser()
+    } catch (error) {
+      setError("Cannot update about")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Skills 
   const [openSkills, setOpenSkills] = useState(false);
   const handleOpenSkills = () => setOpenSkills(true);
   const handleCloseSkills = () => setOpenSkills(false);
+  // Edit Skills
+  const [prevSkills,setPrevSkills] = useState([])
+  const [skillsChanged, setSkillsChanged] = useState(false)
+  const handleSaveSkills = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/update/skills/${userId}`,{skills},{
+        headers:{Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setSkillsChanged(false)
+      fetchUser()
+    } catch (error) {
+      setError("unable to update skills")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // Experince
   const [openExp, setOpenExp] = useState(false);
   const handleOpenExp = () => setOpenExp(true);
   const handleCloseExp = () => setOpenExp(false);
+  // Add Experience
+  const [prevExp, setPrevExp] = useState([])
+  const [addedExp, setAddedExp] = useState(false)
+  const handleAddExp = async (req, res) => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/add/new/experience/${userId}`,{experience: exp},{
+        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setAddedExp(false)
+      fetchUser()
+    } catch (error) {
+      setError('Unable to add new experience')
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
   // Edit Experience
   const [openEditExp, setOpenEditExp] = useState(false)
   const handleOpenEditExp = () => setOpenEditExp(true);
   const handleCloseEditExp = () => setOpenEditExp(false);
 
-  // Edit Details
-  const [openEditDetails, setOpenEditDetails] = useState(false)
-  const handleOpenEditDetails = () => setOpenEditDetails(true);
-  const handleCloseEditDetails = () => setOpenEditDetails(false);
-
   // Education
   const [openEdu, setOpenEdu] = useState(false);
   const handleOpenEdu = () => setOpenEdu(true);
   const handleCloseEdu = () => setOpenEdu(false);
+  // Edit education details
+  const [openEditEdu, setOpenEditEdu] = useState(false);
+  const handleOpenEditEdu = () => setOpenEditEdu(true);
+  const handleCloseEditEdu = () => setOpenEditEdu(false);
 
   // License & Certifications
   const [openCert, setOpenCert] = useState(false);
   const handleOpenCert = () => setOpenCert(true);
   const handleCloseCert = () => setOpenCert(false);
+  // Edit License & Certifications
+  const [openEditCert, setOpenEditCert] = useState(false);
+  const handleOpenEditCert = () => setOpenEditCert(true);
+  const handleCloseEditCert = () => setOpenEditCert(false);
 
   // Projects
   const [openProjects, setOpenProjects] = useState(false);
   const handleOpenProjects = () => setOpenProjects(true);
   const handleCloseProjects = () => setOpenProjects(false);
+  // edit Projects
+  const [openEditProjects, setOpenEditProjects] = useState(false);
+  const handleOpenEditProjects = () => setOpenEditProjects(true);
+  const handleCloseEditProjects = () => setOpenEditProjects(false);
 
   // Resume
   const [openResume, setOpenResume] = useState(false);
@@ -227,6 +324,7 @@ export const Profile = () => {
     }
   }, [resumeLink]);
 
+  // Fetches user details
   const fetchUser = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     if (!token) return
@@ -249,7 +347,9 @@ export const Profile = () => {
       setEmail(users.email)
       setUsername(users.username)
       setSkills(user.skills)
+      setPrevSkills(user.skills)
       setExp(user.experience)
+      setPrevExp(user.experience)
       setEdu(user.education)
       setCert(user.certificates)
       setProjects(user.projects)
@@ -260,7 +360,19 @@ export const Profile = () => {
     }
   }
 
-  useEffect(() => {fetchUser()},[])
+  // to get details of users
+  useEffect(() => {
+    fetchUser()
+    setEditMobile(mobile || "")
+    setEditLocation(location || "")
+    setEditAbout(about || "")
+  },[mobile, location, about])
+
+  // for enabling done button
+  useEffect(()=>{
+    skills.length !== prevSkills.length ? setSkillsChanged(true) : setSkillsChanged(false)
+    exp.length !== prevExp.length ? setAddedExp(true) : setAddedExp(false)
+  },[skills, prevSkills, exp, prevExp])
 
   return (
     <Box sx={{flexGrow: 1, minHeight: '100vh', background:theme.primaryBg, color: theme.primaryText}}>
@@ -310,18 +422,18 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
               <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
                 <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
-                    <ButtonBase onClick={handleOpenEditDetails} sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={() => isEditDetails ? handleSaveDetails() : setIsEditDetails(true)} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         color: theme.hoverAccent,
                       }
-                    }}><Edit/></ButtonBase>
+                    }}>{isEditDetails ? loading ? <CircularProgress size={24} color="inherit"/> : <Done/> : <Edit/>}</ButtonBase>
                 </CardActions>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                      <span style={{fontWeight:"bolder", color:theme.primaryText}}>Personnal Details</span>
+                      <span style={{fontWeight:"bolder", color:theme.primaryText}}>Personal Details</span>
                   </Typography>
                   <Typography variant="body2" sx={{ color: theme.secondaryText }}>
                     <Box sx={{display:'flex',alignItems:'center',flexWrap:'wrap',gap:2}}>
@@ -334,13 +446,53 @@ export const Profile = () => {
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       <Smartphone/>
                       :
-                      <span>{mobile}</span>
+                      {isEditDetails ? 
+                      <TextField variant='standard' value={editMobile}
+                        onChange={e=>setEditMobile(e.target.value)} autoFocus
+                        sx={{
+                            '& .MuiInputBase-input': {
+                                color: theme.primaryText,
+                            },
+                            '& .MuiInput-underline:before': {
+                                borderBottomColor: theme.cardBorder,
+                            },
+                            '& .MuiInput-underline:after': {
+                                borderBottomColor: theme.primaryAccent,
+                            },
+                            }}
+                        slotProps={{
+                            input: {
+                                style: {
+                                    width: `${Math.max(editMobile.length,4)}ch`
+                                }
+                            }
+                        }}/> : <span>{mobile}</span>}
                       </Box> 
                       <Box>|</Box>
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       <Place/>
                       :
-                      <span>{location}</span>
+                      {isEditDetails ? 
+                      <TextField variant='standard' value={editLocation}
+                      onChange={e=>setEditLocation(e.target.value)} autoFocus
+                      sx={{
+                          '& .MuiInputBase-input': {
+                              color: theme.primaryText,
+                          },
+                          '& .MuiInput-underline:before': {
+                              borderBottomColor: theme.cardBorder,
+                          },
+                          '& .MuiInput-underline:after': {
+                              borderBottomColor: theme.primaryAccent,
+                          },
+                          }}
+                      slotProps={{
+                          input: {
+                              style: {
+                                  width: `${Math.max(editLocation.length,4)}ch`
+                              }
+                          }
+                      }}/> : <span>{location}</span>}
                       </Box> 
                       <Box>|</Box>
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
@@ -348,49 +500,49 @@ export const Profile = () => {
                       :
                       <Link sx={{textDecoration:'none',color:theme.primaryAccent,
                     '&:hover':{color:theme.hoverAccent}
-                  }}>http://localhost:3000</Link>
+                  }}>{`http://localhost:3000/profile/view/${username}`}</Link>
                       </Box> 
                     </Box>
                   </Typography>
                 </CardContent>
               </Card>
-              <Modal
-                open={openEditDetails}
-                onClose={handleCloseEditDetails}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" 
-                  sx={{fontWeight:'bolder',background:theme.primaryBg,color:theme.primaryText}}>
-                    Edit Personal Details
-                  </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <EditDetails/>
-                  </Typography>
-                </Box>
-              </Modal>
             </Box>
         </Grid>
         <Grid size={12}>
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'}, borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
-                  <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                  <ButtonBase onClick={() => isEditAbout ? handleSaveAbout() : setIsEditAbout(true)} 
+                  sx={{display:'flex',color: theme.primaryText,
                     flexDirection:'column',justifyContent:'flex-end',
                     alignItems:'center', pb:0.5, px:1,
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       color: theme.hoverAccent,
                     }
-                  }}><Edit/></ButtonBase>
+                  }}>{isEditAbout ? loading ? <CircularProgress size={24} color="inherit"/> : <Done/> : <Edit/>}</ButtonBase>
               </CardActions>
               <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 <span style={{fontWeight:"bolder", color:theme.primaryText}}>About</span>
               </Typography>
               <Typography variant="body2" sx={{ color: theme.secondaryText }}>
-                <span>{about}</span>
+                {isEditAbout ? 
+                <Box sx={{display:'flex', flexWrap:'wrap', width:'100%'}}>
+                  <TextField variant='standard' value={editAbout}
+                onChange={e=>setEditAbout(e.target.value)} autoFocus multiline fullWidth
+                sx={{
+                    '& .MuiInputBase-input': {
+                        color: theme.primaryText,
+                    },
+                    '& .MuiInput-underline:before': {
+                        borderBottomColor: theme.cardBorder,
+                    },
+                    '& .MuiInput-underline:after': {
+                        borderBottomColor: theme.primaryAccent,
+                    },
+                    }}/>
+                </Box> : <span>{about}</span>}
               </Typography>
               </CardContent>
             </Card>
@@ -400,6 +552,15 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
+                    {skillsChanged && (
+                      <ButtonBase onClick={handleSaveSkills} sx={{display:'flex',color: theme.primaryText,
+                        flexDirection:'column',justifyContent:'flex-end',
+                        alignItems:'center', pb:0.5, px:1,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          color: theme.hoverAccent,
+                        }
+                      }}>{loading ? <CircularProgress color="inherit"/> :<Done/>}</ButtonBase>)}
                     <ButtonBase onClick={handleOpenSkills} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
@@ -408,14 +569,6 @@ export const Profile = () => {
                         color: theme.hoverAccent,
                       }
                     }}><Add/></ButtonBase>
-                    <ButtonBase  sx={{display:'flex',color: theme.primaryText,
-                      flexDirection:'column',justifyContent:'flex-end',
-                      alignItems:'center', pb:0.5, px:1,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        color: theme.hoverAccent,
-                      }
-                    }}><Edit/></ButtonBase>
                 </CardActions>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
@@ -423,7 +576,7 @@ export const Profile = () => {
                   </Typography>
                   <Stack direction="row" spacing={1} sx={{display:'flex',flexWrap:'wrap',gap:1}}>
                     {skills.map((s,i)=>(
-                        <Chip label={s} 
+                        <Chip key={i} label={s} 
                         sx={{ backgroundColor: theme.cardBg, color:theme.primaryText, border:`1px solid ${theme.cardBorder}` }}/>
                     ))}
                   </Stack>
@@ -451,6 +604,15 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
+                    {addedExp && (
+                      <ButtonBase onClick={handleAddExp} sx={{display:'flex',color: theme.primaryText,
+                        flexDirection:'column',justifyContent:'flex-end',
+                        alignItems:'center', pb:0.5, px:1,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          color: theme.hoverAccent,
+                        }
+                      }}>{loading ? <CircularProgress color="inherit"/> :<Done/>}</ButtonBase>)}
                     <ButtonBase onClick={handleOpenExp} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
@@ -488,7 +650,7 @@ export const Profile = () => {
                     Add experience details
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <AddExp experience={exp} setExperience={exp} handleCloseModal={handleCloseExp} skills={skills}/>
+                    <AddExp experience={exp} setExperience={setExp} handleCloseModal={handleCloseExp} skills={skills}/>
                   </Typography>
                 </Box>
               </Modal>
@@ -503,7 +665,7 @@ export const Profile = () => {
                     Edit experience details
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <EditExp experience={exp} setExperience={setExp} handleCloseModal={handleCloseExp} skills={skills}/>
+                    <EditExp experience={exp} setExperience={setExp} handleCloseModal={handleCloseEditExp} skills={skills}/>
                   </Typography>
                 </Box>
               </Modal>
@@ -521,7 +683,7 @@ export const Profile = () => {
                         color: theme.hoverAccent,
                       }
                     }}><Add/></ButtonBase>
-                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={handleOpenEditEdu} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -554,6 +716,21 @@ export const Profile = () => {
                   </Typography>
                 </Box>
               </Modal>
+              <Modal
+                open={openEditEdu}
+                onClose={handleCloseEditEdu}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
+                    Edit Education details
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <EditEdu education={edu} setEducation={setEdu} handleCloseModal={handleCloseEditEdu}/>
+                  </Typography>
+                </Box>
+              </Modal>
             </Box>
         </Grid>
         <Grid size={12}>
@@ -568,7 +745,7 @@ export const Profile = () => {
                         color: theme.hoverAccent,
                       }
                     }}><Add/></ButtonBase>
-                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={handleOpenEditProjects} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -602,6 +779,22 @@ export const Profile = () => {
                   </Typography>
                 </Box>
               </Modal>
+              <Modal
+                open={openEditProjects}
+                onClose={handleCloseEditProjects}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
+                    Edit project details
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <EditProjects projects={projects} setProjects={setProjects} handleCloseModal={handleCloseEditProjects}
+                    skills={skills} college={edu.map(c => c.institute)} work={exp.map(w => w.company)}/>
+                  </Typography>
+                </Box>
+              </Modal>
             </Box>
         </Grid>
         <Grid size={12}>
@@ -616,7 +809,7 @@ export const Profile = () => {
                         color: theme.hoverAccent,
                       }
                     }}><Add/></ButtonBase>
-                    <ButtonBase sx={{display:'flex',color: theme.primaryText,
+                    <ButtonBase onClick={handleOpenEditCert} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
                       transition: 'all 0.3s ease',
@@ -646,6 +839,21 @@ export const Profile = () => {
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <AddCert certificates={cert} setCertificates={setCert} handleCloseModal={handleCloseCert} skills={skills}/>
+                  </Typography>
+                </Box>
+              </Modal>
+              <Modal
+                open={openEditCert}
+                onClose={handleCloseEditCert}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontWeight:'bolder',color:theme.primaryText}}>
+                    Edit Certificates or License details
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <EditCert certificates={cert} setCertificates={setCert} handleCloseModal={handleCloseEditCert} skills={skills}/>
                   </Typography>
                 </Box>
               </Modal>

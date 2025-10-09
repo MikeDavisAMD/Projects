@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Divider, Grid, Stack } from '@mui/material'
 import React from 'react'
 import { AddSkillsUi } from './AddSkillsUI'
-import { Save } from '@mui/icons-material'
+import { Cancel, Save } from '@mui/icons-material'
 import { useThemeContext } from './ThemeContext'
 
 export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
@@ -22,7 +22,7 @@ export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
       <Grid container spacing={2}>
         <Grid size={12}>
           <AddSkillsUi onAdd={handleAddSkills}/>
-          <br /><Divider/>
+          <br /><Divider color={theme.secondaryText}/>
         </Grid>
         <Grid size={12}>
           <Box sx={{m:1, backgroundColor: theme.secondaryBg, color:theme.secondaryText, minHeight:'150px', 
@@ -50,8 +50,20 @@ export const AddSkills = ({ skills, setSkills, handleCloseModal }) => {
           </Box>
         </Grid>
         <Grid size={12}>
-            <Divider/><br />
-            <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'}}}>
+            <Divider color={theme.secondaryText}/><br />
+            <Box sx={{display:'flex',gap:2,justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'}}}>
+            <Button variant='outlined' size='large' startIcon={<Cancel/>} onClick={handleCloseModal}
+              sx={{
+                  color:theme.primaryAccent,
+                  borderColor:theme.primaryAccent,
+                  '&:hover':{
+                    backgroundColor:theme.hoverAccent,
+                    borderColor:theme.hoverAccent,
+                    color:theme.primaryBg
+                  }
+                }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                    Cancel
+                  </Box></Button>
             <Button variant='outlined' size='large' startIcon={<Save/>} onClick={handleCloseModal}
               sx={{
                   color:theme.primaryAccent,
