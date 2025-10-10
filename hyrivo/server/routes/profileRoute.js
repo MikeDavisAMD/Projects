@@ -508,6 +508,22 @@ router.put('/add/new/education/:userId',log,auth, async (req, res) => {
     }
 })
 
+router.put('/update/education/:expId',log,auth, async (req, res) => {
+    try {
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message})
+    }
+})
+
+router.delete('/delete/education/:expId',log, auth, async (req, res) => {
+    try {
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 router.put('/add/new/projects/:userId',log,auth, async (req, res) => {
     try {
         const {userId} = req.params
@@ -527,6 +543,22 @@ router.put('/add/new/projects/:userId',log,auth, async (req, res) => {
         })
     } catch (error) {
         res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/projects/:expId',log,auth, async (req, res) => {
+    try {
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.delete('/delete/projects/:expId',log,auth, async (req,res) => {
+    try {
+        
+    } catch (error) {
+        res.status(500).json({})
     }
 })
 
