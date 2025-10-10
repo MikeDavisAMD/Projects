@@ -71,6 +71,203 @@ export const Profile = () => {
   setOpen(false);
   };
 
+  // Edit Details
+  const [editMobile, setEditMobile] = useState('')
+  const [editLocation, setEditLocation] = useState('')
+  const [isEditDetails, setIsEditDetails] = useState(false)
+
+  const handleSaveDetails = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/update/details/${userId}`,{
+        mobile: editMobile,
+        location: editLocation
+      },{
+        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setIsEditDetails(false)
+      fetchUser()
+    } catch (error) {
+      setError("Failed to edit details",error.message)
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Edit About
+  const [editAbout, setEditAbout] = useState('')
+  const [isEditAbout, setIsEditAbout] = useState(false)
+
+  const handleSaveAbout = async () => {
+    try {
+      setLoading(true)
+      
+      await axios.put(`http://localhost:2000/profile/update/about/${userId}`,{about: editAbout},{
+        headers:{ Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` }
+      })
+
+      setIsEditAbout(false)
+      fetchUser()
+    } catch (error) {
+      setError("Cannot update about")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Skills 
+  const [openSkills, setOpenSkills] = useState(false);
+  const handleOpenSkills = () => setOpenSkills(true);
+  const handleCloseSkills = () => setOpenSkills(false);
+  // Edit Skills
+  const [prevSkills,setPrevSkills] = useState([])
+  const [skillsChanged, setSkillsChanged] = useState(false)
+  const handleSaveSkills = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/update/skills/${userId}`,{skills},{
+        headers:{Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setSkillsChanged(false)
+      fetchUser()
+    } catch (error) {
+      setError("unable to update skills")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Experince
+  const [openExp, setOpenExp] = useState(false);
+  const handleOpenExp = () => setOpenExp(true);
+  const handleCloseExp = () => setOpenExp(false);
+  // Add Experience
+  const [prevExp, setPrevExp] = useState([])
+  const [addedExp, setAddedExp] = useState(false)
+  const handleAddExp = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/add/new/experience/${userId}`,{experience: exp},{
+        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setAddedExp(false)
+      fetchUser()
+    } catch (error) {
+      setError('Unable to add new experience')
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+  // Edit Experience
+  const [openEditExp, setOpenEditExp] = useState(false)
+  const handleOpenEditExp = () => setOpenEditExp(true);
+  const handleCloseEditExp = () => setOpenEditExp(false);
+
+  // Education
+  const [openEdu, setOpenEdu] = useState(false);
+  const handleOpenEdu = () => setOpenEdu(true);
+  const handleCloseEdu = () => setOpenEdu(false);
+  // Add Education
+  const [prevEdu, setPrevEdu] = useState([])
+  const [addedEdu, setAddedEdu] = useState(false)
+  const handleAddEdu = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/add/new/education/${userId}`,{education: edu},{
+        headers: {Authorization:`Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setAddedEdu(false)
+      fetchUser()
+    } catch (error) {
+      setError("Unable to add education")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+  // Edit education details
+  const [openEditEdu, setOpenEditEdu] = useState(false);
+  const handleOpenEditEdu = () => setOpenEditEdu(true);
+  const handleCloseEditEdu = () => setOpenEditEdu(false);
+
+  // License & Certifications
+  const [openCert, setOpenCert] = useState(false);
+  const handleOpenCert = () => setOpenCert(true);
+  const handleCloseCert = () => setOpenCert(false);
+  // Add License & certificates
+  const [prevCert, setPrevCert] = useState([])
+  const [addedCert, setAddedCert] = useState(false)
+  const handleAddCert = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/add/new/certificates/${userId}`,{certificates: cert},{
+        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setAddedCert(false)
+      fetchUser()
+    } catch (error) {
+      setError("Unable to add Certificates & licenses")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+  // Edit License & Certifications
+  const [openEditCert, setOpenEditCert] = useState(false);
+  const handleOpenEditCert = () => setOpenEditCert(true);
+  const handleCloseEditCert = () => setOpenEditCert(false);
+
+  // Projects
+  const [openProjects, setOpenProjects] = useState(false);
+  const handleOpenProjects = () => setOpenProjects(true);
+  const handleCloseProjects = () => setOpenProjects(false);
+  // Add projects
+  const [prevProjects, setPrevProjects] = useState([])
+  const [addedProjects, setAddedProjects] = useState(false)
+  const handleAddProjects = async () => {
+    try {
+      setLoading(true)
+
+      await axios.put(`http://localhost:2000/profile/add/new/projects/${userId}`,{projects},{
+        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+      })
+
+      setAddedProjects(false)
+      fetchUser()
+    } catch (error) {
+      setError("Unable to add new project")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+  // edit Projects
+  const [openEditProjects, setOpenEditProjects] = useState(false);
+  const handleOpenEditProjects = () => setOpenEditProjects(true);
+  const handleCloseEditProjects = () => setOpenEditProjects(false);
+
+  // Resume
+  const [openResume, setOpenResume] = useState(false);
+  const handleOpenResume = () => setOpenResume(true);
+  const handleCloseResume = () => setOpenResume(false);
+
+  // selected resume for default resume
+  const [selectedResume, setSelectedResume] = useState("");
+
   // new resume adding
   const [resume, setResume] = useState('')
 
@@ -181,149 +378,6 @@ export const Profile = () => {
     } 
   }
 
-  // Edit Details
-  const [editMobile, setEditMobile] = useState('')
-  const [editLocation, setEditLocation] = useState('')
-  const [isEditDetails, setIsEditDetails] = useState(false)
-
-  const handleSaveDetails = async () => {
-    try {
-      setLoading(true)
-
-      await axios.put(`http://localhost:2000/profile/update/details/${userId}`,{
-        mobile: editMobile,
-        location: editLocation
-      },{
-        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
-      })
-
-      setIsEditDetails(false)
-      fetchUser()
-    } catch (error) {
-      setError("Failed to edit details",error.message)
-      setOpen(true)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Edit About
-  const [editAbout, setEditAbout] = useState('')
-  const [isEditAbout, setIsEditAbout] = useState(false)
-
-  const handleSaveAbout = async () => {
-    try {
-      setLoading(true)
-      
-      await axios.put(`http://localhost:2000/profile/update/about/${userId}`,{about: editAbout},{
-        headers:{ Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` }
-      })
-
-      setIsEditAbout(false)
-      fetchUser()
-    } catch (error) {
-      setError("Cannot update about")
-      setOpen(true)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Skills 
-  const [openSkills, setOpenSkills] = useState(false);
-  const handleOpenSkills = () => setOpenSkills(true);
-  const handleCloseSkills = () => setOpenSkills(false);
-  // Edit Skills
-  const [prevSkills,setPrevSkills] = useState([])
-  const [skillsChanged, setSkillsChanged] = useState(false)
-  const handleSaveSkills = async () => {
-    try {
-      setLoading(true)
-
-      await axios.put(`http://localhost:2000/profile/update/skills/${userId}`,{skills},{
-        headers:{Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
-      })
-
-      setSkillsChanged(false)
-      fetchUser()
-    } catch (error) {
-      setError("unable to update skills")
-      setOpen(true)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Experince
-  const [openExp, setOpenExp] = useState(false);
-  const handleOpenExp = () => setOpenExp(true);
-  const handleCloseExp = () => setOpenExp(false);
-  // Add Experience
-  const [prevExp, setPrevExp] = useState([])
-  const [addedExp, setAddedExp] = useState(false)
-  const handleAddExp = async (req, res) => {
-    try {
-      setLoading(true)
-
-      await axios.put(`http://localhost:2000/profile/add/new/experience/${userId}`,{experience: exp},{
-        headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
-      })
-
-      setAddedExp(false)
-      fetchUser()
-    } catch (error) {
-      setError('Unable to add new experience')
-      setOpen(true)
-    } finally {
-      setLoading(false)
-    }
-  }
-  // Edit Experience
-  const [openEditExp, setOpenEditExp] = useState(false)
-  const handleOpenEditExp = () => setOpenEditExp(true);
-  const handleCloseEditExp = () => setOpenEditExp(false);
-
-  // Education
-  const [openEdu, setOpenEdu] = useState(false);
-  const handleOpenEdu = () => setOpenEdu(true);
-  const handleCloseEdu = () => setOpenEdu(false);
-  // Edit education details
-  const [openEditEdu, setOpenEditEdu] = useState(false);
-  const handleOpenEditEdu = () => setOpenEditEdu(true);
-  const handleCloseEditEdu = () => setOpenEditEdu(false);
-
-  // License & Certifications
-  const [openCert, setOpenCert] = useState(false);
-  const handleOpenCert = () => setOpenCert(true);
-  const handleCloseCert = () => setOpenCert(false);
-  // Edit License & Certifications
-  const [openEditCert, setOpenEditCert] = useState(false);
-  const handleOpenEditCert = () => setOpenEditCert(true);
-  const handleCloseEditCert = () => setOpenEditCert(false);
-
-  // Projects
-  const [openProjects, setOpenProjects] = useState(false);
-  const handleOpenProjects = () => setOpenProjects(true);
-  const handleCloseProjects = () => setOpenProjects(false);
-  // edit Projects
-  const [openEditProjects, setOpenEditProjects] = useState(false);
-  const handleOpenEditProjects = () => setOpenEditProjects(true);
-  const handleCloseEditProjects = () => setOpenEditProjects(false);
-
-  // Resume
-  const [openResume, setOpenResume] = useState(false);
-  const handleOpenResume = () => setOpenResume(true);
-  const handleCloseResume = () => setOpenResume(false);
-
-  // selected resume for default resume
-  const [selectedResume, setSelectedResume] = useState("");
-
-  useEffect(() => {
-    if (resumeLink.length > 0) {
-      setSelectedResume(resumeLink[0].public_id);
-    }
-  }, [resumeLink]);
-
   // Fetches user details
   const fetchUser = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -351,8 +405,11 @@ export const Profile = () => {
       setExp(user.experience)
       setPrevExp(user.experience)
       setEdu(user.education)
+      setPrevEdu(user.education)
       setCert(user.certificates)
+      setPrevCert(user.certificates)
       setProjects(user.projects)
+      setPrevProjects(user.projects)
       setResumeLink(user.resumes)
     } catch (error) {
       setError(error.message)
@@ -368,11 +425,19 @@ export const Profile = () => {
     setEditAbout(about || "")
   },[mobile, location, about])
 
-  // for enabling done button
-  useEffect(()=>{
+  // for enabling done button and setting selected resume
+  useEffect(()=>
+  {
     skills.length !== prevSkills.length ? setSkillsChanged(true) : setSkillsChanged(false)
     exp.length !== prevExp.length ? setAddedExp(true) : setAddedExp(false)
-  },[skills, prevSkills, exp, prevExp])
+    edu.length !== prevEdu.length ? setAddedEdu(true) : setAddedEdu(false)
+    cert.length !== prevCert.length ? setAddedCert(true) : setAddedCert(false)
+    projects.length !== prevProjects.length ? setAddedProjects(true) : setAddedProjects(false)
+    if (resumeLink.length > 0) {
+      setSelectedResume(resumeLink[0].public_id);
+    }
+  },
+  [skills, prevSkills, exp, prevExp, edu, prevEdu, cert, prevCert, projects, prevProjects, resumeLink])
 
   return (
     <Box sx={{flexGrow: 1, minHeight: '100vh', background:theme.primaryBg, color: theme.primaryText}}>
@@ -675,6 +740,15 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
+                    {addedEdu && (
+                      <ButtonBase onClick={handleAddEdu} sx={{display:'flex',color: theme.primaryText,
+                        flexDirection:'column',justifyContent:'flex-end',
+                        alignItems:'center', pb:0.5, px:1,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          color: theme.hoverAccent,
+                        }
+                      }}>{loading ? <CircularProgress color="inherit"/> :<Done/>}</ButtonBase>)}
                     <ButtonBase onClick={handleOpenEdu} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
@@ -737,6 +811,16 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
+                    {addedProjects && (
+                      <ButtonBase onClick={handleAddProjects} sx={{display:'flex',color: theme.primaryText,
+                        flexDirection:'column',justifyContent:'flex-end',
+                        alignItems:'center', pb:0.5, px:1,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          color: theme.hoverAccent,
+                        }
+                      }}>{loading ? <CircularProgress color="inherit"/> :<Done/>}</ButtonBase>
+                    )}
                     <ButtonBase onClick={handleOpenProjects} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,
@@ -801,6 +885,16 @@ export const Profile = () => {
             <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
             <Card sx={{width:{lg:'82%',md:'82%',sm:'82%',xs:'90%'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
               <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
+                    {addedCert && (
+                      <ButtonBase onClick={handleAddCert} sx={{display:'flex',color: theme.primaryText,
+                        flexDirection:'column',justifyContent:'flex-end',
+                        alignItems:'center', pb:0.5, px:1,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          color: theme.hoverAccent,
+                        }
+                      }}>{loading ? <CircularProgress color="inherit"/> :<Done/>}</ButtonBase>
+                    )}
                     <ButtonBase onClick={handleOpenCert} sx={{display:'flex',color: theme.primaryText,
                       flexDirection:'column',justifyContent:'flex-end',
                       alignItems:'center', pb:0.5, px:1,

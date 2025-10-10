@@ -486,6 +486,72 @@ router.delete('/delete/experience/:expId',log,auth, async (req, res) => {
     }
 })
 
+router.put('/add/new/education/:userId',log,auth, async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {education} = req.body
+
+        const newEdu = await userProfile.findOneAndUpdate(
+            {userId},
+            {education},
+            {new: true}
+        )
+
+        if (!newEdu) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: newEdu
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/add/new/projects/:userId',log,auth, async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {projects} = req.body
+
+        const newProject = await userProfile.findOneAndUpdate(
+            {userId},
+            {projects},
+            {new: true}
+        )
+
+        if (!newProject) return res.status(404).json({message: "Profile not found"})
+        
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            profile: newProject
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/add/new/certificates/:userId',log,auth, async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {certificates} = req.body
+
+        const newCert = await userProfile.findOneAndUpdate(
+            {userId},
+            {certificates},
+            {new :true}
+        )
+
+        if (!newCert) return res.status(404).json({message: "Profile not found"})
+
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            profile: newCert
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 router.post('/upload/resume',log,auth,upload.single("file"),async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "No file uploaded" })

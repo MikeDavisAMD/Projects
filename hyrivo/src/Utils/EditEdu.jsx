@@ -145,12 +145,12 @@ export const EditEdu = ({ education, setEducation, handleCloseModal }) => {
                 color: theme.hoverAccent,   // when dropdown is open
                 },
             }}>
-            <InputLabel id="demo-simple-select-label">Select Experience</InputLabel>
+            <InputLabel id="demo-simple-select-label">Select Education</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={selectedIndex !== null ? selectedIndex : ''}
-                label="Select Experience"
+                label="Select Education"
                 onChange={handleSelectEducation}
                 MenuProps={{
                 PaperProps: {
@@ -175,7 +175,7 @@ export const EditEdu = ({ education, setEducation, handleCloseModal }) => {
                 <MenuItem key={index} value={index}>{type.degree}</MenuItem>
                 ))}
             </Select>
-            <FormHelperText>Select what type of employee were you</FormHelperText>
+            <FormHelperText>Select your education details to edit or delete</FormHelperText>
             </FormControl>
             </Box>
         </Grid>

@@ -24,7 +24,7 @@ export const ListCert = ({certificates}) => {
                     '&:hover':{color:theme.hoverAccent}
                   }}>{data.credUrl}</Link></Box><br />
                 <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>Issued On - {data.issueDate ? new Date(data.issueDate).toLocaleDateString() : "N/A" }</Box><br />
-                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>{data.hasNoExpiry ? "" : `Expires On - ${data.expiryDate ? new Date(data.expiryDate).toLocaleDateString() : "N/A"}`}</Box><br />
+                <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>{data.hasNoExpiry ? null : `Expires On - ${data.expiryDate ? new Date(data.expiryDate).toLocaleDateString() : "N/A"}`}</Box><br />
                 <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                   <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.primaryAccent}}><Star/></Box><br />
                   <Box component='span' sx={{fontSize: {lg:15,md:15,sm:13,xs:13}, color:theme.secondaryText}}>-</Box><br />

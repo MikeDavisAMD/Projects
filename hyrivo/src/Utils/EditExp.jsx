@@ -279,7 +279,7 @@ export const EditExp = ({experience, setExperience, handleCloseModal, skills}) =
                 <MenuItem key={index} value={index}>{type.title} at {type.company}</MenuItem>
               ))}
             </Select>
-            <FormHelperText>Select what type of employee were you</FormHelperText>
+            <FormHelperText>Select the experience you want to edit or delete</FormHelperText>
           </FormControl>
           </Box>
         </Grid>
