@@ -455,7 +455,7 @@ router.put('/update/experience/:expId',log,auth,async (req,res) => {
         if (!exp) return res.status(404).json({ error: "Experience not found" })
         
         Object.assign(exp, updates)
-        await profile.save()
+        await profile.save({ validateModifiedOnly: true })
 
         const updatedExperience = profile.experience.id(expId)
 
@@ -477,7 +477,7 @@ router.delete('/delete/experience/:expId',log,auth, async (req, res) => {
 
         profile.experience = profile.experience.filter(e => e._id.toString() !== expId)
 
-        await profile.save()
+        await profile.save({ validateModifiedOnly: true })
 
         return res.status(200).json({ message: "Selected Experience Deleted Successfully" })
     } catch (error) {
@@ -508,17 +508,46 @@ router.put('/add/new/education/:userId',log,auth, async (req, res) => {
     }
 })
 
-router.put('/update/education/:expId',log,auth, async (req, res) => {
+router.put('/update/education/:eduId',log,auth, async (req, res) => {
     try {
-        
+        const {eduId} = req.params
+        const updates = req.body
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        const edu = profile.education.id(eduId)
+        if (!edu) return res.status(404).json({ error: "Education details unavailable" })
+
+        Object.assign(edu, updates)
+        await profile.save({ validateModifiedOnly: true })
+
+        const updatedEducation = profile.education.id(eduId)
+
+        return res.status(200).json({ message: "Selected education details updated successfully", updatedEducation })
     } catch (error) {
         res.status(500).json({ error: error.message})
     }
 })
 
-router.delete('/delete/education/:expId',log, auth, async (req, res) => {
+router.delete('/delete/education/:eduId',log, auth, async (req, res) => {
     try {
-        
+        const {eduId} = req.params
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        profile.education = profile.education.filter(e => e._id.toString() !== eduId)
+
+        await profile.save({ validateModifiedOnly: true })
+
+        return res.status(200).json({ message: "Selected Education deleted successfully" })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
@@ -546,7 +575,7 @@ router.put('/add/new/projects/:userId',log,auth, async (req, res) => {
     }
 })
 
-router.put('/update/projects/:expId',log,auth, async (req, res) => {
+router.put('/update/projects/:projectId',log,auth, async (req, res) => {
     try {
         
     } catch (error) {
@@ -554,7 +583,7 @@ router.put('/update/projects/:expId',log,auth, async (req, res) => {
     }
 })
 
-router.delete('/delete/projects/:expId',log,auth, async (req,res) => {
+router.delete('/delete/projects/:projectId',log,auth, async (req,res) => {
     try {
         
     } catch (error) {
