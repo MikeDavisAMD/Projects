@@ -334,25 +334,69 @@ router.put('/update/profileCard/:userId', log, auth, async (req,res) => {
     }
 })
 
+router.put('/update/Org/profileCard/:userId', log, auth, async (req,res) => {
+    try {
+        const {userId} = req.params
+        const {companyName, description, username, industry} = req.body
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {username},
+            {new: true}
+        )
+
+        if (!updatedUser) return res.status(400).json({ message: "User not found" })
+
+        const updatedProfile = await orgProfile.findOneAndUpdate(
+            { userId },
+            {companyName, description, industry},
+            {new: true}
+        )
+
+        if (!updatedProfile) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            user: updatedUser,
+            profile: updatedProfile
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 router.put('/update/details/:userId',log,auth, async (req,res) => {
     try {
         const {userId} = req.params
         const {mobile, location} = req.body
 
-        const user = await User.findById(userId)
-        if (!user) return res.status(400).json({error: "user not found"})
+        const updatedDetails = await userProfile.findOneAndUpdate(
+            {userId},
+            {mobile, location},
+            {new: true}
+        )
 
-        const updatedDetails = !user.isCompany 
-            ? await userProfile.findOneAndUpdate(
-                {userId},
-                {mobile, location},
-                {new: true}
-            ) 
-            : await orgProfile.findOneAndUpdate(
-                {userId},
-                {mobile, location},
-                {new: true}
-            )
+        if (!updatedDetails) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: updatedDetails
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/Org/details/:userId',log,auth, async (req,res) => {
+    try {
+        const {userId} = req.params
+        const {mobile, location, founded, size, headquarters, website} = req.body
+
+        const updatedDetails = await orgProfile.findOneAndUpdate(
+            {userId},
+            {mobile, location, founded, size, headquarters, website},
+            {new: true}
+        )
 
         if (!updatedDetails) return res.status(400).json({message:"Profile not found"})
 
@@ -412,6 +456,28 @@ router.put('/update/skills/:userId',log,auth,async (req, res) => {
         return res.status(200).json({
             message:"Profile updated successfully",
             profile: updatedSkills
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/specialities/:userId',log,auth,async (req, res) => {
+    try {
+        const {userId} = req.params
+        const {specialities} = req.body
+
+        const updatedSpecialities = await orgProfile.findOneAndUpdate(
+            {userId},
+            {specialities},
+            {new: true}
+        )
+
+        if (!updatedSpecialities) return res.status(400).json({message:"Profile not found"})
+
+        return res.status(200).json({
+            message:"Profile updated successfully",
+            profile: updatedSpecialities
         })
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -519,10 +585,10 @@ router.put('/update/education/:eduId',log,auth, async (req, res) => {
         const profile = await userProfile.findOne({userId: req.userId})
         if (!profile) return res.status(404).json({ error: "Profile not found" })
 
-        const edu = profile.education.id(eduId)
-        if (!edu) return res.status(404).json({ error: "Education details unavailable" })
+        const education = profile.education.id(eduId)
+        if (!education) return res.status(404).json({ error: "Education details unavailable" })
 
-        Object.assign(edu, updates)
+        Object.assign(education, updates)
         await profile.save({ validateModifiedOnly: true })
 
         const updatedEducation = profile.education.id(eduId)
@@ -577,7 +643,24 @@ router.put('/add/new/projects/:userId',log,auth, async (req, res) => {
 
 router.put('/update/projects/:projectId',log,auth, async (req, res) => {
     try {
-        
+        const {projectId} = req.params
+        const updates = req.body 
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        const project = profile.projects.id(projectId)
+        if (!project) return res.status(404).json({ error: "Project details unavailable" })
+
+        Object.assign(project, updates)
+        await profile.save({ validateModifiedOnly: true })
+
+        const updatedProjects = profile.projects.id(projectId)
+
+        return res.status(200).json({ message: "Selected projects details updated successfully", updatedProjects })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
@@ -585,7 +668,19 @@ router.put('/update/projects/:projectId',log,auth, async (req, res) => {
 
 router.delete('/delete/projects/:projectId',log,auth, async (req,res) => {
     try {
-        
+        const {projectId} = req.params
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        profile.projects = profile.projects.filter(p => p._id.toString() !== projectId)
+
+        await profile.save({ validateModifiedOnly: true })
+
+        return res.status(200).json({ message: "Selected project deleted successfully" })
     } catch (error) {
         res.status(500).json({})
     }
@@ -608,6 +703,51 @@ router.put('/add/new/certificates/:userId',log,auth, async (req, res) => {
             message: "Profile updated successfully",
             profile: newCert
         })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/update/certificates/:certId',log,auth, async (req, res) => {
+    try {
+        const {certId} = req.params
+        const updates = req.body 
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        const certificates = profile.certificates.id(certId)
+        if (!certificates) return res.status(404).json({ error: "Certificate details unavailable"})
+
+        Object.assign(certificates, updates)
+        await profile.save({ validateModifiedOnly: true })
+
+        const updatedCert = profile.certificates.id(certId)
+        return res.status(200).json({ message: "Selected Certificate details updated successfully", updatedCert })
+    } catch (error) {
+        console.error("error:",error)
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.delete('/delete/certificates/:certId',log,auth, async (req, res) => {
+    try {
+        const {certId} = req.params
+
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = await userProfile.findOne({userId: req.userId})
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+
+        profile.certificates = profile.certificates.filter(c => c._id.toString() !== certId)
+
+        await profile.save({ validateModifiedOnly: true })
+
+        return res.status(200).json({ message: "Selected Certificate deleted successfully" })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }

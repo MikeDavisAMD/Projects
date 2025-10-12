@@ -3,6 +3,7 @@ import { useThemeContext } from './ThemeContext'
 import { Alert, Box, Button, Checkbox, CircularProgress, Divider, FormControl, FormHelperText, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, Snackbar, TextField } from '@mui/material'
 import { DatePickerUi } from './DatePickerUi'
 import { Delete, Save } from '@mui/icons-material'
+import axios from 'axios'
 
 export const EditProjects = ({projects, setProjects, handleCloseModal, skills, college, work}) => {
     const {theme} = useThemeContext()
@@ -96,7 +97,15 @@ export const EditProjects = ({projects, setProjects, handleCloseModal, skills, c
   }
   
     // save button save
-    const handleSave = () => {
+    const handleSave = async () => {
+      if (selectedIndex === null) {
+        setError("Select existing project details to update")
+        setOpen(true)
+        return
+      }
+
+      const selectedProject = projects[selectedIndex]
+
       const pro = {
         name: projectName,
         description,
@@ -108,8 +117,47 @@ export const EditProjects = ({projects, setProjects, handleCloseModal, skills, c
         assn,
         link
       }
-      setProjects([...projects,pro])
-      handleCloseModal()
+      
+      setLoading(true)
+      try {
+        const response = await axios.put(`http://localhost:2000/profile/update/projects/${selectedProject._id}`,pro,{
+          headers:{Authorization : `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+        })
+
+        const updated = [...projects]
+        updated[selectedIndex] = response.data.updatedProjects
+        setProjects(updated)
+      } catch (error) {
+        setError("Unable to update project details")
+        setOpen(true)
+      } finally {
+        setLoading(false)
+        handleCloseModal()
+      }
+    }
+
+    // Delete Projects
+    const handleDelete = async () => {
+      if (selectedIndex !== null) {
+        const selectedProject = projects[selectedIndex]
+
+        setDLoading(true)
+        try {
+          await axios.delete(`http://localhost:2000/profile/delete/projects/${selectedProject._id}`,{
+            headers: {Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`}
+          })
+
+          const updated = [...projects]
+          updated.splice(selectedIndex,1)
+          setProjects(updated)
+        } catch (error) {
+          setError("error while deleting selected project")
+          setOpen(true)
+        } finally {
+          setDLoading(false)
+          handleCloseModal()
+        }
+      }
     }
 
     // Snackbar
@@ -675,7 +723,7 @@ export const EditProjects = ({projects, setProjects, handleCloseModal, skills, c
         <Grid size={12}>
           <Divider color={theme.secondaryText}/><br />
             <Box sx={{display:'flex',justifyContent:{lg:'flex-end',md:'flex-end',sm:'flex-end',xs:'center'},gap:1}}>
-              <Button variant='outlined' size='large' 
+              <Button variant='outlined' size='large' onClick={handleDelete}
               startIcon={dLoading ? <CircularProgress size={24} color="inherit"/> : <Delete/>} 
                 sx={{
                     color:theme.error,
