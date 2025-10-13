@@ -1,11 +1,13 @@
-export const profileViewCardUi = () => {
+export const ProfileViewCardUi = ({firstName, lastName, username, dp, theme}) => {
     return (
         <>
         <style>{`
             .card {
-                max-width: 320px;
+                max-width: auto;
+                width: 100%;
+                height: auto;
                 border-radius: 1rem;
-                background-color: rgba(31, 41, 55, 1);
+                background-color: ${theme.cardBg};
                 padding: 1rem;
             }
 
@@ -21,12 +23,11 @@ export const profileViewCardUi = () => {
                 height: 7rem;
                 width: 7rem;
                 border-radius: 0.5rem;
-                background-color: rgb(118, 36, 194);
-                background: linear-gradient(to bottom right, rgb(118, 36, 194), rgb(185, 128, 240));
+                background-color: ${theme.background};
+                background: linear-gradient(135deg, #00BFFF, #1BC47D);
             }
 
             .info {
-                height: 7rem;
                 flex: 1;
                 display: flex;
                 flex-direction: column;
@@ -37,26 +38,28 @@ export const profileViewCardUi = () => {
                 font-size: 1.25rem;
                 line-height: 1.75rem;
                 font-weight: 500;
-                color: rgba(255, 255, 255, 1);
+                color: ${theme.primaryText};
             }
 
             .function {
                 font-size: 0.75rem;
                 line-height: 1rem;
-                color: rgba(156, 163, 175, 1);
+                color: ${theme.secondaryText};
             }
 
             .stats {
                 width: 100%;
+                max-width: 300px;
                 border-radius: 0.5rem;
-                background-color: rgba(255, 255, 255, 1);
+                background-color: ${theme.background};
                 padding: 0.5rem;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: space-around;
                 font-size: 0.75rem;
                 line-height: 1rem;
-                color: rgba(0, 0, 0, 1);
+                color: ${theme.primaryText};
+                margin-top: 0.5rem;
             }
 
             .flex {
@@ -68,13 +71,15 @@ export const profileViewCardUi = () => {
 
             .state-value {
                 font-weight: 700;
-                color: rgb(118, 36, 194);
+                color: ${theme.primaryAccent};
             }
 
             .request {
                 margin-top: 1.5rem;
                 width: 100%;
                 border: 1px solid transparent;
+                background: ${theme.primaryAccent};
+                color: ${theme.primaryText};
                 border-radius: 0.5rem;
                 padding: 0.5rem 1rem;
                 font-size: 1rem;
@@ -83,26 +88,28 @@ export const profileViewCardUi = () => {
             }
 
             .request:hover {
-                background-color: rgb(118, 36, 194);
+                background-color: ${theme.hoverAccent};
                 color: #fff;
             }
         `}</style>
 
         <div class="card">
             <div class="infos">
-                <div class="image"></div>
+                <div class="image">
+                <img src={dp} alt="Display Pic" class="image"/>
+                </div>
                 <div class="info">
                     <div>
-                        <p class="name">
-                            John Doe
-                        </p>
-                        <p class="function">
-                            @ username
-                        </p>
+                        <div class="name">
+                            {`${firstName} ${lastName}`}
+                        </div>
+                        <div class="function">
+                            @ {username}
+                        </div>
                     </div>
                     <div class="stats">
                             <p class="flex flex-col">
-                                Articles
+                                Following
                                 <span class="state-value">
                                     34
                                 </span>
@@ -118,7 +125,7 @@ export const profileViewCardUi = () => {
                 </div>
             </div>
             <button class="request" type="button">
-                Add friend
+                Add to connection
             </button>
         </div>
 

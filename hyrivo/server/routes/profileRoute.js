@@ -838,4 +838,21 @@ router.get('/me',log,auth, async (req, res) => {
     }
 })
 
+router.get('/v/:profileType/:username',log, async (req, res) => {
+    try {
+        const {profileType, username} = req.params
+
+        const user = await User.findOne({ username })
+        if (!user) return res.status(404).json({ error: "User not found" })
+
+        const profile = user.isCompany ? await orgProfile.findOne({ userId: user._id, profileType }) 
+            : await userProfile.findOne({ userId: user._id, profileType })
+        if (!profile) return res.status(404).json({ error: "Profile not found" })
+        
+        return res.status(200).json({user, profile})
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 module.exports = router

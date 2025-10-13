@@ -32,6 +32,7 @@ export const ProfileOrg = () => {
     const [desc, setDesc] = useState('')
     const [dp, setDp] = useState('')
     const [username, setUsername] = useState('')
+    const [accType, setAccType] = useState('')
     const [email,setEmail] = useState('')
     const [mobile, setMobile] = useState('')
     const [location,setLocation] = useState('')
@@ -154,6 +155,7 @@ export const ProfileOrg = () => {
         setIndustry(user.industry)
         setDesc(user.description)
         setUsername(users.username)
+        setAccType(user.profileType)
         setEmail(users.email)
         setMobile(user.mobile)
         setLocation(user.location)
@@ -403,9 +405,10 @@ export const ProfileOrg = () => {
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       <LinkRounded/>
                       :
-                      <Link sx={{textDecoration:'none',color:theme.primaryAccent,
-                    '&:hover':{color:theme.hoverAccent}
-                  }}>{`http://localhost:3000/profile/view/${username}`}</Link>
+                      <Link href={`/profile/v/${accType}/${username}`} target="_blank" rel="noopener noreferrer" 
+                      sx={{textDecoration:'none',color:theme.primaryAccent,
+                        '&:hover':{color:theme.hoverAccent},cursor: 'pointer'
+                      }}>{`http://localhost:3000/profile/v/${accType}/${username}`}</Link>
                       </Box>
                       <Box>|</Box> 
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>

@@ -25,6 +25,7 @@ import { Loading } from './components/Loading'
 import { DetailsOrg } from './components/DetailsOrg'
 import { ProfileOrg } from './components/ProfileOrg'
 import { EditDP } from './Utils/EditDP'
+import { ProfileCardWrapper } from './Utils/ProfileCardWrapper'
 
 const AppContent = () => {
 
@@ -50,6 +51,7 @@ const AppContent = () => {
     <>
     {showNavbar && <Navbar/>}
       <Routes>
+        <Route path='/profile/v/:profileType/:username' element={<ProfileCardWrapper/>}/>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/' element={
           <RouteSecure>

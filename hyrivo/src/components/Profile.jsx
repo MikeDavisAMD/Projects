@@ -51,6 +51,7 @@ export const Profile = () => {
   const [about, setAbout] = useState('')
   const [email,setEmail] = useState('')
   const [username,setUsername] = useState('')
+  const [accType, setAccType] = useState('')
   const [skills, setSkills] = useState([])
   const [exp,setExp] = useState([])
   const [edu,setEdu] = useState([])
@@ -400,6 +401,7 @@ export const Profile = () => {
       setAbout(user.about)
       setEmail(users.email)
       setUsername(users.username)
+      setAccType(user.profileType)
       setSkills(user.skills)
       setPrevSkills(user.skills)
       setExp(user.experience)
@@ -563,9 +565,11 @@ export const Profile = () => {
                       <Box sx={{display:'flex',alignItems:'center',gap:1}}>
                       <LinkRounded/>
                       :
-                      <Link sx={{textDecoration:'none',color:theme.primaryAccent,
-                    '&:hover':{color:theme.hoverAccent}
-                  }}>{`http://localhost:3000/profile/view/${username}`}</Link>
+                      <Link href={`/profile/v/${accType}/${username}`} target="_blank" rel="noopener noreferrer" 
+                        sx={{textDecoration:'none',color:theme.primaryAccent,
+                        '&:hover':{color:theme.hoverAccent}}}>
+                          {`http://localhost:3000/profile/v/${accType}/${username}`}
+                      </Link>
                       </Box> 
                     </Box>
                   </Typography>
