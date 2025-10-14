@@ -26,6 +26,8 @@ import { DetailsOrg } from './components/DetailsOrg'
 import { ProfileOrg } from './components/ProfileOrg'
 import { EditDP } from './Utils/EditDP'
 import { ProfileCardWrapper } from './Utils/ProfileCardWrapper'
+import { Puzzles } from './components/Puzzles'
+import { UserPosts } from './components/UserPosts'
 
 const AppContent = () => {
 
@@ -56,6 +58,16 @@ const AppContent = () => {
         <Route path='/' element={
           <RouteSecure>
             <Home/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles' element={
+          <RouteSecure>
+            <Puzzles/>
+          </RouteSecure>
+        }/>
+        <Route path='/UserPosts' element={
+          <RouteSecure>
+            <UserPosts/>
           </RouteSecure>
         }/>
         <Route path='/JobsUser' element={

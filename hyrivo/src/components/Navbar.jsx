@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AppBar, Avatar, Box, ButtonBase, Divider, Drawer, Grid, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material'
-import { ArrowBackIosNew, Close, ExpandLess, ExpandMore, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
+import { ArrowBackIosNew, Close, ExpandLess, ExpandMore, Extension, Group, Home, Logout, Message, Notifications, Person, Search, Settings, Work } from '@mui/icons-material'
 import logo from '../Assets/Images/Hyrivo copy.png'
 import icon from '../Assets/Images/icon.jpg'
 import { logout } from '../Utils/logout'
@@ -28,6 +28,8 @@ const ME = ({dp, users, desc, profileType ,logout}) => {
     setOpen(newOpen);
   };
 
+  const puzzles = () => {navigate('/Puzzles')}
+
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
@@ -46,14 +48,16 @@ const ME = ({dp, users, desc, profileType ,logout}) => {
       </List>
       <Divider />
       <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={logout}>
+        {['Puzzles & Games','Logout'].map((text, index) => (
+          <ListItem disablePadding>
+          <ListItemButton onClick={index % 2 === 0 ? puzzles : logout}>
             <ListItemIcon>
-              <Logout sx={{color:theme.primaryText}}/>
+              {index % 2 === 0 ? <Extension sx={{color:theme.primaryText}}/> : <Logout sx={{color:theme.primaryText}}/>}
             </ListItemIcon>
-            <ListItemText primary='Logout' />
+            <ListItemText primary={text} />
           </ListItemButton>
         </ListItem>
+        ))}
       </List>
     </Box>
   );

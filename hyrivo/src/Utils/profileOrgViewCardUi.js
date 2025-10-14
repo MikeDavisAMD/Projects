@@ -27,6 +27,14 @@ export const ProfileOrgViewCardUi = ({companyName, username, industry, dp, theme
                 background: linear-gradient(135deg, #00BFFF, #1BC47D);
             }
 
+            .dp {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 62px; 
+                height: 100%;
+            }
+
             .info {
                 flex: 1;
                 display: flex;
@@ -96,7 +104,11 @@ export const ProfileOrgViewCardUi = ({companyName, username, industry, dp, theme
         <div class="card">
             <div class="infos">
                 <div class="image">
-                    <img src={dp} alt="Display Pic" class="image"/>
+                    {dp && dp.startsWith('https://') ? (
+                        <img src={dp} alt="Display Pic" class="image"/>
+                    ):(
+                        <div class='dp'>{dp}</div>
+                    )}
                 </div>
                 <div class="info">
                     <div>
