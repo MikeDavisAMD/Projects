@@ -4,8 +4,9 @@ import { ArrowRight } from '@mui/icons-material'
 import sudoku from '../Assets/icons/sudoku.png'
 import crosswords from '../Assets/icons/crossword.png'
 import wordsearch from '../Assets/icons/wordsearch.png'
-import chess from '../Assets/icons/chess.png'
-import tetris from '../Assets/icons/tetris.png'
+import minesweeper from '../Assets/icons/minesweeper.png'
+import memorymatch from '../Assets/icons/memory-game.png'
+import twoGame from '../Assets/icons/2048game.png'
 import { Avatar, Box, Card, CardActionArea, CardContent, Grid, Typography } from '@mui/material'
 
 export const PuzzleList = () => {
@@ -15,8 +16,9 @@ export const PuzzleList = () => {
         {avatar: sudoku, name: 'Sudoku'},
         {avatar: crosswords, name:'Cross-Word'},
         {avatar: wordsearch, name: 'Word-Search'},
-        {avatar: chess, name: 'Chess'},
-        {avatar: tetris, name: 'tetris'}
+        {avatar: minesweeper, name: 'Minesweeper'},
+        {avatar: memorymatch, name: 'Memory Match'},
+        {avatar: twoGame, name: '2048 Game'},
     ]
   return (
     <Card sx={{borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Box, Button, Card, CardContent, Divider, Grid, Link, Menu, MenuItem, Typography } from '@mui/material'
+import { Avatar, Box, Button, ButtonBase, Card, CardActions, CardContent, Divider, Grid, Link, Menu, MenuItem, Modal, Typography } from '@mui/material'
 import { useThemeContext } from '../Utils/ThemeContext'
 import axios from 'axios'
 import { HomeOrgProfileCard } from '../Utils/HomeOrgProfileCard'
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import logo from '../Assets/Images/Hyrivo copy.png'
 import { PuzzleList } from '../Utils/PuzzleList'
 import { Posts } from './Posts'
-import { ArrowDropDown, ArrowDropUp, Article, InsertPhoto, Movie } from '@mui/icons-material'
+import { ArrowDropDown, ArrowDropUp, Article, Close, InsertPhoto, Movie, Publish } from '@mui/icons-material'
 
 export const Home = () => {
   const {theme} = useThemeContext()
@@ -21,6 +21,26 @@ export const Home = () => {
   const [industry, setIndustry] = useState('')
   const [desc, setDesc] = useState('')
   const [dp, setDp] = useState('')
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: {lg:400,md:400,sm:300,xs:200},
+    bgcolor: theme.primaryBg,
+    border: `2px solid ${theme.cardBorder}` ,
+    boxShadow: 24,
+    borderRadius: 5,
+    p: 4,
+    maxHeight: '80vh',
+    overflowY: 'auto'
+  };
+
+  // Modal for create post
+  const [openCreatePost, setOpenCreatePost] = useState(false);
+  const handleOpenCreatePost = () => setOpenCreatePost(true);
+  const handleCloseCreatPost = () => setOpenCreatePost(false);
 
   // Menu in divider to sort
   const options = ['Top','Recent']
@@ -88,7 +108,7 @@ export const Home = () => {
           transition: all 0.5s;
         }
         `}</style>
-        <button class="blue-btn">Create Post</button>
+        <button onClick={handleOpenCreatePost} class="blue-btn">Create Post</button>
       </>
     )
   }
@@ -123,14 +143,14 @@ export const Home = () => {
   return (
     <Box sx={{flexGrow:1, height:'100%', backgroundColor:theme.primaryBg, color: theme.primaryText}}>
       <Grid container>
-          <Grid size={{lg:4, md:4, sm:5, xs:12}} sx={{display:{lg:'block', md: 'block', sm:'block', xs:'none'}}}>
+          <Grid size={{lg:4, md:4, sm:5, xs:12}} sx={{display:{lg:'block', md: 'block', sm:'flex', xs:'none'}, flexDirection: 'column'}}>
               <Box>
                 {isCompany ? <HomeOrgProfileCard theme={theme} companyName={companyName} industry={industry}
                 handleView={handleViewUserPosts} desc={desc} dp={dp} username={username}/> : 
                 <HomeProfileCard theme={theme} firstName={firstName} lastName={lastName} 
                 username={username} handleView={handleViewUserPosts} desc={desc} dp={dp}/>}
               </Box>
-              <Box sx={{display:{lg:'none', md:'none', sm:'block', xs:'none'},width: '80%',ml:4,mb:2}}>
+              <Box sx={{display:{lg:'none', md:'none', sm:'block', xs:'none'},width: 'auto',ml:2,mr:2,mb:2}}>
                 <PuzzleList/>
               </Box>
               <Box sx={{display:{lg:'none', md:'none', sm:'flex', xs:'none'},
@@ -144,7 +164,7 @@ export const Home = () => {
               </Box>
           </Grid>
           <Grid size={{lg:5,md:5,sm:7, xs:12}}>
-              <Box sx={{flexGrow:1, pt:2}}>
+              <Box sx={{flexGrow:1, pt:2,pr:{lg:0,md:0,sm:2,xs:2},pl:{lg:0,md:0,sm:0,xs:2}}}>
                 <Grid container spacing={2}>
                   <Grid size={12}>
                     <Card sx={{borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
@@ -166,6 +186,50 @@ export const Home = () => {
                             <Grid size={{lg:11, md:10, sm:10, xs:10}}>
                                 <Box sx={{pr:2}}>
                                 <Addpostbtn/>
+                                <Modal
+                                  open={openCreatePost}
+                                  onClose={handleCloseCreatPost}
+                                  aria-labelledby="modal-modal-title"
+                                  aria-describedby="modal-modal-description"
+                                >
+                                  <Box sx={style}>
+                                    <Box sx={{display:'flex', justifyContent:'flex-end',pb:2}}>
+                                      <ButtonBase onClick={handleCloseCreatPost} sx={{display:'flex',color: theme.primaryText,
+                                          flexDirection:'column',justifyContent:'flex-end',
+                                          alignItems:'center', pb:0.5, px:1,
+                                          transition: 'all 0.3s ease',
+                                          '&:hover': {
+                                            color: theme.hoverAccent,
+                                          }
+                                        }}><Close/></ButtonBase>
+                                    </Box>
+                                    <Card sx={{borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
+                                      <CardActions>
+                                        
+                                      </CardActions>
+                                      <CardContent>
+
+                                      </CardContent>
+                                      <CardActions>
+
+                                      </CardActions>
+                                    </Card>
+                                    <Box sx={{display:'flex', justifyContent:'flex-end',pt:2}}>
+                                    <Button variant='outlined' size='large' startIcon={<Publish/>}
+                                      sx={{
+                                          color:theme.primaryAccent,
+                                          borderColor:theme.primaryAccent,
+                                          '&:hover':{
+                                            backgroundColor:theme.hoverAccent,
+                                            borderColor:theme.hoverAccent,
+                                            color:theme.primaryBg
+                                          }
+                                        }}><Box sx={{display:'flex',alignItems:'center',gap:1}}>
+                                            post
+                                          </Box></Button>
+                                    </Box>
+                                  </Box>
+                                </Modal>
                                 </Box>
                             </Grid>
                             <Grid size={12}>

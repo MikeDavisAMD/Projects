@@ -9,9 +9,10 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
                 -webkit-backdrop-filter: blur(48px);
                 backdrop-filter: blur(48px);
                 border-radius: 20px;
-                padding: 2rem;
+                padding: 1.6rem;
+                margin: 18px;
                 box-shadow: 12px 12px 12px -20px ${theme.shadow};
-                transform: perspective(1000px) scale(0.8); /*adjust the scale to view properly*/
+                transform: perspective(1000px); /*adjust the scale to view properly*/
                 transform-style: preserve-3d;
             }
 
@@ -144,7 +145,7 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
                 <div class="profile-title">@{username}</div>
                 <div class="profile-bio">{desc}</div>
             </div>
-        <button onClick={handleView} class="cta-button">View Profile</button>
+        <button onClick={handleView} class="cta-button">View Posts</button>
         <div class="stats">
             <div class="stat-item">
             <div class="stat-value">15</div>
