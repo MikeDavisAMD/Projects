@@ -299,7 +299,7 @@ export const EditDP = () => {
                                         alt="Display Picture"
                                     />
                                 ) : (
-                                    <Box sx={{height:'100%', width:'100%', background:'linear-gradient(135deg, #00BFFF, #1BC47D)', 
+                                    <Box sx={{height:'100%', width:'100%', background:`linear-gradient(50deg, ${theme.primaryAccent} 0%, ${theme.hoverAccent} 100%)`, 
                                     display:'flex',alignItems:'center',justifyItems:'center'}}>
                                         <Box>
                                         <b style={{fontSize:"150px"}}>{currentDp}</b>

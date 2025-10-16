@@ -103,7 +103,7 @@ export const ProfilUIOrg = ({dp, name, desc, username, industry, theme, setError
                 align-items: center;
                 border-radius: 15px;
                 color: ${theme.primaryText};
-                background: linear-gradient(135deg, #00BFFF, #1BC47D);
+                background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
                 font-size: 1em;
                 position: relative;
                 overflow: hidden;

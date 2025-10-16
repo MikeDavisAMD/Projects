@@ -141,7 +141,7 @@ export const Home = () => {
 
   useEffect(() => {fetchUser()},[])
   return (
-    <Box sx={{flexGrow:1, height:'100%', backgroundColor:theme.primaryBg, color: theme.primaryText}}>
+    <Box sx={{flexGrow:1,pt:{lg:9, md:8, sm:8, xs:7}, height:'100%', backgroundColor:theme.primaryBg, color: theme.primaryText}}>
       <Grid container>
           <Grid size={{lg:4, md:4, sm:5, xs:12}} sx={{display:{lg:'block', md: 'block', sm:'flex', xs:'none'}, flexDirection: 'column'}}>
               <Box>

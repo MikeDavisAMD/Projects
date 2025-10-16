@@ -343,7 +343,7 @@ export const Navbar = () => {
   },[showSearch])
 
   return (
-    <AppBar position='static' sx={{backgroundColor:theme.background,backdropFilter:'blur(10px)',borderBottom:`1px solid ${theme.cardBorder}`, color:theme.primaryText}}>
+    <AppBar position='fixed' sx={{backgroundColor:theme.background,backdropFilter:'blur(10px)',borderBottom:`1px solid ${theme.cardBorder}`, color:theme.primaryText}}>
       <Toolbar>
         <Box sx={{flexGrow:1,display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
           <Grid container spacing={4} alignItems='center'>
