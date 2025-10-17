@@ -24,7 +24,7 @@ export const ProfileViewCardUi = ({firstName, lastName, username, dp, theme}) =>
                 width: 7rem;
                 border-radius: 0.5rem;
                 background-color: ${theme.background};
-                background: linear-gradient(135deg, #00BFFF, #1BC47D);
+                background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
             }
 
             .dp {

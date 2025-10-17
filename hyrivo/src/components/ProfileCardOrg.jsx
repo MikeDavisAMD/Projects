@@ -47,7 +47,7 @@ export const ProfileCardOrg = () => {
 
   const Desc = () => {
     return (
-      <Typography sx={{ marginBottom: 2 }}>
+      <Typography sx={{ marginBottom: 2, color: theme.primaryText  }}>
         {profile.description} 
       </Typography>
     )
@@ -56,7 +56,7 @@ export const ProfileCardOrg = () => {
   const About = () => {
     return (
       <Box>
-        <Typography sx={{ marginBottom: 2 }}>
+        <Typography sx={{ marginBottom: 2, color: theme.primaryText }}>
           {profile.about}
         </Typography>
         <Stack direction="row" spacing={1} sx={{display:'flex',flexWrap:'wrap',alignItems:'center',gap:1}}>
@@ -94,28 +94,36 @@ export const ProfileCardOrg = () => {
         <Grid container spacing={2}>
           <Grid size={{lg:6, md:6, sm: 12}}>
             {CONTACT.map((s,i)=>(
-              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+              <List sx={{ width: '100%', maxWidth: 360, bgcolor: theme.primaryBg }}>
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
                       {s.icon}
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={s.name} secondary={s.detail} />
+                  <ListItemText primary={s.name} secondary={s.detail} 
+                  slotProps={{
+                    primary:{ sx: { color: theme.primaryText } },
+                    secondary: { sx: { color: theme.secondaryText } }
+                  }}/>
                 </ListItem>
               </List>
             ))}
           </Grid>
           <Grid size={{lg:6, md:6, sm: 12}}>
           {CONTACT2.map((s,i)=>(
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: theme.primaryBg }}>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     {s.icon}
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={s.name} secondary={s.detail} />
+                <ListItemText primary={s.name} secondary={s.detail} 
+                slotProps={{
+                  primary:{ sx: { color: theme.primaryText } },
+                  secondary: { sx: { color: theme.secondaryText } }
+                }}/>
               </ListItem>
             </List>
           ))}
@@ -174,6 +182,8 @@ export const ProfileCardOrg = () => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+            backgroundColor:theme.primaryBg,
+            color: theme.primaryText
           },
         }}
         variant="permanent"
@@ -214,19 +224,34 @@ export const ProfileCardOrg = () => {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{ flexGrow: 1, bgcolor: theme.primaryBg, p: 3, height:'100vh' }}
       >
         <Toolbar />
         {DRAWERLIST[value]?.component}
       </Box>
     </Box>
-    <Box sx={{ width: '100%', display:{lg:'none',md:'none',sm:'none',xs:'block'} }}>
+    <Box sx={{ width: '100%', display:{lg:'none',md:'none',sm:'none',xs:'block'},background: theme.primaryBg,minHeight:'100vh',height:'100%' }}>
       <Box>
           <ProfileOrgViewCardUi username={user.username} industry={profile.industry} 
           companyName={profile.companyName} dp={profile.currentDp} theme={theme}/>
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} 
+        sx={{
+          color: theme.primaryText,
+          '& .MuiTab-root':{
+            color: theme.secondaryText,
+            '&:hover': {
+              color: theme.hoverAccent, 
+            },
+          },
+          '& .Mui-selected': {
+            color: theme.primaryAccent + ' !important',
+          },
+          '& .MuiTabs-indicator': {
+            backgroundColor: theme.primaryAccent,
+          },
+        }}
         variant='scrollable' scrollButtons='auto' allowScrollButtonsMobile
         aria-label="basic tabs example">
           {DRAWERLIST.map((s,i) => (

@@ -44,6 +44,8 @@ export const HomeProfileCard = ({theme, firstName, lastName, username, desc, han
                 align-items: center;
                 font-size: 62px; 
                 height: 100%;
+                width: 100%;
+                background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
             }
 
             .profile-image::before {
@@ -53,7 +55,7 @@ export const HomeProfileCard = ({theme, firstName, lastName, username, desc, han
                 top: 0;
                 width: 100%;
                 height: 96px;
-                background: linear-gradient(135deg, ${theme.primaryAccent}, ${theme.hoverAccent});
+                background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
                 border-radius: 20px 20px 0 0;
                 z-index: -1;
             }

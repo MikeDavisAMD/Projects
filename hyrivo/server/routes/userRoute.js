@@ -396,10 +396,18 @@ router.get('/me',log,auth,async (req,res) => {
     }
 })
 
-router.get('/',log,auth,async (req,res) => {
+router.get('/all',log,auth,async (req,res) => {
     try {
-        const user = await User.find().select('username')
-        res.status(200).json(user)
+        const users = await User.find({_id: {$ne: req.userId}}, {password: 0})
+        if (!users) return res.status(400).json({ message: "Error fetching user details" })
+        const result = await Promise.all(users.map(async u => {
+            let profile = null
+            if (u.profileId) {
+                profile = await Profile.findById(u.profileId)
+            }
+            return { user: u, profile }
+        }))
+        res.status(200).json({result, count: result.length})
     } catch (error) {
         res.status(500).json({error:error.message})
     }

@@ -52,7 +52,7 @@ export const ProfileCard = () => {
 
   const Desc = () => {
     return (
-      <Typography sx={{ marginBottom: 2 }}>
+      <Typography sx={{ marginBottom: 2, color: theme.primaryText }}>
         {profile.description} 
       </Typography>
     )
@@ -61,7 +61,7 @@ export const ProfileCard = () => {
   const About = () => {
     return (
       <Box>
-        <Typography sx={{ marginBottom: 2 }}>
+        <Typography sx={{ marginBottom: 2, color: theme.primaryText }}>
           {profile.about} 
         </Typography>
         <Stack direction="row" spacing={1} sx={{display:'flex',alignItems:'center',flexWrap:'wrap',gap:1}}>
@@ -85,14 +85,18 @@ export const ProfileCard = () => {
     return (
       <Box>
         {CONTACT.map((s,i)=>(
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: theme.primaryBg }}>
           <ListItem>
             <ListItemAvatar>
               <Avatar>
                 {s.icon}
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={s.name} secondary={s.detail} />
+            <ListItemText primary={s.name} secondary={s.detail} 
+            slotProps={{ 
+              primary: { sx: { color: theme.primaryText }},
+              secondary: { sx: { color: theme.secondaryText }}
+            }}/>
           </ListItem>
         </List>
       ))}
@@ -157,7 +161,7 @@ export const ProfileCard = () => {
     },[])
     
     return (
-      <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2}}>
+      <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:{xs:'center'},gap:2,background:theme.primaryBg}}>
         <Card sx={{width:"100%",borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
           <CardActions sx={{display:'flex',justifyContent:'flex-end'}}>
                 <ButtonBase onClick={handlePreviewResume} sx={{display:'flex',color: theme.primaryText, 
@@ -261,6 +265,8 @@ export const ProfileCard = () => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+            backgroundColor:theme.primaryBg,
+            color: theme.primaryText
           },
         }}
         variant="permanent"
@@ -301,19 +307,34 @@ export const ProfileCard = () => {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{ flexGrow: 1, bgcolor: theme.primaryBg, p: 3, height:'100vh' }}
       >
         <Toolbar />
         {DRAWERLIST[value]?.component}
       </Box>
     </Box>
-      <Box sx={{ width: '100%', display:{lg:'none',md:'none',sm:'none',xs:'block'} }}>
+      <Box sx={{ width: '100%', display:{lg:'none',md:'none',sm:'none',xs:'block'},background: theme.primaryBg,minHeight:'100vh', height:'100%' }}>
         <Box>
           <ProfileViewCardUi username={user.username} firstName={profile.firstName} lastName={profile.lastName}
           dp={profile.currentDp} theme={theme}/>
         </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} 
+        sx={{
+          color: theme.primaryText,
+          '& .MuiTab-root':{
+            color: theme.secondaryText,
+            '&:hover': {
+              color: theme.hoverAccent, 
+            },
+          },
+          '& .Mui-selected': {
+            color: theme.primaryAccent + ' !important',
+          },
+          '& .MuiTabs-indicator': {
+            backgroundColor: theme.primaryAccent,
+          },
+        }}
         variant='scrollable' scrollButtons='auto' allowScrollButtonsMobile
         aria-label="basic tabs example">
           {DRAWERLIST.map((s,i) => (
