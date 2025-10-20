@@ -33,7 +33,7 @@ export const Navbar = ({AboutRef,EduRef,SkillsRef,ExpRef,ProjectRef,ContactRef})
     {label:'Skills',action:scrollSkills,icon:<Extension/>},
     {label:'Experience',action:scrollExp,icon:<WorkspacePremium/>},
     {label:'Projects',action:scrollProject,icon:<DataExploration/>},
-    {label:'Contacts',action:scrollProject,icon:<Contacts/>}
+    {label:'Contacts',action:scrollContact,icon:<Contacts/>}
   ]
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
