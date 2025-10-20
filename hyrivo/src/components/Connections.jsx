@@ -1,7 +1,7 @@
 import { ArrowRightRounded, PeopleAlt, PersonAdd } from '@mui/icons-material';
-import { AppBar, BottomNavigation, BottomNavigationAction, Box, CssBaseline, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Tab, Tabs, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardContent, CssBaseline, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Tab, Tabs, Toolbar, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext';
 import axios from 'axios'
 
@@ -34,7 +34,7 @@ function a11yProps(index) {
   };
 }
 
-const CONNECTCARD = ({theme, name, isCompany, username, industry, desc}) => {
+const CONNECTCARD = ({theme, name, isCompany, profileType, username, industry, desc, dp}) => {
   return (
     <>
       <style>{`
@@ -74,11 +74,30 @@ const CONNECTCARD = ({theme, name, isCompany, username, industry, desc}) => {
         .image {
           width: 90px;
           height: 90px;
-          background-color: #1468BF;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
           border-radius: 50%;
           border: 4px solid ${theme.hoverAccent};
-          margin-top: 30px;
           transition: all 0.5s ease;
+        }
+
+        .profile-type {
+          position: absolute;
+            top: 0;                 
+            left: 0;
+            width: 100%;
+            height: 100px;          
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 40px;
+            opacity: 0.8;
+            z-index: 0;             
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
         .card-info {
@@ -99,6 +118,19 @@ const CONNECTCARD = ({theme, name, isCompany, username, industry, desc}) => {
         .card-info .industry {
           font-size: 15px;
           color: ${theme.secondaryText};
+        }
+
+        .card-info span {
+          width: 260px;
+          display: inline-block;
+          text-overflow: ellipsis;
+          font-weight: 600;
+          font-size: 24px;
+          overflow: hidden;
+          color: ${theme.primaryText};
+          margin-top: 15px;
+          white-space: nowrap;
+          transition: all 0.4s ease;
         }
 
         .card-info p {
@@ -125,8 +157,9 @@ const CONNECTCARD = ({theme, name, isCompany, username, industry, desc}) => {
 
         .card:hover::before {
           width: 290px;
-          height: 320px;
-          background: ${theme.cardBg};
+          height: 100%;
+          opacity: 0.5;
+          background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
           border-bottom: none;
           border-bottom-left-radius: 15px;
           border-bottom-right-radius: 15px;
@@ -135,12 +168,13 @@ const CONNECTCARD = ({theme, name, isCompany, username, industry, desc}) => {
 
         .card:hover {
           height: auto;
-          transform: scale(1.05);
+          width: 290px;
+          transform: scale(1.08);
           box-shadow: 0 15px 25px ${theme.shadow};
         }
 
         .card:hover .card-info {
-          transform: translate(0%,-25%);
+          transform: translate(0%,-15%);
         }
 
         .card:hover .card-info p {
@@ -149,396 +183,177 @@ const CONNECTCARD = ({theme, name, isCompany, username, industry, desc}) => {
           margin-top: 10px;
         }
 
+        .card:hover .card-info span {
+          white-space: normal;
+          overflow: visible;
+          text-overflow: unset;
+          word-wrap: break-word;
+        }
+
         .card:hover .image {
           transform: scale(2) translate(-60%,-40%);
           background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
+        }
+
+        .card:hover .profile-type {
+          opacity: 0;
+          transform: translateY(-10px);
         }
 
         .button:hover {
           background-color: ${theme.hoverAccent};
           transform: scale(1.1);
         }
+
+        .card::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          filter: blur(10px);
+          opacity: 0;
+          transition: opacity 0.6s ease;
+          z-index: 0;
+        }
       `}</style>
 
       <div className="card">
-        <div className="image"></div>
+        <div className="image">
+          {dp && dp.startsWith('https://') ? (
+            <Avatar src={dp} alt={name}
+            sx={{width:'100%',height:'100%'}}/>
+          ):(
+            <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:'100%',height:'100%',fontSize:50}}>
+              {dp}
+            </Avatar>
+          )}
+        </div>
+        <div className='profile-type'>{profileType}</div>
         <div className="card-info">
-          <span style={{
-            width: '260px',
-            display:'inline-block',
-            textOverflow: 'ellipsis',
-            fontWeight: 600,
-            fontSize: 24,
-            color: theme.primaryText,
-            marginTop: 15,
-            whiteSpace: 'nowrap',
-            animation: name.length > 20 ? 'scrollText 15s linear infinite' : 'none'
-          }}>{name}</span>
+          <span>{name}</span>
           <div>@{username}{isCompany ?  ` | ${industry}`: ""}</div>
-          <p>{desc}</p>
+          <p>{desc}</p><br />
+          <a className="button" >Connect</a>
         </div>
-        <a href="#" className="button">Connect</a>
       </div>
     </>
   )
 }
 
-const FOLLOWERCARD = ({theme}) => {
-  return (
-    <>
-    <style>{`
-      .card {
-        width: auto;
-        height: auto;
-        background: ${theme.cardBg};
-        border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .title, .more {
-        padding: 10px 15px;
-      }
-
-      .user {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 15px;
-      }
-
-      .user__content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-grow: 1;
-      }
-
-      .user__container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .title {
-        font-weight: 900;
-        font-size: 1.3em;
-      }
-
-      .name {
-        font-weight: 800;
-      }
-
-      .username {
-        font-size: .7em;
-        color: ${theme.secondaryText};
-      }
-
-      .desc {
-        font-size: .9em;
-        color: ${theme.secondaryText};
-      }
-
-      .image {
-        width: 60px;
-        height: 60px;
-        background: ${theme.background};
-        background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
-        border-radius: 50%;
-        margin-right: 15px;
-      }
-
-      .follow {
-        border: none;
-        border-radius: 25px;
-        background-color: ${theme.primaryAccent};
-        color: white;
-        padding: 8px 15px;
-        font-weight: 700;
-      }
-
-      .user:hover {
-        background-color: ${theme.hoverAccent};
-      }
-
-      .follow:hover {
-        background-color: ${theme.hoverAccent};
-      }
-    `}</style>
-
-    <div className="card">
-      <div className="user__container">
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div> 
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-      </div>
-    </div>
-    </>
-  )
-}
-
-const FOLLOWINGCARD = ({theme}) => {
-  return (
-    <>
-    <style>{`
-      .card {
-        width: auto;
-        height: auto;
-        background: ${theme.cardBg};
-        border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .title, .more {
-        padding: 10px 15px;
-      }
-
-      .user {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 15px;
-      }
-
-      .user__content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-grow: 1;
-      }
-
-      .user__container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .title {
-        font-weight: 900;
-        font-size: 1.3em;
-      }
-
-      .name {
-        font-weight: 800;
-      }
-
-      .username {
-        font-size: .7em;
-        color: ${theme.secondaryText};
-      }
-
-      .desc {
-        font-size: .9em;
-        color: ${theme.secondaryText};
-      }
-
-      .image {
-        width: 60px;
-        height: 60px;
-        background: ${theme.background};
-        background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
-        border-radius: 50%;
-        margin-right: 15px;
-      }
-
-      .follow {
-        border: none;
-        border-radius: 25px;
-        background-color: ${theme.primaryAccent};
-        color: white;
-        padding: 8px 15px;
-        font-weight: 700;
-      }
-
-      .user:hover {
-        background-color: ${theme.hoverAccent};
-      }
-
-      .follow:hover {
-        background-color: ${theme.hoverAccent};
-      }
-    `}</style>
-
-    <div className="card">
-      <div className="user__container">
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div> 
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-        <div className="user">
-          <div className="image"></div>
-          <div className="user__content">
-            <div className="text">
-              <span className="name">Name</span>
-              <div className="username">@namedlorem</div>
-              <p className="desc">Description</p>
-            </div>
-            <button className="follow">Follow</button>
-          </div> 
-        </div>
-      </div>
-    </div>
-    </>
-  )
-}
-
-const Followers = ({theme}) => {
+const Followers = ({theme, users}) => {
   return (
     <Box sx={{flexGrow:1}}>
       <Grid container spacing={2}>
         <Grid size={12}>
-          <FOLLOWERCARD theme={theme}/>
+          {!users || users.length === 0 ? (
+            <Box sx={{textAlign: 'center', color:theme.secondaryText}}>
+              <Typography variant='span'>No Followers yet</Typography>
+            </Box>
+          ):(
+            users.map((d,i) => (
+              <Box>
+                <Card key={i} sx={{width:'100%', maxWidth:'54vw',borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
+                  <CardContent>
+                    <Box sx={{flexGrow: 1}}>
+                      <Grid container spacing={2} alignItems='center'>
+                        <Grid size={2}>
+                          {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
+                            <Avatar src={d.profile.currentDp} alt='Display Pic'
+                            sx={{width:'100%',height:'100%'}}/>
+                          ):(
+                            <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:100,height:100,fontSize:50}}>
+                              {d.profile.currentDp}
+                            </Avatar>
+                          )}
+                        </Grid>
+                        <Grid size={8}>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: theme.primaryText, fontWeight: 'bolder' }}>{d.user.isCompany ? 
+                            d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText }}>@{d.user.username}{d.user.isCompany ? ` | ${d.profile.industry}` : ""}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2 }}>{d.profile.description}</Typography>
+                          </Box>
+                        </Grid>
+                        <Grid size={2}>
+                          <Button variant='outlined'
+                            sx={{borderRadius:'20px',
+                                color:theme.primaryAccent,
+                                borderColor:theme.primaryAccent,
+                                '&:hover':{ 
+                                backgroundColor:theme.hoverAccent,
+                                borderColor:theme.hoverAccent,
+                                color:theme.primaryText
+                                }
+                            }}>follow</Button>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </CardContent>
+                </Card><br />
+              </Box>
+            ))
+          ) }
         </Grid>
       </Grid>
     </Box>
   )
 }
 
-const Following = ({theme}) => {
+const Following = ({theme, users}) => {
   return (
     <Box sx={{flexGrow:1}}>
       <Grid container spacing={2}>
         <Grid size={12}>
-          <FOLLOWINGCARD theme={theme}/>
+          {!users || users.length === 0 ? (
+            <Box sx={{textAlign: 'center', color:theme.secondaryText}}>
+              <Typography variant='span'>No Following yet</Typography>
+            </Box>
+          ):(
+            users.map((d,i) => (
+              <Box>
+                <Card key={i} sx={{width:'100%', maxWidth:'54vw',borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
+                  <CardContent>
+                    <Box sx={{flexGrow: 1}}>
+                      <Grid container spacing={2} alignItems='center'>
+                        <Grid size={2}>
+                          {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
+                            <Avatar src={d.profile.currentDp} alt='Display Pic'
+                            sx={{width:'100%',height:'100%'}}/>
+                          ):(
+                            <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:100,height:100,fontSize:50}}>
+                              {d.profile.currentDp}
+                            </Avatar>
+                          )}
+                        </Grid>
+                        <Grid size={8}>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: theme.primaryText, fontWeight: 'bolder' }}>{d.user.isCompany ? 
+                            d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText }}>@{d.user.username}{d.user.isCompany ? ` | ${d.profile.industry}` : ""}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2 }}>{d.profile.description}</Typography>
+                          </Box>
+                        </Grid>
+                        <Grid size={2}>
+                          <Button variant='outlined'
+                            sx={{borderRadius:'20px',
+                                color:theme.primaryAccent,
+                                borderColor:theme.primaryAccent,
+                                '&:hover':{ 
+                                backgroundColor:theme.hoverAccent,
+                                borderColor:theme.hoverAccent,
+                                color:theme.primaryText
+                                }
+                            }}>follow</Button>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </CardContent>
+                </Card><br />
+              </Box>
+            ))
+          )}
         </Grid>
       </Grid>
     </Box>
@@ -550,17 +365,22 @@ export const Connections = () => {
   const [value, setValue] = useState(0)
   const [drawerValue, setDrawerValue] = useState(0)
   const [data, setData] = useState([])
+  const [userId,setUserId] = useState('')
 
   const DRAWERLIST = [
-    {name: 'Followers', text:'People you follow', icon: <PersonAdd/>, component: <Followers theme={theme}/>, count: "120"},
-    {name: 'Following', text: 'People who follows you', icon: <PeopleAlt/>, component: <Following theme={theme}/>, count: "130"}
+    {name: 'Followers', text:'People you follow', icon: <PersonAdd/>, 
+      component: <Followers theme={theme} users={data.filter(u => u.profile?.followers?.includes(userId))}/>, 
+      count: data.filter(u => Array.isArray(u.profile?.followers) && u.profile?.followers?.includes(userId)).length || "0"},
+    {name: 'Following', text: 'People who follows you', icon: <PeopleAlt/>, 
+      component: <Following theme={theme} users={data.filter(u => u.profile?.following?.includes(userId))}/>, 
+      count: data.filter(u => Array.isArray(u.profile?.following) && u.profile?.following?.includes(userId)).length || "0"}
   ]
 
   const handleChange = (_, newValue) => {
     setDrawerValue(newValue);
   };
 
-  const fetchData = async (params) => {
+  const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:2000/user/all",{
         headers: {
@@ -574,7 +394,24 @@ export const Connections = () => {
     }
   }
 
-  useEffect(() => {fetchData()},[])
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get("http://localhost:2000/user/me",{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+        }
+      })
+
+      setUserId(response.data.profile.userId)
+    } catch (error) {
+      console.error("Error Fetching user data")
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+    fetchUser()
+  },[])
 
   return (
     <Box sx={{flexGrow:1,pt:{lg:9, md:8, sm:8, xs:7},pb: '80px',minHeight: '100vh',
@@ -609,10 +446,10 @@ export const Connections = () => {
         <Grid container spacing={2}>
           <Grid size={12}>
             <Box sx={{display:'flex',flexWrap:'wrap',justifyContent:'center',p:2,gap:2}}>
-              {data.map((d,i) => (
+              {data.filter(d => d.profile).map((d,i) => (
                 <CONNECTCARD key={i} theme={theme} industry={d.profile?.industry} desc={d.profile?.description}
                 name={d.user.isCompany ? d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}
-                isCompany={d.user?.isCompany} username={d.user.username}/>
+                isCompany={d.user?.isCompany} username={d.user.username} profileType={d.profile.profileType} dp={d.profile.currentDp}/>
               ))}
             </Box>
           </Grid>

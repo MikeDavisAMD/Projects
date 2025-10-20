@@ -177,7 +177,7 @@ export const Home = () => {
                                   <Avatar src={dp} alt={isCompany ? companyName :`${firstName} ${lastName}`} 
                                   sx={{width:50,height:50}}/>
                                 ):(
-                                  <Avatar sx={{background:'linear-gradient(135deg, #00BFFF, #1BC47D)',width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
+                                  <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:{lg:30,md:25,sm:25},height:{lg:30,md:25,sm:25},fontSize:{lg:17,md:13,sm:14}}}>
                                     {dp}
                                   </Avatar>
                                 )}
@@ -347,7 +347,16 @@ export const Home = () => {
             </Box>
           </Grid>
           <Grid size={3} sx={{display:{lg:'block', md: 'block', sm:'none', xs:'none'},p:2}}>
-              <PuzzleList/>
+              <PuzzleList/><br />
+              <Box sx={{display:'flex',
+              p:2, gap:1, alignItems: 'center', justifyContent:'center'}}>
+                <Box>
+                  <img src={logo} alt="Hyrivo" height='22px'/>
+                </Box>
+                <Box>
+                  <Typography variant='span' sx={{color: theme.secondaryText}}>by Mike Davis &#169; 2025</Typography>
+                </Box>
+              </Box>
           </Grid>
       </Grid>
     </Box>
