@@ -21,6 +21,8 @@ export const Home = () => {
   const [industry, setIndustry] = useState('')
   const [desc, setDesc] = useState('')
   const [dp, setDp] = useState('')
+  const [followers, setFollowers] = useState([])
+  const [following, setFollowing] = useState([])
 
   const style = {
     position: 'absolute',
@@ -134,6 +136,8 @@ export const Home = () => {
         setIndustry(profile.industry)
         setDesc(profile.description)
         setDp(profile.currentDp)
+        setFollowers(profile.followers)
+        setFollowing(profile.following)
     } catch (error) {
       console.error(error.message)
     }
@@ -146,9 +150,10 @@ export const Home = () => {
           <Grid size={{lg:4, md:4, sm:5, xs:12}} sx={{display:{lg:'block', md: 'block', sm:'flex', xs:'none'}, flexDirection: 'column'}}>
               <Box>
                 {isCompany ? <HomeOrgProfileCard theme={theme} companyName={companyName} industry={industry}
-                handleView={handleViewUserPosts} desc={desc} dp={dp} username={username}/> : 
-                <HomeProfileCard theme={theme} firstName={firstName} lastName={lastName} 
-                username={username} handleView={handleViewUserPosts} desc={desc} dp={dp}/>}
+                handleView={handleViewUserPosts} desc={desc} dp={dp} username={username} followers={followers}
+                following={following}/> : 
+                <HomeProfileCard theme={theme} firstName={firstName} lastName={lastName} following={following}
+                username={username} handleView={handleViewUserPosts} desc={desc} dp={dp} followers={followers}/>}
               </Box>
               <Box sx={{display:{lg:'none', md:'none', sm:'block', xs:'none'},width: 'auto',ml:2,mr:2,mb:2}}>
                 <PuzzleList/>

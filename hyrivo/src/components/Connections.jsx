@@ -1,5 +1,5 @@
 import { ArrowRightRounded, PeopleAlt, PersonAdd } from '@mui/icons-material';
-import { AppBar, Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardContent, CssBaseline, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Tab, Tabs, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardContent, CssBaseline, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Snackbar, Tab, Tabs, Toolbar, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext';
@@ -34,7 +34,35 @@ function a11yProps(index) {
   };
 }
 
-const CONNECTCARD = ({theme, name, isCompany, profileType, username, industry, desc, dp}) => {
+const CONNECTCARD = ({
+  theme, name, isCompany, profileType, username, industry, desc, dp, 
+  setLoading, setError, setOpen, setSuccess, targetUserId, fetchData,
+  userFollowers,currentUserId, loading
+}) => {
+  const isConnectBack = userFollowers.includes(currentUserId)
+  
+  const handleConnect = async () => {
+    try {
+      setLoading(true)
+
+      await axios.post(`http://localhost:2000/profile/connect/add/${targetUserId}`,{},{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+        }
+      })
+
+      setSuccess(`Following ${name}`)
+      setError("")
+      setOpen(true)
+      fetchData()
+    } catch (error) {
+      setError("Unable to connect to the user")
+      setSuccess("")
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <>
       <style>{`
@@ -171,6 +199,7 @@ const CONNECTCARD = ({theme, name, isCompany, profileType, username, industry, d
           width: 290px;
           transform: scale(1.08);
           box-shadow: 0 15px 25px ${theme.shadow};
+          margin-bottom: 26px;
         }
 
         .card:hover .card-info {
@@ -235,14 +264,65 @@ const CONNECTCARD = ({theme, name, isCompany, profileType, username, industry, d
           <span>{name}</span>
           <div>@{username}{isCompany ?  ` | ${industry}`: ""}</div>
           <p>{desc}</p><br />
-          <a className="button" >Connect</a>
+          <button className="button" disabled={loading} onClick={handleConnect}>
+            {loading ? "connecting..." : isConnectBack ? "Connect Back" : "Connect"}
+          </button>
         </div>
       </div>
     </>
   )
 }
 
-const Followers = ({theme, users}) => {
+const Followers = ({theme, users, setLoading, loading, setError, setSuccess, setOpen, 
+  fetchData, currentUserFollowing, setCurrentUserFollowing, currentUserId}) => {
+
+  const handleUnfollow = async (targetUserId, name) => {
+    try {
+      setLoading(true)
+
+      await axios.delete(`http://localhost:2000/profile/connect/remove/${targetUserId}`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+        }
+      })
+
+      setCurrentUserFollowing(prev => prev.filter(id => id !== targetUserId));
+      setSuccess(`Unfollowed ${name}`)
+      setError('')
+      setOpen(true)
+      fetchData()
+    } catch (error) {
+      setError(`Unable to unfollow ${name}`)
+      setSuccess('')
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleFollowBack = async (targetUserId, name) => {
+    try {
+      setLoading(true)
+      await axios.post(`http://localhost:2000/profile/connect/add/${targetUserId}`,{},{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+        }
+      })
+
+      setCurrentUserFollowing(prev => [...prev, targetUserId]);
+      setSuccess(`Followed Back ${name}`)
+      setError('')
+      setOpen(true)
+      fetchData()
+    } catch (error) {
+      setError(`Unable to follow back ${name}`)
+      setSuccess('')
+      setOpen(true) 
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Box sx={{flexGrow:1}}>
       <Grid container spacing={2}>
@@ -252,32 +332,58 @@ const Followers = ({theme, users}) => {
               <Typography variant='span'>No Followers yet</Typography>
             </Box>
           ):(
-            users.map((d,i) => (
+            users.map((d) => {
+              const targetUserId = d.profile.userId
+              const isFollowing = currentUserFollowing?.includes(targetUserId)
+
+              const btnTxt = isFollowing ? "unfollow" : "follow back"
+
+              const handleClick = () => {
+                if (btnTxt === "follow back") {
+                  handleFollowBack(
+                    targetUserId, 
+                    d.user.isCompany ? d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`
+                  )
+                  currentUserFollowing.push(targetUserId)
+                } else {
+                  handleUnfollow(
+                    targetUserId, 
+                    d.user.isCompany ? d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`
+                  )
+                  const index = currentUserFollowing.indexOf(targetUserId)
+                  if (index > -1) return currentUserFollowing.splice(index, 1)
+                } 
+              }
+            return (
               <Box>
-                <Card key={i} sx={{width:'100%', maxWidth:'54vw',borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
+                <Card key={d.profile.userId} sx={{width:'100%', maxWidth:{lg:'55vw',md:'55vw',sm:'55vw',xs:'100vw'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
                   <CardContent>
-                    <Box sx={{flexGrow: 1}}>
+                    <Box sx={{flexGrow: 1, display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
                       <Grid container spacing={2} alignItems='center'>
-                        <Grid size={2}>
-                          {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
-                            <Avatar src={d.profile.currentDp} alt='Display Pic'
-                            sx={{width:'100%',height:'100%'}}/>
-                          ):(
-                            <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:100,height:100,fontSize:50}}>
-                              {d.profile.currentDp}
-                            </Avatar>
-                          )}
+                        <Grid size={{lg:2,md:3}}>
+                          <Box sx={{display:'flex',justifyContent:'center'}}>
+                            {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
+                              <Avatar src={d.profile.currentDp} alt='Display Pic'
+                              sx={{width:'100%',height:'100%'}}/>
+                            ):(
+                              <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:80,height:80,fontSize:40}}>
+                                {d.profile.currentDp}
+                              </Avatar>
+                            )}
+                          </Box>
                         </Grid>
-                        <Grid size={8}>
-                          <Box>
+                        <Grid size={{lg:7, md:6}}>
+                          <Box sx={{width:'100%'}}>
                             <Typography variant="body2" sx={{ color: theme.primaryText, fontWeight: 'bolder' }}>{d.user.isCompany ? 
                             d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}</Typography>
                             <Typography variant="body2" sx={{ color: theme.secondaryText }}>@{d.user.username}{d.user.isCompany ? ` | ${d.profile.industry}` : ""}</Typography>
-                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2 }}>{d.profile.description}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2, fontSize:10 }}>{d.profile.description}</Typography>
                           </Box>
                         </Grid>
-                        <Grid size={2}>
-                          <Button variant='outlined'
+                        <Grid size={3}>
+                          <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+                          <Button variant='outlined' disabled = {loading}
+                          onClick={handleClick}
                             sx={{borderRadius:'20px',
                                 color:theme.primaryAccent,
                                 borderColor:theme.primaryAccent,
@@ -286,14 +392,54 @@ const Followers = ({theme, users}) => {
                                 borderColor:theme.hoverAccent,
                                 color:theme.primaryText
                                 }
-                            }}>follow</Button>
+                            }}>{loading ? "following..." : btnTxt}</Button>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                    <Box sx={{flexGrow:1, display:{lg:'none',md:'none',sm:'block',xs:'block'}}}>
+                      <Grid container spacing={2} alignItems='center' justifyContent='center'>
+                        <Grid size={12}>
+                          <Box sx={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+                            {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
+                              <Avatar src={d.profile.currentDp} alt='Display Pic'
+                              sx={{width:'100%',height:'100%'}}/>
+                            ):(
+                              <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:100,height:100,fontSize:50}}>
+                                {d.profile.currentDp}
+                              </Avatar>
+                            )}
+                          </Box>
+                        </Grid>
+                        <Grid size={12}>
+                          <Box sx={{width:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                            <Typography variant="body2" sx={{ color: theme.primaryText, fontWeight: 'bolder' }}>{d.user.isCompany ? 
+                            d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText }}>@{d.user.username}{d.user.isCompany ? ` | ${d.profile.industry}` : ""}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2, fontSize:10, textAlign:'center' }}>{d.profile.description}</Typography>
+                          </Box>
+                        </Grid>
+                        <Grid size={12}>
+                          <Box sx={{width:'100%',display:'flex', justifyContent:'center',alignItems:'center'}}>
+                            <Button variant='outlined' disabled={loading} 
+                            onClick={handleClick}
+                              sx={{borderRadius:'20px',
+                                color:theme.primaryAccent,
+                                borderColor:theme.primaryAccent,
+                                '&:hover':{ 
+                                backgroundColor:theme.hoverAccent,
+                                borderColor:theme.hoverAccent,
+                                color:theme.primaryText
+                                }
+                            }}>{loading ? "following..." : btnTxt}</Button>
+                          </Box>
                         </Grid>
                       </Grid>
                     </Box>
                   </CardContent>
                 </Card><br />
               </Box>
-            ))
+            )})
           ) }
         </Grid>
       </Grid>
@@ -301,7 +447,29 @@ const Followers = ({theme, users}) => {
   )
 }
 
-const Following = ({theme, users}) => {
+const Following = ({theme, users, setLoading, loading, setOpen, setError, setSuccess, fetchData}) => {
+
+  const handleUnfollow = async (targetUserId, name) => {
+    try {
+      setLoading(true)
+
+      await axios.delete(`http://localhost:2000/profile/connect/remove/${targetUserId}`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+        }
+      })
+      setSuccess(`Unfollowed ${name}`)
+      setError('')
+      setOpen(true)
+      fetchData()
+    } catch (error) {
+      setError(`Unable to unfollow ${name}`)
+      setSuccess('')
+      setOpen(true)
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <Box sx={{flexGrow:1}}>
       <Grid container spacing={2}>
@@ -313,30 +481,33 @@ const Following = ({theme, users}) => {
           ):(
             users.map((d,i) => (
               <Box>
-                <Card key={i} sx={{width:'100%', maxWidth:'54vw',borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
+                <Card key={i} sx={{width:'100%', maxWidth:{lg:'55vw',md:'55vw',sm:'55vw',xs:'100vw'},borderRadius:'15px', background: theme.cardBg, border:theme.cardBorder}}>
                   <CardContent>
-                    <Box sx={{flexGrow: 1}}>
+                    <Box sx={{flexGrow: 1, display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
                       <Grid container spacing={2} alignItems='center'>
-                        <Grid size={2}>
-                          {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
-                            <Avatar src={d.profile.currentDp} alt='Display Pic'
-                            sx={{width:'100%',height:'100%'}}/>
-                          ):(
-                            <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:100,height:100,fontSize:50}}>
-                              {d.profile.currentDp}
-                            </Avatar>
-                          )}
+                        <Grid size={{lg:2,md:2}}>
+                         <Box sx={{display:'flex',justifyContent:'center'}}>
+                            {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
+                              <Avatar src={d.profile.currentDp} alt='Display Pic'
+                              sx={{width:'100%',height:'100%'}}/>
+                            ):(
+                              <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:80,height:80,fontSize:40}}>
+                                {d.profile.currentDp}
+                              </Avatar>
+                            )}
+                          </Box>
                         </Grid>
-                        <Grid size={8}>
-                          <Box>
+                        <Grid size={{lg:7, md:6}}>
+                          <Box sx={{width:'100%'}}>
                             <Typography variant="body2" sx={{ color: theme.primaryText, fontWeight: 'bolder' }}>{d.user.isCompany ? 
                             d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}</Typography>
                             <Typography variant="body2" sx={{ color: theme.secondaryText }}>@{d.user.username}{d.user.isCompany ? ` | ${d.profile.industry}` : ""}</Typography>
-                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2 }}>{d.profile.description}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2, fontSize:10 }}>{d.profile.description}</Typography>
                           </Box>
                         </Grid>
-                        <Grid size={2}>
-                          <Button variant='outlined'
+                        <Grid size={{lg:3,md:4}}>
+                          <Button variant='outlined' disabled={loading}
+                            onClick={() => handleUnfollow(d.profile.userId, d.user.username)}
                             sx={{borderRadius:'20px',
                                 color:theme.primaryAccent,
                                 borderColor:theme.primaryAccent,
@@ -345,7 +516,46 @@ const Following = ({theme, users}) => {
                                 borderColor:theme.hoverAccent,
                                 color:theme.primaryText
                                 }
-                            }}>follow</Button>
+                            }}>{loading ? "unfollowing..." : "unfollow"}</Button>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                    <Box sx={{flexGrow:1, display:{lg:'none',md:'none',sm:'block',xs:'block'}}}>
+                      <Grid container spacing={2} alignItems='center' justifyContent='center'>
+                        <Grid size={12}>
+                          <Box sx={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+                            {d.profile.currentDp && d.profile.currentDp.startsWith('https://') ? (
+                              <Avatar src={d.profile.currentDp} alt='Display Pic'
+                              sx={{width:100,height:100}}/>
+                            ):(
+                              <Avatar sx={{background:`linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`,width:100,height:100,fontSize:50}}>
+                                {d.profile.currentDp}
+                              </Avatar>
+                            )}
+                          </Box>
+                        </Grid>
+                        <Grid size={12}>
+                          <Box sx={{width:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                            <Typography variant="body2" sx={{ color: theme.primaryText, fontWeight: 'bolder' }}>{d.user.isCompany ? 
+                            d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText }}>@{d.user.username}{d.user.isCompany ? ` | ${d.profile.industry}` : ""}</Typography>
+                            <Typography variant="body2" sx={{ color: theme.secondaryText, pt:2, fontSize:10, textAlign:'center' }}>{d.profile.description}</Typography>
+                          </Box>
+                        </Grid>
+                        <Grid size={12}>
+                          <Box sx={{width:'100%',display:'flex', justifyContent:'center',alignItems:'center'}}>
+                            <Button variant='outlined' disabled={loading}
+                            onClick={() => handleUnfollow(d.profile.userId, d.user.username)}
+                              sx={{borderRadius:'20px',
+                                color:theme.primaryAccent,
+                                borderColor:theme.primaryAccent,
+                                '&:hover':{ 
+                                backgroundColor:theme.hoverAccent,
+                                borderColor:theme.hoverAccent,
+                                color:theme.primaryText
+                                }
+                            }}>{loading ? "unfollowing..." : "unfollow"}</Button>
+                          </Box>
                         </Grid>
                       </Grid>
                     </Box>
@@ -366,15 +576,21 @@ export const Connections = () => {
   const [drawerValue, setDrawerValue] = useState(0)
   const [data, setData] = useState([])
   const [userId,setUserId] = useState('')
+  const [currentUserFollowing, setCurrentUserFollowing] = useState([])
 
-  const DRAWERLIST = [
-    {name: 'Followers', text:'People you follow', icon: <PersonAdd/>, 
-      component: <Followers theme={theme} users={data.filter(u => u.profile?.followers?.includes(userId))}/>, 
-      count: data.filter(u => Array.isArray(u.profile?.followers) && u.profile?.followers?.includes(userId)).length || "0"},
-    {name: 'Following', text: 'People who follows you', icon: <PeopleAlt/>, 
-      component: <Following theme={theme} users={data.filter(u => u.profile?.following?.includes(userId))}/>, 
-      count: data.filter(u => Array.isArray(u.profile?.following) && u.profile?.following?.includes(userId)).length || "0"}
-  ]
+  // Snackbar
+  const [open,setOpen] = useState(false)
+  const [error,setError] = useState('')
+  const [success,setSuccess] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleClose = (event, reason) => {
+  if (reason === 'clickaway') {
+      return;
+  }
+
+  setOpen(false);
+  };
 
   const handleChange = (_, newValue) => {
     setDrawerValue(newValue);
@@ -403,10 +619,25 @@ export const Connections = () => {
       })
 
       setUserId(response.data.profile.userId)
+      setCurrentUserFollowing(response.data.profile.following || [])
     } catch (error) {
       console.error("Error Fetching user data")
     }
   }
+
+  const DRAWERLIST = [
+    {name: 'Following', text: 'People you follow', icon: <PersonAdd/>, 
+      component: <Following theme={theme} users={data.filter(u => u.profile?.followers?.includes(userId))}
+      setLoading={setLoading} loading={loading} setError={setError} setSuccess={setSuccess} setOpen={setOpen}
+      fetchData={fetchData}/>, 
+      count: data.filter(u => Array.isArray(u.profile?.followers) && u.profile?.followers?.includes(userId)).length || "0"},
+    {name: 'Followers', text:'People who follows you', icon: <PeopleAlt/>, 
+      component: <Followers theme={theme} users={data.filter(u => u.profile?.following?.includes(userId))}
+      setError={setError} setSuccess={setSuccess} setLoading={setLoading} loading={loading} setOpen={setOpen}
+      fetchData={fetchData} currentUserId={userId} setCurrentUserFollowing={setCurrentUserFollowing}
+      currentUserFollowing={currentUserFollowing}/>, 
+      count: data.filter(u => Array.isArray(u.profile?.following) && u.profile?.following?.includes(userId)).length || "0"},
+  ]
 
   useEffect(() => {
     fetchData()
@@ -446,10 +677,14 @@ export const Connections = () => {
         <Grid container spacing={2}>
           <Grid size={12}>
             <Box sx={{display:'flex',flexWrap:'wrap',justifyContent:'center',p:2,gap:2}}>
-              {data.filter(d => d.profile).map((d,i) => (
+              {data.filter(d => d.profile && !d.profile.followers?.includes(userId) && d.profile.userId !== userId).map((d,i) => (
                 <CONNECTCARD key={i} theme={theme} industry={d.profile?.industry} desc={d.profile?.description}
                 name={d.user.isCompany ? d.profile.companyName : `${d.profile.firstName} ${d.profile.lastName}`}
-                isCompany={d.user?.isCompany} username={d.user.username} profileType={d.profile.profileType} dp={d.profile.currentDp}/>
+                isCompany={d.user?.isCompany} username={d.user.username} profileType={d.profile.profileType} 
+                dp={d.profile.currentDp} setError={setError} setSuccess={setSuccess} setOpen={setOpen} loading={loading}
+                setLoading={setLoading} targetUserId={d.profile.userId} fetchData={fetchData} currentUserId={userId}
+                currentUserFollowing={data.find(u => u.profile?.userId === userId)?.profile?.following || []}
+                userFollowers={d.profile.following || []}/>
               ))}
             </Box>
           </Grid>
@@ -572,6 +807,14 @@ export const Connections = () => {
           </Grid>
         </Grid>
       )}
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} variant='filled' severity={error ? 'error' : 'success'}
+        sx={{
+          backgroundColor: error ? '#FF4D6D' : '#1BC47D'
+        }}>
+          {error || success}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

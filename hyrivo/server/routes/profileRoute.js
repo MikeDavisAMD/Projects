@@ -819,91 +819,69 @@ router.delete('/delete/resume/:public_id',log,auth,async (req,res) => {
     }
 })
 
-router.put('/connect/:targetUserId',log,auth, async (req,res) => {
+router.post('/connect/add/:targetUserId',log,auth, async (req,res) => {
     try {
         const {targetUserId} = req.params
         const currentUserId = req.userId
 
-        if (currentUserId === targetUserId) {
-            return res.status(400).json({ message: "Cannot connect to yourself"})
-        }
+        if (currentUserId === targetUserId) return res.status(400).json({ message: "Cannot connect to yourself"})
 
         const currentUser = await User.findById(currentUserId)
         const targetUser = await User.findById(targetUserId)
         if (!targetUser || !currentUser) return res.status(400).json({ message: "cannot find user"})
 
-        const currentProfile = currentUser.isCompany
-            ? await orgProfile.findOne({ userId: currentUserId }) 
-            : await userProfile.findOne({ userId: currentUserId })
-        const targetProfile = targetUser.isCompany
-            ? await orgProfile.findOne({ userId: targetUserId }) 
-            : await userProfile.findOne({ userId: targetUserId })
-        if (!targetProfile || !currentProfile) return res.status(400).json({ message: "cannot find user's profile" })
+        const currentUserProfile = await currentUser.isCompany 
+            ? await orgProfile.findOne({userId: currentUserId})
+            : await userProfile.findOne({userId: currentUserId})
 
-        if (!targetProfile.followers.includes(currentUserId)) {
-            targetProfile.followers.push(currentUserId)
-        }
-        if (!currentProfile.following.includes(targetUserId)) {
-            currentProfile.following.push(targetUserId)
-        }
+        const targetUserProfile = await targetUser.isCompany
+            ? await orgProfile.findOne({userId: targetUserId})
+            : await userProfile.findOne({userId: targetUserId})
 
-        await currentProfile.save()
-        await targetProfile.save()
+        if (!currentUserProfile.following) currentUserProfile.following = []
+        if (!targetUserProfile.followers) targetUserProfile.followers = []
 
-        return res.status(200).json({ message: "Follower/Following added successfully"})
+        if (currentUserProfile.following.includes(targetUserId)) return res.status(400).json({ message: "Already Connected" })
+
+        currentUserProfile.following.push(targetUserId)
+        targetUserProfile.followers.push(currentUserId)
+
+        await currentUserProfile.save()
+        await targetUserProfile.save()
+
+        return res.status(200).json({ message: "connection added successfully"})
     } catch (error) {
         res.status(500).json({error: error.message})
+        console.error("error",error.message)
     }
 })
 
-router.get('/followers',log,auth, async (req, res) => {
+router.delete('/connect/remove/:targetUserId',log,auth, async (req, res) => {
     try {
-        const user = await User.findById(req.userId)
-        if (!user) return res.status(400).json({ message: "user not found" })
+        const {targetUserId} = req.params
+        const currentUserId = req.userId
 
-        const profile = user.isCompany 
-            ? await orgProfile.findOne({ userId: req.userId }).populate('followers','userId companyName industry currentDp')
-            : await userProfile.findOne({ userId: req.userId }).populate('followers','userId firstName lastName currentDp')
-        if (!profile) return res.status(400).json({ message: "unable to fetch profile details" })
+        if (currentUserId === targetUserId) return res.status(400).json({ message: "Cannot connect to yourself"})
 
-        return res.status(200).json({followers: profile.followers})
-    } catch (error) {
-        res.status(500).json({error: error.message})
-    }
-})
+        const currentUser = await User.findById(currentUserId)
+        const targetUser = await User.findById(targetUserId)
+        if (!targetUser || !currentUser) return res.status(400).json({ message: "cannot find user"})
 
-router.get('/following',log,auth,async (req, res) => {
-    try {
-        const user = await User.findById(req.userId)
-        if (!user) return res.status(400).json({ message: "user not found" })
+        const currentUserProfile = await currentUser.isCompany 
+            ? await orgProfile.findOne({userId: currentUserId})
+            : await userProfile.findOne({userId: currentUserId})
 
-        const profile = user.isCompany 
-            ? await orgProfile.findOne({ userId: req.userId }).populate('following','userId companyName industry currentDp')
-            : await userProfile.findOne({ userId: req.userId }).populate('following','userId firstName lastName currentDp')
-        if (!profile) return res.status(400).json({ message: "unable to fetch profile details" })
+        const targetUserProfile = await targetUser.isCompany
+            ? await orgProfile.findOne({userId: targetUserId})
+            : await userProfile.findOne({userId: targetUserId})
 
-        return res.status(200).json({following: profile.following})
-    } catch (error) {
-        res.status(500).json({error: error.message})
-    }
-})
+        currentUserProfile.following = currentUserProfile.following.filter( id => id.toString() !== targetUserId)
+        targetUserProfile.followers = targetUserProfile.followers.filter( id => id.toString() !== currentUserId)
 
-router.get('/connect',log,auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.userId)
-        if (!user) return res.status(400).json({ message: "user not found" })
+        await currentUserProfile.save()
+        await targetUserProfile.save()
 
-        const currentProfile = user.isCompany
-            ? await orgProfile.findOne({ userId: req.userId }) 
-            : await userProfile.findOne({ userId: req.userId })
-        if (!currentProfile) return res.status(400).json({ message: "cannot fetch profile details"})
-
-        const allProfiles = user.isCompany
-            ? await orgProfile.find({ userId: { $ne: req.userId } })
-            : await userProfile.find({ userId: { $ne: req.userId } })
-
-        const connectList = allProfiles.filter(p => !currentProfile.following.includes(p.userId))
-        res.status(200).json({ connectList })
+        return res.status(200).json({ message: "unfollowed successfully"})
     } catch (error) {
         res.status(500).json({error: error.message})
     }

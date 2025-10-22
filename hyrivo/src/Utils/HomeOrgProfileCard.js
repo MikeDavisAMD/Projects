@@ -1,4 +1,4 @@
-export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, companyName, handleView}) => {
+export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, companyName, handleView, followers, following}) => {
     return (
         <>
         <style>{`
@@ -148,15 +148,15 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
         <button onClick={handleView} class="cta-button">View Posts</button>
         <div class="stats">
             <div class="stat-item">
-            <div class="stat-value">15</div>
+            <div class="stat-value">{followers.length}</div>
             <div class="stat-label">Followers</div>
             </div>
             <div class="stat-item">
-            <div class="stat-value">82</div>
+            <div class="stat-value">{following.length}</div>
             <div class="stat-label">Following</div>
             </div>
             <div class="stat-item">
-            <div class="stat-value">2</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">Posts</div>
             </div>
         </div>

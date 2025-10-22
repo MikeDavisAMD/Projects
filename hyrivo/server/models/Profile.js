@@ -11,8 +11,8 @@ const profileSchema = new mongoose.Schema({
         url: { type: String, default:null }
     }],
     currentDp: { type: String, default: null },
-    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Profile" }],
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "Profile" }],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
 }, { discriminatorKey: 'profileType', timestamps: true })
 
 profileSchema.pre('save', function(next) {
