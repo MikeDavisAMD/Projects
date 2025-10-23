@@ -28,6 +28,7 @@ import { EditDP } from './Utils/EditDP'
 import { ProfileCardWrapper } from './Utils/ProfileCardWrapper'
 import { Puzzles } from './components/Puzzles'
 import { UserPosts } from './components/UserPosts'
+import { Article } from './components/Article'
 
 const AppContent = () => {
 
@@ -58,6 +59,11 @@ const AppContent = () => {
         <Route path='/' element={
           <RouteSecure>
             <Home/>
+          </RouteSecure>
+        }/>
+        <Route path='/Post/Article' element={
+          <RouteSecure>
+            <Article/>
           </RouteSecure>
         }/>
         <Route path='/Puzzles' element={
