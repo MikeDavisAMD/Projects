@@ -1,4 +1,4 @@
-export const ProfileViewCardUi = ({firstName, lastName, username, dp, theme}) => {
+export const ProfileViewCardUi = ({firstName, lastName, username, dp, theme, following, followers, loading, isFollowing, handleClick}) => {
     return (
         <>
         <style>{`
@@ -123,21 +123,21 @@ export const ProfileViewCardUi = ({firstName, lastName, username, dp, theme}) =>
                             <p class="flex flex-col">
                                 Following
                                 <span class="state-value">
-                                    34
+                                    {following?.length || "0"}
                                 </span>
                             </p>
                             <p class="flex">
                                 Followers
                                 <span class="state-value">
-                                    455
+                                    {followers?.length || "0"}
                                 </span>
                             </p>
                             
                     </div>
                 </div>
             </div>
-            <button class="request" type="button">
-                Add to connection
+            <button class="request" type="button" onClick={handleClick}>
+                {loading ? "Loading..." : isFollowing ? "Remove from connection" :"Add to connection"}
             </button>
         </div>
 

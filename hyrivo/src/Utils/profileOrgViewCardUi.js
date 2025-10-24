@@ -1,4 +1,5 @@
-export const ProfileOrgViewCardUi = ({companyName, username, industry, dp, theme}) => {
+export const ProfileOrgViewCardUi = ({companyName, username, industry, dp, theme, followers, following, loading, isFollowing, handleClick}) => {
+
     return (
         <>
         <style>{`
@@ -126,21 +127,21 @@ export const ProfileOrgViewCardUi = ({companyName, username, industry, dp, theme
                             <p class="flex flex-col">
                                 Following
                                 <span class="state-value">
-                                    34
+                                    {following?.length || "0"}
                                 </span>
                             </p>
                             <p class="flex">
                                 Followers
                                 <span class="state-value">
-                                    455
+                                    {followers?.length || "0"}
                                 </span>
                             </p>
                             
                     </div>
                 </div>
             </div>
-            <button class="request" type="button">
-                Add to connection
+            <button class="request" type="button" onClick={handleClick}>
+                {loading ? "Loading..." : isFollowing ? "Remove from connection" :"Add to connection"}
             </button>
         </div>
 

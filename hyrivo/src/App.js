@@ -28,7 +28,12 @@ import { EditDP } from './Utils/EditDP'
 import { ProfileCardWrapper } from './Utils/ProfileCardWrapper'
 import { Puzzles } from './components/Puzzles'
 import { UserPosts } from './components/UserPosts'
-import { Article } from './components/Article'
+import { SudokuGame } from './Games/SudokuGame'
+import { CrossWordGame } from './Games/CrossWordGame'
+import { Game2048 } from './Games/Game2048'
+import { MemoryMatchGame } from './Games/MemoryMatchGame'
+import { MinesweeperGame } from './Games/MinesweeperGame'
+import { WordSearchGame } from './Games/WordSearchGame'
 
 const AppContent = () => {
 
@@ -61,14 +66,39 @@ const AppContent = () => {
             <Home/>
           </RouteSecure>
         }/>
-        <Route path='/Post/Article' element={
-          <RouteSecure>
-            <Article/>
-          </RouteSecure>
-        }/>
         <Route path='/Puzzles' element={
           <RouteSecure>
             <Puzzles/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles/Sudoku' element={
+          <RouteSecure>
+            <SudokuGame/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles/Cross-Word' element={
+          <RouteSecure>
+            <CrossWordGame/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles/Word-Search' element={
+          <RouteSecure>
+            <WordSearchGame/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles/Minesweeper' element={
+          <RouteSecure>
+            <MinesweeperGame/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles/Memory-Match' element={
+          <RouteSecure>
+            <MemoryMatchGame/>
+          </RouteSecure>
+        }/>
+        <Route path='/Puzzles/2048' element={
+          <RouteSecure>
+            <Game2048/>
           </RouteSecure>
         }/>
         <Route path='/UserPosts' element={

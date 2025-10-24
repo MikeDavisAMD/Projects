@@ -59,6 +59,11 @@ export const Home = () => {
   const handleOpenCreatePostExpert = () => setOpenCreatePostExpert(true);
   const handleCloseCreatPostExpert = () => setOpenCreatePostExpert(false);
 
+  // Modal for create article
+  const [openCreatePostArticle, setOpenCreatePostArticle] = useState(false);
+  const handleOpenCreatePostArticle = () => setOpenCreatePostArticle(true);
+  const handleCloseCreatPostArticle = () => setOpenCreatePostArticle(false);
+
   // Menu in divider to sort
   const options = ['Top', 'Recent']
   const [anchorEl, setAnchorEl] = useState(null);
@@ -265,14 +270,29 @@ export const Home = () => {
   const CREATEPOSTBUTTONS = [
     { title: 'Add Photo', icon: <InsertPhoto />, click: handleOpenCreatePostImage },
     { title: 'Add Video', icon: <Movie />, click: handleOpenCreatePostVideo },
-    { title: 'Add Document', icon: <Description />, click: () => navigate('/Post/Article')},
+    { title: 'Add Document', icon: <Description />, click: handleOpenCreatePostArticle },
     { title: 'Find an Expert', icon: <PersonPin />, click: handleOpenCreatePostExpert }
   ]
 
   const POSTCREATION = [
     { icon: <Movie />, title: "Video", click: handleOpenCreatePostVideo },
     { icon: <InsertPhoto />, title: "Photo", click: handleOpenCreatePostImage },
-    { icon: <Article />, title: "Article", click: () => navigate('/Post/Article') }
+    { icon: <Article />, title: "Article", click: handleOpenCreatePostArticle }
+  ]
+
+  const POSTMODALS = [
+    {
+      open: openCreatePostImage, close: handleCloseCreatPostImage,
+      icon: <InsertPhoto sx={{ color: theme.secondaryText, height: 100, width: 100 }} />
+    },
+    {
+      open: openCreatePostVideo, close: handleCloseCreatPostVideo,
+      icon: <Movie sx={{ color: theme.secondaryText, height: 100, width: 100 }} />
+    },
+    {
+      open: openCreatePostArticle, close: handleCloseCreatPostArticle,
+      icon: <Description sx={{ color: theme.secondaryText, height: 100, width: 100 }} />
+    },
   ]
 
   const PostHead = () => {
@@ -545,88 +565,49 @@ export const Home = () => {
                               ))}
                             </Grid>
                           </Box>
-                          <Modal
-                            open={openCreatePostImage}
-                            onClose={handleCloseCreatPostImage}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                          >
-                            <Box sx={style}>
-                              <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: 2 }}>
-                                <ButtonBase onClick={handleCloseCreatPostImage} sx={{
-                                  display: 'flex', color: theme.primaryText,
-                                  flexDirection: 'column', justifyContent: 'flex-end',
-                                  alignItems: 'center', pb: 0.5, px: 1,
-                                  transition: 'all 0.3s ease',
-                                  '&:hover': {
-                                    color: theme.hoverAccent,
-                                  }
-                                }}><Close /></ButtonBase>
-                              </Box>
-                              <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
-                                <CardContent>
-                                  <Box>
-                                    <UploadMedia icon={<InsertPhoto sx={{ color: theme.secondaryText, height: 100, width: 100 }} />} />
-                                  </Box>
-                                </CardContent>
-                              </Card>
-                              <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
-                                <Button variant='outlined' size='large' endIcon={<NavigateNext />}
-                                  sx={{
-                                    color: theme.primaryAccent,
-                                    borderColor: theme.primaryAccent,
+                          {POSTMODALS.map((d, i) => (
+                            <Modal key={i}
+                              open={d.open}
+                              onClose={d.close}
+                              aria-labelledby="modal-modal-title"
+                              aria-describedby="modal-modal-description"
+                            >
+                              <Box sx={style}>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: 2 }}>
+                                  <ButtonBase onClick={d.close} sx={{
+                                    display: 'flex', color: theme.primaryText,
+                                    flexDirection: 'column', justifyContent: 'flex-end',
+                                    alignItems: 'center', pb: 0.5, px: 1,
+                                    transition: 'all 0.3s ease',
                                     '&:hover': {
-                                      backgroundColor: theme.hoverAccent,
-                                      borderColor: theme.hoverAccent,
-                                      color: theme.primaryBg
+                                      color: theme.hoverAccent,
                                     }
-                                  }}><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    next
-                                  </Box></Button>
+                                  }}><Close /></ButtonBase>
+                                </Box>
+                                <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
+                                  <CardContent>
+                                    <Box>
+                                      <UploadMedia icon={d.icon} />
+                                    </Box>
+                                  </CardContent>
+                                </Card>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
+                                  <Button variant='outlined' size='large' endIcon={<NavigateNext />}
+                                    sx={{
+                                      color: theme.primaryAccent,
+                                      borderColor: theme.primaryAccent,
+                                      '&:hover': {
+                                        backgroundColor: theme.hoverAccent,
+                                        borderColor: theme.hoverAccent,
+                                        color: theme.primaryBg
+                                      }
+                                    }}><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                      next
+                                    </Box></Button>
+                                </Box>
                               </Box>
-                            </Box>
-                          </Modal>
-                          <Modal
-                            open={openCreatePostVideo}
-                            onClose={handleCloseCreatPostVideo}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                          >
-                            <Box sx={style}>
-                              <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: 2 }}>
-                                <ButtonBase onClick={handleCloseCreatPostVideo} sx={{
-                                  display: 'flex', color: theme.primaryText,
-                                  flexDirection: 'column', justifyContent: 'flex-end',
-                                  alignItems: 'center', pb: 0.5, px: 1,
-                                  transition: 'all 0.3s ease',
-                                  '&:hover': {
-                                    color: theme.hoverAccent,
-                                  }
-                                }}><Close /></ButtonBase>
-                              </Box>
-                              <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
-                                <CardContent>
-                                  <Box>
-                                    <UploadMedia icon={<Movie sx={{ color: theme.secondaryText, height: 100, width: 100 }} />} />
-                                  </Box>
-                                </CardContent>
-                              </Card>
-                              <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
-                                <Button variant='outlined' size='large' endIcon={<NavigateNext />}
-                                  sx={{
-                                    color: theme.primaryAccent,
-                                    borderColor: theme.primaryAccent,
-                                    '&:hover': {
-                                      backgroundColor: theme.hoverAccent,
-                                      borderColor: theme.hoverAccent,
-                                      color: theme.primaryBg
-                                    }
-                                  }}><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    next
-                                  </Box></Button>
-                              </Box>
-                            </Box>
-                          </Modal>
+                            </Modal>
+                          ))}
                           <Modal
                             open={openCreatePostExpert}
                             onClose={handleCloseCreatPostExpert}
