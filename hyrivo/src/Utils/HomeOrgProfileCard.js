@@ -4,12 +4,12 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
         <style>{`
             .profile-card {
                 position: relative;
-                width: 80%;
+                width: auto;
                 background: ${theme.cardBg};
                 -webkit-backdrop-filter: blur(48px);
                 backdrop-filter: blur(48px);
                 border-radius: 20px;
-                padding: 1.6rem;
+                padding: 2rem;
                 margin: 18px;
                 box-shadow: 12px 12px 12px -20px ${theme.shadow};
                 transform: perspective(1000px); /*adjust the scale to view properly*/
@@ -37,15 +37,17 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
                 align-items: center;
                 justify-content: center;
             }
-            
+
             .dp {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 font-size: 62px; 
                 height: 100%;
+                width: 100%;
+                background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
             }
-            
+
             .profile-image::before {
                 content: "";
                 position: absolute;
@@ -53,7 +55,7 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
                 top: 0;
                 width: 100%;
                 height: 96px;
-                background: linear-gradient(135deg, ${theme.primaryAccent}, ${theme.hoverAccent});
+                background: linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%);
                 border-radius: 20px 20px 0 0;
                 z-index: -1;
             }

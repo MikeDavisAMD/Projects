@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Box, Button, ButtonBase, Card, CardActions, CardContent, Divider, Grid, Link, Menu, MenuItem, Modal, TextareaAutosize, TextField, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, Button, ButtonBase, Card, CardActions, CardContent, CardMedia, Divider, Grid, Link, Menu, MenuItem, Modal, TextareaAutosize, TextField, Tooltip, Typography } from '@mui/material'
 import { useThemeContext } from '../Utils/ThemeContext'
 import axios from 'axios'
 import { HomeOrgProfileCard } from '../Utils/HomeOrgProfileCard'
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import logo from '../Assets/Images/Hyrivo copy.png'
 import { PuzzleList } from '../Utils/PuzzleList'
 import { Posts } from './Posts'
-import { ArrowDropDown, ArrowDropUp, Article, Close, Description, Done, InsertPhoto, Movie, NavigateNext, PersonPin, Publish } from '@mui/icons-material'
+import { ArrowDropDown, ArrowDropUp, Article, Close, Description, Done, Edit, Feed, InsertPhoto, Movie, NavigateNext, PersonPin, Publish } from '@mui/icons-material'
 
 export const Home = () => {
   const { theme } = useThemeContext()
@@ -29,7 +29,7 @@ export const Home = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: { lg: 800, md: 800, sm: 500, xs: 220 },
+    width: { lg: 800, md: 800, sm: 500, xs: 300 },
     bgcolor: theme.primaryBg,
     border: `2px solid ${theme.cardBorder}`,
     boxShadow: 24,
@@ -159,11 +159,53 @@ export const Home = () => {
   }
 
   const UploadMedia = ({ icon }) => {
+    const [file, setFile] = useState(null)
+
+    const handleFileChange = (e) => {
+      const selectedFiles = e.target.files[0]
+      if (!selectedFiles) return
+
+      setFile(selectedFiles)
+    }
+
+    const renderHeader = () => {
+      if (!file) {
+        return (
+          <div class="header">
+            {icon} <p>Browse File to upload!</p>
+          </div>
+        )
+      } else if (file.type.startsWith("image/")) {
+        return (
+          <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
+            <CardMedia sx={{ height: { lg: 400, md: 400, sm: 300, xs: 160 }, width: { lg: 400, md: 400, sm: 300, xs: 160 } }}>
+              <img src={URL.createObjectURL(file)} alt="Pic Post"
+                style={{ maxWidth: 'auto', maxHeight: 'auto', height: 'inherit', width: 'inherit', borderRadius: '15px', }} />
+            </CardMedia>
+          </Card>
+        )
+      } else if (file.type.startsWith("video/")) {
+        return (
+          <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
+            <CardMedia sx={{ height: { lg: 400, md: 400, sm: 235, xs: 200 }, width: { lg: 700, md: 700, sm: 400, xs: 300 } }}>
+              <video src={URL.createObjectURL(file)} controls
+                style={{ maxWidth: 'auto', maxHeight: 'auto', height: 'inherit', width: 'inherit', borderRadius: '15px', }} />
+            </CardMedia>
+          </Card>
+        )
+      } else {
+        return (
+          <div class="header">
+            <Feed sx={{ color: theme.secondaryText, height: 100, width: 100 }} /> <p>PDF / Document</p>
+          </div>
+        )
+      }
+    }
     return (
       <>
         <style>{`
         .container {
-          height: 300px;
+          height: auto;
           width: auto;
           border-radius: 10px;
           box-shadow: 4px 4px 30px ${theme.shadow};
@@ -179,6 +221,7 @@ export const Home = () => {
         .header {
           flex: 1;
           width: 100%;
+          padding: 50px 0;
           border: 2px dashed ${theme.secondaryText};
           border-radius: 10px;
           display: flex;
@@ -206,16 +249,6 @@ export const Home = () => {
           border: none;
         }
 
-        .footer svg {
-          height: auto;
-          fill: ${theme.secondaryText};
-          background-color: ${theme.cardBg};
-          border-radius: 50%;
-          padding: 12px;
-          cursor: pointer;
-          box-shadow: 0 2px 30px ${theme.shadow};
-        }
-
         .footer p {
           flex: 1;
           text-align: center;
@@ -227,13 +260,29 @@ export const Home = () => {
       `}</style>
 
         <div class="container">
-          <div class="header">
-            {icon} <p>Browse File to upload!</p>
-          </div>
+          {renderHeader()}
           <label for="file" class="footer">
-            <p>Not selected file</p>
+            <p>{file ?
+              <Box sx={{ flexGrow: 1 }}>
+                <Grid container alignItems='center'>
+                  <Grid size={11}>
+                    <Box>{file.name}</Box>
+                  </Grid>
+                  <Grid size={1}>
+                    <ButtonBase sx={{
+                      display: 'flex', color: theme.primaryText,
+                      flexDirection: 'column', justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        color: theme.hoverAccent,
+                      }
+                    }}><Edit /></ButtonBase>
+                  </Grid>
+                </Grid>
+              </Box> : "Not selected file"}</p>
           </label>
-          <input id="file" type="file" />
+          <input id="file" type="file" onChange={handleFileChange} />
         </div>
       </>
     )
@@ -591,7 +640,7 @@ export const Home = () => {
                                     </Box>
                                   </CardContent>
                                 </Card>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pt: 2 }}>
                                   <Button variant='outlined' size='large' endIcon={<NavigateNext />}
                                     sx={{
                                       color: theme.primaryAccent,
