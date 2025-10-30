@@ -1,0 +1,1644 @@
+{
+  "camera": [
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 1DX Mark III is a professional DSLR delivering fast performance, excellent image quality, 4K video, and robust durability.",
+      "id": "1",
+      "img": "https://i.postimg.cc/yYtQN3Qw/canoneos1dmarkiii.jpg",
+      "model": "EOS 1DX Mark III",
+      "price": "550000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 5D Mark IV offers high-resolution imaging, 4K video, fast autofocus, and durable build for professionals and serious enthusiasts alike.",
+      "id": "2",
+      "img": "https://i.postimg.cc/XJjxPfqy/canoneos5dmarkiv.jpg",
+      "model": "EOS 5D Mark IV",
+      "price": "314000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 6D Mark II is a full-frame DSLR featuring a 26.2MP sensor, DIGIC 7 processor, 45-point autofocus, and vari-angle touchscreen.",
+      "id": "3",
+      "img": "https://i.postimg.cc/XY52BNtX/canoneos6dmarkii.jpg",
+      "model": "EOS 6D Mark II",
+      "price": "175000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 90D is a versatile DSLR featuring a 32.5MP APS-C sensor, 10fps shooting, 4K video, and 45-point autofocus system.",
+      "id": "4",
+      "img": "https://i.postimg.cc/SQZ1wvWQ/canoneos90d.jpg",
+      "model": "EOS 90D",
+      "price": "145000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 7D Mark II is a professional-grade DSLR tailored for sports and wildlife photography, offering high-speed performance and durability.",
+      "id": "5",
+      "img": "https://i.postimg.cc/YqhDkz36/canoneos7dmarkii.jpg",
+      "model": "EOS 7D Mark II",
+      "price": "99000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 850D is a versatile DSLR featuring a 24.1MP APS-C sensor, DIGIC 8 processor, 4K video, and vari-angle touchscreen.",
+      "id": "6",
+      "img": "https://i.postimg.cc/1XYWw89V/canoneos850d.jpg",
+      "model": "EOS 850D",
+      "price": "81500"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 250D (also known as EOS Rebel SL3 or EOS 200D Mark II) is a compact, lightweight DSLR designed for beginners and enthusiasts.",
+      "id": "7",
+      "img": "https://i.postimg.cc/6qQj8rNN/canoneos250d.jpg",
+      "model": "EOS 250D",
+      "price": "68000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The EOS 200D is notable as one of the world's lightest DSLRs with a movable screen, making it highly portable and user-friendly for on-the-go shooting.",
+      "id": "8",
+      "img": "https://i.postimg.cc/wBhbZxkn/canoneos200d.jpg",
+      "model": "EOS 200D",
+      "price": "65000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 77D is a versatile Digital SLR featuring a 24.2MP APS-C sensor, Dual Pixel AF, and DIGIC 7 processor.",
+      "id": "9",
+      "img": "https://i.postimg.cc/50bkVc7y/canoneos77d.jpg",
+      "model": "EOS 77D",
+      "price": "86500"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 80D is a versatile Digital SLR featuring a 24.2MP APS-C sensor, Dual Pixel AF, and 7fps continuous shooting.",
+      "id": "10",
+      "img": "https://i.postimg.cc/5tqnp74V/canoneos80d.jpg",
+      "model": "EOS 80D",
+      "price": "60000"
+    },
+    {
+      "brand": "Canon",
+      "category": "DSLR",
+      "desc": "The Canon EOS 20D is an 8.2MP DSLR featuring a 22.5×15.0mm APS-C CMOS sensor, DIGIC II processor, and 5fps continuous shooting.",
+      "id": "11",
+      "img": "https://i.postimg.cc/C17rMvXN/canoneos20d.jpg",
+      "model": "EOS 20D",
+      "price": "15500"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D6 is Nikon's flagship full-frame DSLR, designed for professional photographers requiring speed, precision, and reliability and 4K UHD video",
+      "id": "12",
+      "img": "https://i.postimg.cc/m2DJksbF/nikond6.jpg",
+      "model": "D6",
+      "price": "490000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D850 is a 45.7MP full-frame DSLR, offering 7fps continuous shooting, 4K UHD video, and excellent dynamic range.",
+      "id": "13",
+      "img": "https://i.postimg.cc/L547zdLw/nikond850.jpg",
+      "model": "D850",
+      "price": "195000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D780 is a 24.5MP full-frame DSLR with excellent autofocus, 4K UHD video, and superior low-light performance.",
+      "id": "14",
+      "img": "https://i.postimg.cc/0QshyKQ8/nikond780.jpg",
+      "model": "D780",
+      "price": "148000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D750 is a 24.3MP full-frame DSLR offering fast autofocus, 6.5fps continuous shooting, and 1080p full HD video.",
+      "id": "15",
+      "img": "https://i.postimg.cc/pTJ4hVhK/nikond750.jpg",
+      "model": "D750",
+      "price": "107000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D500 is a 20.9MP APS-C DSLR with 10fps burst, 4K video, and pro-level autofocus for action photography.",
+      "id": "16",
+      "img": "https://i.postimg.cc/mrM04yTX/nikond500.jpg",
+      "model": "D500",
+      "price": "369000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D7500 is a 20.9MP APS-C DSLR offering 8fps shooting, 4K UHD video, and excellent ISO performance for enthusiasts.",
+      "id": "17",
+      "img": "https://i.postimg.cc/T3BZB4v5/nikond7500.jpg",
+      "model": "D7500",
+      "price": "93000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D5600 is a 24.2MP APS-C DSLR featuring a vari-angle touchscreen, built-in Wi-Fi, and Full HD 1080p video.",
+      "id": "18",
+      "img": "https://i.postimg.cc/8CVZRQV4/nikond5600.jpg",
+      "model": "D5600",
+      "price": "50000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D3500 is a 24.2MP APS-C DSLR offering great image quality, easy controls, long battery life, and beginner-friendly features.",
+      "id": "19",
+      "img": "https://i.postimg.cc/ncS8GLdk/nikond3500.jpg",
+      "model": "D3500",
+      "price": "65000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D610 is a 24.3MP full-frame DSLR with dual card slots, 6fps shooting, and excellent image quality for professionals.",
+      "id": "20",
+      "img": "https://i.postimg.cc/3xksSHVH/nikond610.jpg",
+      "model": "D610",
+      "price": "229500"
+    },
+    {
+      "brand": "Nikon",
+      "category": "DSLR",
+      "desc": "The Nikon D7200 is a 24.2MP APS-C DSLR offering 6fps burst, excellent dynamic range, built-in Wi-Fi, and Full HD video.",
+      "id": "21",
+      "img": "https://i.postimg.cc/9FQ599B0/nikond7200.jpg",
+      "model": "D7200",
+      "price": "85900"
+    },
+    {
+      "brand": "Pentax",
+      "category": "DSLR",
+      "desc": "The Pentax K-1 Mark II is a 36.4MP full-frame DSLR with Pixel Shift Resolution, 5-axis stabilization, and weather-sealed rugged design.",
+      "id": "22",
+      "img": "https://i.postimg.cc/Ls1MXM3V/pentaxk1markii.jpg",
+      "model": "K-1 Mark II",
+      "price": "266900"
+    },
+    {
+      "brand": "Pentax",
+      "category": "DSLR",
+      "desc": "The Pentax K-3 Mark III is a 25.7MP APS-C DSLR with fast burst shooting, advanced autofocus, and durable weather-resistant magnesium alloy body.",
+      "id": "23",
+      "img": "https://i.postimg.cc/rmGX1Cb0/pentaxk3markiii.jpg",
+      "model": "K-3 Mark III",
+      "price": "130000"
+    },
+    {
+      "brand": "Pentax",
+      "category": "DSLR",
+      "desc": "The Pentax K-70 is a 24.2MP APS-C DSLR with weather sealing, image stabilization, vari-angle LCD, and excellent low-light performance.",
+      "id": "24",
+      "img": "https://i.postimg.cc/HkjgqMJR/pentaxk70.jpg",
+      "model": "K70",
+      "price": "143000"
+    },
+    {
+      "brand": "Pentax",
+      "category": "DSLR",
+      "desc": "The Pentax KP is a 24.3MP APS-C DSLR with high ISO performance, in-body stabilization, compact design, and customizable controls.",
+      "id": "25",
+      "img": "https://i.postimg.cc/280Y9G5n/pentaxkp.jpg",
+      "model": "KP",
+      "price": "90900"
+    },
+    {
+      "brand": "Nikon",
+      "category": "Mirrorless",
+      "desc": "The Nikon Z9 is a 45.7MP full-frame mirrorless camera offering 20fps shooting, 8K video, and advanced autofocus for professionals.",
+      "id": "26",
+      "img": "https://i.postimg.cc/g25Wm08J/nikonz9.jpg",
+      "model": "Z9",
+      "price": "475900"
+    },
+    {
+      "brand": "Nikon",
+      "category": "Mirrorless",
+      "desc": "The Nikon Z8 is a 45.7MP full-frame mirrorless camera with 8K video, fast autofocus, and excellent dynamic range for professionals.",
+      "id": "27",
+      "img": "https://i.postimg.cc/Kzhh3s9h/nikonz8.jpg",
+      "model": "Z8",
+      "price": "300900"
+    },
+    {
+      "brand": "Nikon",
+      "category": "Mirrorless",
+      "desc": "The Nikon Z7 II is a 45.7MP full-frame mirrorless camera with dual processors, 4K video, and improved autofocus performance.",
+      "id": "28",
+      "img": "https://i.postimg.cc/XqVMQBS2/nikonz7ii.jpg",
+      "model": "Z7 II",
+      "price": "257900"
+    },
+    {
+      "brand": "Nikon",
+      "category": "Mirrorless",
+      "desc": "The Nikon Z6 II is a 24.5MP full-frame mirrorless camera offering 4K video, dual processors, and excellent low-light performance.",
+      "id": "29",
+      "img": "https://i.postimg.cc/BZgftpHR/nikonz6ii.jpg",
+      "model": "Z6 II",
+      "price": "220000"
+    },
+    {
+      "brand": "Nikon",
+      "category": "Mirrorless",
+      "desc": "The Nikon Z5 is a 24.3MP full-frame mirrorless camera with 4K video, in-body stabilization, and excellent image quality for enthusiasts.",
+      "id": "30",
+      "img": "https://i.postimg.cc/yxnM5677/nikonz5.jpg",
+      "model": "Z5",
+      "price": "105900"
+    },
+    {
+      "brand": "Canon",
+      "category": "Mirrorless",
+      "desc": "The Canon EOS R3 is a 24.1MP full-frame mirrorless camera with 30fps burst, 6K video, and advanced autofocus technology.",
+      "id": "31",
+      "img": "https://i.postimg.cc/dVZfRjZs/canoneosr3.jpg",
+      "model": "EOS R3",
+      "price": "538000"
+    },
+    {
+      "brand": "Canon",
+      "category": "Mirrorless",
+      "desc": "The Canon EOS R5 is a 45MP full-frame mirrorless camera offering 8K video, 20fps burst, and superior autofocus performance.",
+      "id": "32",
+      "img": "https://i.postimg.cc/Lsdbxgjz/canoneosr5.jpg",
+      "model": "EOS R5",
+      "price": "256900"
+    },
+    {
+      "brand": "Canon",
+      "category": "Mirrorless",
+      "desc": "The Canon EOS R8 is a 24.2MP full-frame mirrorless camera with 4K video, fast autofocus, and compact, lightweight design.",
+      "id": "33",
+      "img": "https://i.postimg.cc/qM5YC5RD/canoneosr8.jpg",
+      "model": "EOS R8",
+      "price": "122000"
+    },
+    {
+      "brand": "Canon",
+      "category": "Mirrorless",
+      "desc": "The Canon EOS R7 is a 32.5MP APS-C mirrorless camera with 4K video, 15fps burst, and advanced autofocus system.",
+      "id": "34",
+      "img": "https://i.postimg.cc/kMwL74dm/canoneosr7.jpg",
+      "model": "EOS R7",
+      "price": "201000"
+    },
+    {
+      "brand": "Canon",
+      "category": "Mirrorless",
+      "desc": "The Canon EOS R10 is a 24.2MP APS-C mirrorless camera with 4K video, 15fps burst, and advanced autofocus system.",
+      "id": "35",
+      "img": "https://i.postimg.cc/8cyY4yb5/canoneosr10.jpg",
+      "model": "EOS R10",
+      "price": "71900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Mirrorless",
+      "desc": "The Sony Alpha 1 is a 50.1MP full-frame mirrorless camera offering 30fps shooting, 8K video, and advanced autofocus performance.",
+      "id": "36",
+      "img": "https://i.postimg.cc/xCLYsSkd/sonyalpha1.jpg",
+      "model": "Alpha 1",
+      "price": "470900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Mirrorless",
+      "desc": "The Sony Alpha 7R V is a 61MP full-frame mirrorless camera with AI autofocus, 8K video, and excellent image detail.",
+      "id": "37",
+      "img": "https://i.postimg.cc/y6Xscs4Q/sonyalpha7rv.jpg",
+      "model": "Alpha 7R V",
+      "price": "317900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Mirrorless",
+      "desc": "The Sony Alpha 7 IV is a 33MP full-frame mirrorless camera with 4K video, fast autofocus, and excellent dynamic range.",
+      "id": "38",
+      "img": "https://i.postimg.cc/1XHSQcrh/sonyalpha7iv.jpg",
+      "model": "Alpha 7 IV",
+      "price": "218900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Mirrorless",
+      "desc": "The Sony Alpha 9 II is a 24.2MP full-frame mirrorless camera offering 20fps blackout-free shooting, fast autofocus, and professional connectivity.",
+      "id": "39",
+      "img": "https://i.postimg.cc/BQSsCkJq/sonyalpha9ii.jpg",
+      "model": "Alpha 9 II",
+      "price": "423900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Mirrorless",
+      "desc": "The Sony Alpha 6600 is a 24.2MP APS-C mirrorless camera with in-body stabilization, 4K video, and long battery life.",
+      "id": "40",
+      "img": "https://i.postimg.cc/d3vFpSdj/sonyalpha6600.jpg",
+      "model": "Alpha 6600",
+      "price": "65900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Mirrorless",
+      "desc": "The Panasonic Lumix S1R is a 47.3MP full-frame mirrorless camera offering 4K video, robust build, and exceptional image quality.",
+      "id": "41",
+      "img": "https://i.postimg.cc/ZqG4Fq5g/panasoniclumixs1r.jpg",
+      "model": "Lumix S1R",
+      "price": "289900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Mirrorless",
+      "desc": "The Panasonic Lumix GH6 is a 25.2MP Micro Four Thirds camera with 5.7K video, advanced stabilization, and professional video features.",
+      "id": "42",
+      "img": "https://i.postimg.cc/W4FskZTg/panasoniclumixgh6.jpg",
+      "model": "Lumix GH6",
+      "price": "155900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Mirrorless",
+      "desc": "The Panasonic Lumix S5 II is a 24.2MP full-frame mirrorless camera with phase-detect autofocus, 6K video, and powerful image stabilization.",
+      "id": "43",
+      "img": "https://i.postimg.cc/Wb8pLj5F/panasoniclumixs5ii.jpg",
+      "model": "Lumix S5 II",
+      "price": "209900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Mirrorless",
+      "desc": "The Panasonic Lumix G9 II is a 25.2MP Micro Four Thirds camera with 5.7K video, advanced autofocus, and robust build.",
+      "id": "44",
+      "img": "https://i.postimg.cc/htGDKwYC/panasoniclumixg9ii.png",
+      "model": "Lumix G9 II",
+      "price": "169900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Mirrorless",
+      "desc": "The Panasonic Lumix FZ2500 is a 20.1MP bridge camera with a 20x Leica lens, 4K video, and advanced stabilization.",
+      "id": "45",
+      "img": "https://i.postimg.cc/XYDVqLSn/panasoniclumixfz2500.jpg",
+      "model": "Lumix FZ 2500",
+      "price": "79900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Mirrorless",
+      "desc": "The Fujifilm X-H2S is a 26.1MP APS-C mirrorless camera with 4K 120p video, in-body stabilization, and advanced autofocus performance.",
+      "id": "46",
+      "img": "https://i.postimg.cc/ydR6wZGs/fujifilmxh2s.jpg",
+      "model": "X H2S",
+      "price": "185900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Mirrorless",
+      "desc": "The Fujifilm X-H2 is a 40.2MP APS-C mirrorless camera offering 8K video, 7-stop in-body stabilization, and advanced autofocus.",
+      "id": "47",
+      "img": "https://i.postimg.cc/Wz6N4Pjy/fujifilmxh2.jpg",
+      "model": "X H2",
+      "price": "199000"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Mirrorless",
+      "desc": "The Fujifilm X-T5 is a 40.2MP APS-C mirrorless camera with 4K 60p video, in-body stabilization, and advanced autofocus system.",
+      "id": "48",
+      "img": "https://i.postimg.cc/Vvcs1NyM/fujifilmxt5.jpg",
+      "model": "X T5",
+      "price": "178900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Mirrorless",
+      "desc": "The Fujifilm X-S20 is a 26.1MP APS-C mirrorless camera with 5-axis in-body stabilization, 6.2K 30p video, and vlog mode.",
+      "id": "49",
+      "img": "https://i.postimg.cc/8khP4LWb/fujifilmxs20.jpg",
+      "model": "X S20",
+      "price": "109000"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Mirrorless",
+      "desc": "The Fujifilm X-T4 is a 26.1MP APS-C mirrorless camera offering 4K 60p video, in-body stabilization, and advanced autofocus system.",
+      "id": "50",
+      "img": "https://i.postimg.cc/dtwQxDjc/fujifilmxt4.jpg",
+      "model": "X T4",
+      "price": "189000"
+    },
+    {
+      "brand": "Sony",
+      "category": "Point & Shoot",
+      "desc": "The Sony Cyber-shot RX100 VII is a 20.1MP compact camera featuring a 24–200mm zoom lens, 4K video, and advanced autofocus.",
+      "id": "51",
+      "img": "https://i.postimg.cc/VNdkWTBS/sonycybershotrx100vii.jpg",
+      "model": "Cybershot RX100 VII",
+      "price": "150000"
+    },
+    {
+      "brand": "Sony",
+      "category": "Point & Shoot",
+      "desc": "The Sony ZV-1 is a 20.1MP compact camera with 4K video, fast autofocus, built-in mic, and flip-out screen.",
+      "id": "52",
+      "img": "https://i.postimg.cc/k5zX1cfT/sonyzv1.jpg",
+      "model": "ZV-1",
+      "price": "50900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Point & Shoot",
+      "desc": "The Sony Cyber-shot RX100 VI is a 20.1MP compact camera featuring a 24–200mm zoom lens, 4K video, and fast autofocus.",
+      "id": "53",
+      "img": "https://i.postimg.cc/Vk7NM1MQ/sonycybershotrx100vi.jpg",
+      "model": "Cybershot RX100 VI",
+      "price": "96900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Point & Shoot",
+      "desc": "The Sony Cyber-shot DSC-W560 is a 14.1MP compact camera with 4x zoom, 720p HD video, and Sweep Panorama mode.",
+      "id": "54",
+      "img": "https://i.postimg.cc/QdNtHVFJ/sonycybershotw560.jpg",
+      "model": "Cybershot W560",
+      "price": "30900"
+    },
+    {
+      "brand": "Sony",
+      "category": "Point & Shoot",
+      "desc": "The Sony Cyber-shot DSC-WX500 is an 18.2MP compact camera featuring a 30x optical zoom, 180° LCD, and Full HD video.",
+      "id": "55",
+      "img": "https://i.postimg.cc/Qx3VZfsP/sonycybershotwx500.jpg",
+      "model": "Cybershot WX500",
+      "price": "55900"
+    },
+    {
+      "brand": "Canon",
+      "category": "Point & Shoot",
+      "desc": "The Canon PowerShot G7 X Mark III is a 20.1MP compact camera with 4K video, livestreaming, flip-up screen, and microphone input.",
+      "id": "56",
+      "img": "https://i.postimg.cc/nV7MWy8B/canonpowershotg7xmarkiii.jpg",
+      "model": "Powershot G7X Mark III",
+      "price": "119900"
+    },
+    {
+      "brand": "Canon",
+      "category": "Point & Shoot",
+      "desc": "The Canon PowerShot G5 X Mark II is a 20.1MP compact camera featuring a 5x zoom lens, 4K video, and pop-up viewfinder.",
+      "id": "57",
+      "img": "https://i.postimg.cc/sxpXZhPw/canonpowershotg5xmarkii.jpg",
+      "model": "Powershot G5X Mark II",
+      "price": "80000"
+    },
+    {
+      "brand": "Canon",
+      "category": "Point & Shoot",
+      "desc": "The Canon PowerShot G1 X Mark III is a 24.2MP APS-C compact camera with 3x zoom, Dual Pixel AF, and Full HD video",
+      "id": "58",
+      "img": "https://i.postimg.cc/dtj3sGV0/canonpowershotg1xmarkiii.jpg",
+      "model": "Powershot G1X Mark III",
+      "price": "75900"
+    },
+    {
+      "brand": "Canon",
+      "category": "Point & Shoot",
+      "desc": "The Canon PowerShot SX740 HS is a 20.3MP compact camera with 40x zoom, 4K video, flip-up screen, and Bluetooth.",
+      "id": "59",
+      "img": "https://i.postimg.cc/634TtS8s/canonpowershotsx740hs.jpg",
+      "model": "Powershot SX740 HS",
+      "price": "82500"
+    },
+    {
+      "brand": "Samsung",
+      "category": "Point & Shoot",
+      "desc": "The Samsung WB350F is a 16.3MP compact camera featuring a 21x optical zoom lens, Wi-Fi, NFC, and Full HD video recording",
+      "id": "60",
+      "img": "https://i.postimg.cc/hG5fFgPb/samsungwb350f.jpg",
+      "model": "WB350F",
+      "price": "25900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Point & Shoot",
+      "desc": "The Fujifilm X100V is a 26.1MP APS-C mirrorless camera with a fixed 23mm f/2 lens, hybrid viewfinder, and 4K video.",
+      "id": "61",
+      "img": "https://i.postimg.cc/yNdkrWB8/fujifilmx100v.jpg",
+      "model": "X100 V",
+      "price": "145900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Point & Shoot",
+      "desc": "The Fujifilm XF10 is a 24.2MP APS-C compact camera featuring an 18.5mm f/2.8 fixed lens, 4K video, and Wi-Fi.",
+      "id": "62",
+      "img": "https://i.postimg.cc/hvFvjrmX/fujifilmxf10.jpg",
+      "model": "XF10",
+      "price": "85900"
+    },
+    {
+      "brand": "Nikon",
+      "category": "Point & Shoot",
+      "desc": "The Nikon Coolpix A1000 is a 16MP camera with a 35x zoom lens, 4K UHD video, tilting LCD, and Wi-Fi.",
+      "id": "63",
+      "img": "https://i.postimg.cc/Dw5SgL9N/nikoncoolpixa1000.jpg",
+      "model": "Coolpix A1000",
+      "price": "79900"
+    },
+    {
+      "brand": "Ricoh",
+      "category": "Point & Shoot",
+      "desc": "The Ricoh GR IIIx is a 24.2MP APS-C compact camera featuring a 40mm f/2.8 lens, in-body stabilization, and touchscreen.",
+      "id": "64",
+      "img": "https://i.postimg.cc/fRM3mBrX/ricohgriiix.jpg",
+      "model": "GR IIIx",
+      "price": "95900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Point & Shoot",
+      "desc": "The Panasonic Lumix LX100 II is a 17MP large-sensor compact camera featuring a 24–75mm f/1.7–2.8 Leica lens, 4K video.",
+      "id": "65",
+      "img": "https://i.postimg.cc/HswcrfBd/panasoniclumixlx100ii.jpg",
+      "model": "Lumix LX100 II",
+      "price": "128900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Point & Shoot",
+      "desc": "The Panasonic Lumix ZS200 is a 20.1MP compact camera with a 15x zoom, 4K video, electronic viewfinder, and 1-inch sensor.",
+      "id": "66",
+      "img": "https://i.postimg.cc/hPWQPS82/panasoniclumixzs200.jpg",
+      "model": "ZS200/TZ200",
+      "price": "91900"
+    },
+    {
+      "brand": "Panasonic",
+      "category": "Point & Shoot",
+      "desc": "The Panasonic Lumix LX10 is a 20.1MP compact camera with a 1-inch sensor, Leica lens, 4K video, and touchscreen.",
+      "id": "67",
+      "img": "https://i.postimg.cc/FFJJ4fSf/panasoniclumixlx10.jpg",
+      "model": "Lumix LX10",
+      "price": "85900"
+    },
+    {
+      "brand": "Olympus",
+      "category": "Point & Shoot",
+      "desc": "The Olympus Tough TG-6 is a 12MP rugged camera featuring 4x zoom, 4K video, macro mode, GPS, and waterproofing to 15m.",
+      "id": "68",
+      "img": "https://i.postimg.cc/wMJtcPz5/olympustoughtg6.jpg",
+      "model": "Tough TG-6",
+      "price": "82400"
+    },
+    {
+      "brand": "Olympus",
+      "category": "Point & Shoot",
+      "desc": "The Olympus Stylus 1s is a 12MP bridge camera with a 28–300mm f/2.8 lens, EVF, tilting touchscreen, Wi-Fi, and Full HD video.",
+      "id": "69",
+      "img": "https://i.postimg.cc/LXJgh50b/olympusstylus1s.jpg",
+      "model": "Stylus 1S",
+      "price": "30900"
+    },
+    {
+      "brand": "Leica",
+      "category": "Point & Shoot",
+      "desc": "The Leica Q2 is a 47.3MP full-frame compact camera with 28mm f/1.7 lens, 4K video, weather sealing, and OLED viewfinder.",
+      "id": "70",
+      "img": "https://i.postimg.cc/mDKz94v2/leicaq2.jpg",
+      "model": "Q2",
+      "price": "555900"
+    },
+    {
+      "brand": "Leica",
+      "category": "Point & Shoot",
+      "desc": "The Leica D-Lux 7 is a 17MP compact camera with 24–75mm f/1.7–2.8 lens, 4K video, EVF, and Wi-Fi.",
+      "id": "71",
+      "img": "https://i.postimg.cc/wBfs6LFN/leicadlux7.jpg",
+      "model": "D-Lux 7",
+      "price": "15900"
+    },
+    {
+      "brand": "Go-Pro",
+      "category": "Action",
+      "desc": "The GoPro Hero 12 Black is a 27MP action camera featuring 5.3K video, HyperSmooth stabilization, HDR, and better battery.",
+      "id": "72",
+      "img": "https://i.postimg.cc/tgCxQ2dy/goprohero12.jpg",
+      "model": "Hero 12 ",
+      "price": "12500"
+    },
+    {
+      "brand": "Go-Pro",
+      "category": "Action",
+      "desc": "The GoPro Hero 11 Black is a 27MP action camera featuring 5.3K60 video, HyperSmooth 5.0 stabilization, and a 1/1.9 sensor.",
+      "id": "73",
+      "img": "https://i.postimg.cc/4xGcwJmY/goprohero11.jpg",
+      "model": "Hero 11",
+      "price": "25900"
+    },
+    {
+      "brand": "Go-Pro",
+      "category": "Action",
+      "desc": "The GoPro Hero10 Black is a 23MP action camera featuring 5.3K60 video, HyperSmooth 4.0, dual touchscreens, and waterproof design.",
+      "id": "74",
+      "img": "https://i.postimg.cc/DyLsqWyV/goprohero10.jpg",
+      "model": "Hero 10",
+      "price": "25990"
+    },
+    {
+      "brand": "Go-Pro",
+      "category": "Action",
+      "desc": "The GoPro Hero9 Black is a 20MP action camera featuring 5K video at 30fps, HyperSmooth 3.0, and improved battery.",
+      "id": "75",
+      "img": "https://i.postimg.cc/zGkgc9g0/goprohero9.jpg",
+      "model": "Hero 9",
+      "price": "24900"
+    },
+    {
+      "brand": "Dji",
+      "category": "Action",
+      "desc": "The DJI Osmo Action 3 offers 4K video, rugged design, long battery life, and front and back touchscreens.",
+      "id": "76",
+      "img": "https://i.postimg.cc/CMWkBC0H/djiosmoaction3.jpg",
+      "model": "Action 3",
+      "price": "22900"
+    },
+    {
+      "brand": "Dji",
+      "category": "Action",
+      "desc": "The DJI Action 2 features a modular magnetic design, 4K/120fps video, 155° FOV, and waterproof capabilities up to 10m.",
+      "id": "77",
+      "img": "https://i.postimg.cc/1RgD3Ck3/djiaction2.jpg",
+      "model": "Action 2",
+      "price": "15900"
+    },
+    {
+      "brand": "Dji",
+      "category": "Action",
+      "desc": "The DJI Osmo Pocket 3 offers 4K/60fps video, 3-axis stabilization, compact design, touchscreen, and enhanced AI-powered features for smooth shooting.",
+      "id": "78",
+      "img": "https://i.postimg.cc/t7QqqCLW/djiosmopocket3.jpg",
+      "model": "Pocket 3",
+      "price": "55900"
+    },
+    {
+      "brand": "Insta 360",
+      "category": "Action",
+      "desc": "The Insta360 ONE X2 is a 360-degree action camera with 5.7K video, FlowState stabilization, waterproof design, and a touchscreen.",
+      "id": "79",
+      "img": "https://i.postimg.cc/Bb1Zf1wJ/insta360onex2.jpg",
+      "model": "One X2",
+      "price": "21900"
+    },
+    {
+      "brand": "Insta 360",
+      "category": "Action",
+      "desc": "The Insta360 GO 2 is a tiny 1440p action camera with 3-axis stabilization, waterproofing, and intuitive app-based editing capabilities.",
+      "id": "80",
+      "img": "https://i.postimg.cc/85YkYb4y/insta360go2.jpg",
+      "model": "Go 2",
+      "price": "25900"
+    },
+    {
+      "brand": "Insta 360",
+      "category": "Action",
+      "desc": "The Insta360 ONE RS is a modular action camera with 4K video, FlowState stabilization, 360-degree capture, and waterproof capabilities.",
+      "id": "81",
+      "img": "https://i.postimg.cc/Pq25WHwn/insta360oners.jpg",
+      "model": "One RS",
+      "price": "35900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Instant",
+      "desc": "Instax Mini 90 Neo Classic is a stylish instant camera with bulb mode, macro, double exposure, flash control, and rechargeable battery.",
+      "id": "82",
+      "img": "https://i.postimg.cc/FRzsG6yd/fujifilminstaxmini90.jpg",
+      "model": "Instax Mini 90 Neo Classic",
+      "price": "50900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Instant",
+      "desc": "The Fujifilm Instax Mini 26 is a compact instant camera with selfie mirror, auto exposure, close-up lens, and easy dual shutter.",
+      "id": "83",
+      "img": "https://i.postimg.cc/q7k76qgG/fujifilminstaxmini26.jpg",
+      "model": "Instax Mini 26",
+      "price": "15900"
+    },
+    {
+      "brand": "Fujifilm",
+      "category": "Instant",
+      "desc": "The Fujifilm Instax Mini 11 is a stylish instant camera with automatic exposure, selfie mode, built-in flash, and easy-to-use features.",
+      "id": "84",
+      "img": "https://i.postimg.cc/g2yJ08cJ/fujifilminstaxmini11.jpg",
+      "model": "Instax Mini 11",
+      "price": "8900"
+    },
+    {
+      "brand": "Polaroid",
+      "category": "Instant",
+      "desc": "The Polaroid Now+ is an instant camera with Bluetooth, manual controls, lens filters, and creative features, capturing high-quality instant photos.",
+      "id": "85",
+      "img": "https://i.postimg.cc/x8WCXPbk/polaroidnow.jpg",
+      "model": "Now +",
+      "price": "17000"
+    },
+    {
+      "brand": "Polaroid",
+      "category": "Instant",
+      "desc": "The Polaroid Go is a compact instant camera with a 1:1 square format, self-timer, double exposure, and creative filters.",
+      "id": "86",
+      "img": "https://i.postimg.cc/ncDr6N6q/polaroidgo.jpg",
+      "model": "Go",
+      "price": "14000"
+    },
+    {
+      "brand": "Kodak",
+      "category": "Instant",
+      "desc": "The Kodak Printomatic is an instant print camera with 10MP resolution, auto-flash, built-in printer, and ZINK photo paper compatibility.",
+      "id": "87",
+      "img": "https://i.postimg.cc/sgCxywrq/kodakprintomatic.jpg",
+      "model": "Printomatic",
+      "price": "9900"
+    },
+    {
+      "brand": "Kodak",
+      "category": "Instant",
+      "desc": "The Kodak Smile is a portable instant print camera with 10MP resolution, a 3.5-inch LCD, and ZINK photo paper support.",
+      "id": "88",
+      "img": "https://i.postimg.cc/mZqhpT6b/kodaksmile.jpg",
+      "model": "Smile",
+      "price": "17900"
+    },
+    {
+      "brand": "Kodak",
+      "category": "Film",
+      "desc": "The Kodak Ektar H35 is a 35mm half-frame film camera, featuring compact design, automatic exposure, and high-quality color film shooting.",
+      "id": "89",
+      "img": "https://i.postimg.cc/wMtMxr38/kodakektarh35.jpg",
+      "model": "Ektar H35",
+      "price": "7900"
+    },
+    {
+      "brand": "Kodak",
+      "category": "Film",
+      "desc": "The Kodak Ultra F9 is a compact, reusable 35mm film camera featuring a 31mm fixed-focus lens, built-in flash, and film winding.",
+      "id": "90",
+      "img": "https://i.postimg.cc/50KjVJ4S/kodakultraf9.jpg",
+      "model": "Ultra F9",
+      "price": "7400"
+    },
+    {
+      "brand": "Kodak",
+      "category": "Film",
+      "desc": "The Kodak i60 is a compact, reusable 35mm film camera featuring a 31mm f/10 fixed-focus lens, built-in pop-up flash.",
+      "id": "91",
+      "img": "https://i.postimg.cc/8zLFrx4T/kodaki60.jpg",
+      "model": "i60",
+      "price": "13600"
+    },
+    {
+      "brand": "Yashica",
+      "category": "Film",
+      "desc": "The Yashica Electro 35 is a classic 35mm rangefinder camera with aperture-priority auto exposure and a sharp 45mm f/1.7 lens.",
+      "id": "92",
+      "img": "https://i.postimg.cc/HxkjRngL/yashicaelectro35.jpg",
+      "model": "Electro 35",
+      "price": "16900"
+    },
+    {
+      "brand": "Yashica",
+      "category": "Film",
+      "desc": "The Yashica FX-3 is a compact, manual 35mm SLR featuring a Contax/Yashica mount, 1/1000s shutter, and LED metering system.",
+      "id": "93",
+      "img": "https://i.postimg.cc/Xv8psFth/yashicafx3.jpg",
+      "model": "FX-3",
+      "price": "23300"
+    },
+    {
+      "brand": "Yashica",
+      "category": "Film",
+      "desc": "Yashica MF-2 is a compact 35mm film camera featuring a 38mm f/3.8 fixed-focus lens, 1/125s shutter, and built-in flash.",
+      "id": "94",
+      "img": "https://i.postimg.cc/43ZYvw2V/yashicamf2.jpg",
+      "model": "MF-2",
+      "price": "16900"
+    },
+    {
+      "brand": "DJI",
+      "category": "Drones",
+      "desc": "With a 1-inch CMOS sensor, 5.4K video, 31-minute battery life, and obstacle sensors, it delivers professional video and photography.",
+      "id": "95",
+      "img": "https://i.postimg.cc/tgm8V44n/djiair2s.jpg",
+      "model": "Air 2S",
+      "price": "144900"
+    },
+    {
+      "brand": "DJI",
+      "category": "Drones",
+      "desc": "This drone features 4K video, a 48MP camera, 34-minute flight time, and intelligent flight modes for intermediate to professional use.",
+      "id": "96",
+      "img": "https://i.postimg.cc/JnfgPYJ1/djimavicair2.jpg",
+      "model": "Mavic Air 2",
+      "price": "48900"
+    }
+  ],
+  "carousel": [
+    {
+      "desc": "Wide range of DSLR cameras from various brands",
+      "img": "https://i.postimg.cc/MK8c7x0Q/DSLR1.jpg",
+      "title": "DSLR cameras"
+    },
+    {
+      "desc": "Wide range of mirrorless DSLR cameras from various brands",
+      "img": "https://i.postimg.cc/9FqpMWmw/mirrorless.jpg",
+      "title": "Mirrorless DSLR cameras"
+    },
+    {
+      "desc": "All kind of camera repairs and services are done by professionals",
+      "img": "https://i.postimg.cc/c1X6wbZB/repairs.jpg",
+      "title": "Camera repairs and service"
+    },
+    {
+      "desc": "Wide range of cameras like poloroid, point and shoot cameras from various brands are available",
+      "img": "https://i.postimg.cc/prGTvpk6/service.jpg",
+      "title": "Different kinds of Cameras"
+    },
+    {
+      "desc": "Wide range of camera accessories like tripods,gimbals,speedlights from various brands are available",
+      "img": "https://i.postimg.cc/j5N9PzKP/accessories.jpg",
+      "title": "Different kinds of Camera Accessories"
+    },
+    {
+      "desc": "Wide range of drone cameras from various brands are available",
+      "img": "https://i.postimg.cc/mZcLtn0F/drones.jpg",
+      "title": "Drones with camera"
+    }
+  ],
+  "parts": [
+    {
+      "brand": "Sigma",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, Sony A, Sony E, and Sigma SA mounts, ensuring wide camera support.",
+      "id": "1",
+      "img": "https://i.postimg.cc/JzCrGK2C/Sigma-DGHSMArt.jpg",
+      "model": "50mm f/1.4 DG HSM Art",
+      "price": "87900"
+    },
+    {
+      "brand": "Samyang",
+      "category": "Lens",
+      "desc": "This camera Lens is compatible with mounts like Canon EF, Nikon F, Sony E, Fuji X, MFT, and Pentax K camera mounts.",
+      "id": "2",
+      "img": "https://i.postimg.cc/DyXfvR5c/Samyangstdprime.jpg",
+      "model": "50mm f/1.4",
+      "price": "40000"
+    },
+    {
+      "brand": "Viltrox",
+      "category": "Lens",
+      "desc": "This compact, high-quality camera lens is compatible with Sony E, Nikon Z, and Fuji X mounts, supporting multiple mirrorless camera systems.",
+      "id": "3",
+      "img": "https://i.postimg.cc/gc5kPGyJ/Viltrox-Std-Prime.jpg",
+      "model": "50mm f/1.8",
+      "price": "30900"
+    },
+    {
+      "brand": "Yongnuo",
+      "category": "Lens",
+      "desc": "This precision-engineered lens is fully compatible with Canon EF and Nikon F mounts, offering seamless integration for DSLR photographers and professionals.",
+      "id": "4",
+      "img": "https://i.postimg.cc/MHhW0YZR/yongnuo-Std-Prime.jpg",
+      "model": "50mm f/1.8 II",
+      "price": "8600"
+    },
+    {
+      "brand": "Meike",
+      "category": "Lens",
+      "desc": "This high-performance lens is compatible with Canon EF, Nikon F, Sony E, Fuji X, and MFT mounts for versatile camera use.",
+      "id": "5",
+      "img": "https://i.postimg.cc/Bb8S1z34/meike-Stdprime.jpg",
+      "model": "50mm f/1.7 Manual Focus",
+      "price": "28700"
+    },
+    {
+      "brand": "Samyang",
+      "category": "Lens",
+      "desc": "This adaptable lens is capable of mounting on Canon EF, Nikon F, Sony E, Fuji X, MFT, and Pentax K systems.",
+      "id": "6",
+      "img": "https://i.postimg.cc/cHk1CSVF/Samyangwide.jpg",
+      "model": "14mm f/2.8",
+      "price": "64310"
+    },
+    {
+      "brand": "Laowa",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, Sony E, Pentax K, Leica L mounts, ensuring broad camera system support.",
+      "id": "7",
+      "img": "https://i.postimg.cc/1zP3YMGr/Laowa-Wide.jpg",
+      "model": "VE154SOA 15mm f/4",
+      "price": "50000"
+    },
+    {
+      "brand": "Irix",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, and Pentax K mounts, offering flexible options for DSLR camera users everywhere.",
+      "id": "8",
+      "img": "https://i.postimg.cc/fLRTMLg3/irixwide.jpg",
+      "model": "15mm f/2.4",
+      "price": "91900"
+    },
+    {
+      "brand": "Tokina",
+      "category": "Lens",
+      "desc": "Compatible with Canon EF-S and Nikon F mounts, this lens ensures smooth functionality, excellent image quality, and versatility for DSLR photographers.",
+      "id": "9",
+      "img": "https://i.postimg.cc/KYN8XLQS/Tokinawide.jpg",
+      "model": "AT-X 11-20mm f/2.8",
+      "price": "39900"
+    },
+    {
+      "brand": "Venus Optics Laowa",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, Sony E, Pentax K, and Leica L, supporting diverse camera systems seamlessly.",
+      "id": "10",
+      "img": "https://i.postimg.cc/wjDBVnmB/venuslaowawide.jpg",
+      "model": "12mm f/2.8 Zero-D",
+      "price": "81500"
+    },
+    {
+      "brand": "Sigma",
+      "category": "Lens",
+      "desc": "This lens offers broad compatibility with Canon EF, Nikon F, and Sigma SA mounts, making it ideal for DSLR system versatility.",
+      "id": "11",
+      "img": "https://i.postimg.cc/tCKTF97f/sigmacontemporary.jpg",
+      "model": "150-600mm f/5-6.3 DG OS HSM Contemporary",
+      "price": "85900"
+    },
+    {
+      "brand": "Tamron",
+      "category": "Lens",
+      "desc": "This lens is compatible with Sony E and Nikon Z mounts, providing excellent performance and flexibility for modern mirrorless camera systems.",
+      "id": "12",
+      "img": "https://i.postimg.cc/1X4trtGx/Tamarontelephoto.jpg",
+      "model": "70-300mm f/4.5-6.3 Di III RXD",
+      "price": "31900"
+    },
+    {
+      "brand": "Samyang",
+      "category": "Lens",
+      "desc": "This camera lens is compatible with Canon EF, Nikon F, Sony E, Fuji X, and Pentax K, offering broad multi-mount support.",
+      "id": "13",
+      "img": "https://i.postimg.cc/T2HhYVxT/samyangtelephoto.jpg",
+      "model": "85mm f/1.4",
+      "price": "49000"
+    },
+    {
+      "brand": "Meike",
+      "category": "Lens",
+      "desc": "This lens is compatible with Sony E, Nikon Z, and Canon EF mounts, providing flexibility across a range of camera systems.",
+      "id": "14",
+      "img": "https://i.postimg.cc/cCjJ9Shv/meiketelephoto.jpg",
+      "model": "85mm f/1.8 AF",
+      "price": "28700"
+    },
+    {
+      "brand": "Yongnuo",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF and Nikon F mounts, offering versatile performance for photographers using popular DSLR systems.",
+      "id": "15",
+      "img": "https://i.postimg.cc/c4gCKv1w/yognuotelephoto.jpg",
+      "model": "100mm f/2",
+      "price": "15900"
+    },
+    {
+      "brand": "Laowa",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, Sony E, Pentax K, and Leica L mounts, ensuring broad compatibility.",
+      "id": "16",
+      "img": "https://i.postimg.cc/9Mmzz1zQ/laowamacro.jpg",
+      "model": "100mm f/2.8 2X Ultra Macro APO",
+      "price": "55600"
+    },
+    {
+      "brand": "Irix",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, and Pentax K mounts, offering versatile performance for various DSLR systems.",
+      "id": "17",
+      "img": "https://i.postimg.cc/xdyc0BfZ/irixmacro.jpg",
+      "model": "150mm f/2.8 Macro 1:1 Dragonfly",
+      "price": "125900"
+    },
+    {
+      "brand": "Meike",
+      "category": "Lens",
+      "desc": "This lens is compatible with Sony E, Canon EF, Nikon F, and Fuji X mounts, providing versatile compatibility across camera systems.",
+      "id": "18",
+      "img": "https://i.postimg.cc/qR1qKnCX/meikemacro.jpg",
+      "model": "85mm f/2.8 Macro Manual Lens",
+      "price": "145900"
+    },
+    {
+      "brand": "Samyang",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF, Nikon F, Sony E, Fuji X, and Pentax K mounts, ensuring wide compatibility.",
+      "id": "19",
+      "img": "https://i.postimg.cc/JhWsCRLJ/samyangmacro.jpg",
+      "model": "100mm f/2.8 ED UMC Macro",
+      "price": "155000"
+    },
+    {
+      "brand": "7artisans",
+      "category": "Lens",
+      "desc": "This lens is compatible with Sony E, Fuji X, Canon EF-M, and MFT mounts, offering versatile compatibility across mirrorless systems.",
+      "id": "20",
+      "img": "https://i.postimg.cc/HkMrNVfd/7artisansmacro.jpg",
+      "model": "60mm f/2.8 Macro",
+      "price": "17000"
+    },
+    {
+      "brand": "Tamron",
+      "category": "Lens",
+      "desc": "This lens is compatible with Sony E and Nikon Z mounts, providing seamless performance and flexibility across leading mirrorless camera systems.",
+      "id": "21",
+      "img": "https://i.postimg.cc/FFPkkty5/tamaronzoom.jpg",
+      "model": "28-75mm f/2.8 Di III RXD",
+      "price": "59990"
+    },
+    {
+      "brand": "Sigma",
+      "category": "Lens",
+      "desc": "This lens is compatible with Sony E and Leica L mounts, offering excellent versatility and performance for modern mirrorless camera users.",
+      "id": "22",
+      "img": "https://i.postimg.cc/7hQ5F7HY/sigmazoom.jpg",
+      "model": "24-70mm f/2.8 DG DN Art",
+      "price": "94900"
+    },
+    {
+      "brand": "Tokina",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF-S and Nikon F mounts, delivering reliable performance for photographers using popular DSLR camera systems.",
+      "id": "23",
+      "img": "https://i.postimg.cc/c4rgQDhK/Tokino-Zoom.jpg",
+      "model": "11-16mm f/2.8 AT-X Pro DX II",
+      "price": "59400"
+    },
+    {
+      "brand": "Yongnuo",
+      "category": "Lens",
+      "desc": "This lens is compatible with Canon EF mount systems, ensuring dependable performance, excellent image quality, and seamless integration for DSLR users.",
+      "id": "24",
+      "img": "https://i.postimg.cc/SN3XVW1g/yongnuozoom.jpg",
+      "model": "35-105mm f/2.8",
+      "price": "20900"
+    },
+    {
+      "brand": "Meike",
+      "category": "Lens",
+      "desc": "This lens features interchangeable mounts including PL, Canon EF, Sony E, and Micro Four Thirds (MFT), supporting diverse camera systems seamlessly.",
+      "id": "25",
+      "img": "https://i.postimg.cc/cCJKkTNb/meikezoom.jpg",
+      "model": "25-85mm T2.9 Cine Zoom",
+      "price": "65900"
+    },
+    {
+      "brand": "DJI",
+      "category": "Support",
+      "desc": "This gimbal supports a 3kg payload, features a touchscreen, Bluetooth shutter, auto-lock arms, and works with all major DSLR/mirrorless cameras.",
+      "id": "26",
+      "img": "https://i.postimg.cc/4dsHVs2Z/djiminigimbal.jpg",
+      "model": "RS 3 Gimbal",
+      "price": "49900"
+    },
+    {
+      "brand": "Peak Design",
+      "category": "Support",
+      "desc": "This compact, strong tripod features an Arca-Swiss mount and mobile compatibility; its included Arca plate fits most major camera brands seamlessly.",
+      "id": "27",
+      "img": "https://i.postimg.cc/k4s6yzLS/peakdesigntraveltripod.jpg",
+      "model": "Travel Tripod",
+      "price": "117900"
+    },
+    {
+      "brand": "Manfrotto",
+      "category": "Support",
+      "desc": "Tripod featuring a quick-release system, fluid head options, and a compact design, with a universal 1/4 screw mount for versatility.",
+      "id": "28",
+      "img": "https://i.postimg.cc/cJqn1QQv/manfrottotripod.jpg",
+      "model": "Befree Advanced Tripod",
+      "price": "14500"
+    },
+    {
+      "brand": "Zhiyun",
+      "category": "Support",
+      "desc": "This gimbal supports a 3.3kg payload, features a built-in light/mic, ergonomic design, and widely supports Sony, Canon, Nikon, and more.",
+      "id": "29",
+      "img": "https://i.postimg.cc/4xHcT8hC/zhiyungimbal.jpg",
+      "model": "Weebill 3 Gimbal",
+      "price": "35000"
+    },
+    {
+      "brand": "Benro",
+      "category": "Support",
+      "desc": "Monopod featuring a fluid video head, foot base, and tilt drag control, with standard mount supporting a wide range of cameras.",
+      "id": "30",
+      "img": "https://i.postimg.cc/NfzXShF7/benromonopod.jpg",
+      "model": "A38FD Monopod",
+      "price": "33800"
+    },
+    {
+      "brand": "Sirui",
+      "category": "Support",
+      "desc": "This ultra-light monopod features twist locks and a budget-friendly build, with 1/4-20 and 3/8-16 mounts for versatile camera support.",
+      "id": "31",
+      "img": "https://i.postimg.cc/Pqm8CP42/siruimonopod.jpg",
+      "model": "P-326 Monopod",
+      "price": "11900"
+    },
+    {
+      "brand": "3 Legged Thing",
+      "category": "Support",
+      "desc": "This modular and compact tripod boasts a high load-to-weight ratio, featuring an Arca-Swiss plate and a universal screw for versatile compatibility.",
+      "id": "32",
+      "img": "https://i.postimg.cc/xTCH6jf1/3leggedthingtripod.jpg",
+      "model": "Leo 2.0 Tripod",
+      "price": "55900"
+    },
+    {
+      "brand": "DJI",
+      "category": "Support",
+      "desc": "This gimbal supports a 2kg payload, ideal for mirrorless kits, and includes both Arca and Manfrotto baseplates for versatile mounting options.",
+      "id": "33",
+      "img": "https://i.postimg.cc/jqvP6nr1/djirs3minigimbal.jpg",
+      "model": "RS 3 Mini Gimbal",
+      "price": "22988"
+    },
+    {
+      "brand": "iFootage",
+      "category": "Support",
+      "desc": "This monopod features a quick-release system, modular foot, and professional mobility, ensuring compatibility across brands for versatile camera support.",
+      "id": "34",
+      "img": "https://i.postimg.cc/FzPSh8Zv/i-Footagemonopod.jpg",
+      "model": "Cobra 3 Strike Monopod",
+      "price": "25570"
+    },
+    {
+      "brand": "Joby",
+      "category": "Support",
+      "desc": "This tripod features flexible legs, a ball head, and a portable design, with a universal 1/4” screw mount for versatile use.",
+      "id": "35",
+      "img": "https://i.postimg.cc/FzFc5N0G/jobygorillapod.jpg",
+      "model": "GorillaPod 5K Kit",
+      "price": "8900"
+    },
+    {
+      "brand": "SanDisk",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "36",
+      "img": "https://i.postimg.cc/XJkFzpBp/sandisk32.jpg",
+      "model": "32GB SD Card",
+      "price": "529"
+    },
+    {
+      "brand": "SanDisk",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "37",
+      "img": "https://i.postimg.cc/76k09g6F/sandisk64.jpg",
+      "model": "64GB SD Card",
+      "price": "699"
+    },
+    {
+      "brand": "SanDisk",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "38",
+      "img": "https://i.postimg.cc/nL7qqdHK/sandisk128.jpg",
+      "model": "128GB SD Card",
+      "price": "1199"
+    },
+    {
+      "brand": "SanDisk",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "39",
+      "img": "https://i.postimg.cc/rw7S06LF/sandisk256.jpg",
+      "model": "256GB SD Card",
+      "price": "2449"
+    },
+    {
+      "brand": "SanDisk",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "40",
+      "img": "https://i.postimg.cc/sgMYgjqN/sandisk512.jpg",
+      "model": "512GB SD Card",
+      "price": "4899"
+    },
+    {
+      "brand": "Sony",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "41",
+      "img": "https://i.postimg.cc/pXXQ3YZx/sony64.jpg",
+      "model": "64GB SD Card",
+      "price": "4399"
+    },
+    {
+      "brand": "Sony",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "42",
+      "img": "https://i.postimg.cc/5N75JY7z/sony128.jpg",
+      "model": "128GB SD Card",
+      "price": "5249"
+    },
+    {
+      "brand": "Samsung",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "43",
+      "img": "https://i.postimg.cc/MZYbsr1d/samsung128.jpg",
+      "model": "128GB SD Card",
+      "price": "1399"
+    },
+    {
+      "brand": "Samsung",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "44",
+      "img": "https://i.postimg.cc/QCSQHHjR/samsung256.jpg",
+      "model": "256GB SD Card",
+      "price": "2399"
+    },
+    {
+      "brand": "Samsung",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "45",
+      "img": "https://i.postimg.cc/mkT3LQWY/samsung512.jpg",
+      "model": "512GB SD Card",
+      "price": "5699"
+    },
+    {
+      "brand": "Kingston",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "46",
+      "img": "https://i.postimg.cc/xCvyV6hj/kingston32.jpg",
+      "model": "32GB SD Card",
+      "price": "2659"
+    },
+    {
+      "brand": "Kingston",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "47",
+      "img": "https://i.postimg.cc/s2Z4wjJh/kingston64.jpg",
+      "model": "64GB SD Card",
+      "price": "5012"
+    },
+    {
+      "brand": "Kingston",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "48",
+      "img": "https://i.postimg.cc/d1PmfbWS/kingston128.jpg",
+      "model": "128GB SD Card",
+      "price": "10122"
+    },
+    {
+      "brand": "Kingston",
+      "category": "Memory",
+      "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+      "id": "49",
+      "img": "https://i.postimg.cc/vH3hmSBc/kingston256.jpg",
+      "model": "256GB SD Card",
+      "price": "22300"
+    },
+    {
+      "brand": "Sony",
+      "category": "Power",
+      "desc": "This high-capacity battery powers monitors, rigs, and cameras via dummy adapters, offering universal compatibility through its reliable dummy battery connection system.",
+      "id": "50",
+      "img": "https://i.postimg.cc/yYVnsz7M/sonybattery.jpg",
+      "model": "Z9NP-F970 Battery",
+      "price": "11900"
+    },
+    {
+      "brand": "SmallRig",
+      "category": "Power",
+      "desc": "This compact 99Wh V-mount battery features USB-C and D-Tap outputs, powering DSLR and mirrorless cameras via an optional adapter plate.",
+      "id": "51",
+      "img": "https://i.postimg.cc/13dKGnDS/smallrigbattery.jpg",
+      "model": "VB99 Mini V-Mount Battery",
+      "price": "21000"
+    },
+    {
+      "brand": "Nitecore",
+      "category": "Power",
+      "desc": "This USB-C charger with LCD display supports various battery models via interchangeable variants, including Canon LP-E6, Nikon EN-EL15, and Sony NP-FZ100.",
+      "id": "52",
+      "img": "https://i.postimg.cc/K8jN3rkQ/Nitecorecharger.jpg",
+      "model": "ULM10 Charger",
+      "price": "6900"
+    },
+    {
+      "brand": "Digitek",
+      "category": "Power",
+      "desc": "Lithium-ion Rechargeable Battery for Sony Digital Cameras, 2280mAH, 7.2V, Compatible with a9 II, a9, a7R IV, a7R III, a7 III, a6600",
+      "id": "53",
+      "img": "https://i.postimg.cc/bY0L7vf0/digitek-NPFZ100.jpg",
+      "model": "NP-FZ100",
+      "price": "1700"
+    },
+    {
+      "brand": "Digitek",
+      "category": "Power",
+      "desc": "Lithium-ion Rechargeable Battery for DSLR Camera, 7.4V 860mAh, Compatible with Canon Eos -1100D, 1200D, 1300D,X50, X70, Rebel series",
+      "id": "54",
+      "img": "https://i.postimg.cc/3NZBmtFf/digitek-LPE10.jpg",
+      "model": "LP-E10",
+      "price": "900"
+    },
+    {
+      "brand": "Digitek",
+      "category": "Power",
+      "desc": "Rechargeable Li-ion Battery for Nikon Digital Camera, 1400mAh, for Nikon D3100, D3200, D3300, D3400, D3500, D5100, D5200, D5300, D5500, D5600",
+      "id": "55",
+      "img": "https://i.postimg.cc/GtRK4WGs/digitek-ENEL14-Platinum.jpg",
+      "model": "ENEL14 Platinum",
+      "price": "1050"
+    },
+    {
+      "brand": "Freewell",
+      "category": "Filters",
+      "desc": "This variable ND filter features magnetic mounting with included step-up rings, enabling quick filter swapping and compatibility with multiple lens sizes.",
+      "id": "56",
+      "img": "https://i.postimg.cc/vBfXHYgs/freewellfilter.jpg",
+      "model": "Magnetic Filters",
+      "price": "3250"
+    },
+    {
+      "brand": "K&F Concept",
+      "category": "Filters",
+      "desc": "This ND & CPL filter features a magnetic base, includes adapter rings, and is stackable, lightweight, and perfect for travel.",
+      "id": "57",
+      "img": "https://i.postimg.cc/PqB2jpqy/k-fconcept82mm-Variable-Fader.jpg",
+      "model": "82mm Variable Fader",
+      "price": "8799"
+    },
+    {
+      "brand": "NiSi",
+      "category": "Filters",
+      "desc": "This set includes universal adapters and slot-in filters for ND, CPL, and Grad ND, working with wide-angle lenses for versatile setups.",
+      "id": "58",
+      "img": "https://i.postimg.cc/d074pmJD/nisifilter.jpg",
+      "model": "V7 100mm Filter Holder Kit",
+      "price": "17500"
+    },
+    {
+      "brand": "Urth Magnetic Essentials",
+      "category": "Filters",
+      "desc": "UV, CPL, and ND filters with magnetic mount, eco-friendly material, minimizing flare, and fitting most lens sizes with adapter rings.",
+      "id": "59",
+      "img": "https://i.postimg.cc/7ZtKKQ8p/urthmagfilterkit.jpg",
+      "model": "Filter Kit Plus+",
+      "price": "26265"
+    },
+    {
+      "brand": "Moment CineBloom",
+      "category": "Filters",
+      "desc": "This diffusion filter, available in multiple thread sizes and a magnetic option, softens light for cinematic video and portrait effects.",
+      "id": "60",
+      "img": "https://i.postimg.cc/t44rtGf3/cinebloomfilters.jpg",
+      "model": "Diffusion Filter",
+      "price": "13170"
+    },
+    {
+      "brand": "HAKUBA",
+      "category": "Cover",
+      "desc": "This soft, durable rubber lens cap with a reversible hood fits lenses from 49mm to 82mm, with step-up rings included.",
+      "id": "61",
+      "img": "https://i.postimg.cc/FsZWLHPF/HAKUBAuniversalcap.jpg",
+      "model": "KA-LCP49 Lens Cap",
+      "price": "9392"
+    },
+    {
+      "brand": "Altura",
+      "category": "Cover",
+      "desc": "This versatile screw-on lens hood fits 52mm to 82mm lenses with included step-up rings, providing effective lens protection and shade.",
+      "id": "62",
+      "img": "https://i.postimg.cc/MKx3HQmr/alturauniversalhood.jpg",
+      "model": "Rubber Lens Hood",
+      "price": "3298"
+    },
+    {
+      "brand": "Neewer",
+      "category": "Lighting",
+      "desc": "This 5-in-1 collapsible reflector (gold, silver, white, black, translucent) works with most on-camera flash units and speedlights for versatile lighting.",
+      "id": "63",
+      "img": "https://i.postimg.cc/8kLnTHM6/newerreflector.jpg",
+      "model": "43 inch Multi-Disc Light Reflector",
+      "price": "6000"
+    },
+    {
+      "brand": "Digitek",
+      "category": "Lighting",
+      "desc": "DIGITEK DSB-080 (80 cm) Professional Octa Softbox for Speedlite provides soft, even lighting, enhancing your photography with speedlight compatibility.",
+      "id": "64",
+      "img": "https://i.postimg.cc/T1jkQdf9/digiteksoftbox.jpg",
+      "model": "DSB-080 Softbox",
+      "price": "1500"
+    },
+    {
+      "brand": "Godox",
+      "category": "Lighting",
+      "desc": "The GODOX FotoStudio 60x90 Rectangular Softbox with Grid and Bowens mount enhances portrait and product photography with soft, controlled lighting.",
+      "id": "65",
+      "img": "https://i.postimg.cc/PJn3mpsJ/godoxsoftbox.jpg",
+      "model": "SB-FW6090 Softbox",
+      "price": "4500"
+    },
+    {
+      "brand": "Neewer",
+      "category": "Lighting",
+      "desc": "The Neewer (2) 83cm Photography Studio Flash Translucent White Soft Umbrella provides soft, diffused lighting for professional photo shoots.",
+      "id": "66",
+      "img": "https://i.postimg.cc/YCdsJCgD/neewerumbrella.jpg",
+      "model": "Photography Umbrella",
+      "price": "6800"
+    },
+    {
+      "brand": "Godox",
+      "category": "Lighting",
+      "desc": "The Godox TT520ii Flash Speedlite offers GN33, 5600K color temperature, 0.1-5s recycle time, and compatibility with Canon, Nikon, and more.",
+      "id": "67",
+      "img": "https://i.postimg.cc/XJC1GKPt/godoxflash.jpg",
+      "model": "TT520ii Flash",
+      "price": "3100"
+    },
+    {
+      "brand": "coku",
+      "category": "Lighting",
+      "desc": "The 2-in-1 Flash Diffuser Cap with silver/white reflector, made of flexible PVC, offers bendable design for creative light shaping.",
+      "id": "68",
+      "img": "https://i.postimg.cc/zGzQtgLR/cokureflector.jpg",
+      "model": "Flash Diffuser",
+      "price": "300"
+    },
+    {
+      "brand": "DJI",
+      "category": "Drones",
+      "desc": "This 5.5-inch built-in screen with 1080p video transmission and long-range control is compatible with DJI Mavic, Air, and Phantom series.",
+      "id": "69",
+      "img": "https://i.postimg.cc/5tGk2Ksw/djiremotecontroller.png",
+      "model": "Smart Remote Controller",
+      "price": "64900"
+    },
+    {
+      "brand": "PGYTECH",
+      "category": "Drones",
+      "desc": "This durable, compact landing pad features a reflective surface for easy landings and is compatible with most drones.",
+      "id": "70",
+      "img": "https://i.postimg.cc/zf3c5YFz/landingpad.jpg",
+      "model": "Landing Pad",
+      "price": "3850"
+    }
+  ],
+  "users": {
+    "-OP_CTp9q1ijRNLTDqsX": {
+      "address": [
+        "dummy addresss"
+      ],
+      "cart": {
+        "-OPoBnjOVit3DnNX4uQt": {
+          "brand": "Fujifilm",
+          "category": "Instant",
+          "desc": "The Fujifilm Instax Mini 26 is a compact instant camera with selfie mirror, auto exposure, close-up lens, and easy dual shutter.",
+          "id": "83",
+          "img": "https://i.postimg.cc/q7k76qgG/fujifilminstaxmini26.jpg",
+          "model": "Instax Mini 26",
+          "price": "15900"
+        }
+      },
+      "email": "test@gmail.com",
+      "fname": "test",
+      "lname": "test",
+      "mobile": "28365987834",
+      "password": "test",
+      "services": {
+        "-OPoCMcyNx-hx3Fm4QpJ": {
+          "email": "test@gmail.com",
+          "mobile": "28365987834",
+          "name": "test booking",
+          "serviceType": "Full service"
+        }
+      },
+      "username": "test"
+    },
+    "-OPaG6h0yXfzW_YrQBKb": {
+      "cart": {
+        "-OQ74gGbHwzLkK0eqShh": {
+          "brand": "Samyang",
+          "category": "Lens",
+          "desc": "This adaptable lens is capable of mounting on Canon EF, Nikon F, Sony E, Fuji X, MFT, and Pentax K systems.",
+          "id": "6",
+          "img": "https://i.postimg.cc/cHk1CSVF/Samyangwide.jpg",
+          "model": "14mm f/2.8",
+          "price": "64310"
+        },
+        "-OQ74gKeQ-TGUEkmvymj": {
+          "brand": "Laowa",
+          "category": "Lens",
+          "desc": "This lens is compatible with Canon EF, Nikon F, Sony E, Pentax K, Leica L mounts, ensuring broad camera system support.",
+          "id": "7",
+          "img": "https://i.postimg.cc/1zP3YMGr/Laowa-Wide.jpg",
+          "model": "VE154SOA 15mm f/4",
+          "price": "50000"
+        }
+      },
+      "email": "new@gmail.com",
+      "fname": "new",
+      "lname": "new",
+      "mobile": "87587376461",
+      "password": "new",
+      "username": "new"
+    },
+    "-OPaLdjRoYk6kHTAvzRU": {
+      "address": [
+        "10-260 Graminiyar Thottam Street,\nVadakkankulam,\nTirunelvaeli Dt.,Tamil-Nadu 627116",
+        "547 Arulagam, Valanar Street,\nPunnainager, Nagercoil,\nTamil-Nadu 629004"
+      ],
+      "cart": {
+        "-OPkVISYE275dsVw9nU5": {
+          "brand": "Go-Pro",
+          "category": "Action",
+          "desc": "The GoPro Hero 11 Black is a 27MP action camera featuring 5.3K60 video, HyperSmooth 5.0 stabilization, and a 1/1.9 sensor.",
+          "id": "73",
+          "img": "https://i.postimg.cc/4xGcwJmY/goprohero11.jpg",
+          "model": "Hero 11",
+          "price": "25900"
+        },
+        "-OPkVIktYLlxMwT1OBmz": {
+          "brand": "SanDisk",
+          "category": "Memory",
+          "desc": "A camera memory system (SDCard) stores, manages, and retrieves media via memory cards, buffers, and file systems, ensuring efficient data handling.",
+          "id": "39",
+          "img": "https://i.postimg.cc/rw7S06LF/sandisk256.jpg",
+          "model": "256GB SD Card",
+          "price": "2449"
+        }
+      },
+      "email": "mike732000davis@gmail.com",
+      "fname": "Mike",
+      "lname": "Davis",
+      "mobile": "7708172413",
+      "password": "AmdiakveiS@732",
+      "username": "falconmd73",
+      "wishlist": {
+        "-OPkUvXTPh6f6o9YpvJ-": {
+          "brand": "Canon",
+          "category": "DSLR",
+          "desc": "The Canon EOS 5D Mark IV offers high-resolution imaging, 4K video, fast autofocus, and durable build for professionals and serious enthusiasts alike.",
+          "id": "2",
+          "img": "https://i.postimg.cc/XJjxPfqy/canoneos5dmarkiv.jpg",
+          "model": "EOS 5D Mark IV",
+          "price": "314000"
+        },
+        "-OPkV0T2rfOedD9N7iEr": {
+          "brand": "Yongnuo",
+          "category": "Lens",
+          "desc": "This precision-engineered lens is fully compatible with Canon EF and Nikon F mounts, offering seamless integration for DSLR photographers and professionals.",
+          "id": "4",
+          "img": "https://i.postimg.cc/MHhW0YZR/yongnuo-Std-Prime.jpg",
+          "model": "50mm f/1.8 II",
+          "price": "8600"
+        }
+      }
+    }
+  }
+}

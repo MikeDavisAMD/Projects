@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Varela+Round&display=swap');
+*{
+    margin: 0%;
+    padding: 0%;
+}
+.header{
+    height: 100px;
+    display: flex;
+    background-color: black;
+    color: white;
+    align-items: center;
+    gap: 20px;
+}
+.header .blm{
+    width: 50%;
+    padding-left: 120px;
+    font-family: "Pacifico", serif;
+}
+.header a{
+    text-decoration: none;
+    color: aliceblue;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.navbar{
+    font-family: Arial, Helvetica, sans-serif;
+    height: 350px;
+    background-color: rgb(245, 242, 242);
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+.navbar .txt{
+    width: 40%;
+    padding-left: 120px;
+}
+.navbar .button button{
+    padding: 5px 20px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background-color: orange;
+}
+.navbar .button button a{
+    text-decoration: none;
+    color: aliceblue;
+}
+.navbar .image{
+    width: 40%;
+}
+.navbar .image img{
+    height: 220px;
+}
+.context{
+    height: 500px;
+    padding-top: 50px;
+    padding-left: 120px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.context .maincxt .cxt .box{
+    height: 200px;
+    width: 300px;
+    background-color: black;
+}
+.context .maincxt{
+    display: flex;
+    gap: 40px;
+}
+.context .maincxt .cxt{
+    width: 30%;
+}
+.context .maincxt .cxt .ctxt{
+    width: 90%;
+}
+.context .maincxt .button button{
+    padding: 5px 20px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background-color: orange;
+}
+.context .maincxt .button button a{
+    text-decoration: none;
+    color: aliceblue;
+}
+.info{
+    height: 315px;
+    background-color: black;
+    color: aliceblue;
+    padding-left: 120px;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 65px;
+}
+.info .lpst{
+    width: 31.5%;
+}
+.info .lpst .pst{
+    display: flex;
+    gap: 10px;
+}
+.info .lpst .pst .date{
+    height: 50px;
+    width: 45px;
+    background-color: white;
+    border-radius: 4px;
+    color: black;
+    padding-left: 15px;
+    padding-top: 5px;
+}
+.info .lpst .pst .ptxt h3{
+    padding-bottom: 5px;
+    padding-top: 4px;
+}
+.info .iabt{
+        width: 38%;
+        padding-right: 40px;
+}
+.info .stycnct{
+    width: 30%;
+}
+.social{
+    display: flex;
+    padding-bottom: 10px;
+}
+.social .icon img{
+    height: 25px;
+    width: 25px;
+    padding-right: 20px;
+}
+.social .icntxt{
+    padding-top: 5px;
+}
+.social a{
+    text-decoration: none;
+    color: aliceblue;
+}
+.footer{
+    height: 80px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

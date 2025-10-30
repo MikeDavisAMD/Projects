@@ -1,0 +1,8 @@
+.back2top {
+    border-radius: 50% !important;
+    background-color: #34A853 !important;
+    box-shadow: 6px 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+.back2top:hover{
+    background-color: #F9AB00 !important;
+}
