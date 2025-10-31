@@ -254,7 +254,7 @@ router.post('/login',log,async (req,res) => {
         const pw = await user.matchPassword(password)
         if(!pw) return res.status(400).json({message:'Invalid username or Password'})
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: remember ? '30d' : '1h'})
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: remember ? '30d' : '1d'})
 
         res.status(200).json({
             token,

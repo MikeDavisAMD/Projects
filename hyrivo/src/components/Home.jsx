@@ -27,6 +27,7 @@ export const Home = () => {
   const [mediaUrl, setMediaUrl] = useState(null)
   const [mediaType, setMediaType] = useState(null)
   const [fileName, setFileName] = useState(null)
+  const [expert, setExpert] = useState({ help: "", helpType: "", skills: "", location: "", desc: "" })
 
   const style = {
     position: 'absolute',
@@ -441,7 +442,7 @@ export const Home = () => {
                                                           height: { lg: 100, md: 100, sm: 80, xs: 50 }, width: { lg: 100, md: 100, sm: 80, xs: 50 }
                                                         }} />
                                                       </Grid>
-                                                      <Grid size={{ lg: 10, md: 10, sm: 9, xs: 12 }} sx={{display:'flex',flexDirection:'column', justifyContent:'center'}}>
+                                                      <Grid size={{ lg: 10, md: 10, sm: 9, xs: 12 }} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                                         <Typography gutterBottom variant="h5" component="div" sx={{
                                                           color: theme.primaryText,
                                                           fontSize: { lg: 20, md: 20, sm: 18, xs: 15 }
@@ -701,7 +702,8 @@ export const Home = () => {
                                       <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                           <TextField variant='outlined' label='What do you need help with'
-                                            fullWidth required
+                                            fullWidth required value={expert.help}
+                                            onChange={(e) => setExpert({ ...expert, help: e.target.value })}
                                             sx={{
                                               "& .MuiInputBase-input": {
                                                 color: theme.primaryText, // input text color
@@ -738,7 +740,8 @@ export const Home = () => {
                                               },
                                             }} />
                                           <TextField variant='outlined' label='What type of help you need with'
-                                            fullWidth required
+                                            fullWidth required value={expert.helpType}
+                                            onChange={(e) => setExpert({ ...expert, helpType: e.target.value })}
                                             sx={{
                                               "& .MuiInputBase-input": {
                                                 color: theme.primaryText, // input text color
@@ -779,7 +782,8 @@ export const Home = () => {
                                       <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                           <TextField variant='outlined' label='Skills that are required for the problem'
-                                            fullWidth required
+                                            fullWidth required value={expert.skills}
+                                            onChange={(e) => setExpert({ ...expert, skills: e.target.value })}
                                             sx={{
                                               "& .MuiInputBase-input": {
                                                 color: theme.primaryText, // input text color
@@ -816,7 +820,8 @@ export const Home = () => {
                                               },
                                             }} />
                                           <TextField variant='outlined' label='Location'
-                                            fullWidth required
+                                            fullWidth required value={expert.location}
+                                            onChange={(e) => setExpert({ ...expert, location: e.target.value })}
                                             sx={{
                                               "& .MuiInputBase-input": {
                                                 color: theme.primaryText, // input text color
@@ -879,7 +884,8 @@ export const Home = () => {
                                         }}>
                                           <TextareaAutosize
                                             placeholder='I am looking for professionals who can help me with few projects. Does anyone have a recommendation?'
-                                            maxRows={15} minRows={5} />
+                                            maxRows={15} minRows={5} value={expert.desc}
+                                            onChange={(e) => setExpert({ ...expert, desc: e.target.value })} />
                                         </Box>
                                       </Grid>
                                     </Grid>
@@ -888,6 +894,16 @@ export const Home = () => {
                               </Card>
                               <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
                                 <Button variant='outlined' size='large' endIcon={<NavigateNext />}
+                                  onClick={() => {
+                                    const combinedText =
+                                      `I need an expert for ${expert.help} in ${expert.helpType} with skills ${expert.skills} in ${expert.location}\n\nMore Details:\n${expert.desc}\n\n#findanexpert #ineedhelp #experthelp`
+
+                                    handleCloseCreatPostExpert()
+                                    setTimeout(() => {
+                                      const textArea = document.querySelector("#postTextArea")
+                                      if (textArea) textArea.value = combinedText
+                                    }, 300)
+                                  }}
                                   sx={{
                                     color: theme.primaryAccent,
                                     borderColor: theme.primaryAccent,

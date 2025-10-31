@@ -30,13 +30,13 @@ router.post('/create', auth, log, upload.single('media'), async (req, res) => {
         const user = await User.findById(req.userId)
         if (!user) return res.status(400).json({ message: "Unable to fetch userDetails" })
 
-
         if (!postText && !req.file) return res.status(400).json({ message: "Post text or text and media required" })
 
         let mediaUrl = null
+        let mediaType = null
 
         if (req.file) {
-            let mediaType = "document"
+            mediaType = "document"
             if (req.file.mimetype.startsWith("image/")) mediaType = "image"
             else if (req.file.mimetype.startsWith("video/")) mediaType = "video"
 
@@ -49,16 +49,30 @@ router.post('/create', auth, log, upload.single('media'), async (req, res) => {
             userId: req.userId,
             postText,
             media: mediaUrl,
+            mediaType,
             postedAt: new Date(),
             likes: 0,
             comments: []
         })
 
         await newPost.save()
+
+        user.postId.push(newPost._id)
+        await user.save()
+
         return res.status(200).json({ message: "Post created successfully", post: newPost })
     } catch (error) {
         res.status(500).json({ error: error.message })
         console.error("Upload error", error)
+    }
+})
+
+router.get('/all', auth, log, async (req, res) => {
+    try {
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+        console.error("Error getting posts", error)
     }
 })
 

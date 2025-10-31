@@ -4,6 +4,7 @@ const postSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     postText: { type: String, required: true },
     media: String,
+    mediaType: String,
     postedAt: { type: Date, default: Date.now(), required: true },
     likes: Number,
     comments: [{

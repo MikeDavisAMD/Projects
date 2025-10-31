@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     isTwoFaEnabled: {type: Boolean, default: false},
     isExistingUser: {type: Boolean, default: false},
     profileId: {type: mongoose.Schema.Types.ObjectId, ref: 'Profile'},
-    postId: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}
+    postId: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
 })
 
 // hashing password
