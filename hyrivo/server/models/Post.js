@@ -6,7 +6,17 @@ const postSchema = new mongoose.Schema({
     media: String,
     mediaType: String,
     postedAt: { type: Date, default: Date.now(), required: true },
-    likes: Number,
+    postView: { type: String, default: "everyone" },
+    postComment: { type: String, default: "everyone" },
+    likes: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    }],
+    repost: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    }],
+    savedPost: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+    }],
     comments: [{
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         text: String,

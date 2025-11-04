@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const streamifier = require('streamifier');
+const { Profile } = require('../models/Profile');
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage, limits: { fileSize: 100 * 1024 * 1024 } })
@@ -26,7 +27,7 @@ function streamUpload(fileBuffer, folder, resource_type) {
 
 router.post('/create', auth, log, upload.single('media'), async (req, res) => {
     try {
-        const { postText } = req.body
+        const { postText, postView, postComment } = req.body
         const user = await User.findById(req.userId)
         if (!user) return res.status(400).json({ message: "Unable to fetch userDetails" })
 
@@ -51,8 +52,12 @@ router.post('/create', auth, log, upload.single('media'), async (req, res) => {
             media: mediaUrl,
             mediaType,
             postedAt: new Date(),
-            likes: 0,
-            comments: []
+            postView,
+            postComment,
+            likes: [],
+            comments: [],
+            repost: [],
+            savedPost: [],
         })
 
         await newPost.save()
@@ -67,12 +72,40 @@ router.post('/create', auth, log, upload.single('media'), async (req, res) => {
     }
 })
 
-router.get('/all', auth, log, async (req, res) => {
+router.get('/all', log, auth, async (req, res) => {
     try {
-        
+        const posts = await Post.find().sort({ postedAt: -1 })
+        if (!posts) return res.status(400).json({ message: "Posts not found" })
+        const result = await Promise.all(
+            posts.map(async (p) => {
+                const user = await User.findById(p.userId)
+                const profile = await Profile.findOne({ userId: p.userId })
+                return { user, profile, post: p }
+            })
+        )
+        if (!result) return res.status(400).json({ message: "Unable to fetch details" })
+        return res.status(200).json({ result })
+    } catch (error) {
+        console.error("unable to fetch posts", error)
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.put('/edit', log, auth, async (req, res) => {
+    try {
+
     } catch (error) {
         res.status(500).json({ error: error.message })
-        console.error("Error getting posts", error)
+        console.error('Error Editing post', error)
+    }
+})
+
+router.delete('/delete', log, auth, async (req, res) => {
+    try {
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+        console.error('Error Deleting post', error)
     }
 })
 

@@ -102,6 +102,8 @@ export const Home = () => {
 
       const formData = new FormData()
       formData.append("postText", postText)
+      formData.append("postView",optionsPostView[selectedIndexPostView].value)
+      formData.append("postComment",optionsPostComment[selectedIndexPostComment].value)
 
       if (mediaUrl && mediaUrl.startsWith("blob:")) {
         const res = await fetch(mediaUrl)
@@ -142,8 +144,15 @@ export const Home = () => {
   }
 
   // Menu in post to select who to receive the post
-  const optionsPostView = ['Post to anyone', 'Connections only']
-  const optionsPostComment = ['Anyone', 'Connections only', 'No one']
+  const optionsPostView = [
+    { name: 'Post to anyone', value: "everyone" },
+    { name: 'Connections only', value: "connections" }
+  ]
+  const optionsPostComment = [
+    { name: 'Anyone', value: "everyone" },
+    { name: 'Connections only', value: "connections" },
+    { name: 'No one', value: "none" }
+  ]
   const [anchorElPostView, setAnchorElPostView] = useState(null);
   const [selectedIndexPostView, setSelectedIndexPostView] = useState(0);
   const [selectedIndexPostComment, setSelectedIndexPostComment] = useState(0);
@@ -291,7 +300,7 @@ export const Home = () => {
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2} alignItems='center'>
-          <Grid size={{ lg: 4, md: 4, sm: 4, xs: 2 }}>
+          <Grid size={{ lg: 3, md: 3, sm: 3, xs: 2 }}>
             <Box>
               {dp && dp.startsWith('https://') ? (
                 <Avatar src={dp} alt={isCompany ? companyName : `${firstName} ${lastName}`}
@@ -303,15 +312,15 @@ export const Home = () => {
               )}
             </Box>
           </Grid>
-          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 8 }}>
+          <Grid size={{ lg: 8, md: 8, sm: 8, xs: 9 }}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Typography variant='span' sx={{ fontWeight: 'bolder', color: theme.primaryText, fontSize: { sm: 20, xs: 20 } }}>{isCompany ? companyName : `${firstName} ${lastName}`}</Typography>
+              <Typography variant='span' sx={{ fontWeight: 'bolder', color: theme.primaryText, fontSize: 20 }}>{isCompany ? companyName : `${firstName} ${lastName}`}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Typography variant='span' sx={{ color: theme.secondaryText, fontSize: { sm: 12, xs: 12 } }}>{optionsPostView[selectedIndexPostView]}</Typography>
+              <Typography variant='span' sx={{ color: theme.secondaryText, fontSize: 12 }}>{optionsPostView[selectedIndexPostView].name}</Typography>
             </Box>
           </Grid>
-          <Grid size={{ lg: 2, md: 2, sm: 2, xs: 2 }}>
+          <Grid size={1}>
             {openPostView ? <ArrowDropUp /> : <ArrowDropDown />}
           </Grid>
         </Grid>
@@ -395,6 +404,7 @@ export const Home = () => {
                                   <CardActions>
                                     <Box>
                                       <ButtonBase onClick={handleClickPostView} sx={{
+                                        width: 'auto',
                                         display: 'flex', color: theme.primaryText,
                                         flexDirection: 'column', justifyContent: 'flex-end',
                                         alignItems: 'center', pb: 0.5, px: 1,
@@ -522,7 +532,7 @@ export const Home = () => {
                             </Box>
                             {optionsPostView.map((option, index) => (
                               <MenuItem
-                                key={option}
+                                key={option.value}
                                 selected={index === selectedIndexPostView}
                                 onClick={(event) => handleMenuPostView(event, index)}
                                 sx={{
@@ -543,7 +553,7 @@ export const Home = () => {
                                   },
                                 }}
                               >
-                                {option}
+                                {option.name}
                               </MenuItem>
                             ))}
                             <Divider color={theme.secondaryText} />
@@ -552,7 +562,7 @@ export const Home = () => {
                             </Box>
                             {optionsPostComment.map((option, index) => (
                               <MenuItem
-                                key={option}
+                                key={option.value}
                                 selected={index === selectedIndexPostComment}
                                 onClick={(event) => handleMenuPostComment(event, index)}
                                 sx={{
@@ -573,7 +583,7 @@ export const Home = () => {
                                   },
                                 }}
                               >
-                                {option}
+                                {option.name}
                               </MenuItem>
                             ))}
                             <Divider color={theme.secondaryText} />
@@ -896,7 +906,7 @@ export const Home = () => {
                                 <Button variant='outlined' size='large' endIcon={<NavigateNext />}
                                   onClick={() => {
                                     const combinedText =
-                                      `I need an expert for ${expert.help} in ${expert.helpType} with skills ${expert.skills} in ${expert.location}\n\nMore Details:\n${expert.desc}\n\n#findanexpert #ineedhelp #experthelp`
+                                      `I need an expert for ${expert.help} in ${expert.helpType} with skills ${expert.skills} in ${expert.location}\n\n${expert.desc}\n\n#findanexpert #ineedhelp #experthelp`
 
                                     handleCloseCreatPostExpert()
                                     setTimeout(() => {
