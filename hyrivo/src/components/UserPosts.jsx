@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { Alert, AppBar, Avatar, Box, Button, ButtonBase, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Divider, Grid, IconButton, Menu, MenuItem, Modal, Snackbar, TextareaAutosize, Toolbar, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, MoreHoriz, Publish, Repeat, ThumbUpOutlined } from '@mui/icons-material'
+import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, LockOutline, MoreHoriz, Public, Publish, Repeat, ThumbUpOutlined } from '@mui/icons-material'
 import { bull } from '../Utils/bull'
 import axios from 'axios'
+import { formatTimeAgo } from '../Utils/formatTimeAgo'
 
 export const UserPosts = () => {
   const { theme } = useThemeContext()
@@ -232,17 +233,40 @@ export const UserPosts = () => {
                   }
                   title={
                     <Typography gutterBottom variant="h5" component="div" sx={{
-                      color: theme.primaryText, fontWeight: 'bolder',
-                      fontSize: { lg: 20, md: 20, sm: 18, xs: 18 }
-                    }}>{ users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}</Typography>
+                      color: theme.primaryText, fontWeight: 'bolder', display: 'block',
+                      fontSize: { lg: 20, md: 20, sm: 18, xs: 18 }, maxWidth: '90%',
+                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                    }}>{users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}</Typography>
                   }
                   subheader={
                     <Box>
-                      <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5 }}>
+                      <Typography variant="body2" sx={{
+                        display: 'block', maxWidth: '90%',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5
+                      }}>
                         @ {users.username} {users.isCompany ? `${bull} ${profiles.industry}` : null}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{profiles.description}</Typography>
-                      <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 } }}>Who can see {bull} posted time</Typography>
+                      <Typography variant="body2" sx={{
+                        display: 'block', maxWidth: '90%',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }
+                      }}>
+                        {profiles.description}
+                      </Typography>
+                      <Typography variant="body2" sx={{
+                        display: 'block', maxWidth: '90%',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 }
+                      }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {formatTimeAgo(p.postedAt)}
+                          {bull}
+                          {p.postView === "everyone" ?
+                            <Public sx={{ fontSize: { lg: 14, md: 14, sm: 11, xs: 11 } }} /> :
+                            <LockOutline sx={{ fontSize: { lg: 14, md: 14, sm: 11, xs: 11 } }} />}
+                        </Box>
+                      </Typography>
                     </Box>
                   }
                 />
@@ -330,16 +354,6 @@ export const UserPosts = () => {
                       }
                     }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
                       comment
-                    </Box></Button>
-                  <Button variant='outlined' startIcon={<Repeat />}
-                    sx={{
-                      color: theme.primaryText,
-                      border: 'none', m: 0, p: 0,
-                      '&:hover': {
-                        color: theme.hoverAccent
-                      }
-                    }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      repost
                     </Box></Button>
                 </CardActions>
               </Card>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { Avatar, Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material'
-import { BookmarkOutlined, ChatBubbleOutline, Description, MoreHoriz, Repeat, ThumbUpOutlined } from '@mui/icons-material'
+import { BookmarkOutlined, ChatBubbleOutline, Description, LockOutline, MoreHoriz, Public, Repeat, ThumbUpOutlined } from '@mui/icons-material'
 import { bull } from '../Utils/bull'
+import { formatTimeAgo } from '../Utils/formatTimeAgo'
 import axios from 'axios'
 
-export const Posts = () => {
+export const Posts = ({ sortType }) => {
   const { theme } = useThemeContext()
   const [posts, setPosts] = useState("")
 
@@ -19,22 +20,31 @@ export const Posts = () => {
     setAnchorEl(null);
   };
 
-  const fetchData = async () => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-    if (!token) return
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      if (!token) return
 
-    try {
-      const response = await axios.get("http://localhost:2000/posts/all",{
-        headers: {Authorization: `Bearer ${token}`}
-      })
+      try {
+        const response = await axios.get("http://localhost:2000/posts/all", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        let sortedPosts = [...response.data.result]
 
-      setPosts(response.data.result)
-    } catch (error) {
-      console.error(error.message)
+        if (sortType === 'Top') {
+          sortedPosts = sortedPosts.sort((a, b) => b.post.likes?.length - a.post.likes?.length)
+        } else if (sortType === 'Recent') {
+          sortedPosts = sortedPosts.sort((a, b) => new Date(b.post.postedAt).getTime() - new Date(a.post.postedAt).getTime())
+        }
+
+        setPosts(sortedPosts)
+      } catch (error) {
+        console.error(error.message)
+      }
     }
-  }
 
-  useEffect(() => { fetchData() }, [])
+    fetchData()
+  }, [sortType])
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: '100vh', backgroundColor: theme.primaryBg, color: theme.primaryText }}>
@@ -43,7 +53,7 @@ export const Posts = () => {
           {posts.length === 0 ? (
             <Box sx={{ textAlign: 'center', color: theme.primaryText }}>No Posts yet</Box>
           ) : posts.map((p, i) => (
-            <Box key={i} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 2, gap: 2 }}>
+            <Box key={i} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 3, gap: 2 }}>
               <Card sx={{ width: '100%', borderRadius: '8px', background: theme.cardBg, border: theme.cardBorder, boxShadow: `1px 1px 5px ${theme.shadow}` }}>
                 <CardHeader
                   avatar={
@@ -95,17 +105,40 @@ export const Posts = () => {
                   }
                   title={
                     <Typography gutterBottom variant="h5" component="div" sx={{
-                      color: theme.primaryText, fontWeight: 'bolder',
-                      fontSize: { lg: 20, md: 20, sm: 18, xs: 18 }
+                      color: theme.primaryText, fontWeight: 'bolder', display: 'block',
+                      fontSize: { lg: 20, md: 20, sm: 18, xs: 18 }, maxWidth: '90%',
+                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                     }}>{p.user.isCompany ? p.profile.companyName : `${p.profile.firstName} ${p.profile.lastName}`}</Typography>
                   }
                   subheader={
                     <Box>
-                      <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5 }}>
+                      <Typography variant="body2" sx={{
+                        display: 'block', maxWidth: '90%',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5
+                      }}>
                         @ {p.user.username} {p.user.isCompany ? `${bull} ${p.profile.industry}` : null}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.profile.description}</Typography>
-                      <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 } }}>Who can see {bull} posted time</Typography>
+                      <Typography variant="body2" sx={{
+                        display: 'block', maxWidth: '90%',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }
+                      }}>
+                        {p.profile.description}
+                      </Typography>
+                      <Typography variant="body2" sx={{
+                        display: 'block', maxWidth: '90%',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 }
+                      }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {formatTimeAgo(p.post.postedAt)}
+                          {bull}
+                          {p.post.postView === "everyone" ?
+                            <Public sx={{ fontSize: { lg: 14, md: 14, sm: 11, xs: 11 } }} /> :
+                            <LockOutline sx={{ fontSize: { lg: 14, md: 14, sm: 11, xs: 11 } }} />}
+                        </Box>
+                      </Typography>
                     </Box>
                   }
                 />
@@ -136,7 +169,7 @@ export const Posts = () => {
                     )}
                     {p.post.mediaType === 'document' && (
                       <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
-                        <CardActionArea onClick={() => window.open(p.media, '_blank')}>
+                        <CardActionArea onClick={() => window.open(p.post.media, '_blank')}>
                           <CardContent sx={{ width: { lg: 400, md: 330, sm: 280, xs: 200 } }}>
                             <Box sx={{ flexGrow: 1 }}>
                               <Grid container spacing={2}>

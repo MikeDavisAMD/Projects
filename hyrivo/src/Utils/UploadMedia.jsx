@@ -1,4 +1,4 @@
-import { Box, ButtonBase, Card, CardMedia, Grid } from "@mui/material";
+import { Box, ButtonBase, Card, CardMedia, Grid, Typography } from "@mui/material";
 import React, { memo, useCallback, useState } from "react";
 import { useThemeContext } from "./ThemeContext";
 import Cropper from "react-easy-crop";
@@ -147,17 +147,39 @@ export const UploadMedia = ({ icon, onMediaChange }) => {
             )
         } else if (file.type.startsWith("image/")) {
             return (
-                <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
-                    <CardMedia sx={{ height: { lg: 400, md: 400, sm: 300, xs: 160 }, width: { lg: 400, md: 400, sm: 300, xs: 160 } }}>
-                        {editImage ? (
-                            <ImageEditor fileUrl={fileUrl} zoom={zoom} crop={crop}
-                                setCrop={setCrop} setZoom={setZoom} onCropComplete={onCropComplete} />
-                        ) : (
-                            <img src={fileUrl} alt="Pic Post"
-                                style={{ maxWidth: 'auto', maxHeight: 'auto', height: 'inherit', width: 'inherit', borderRadius: '15px', }} />
-                        )}
-                    </CardMedia>
-                </Card>
+                <Box>
+                    <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder, mb: 2 }}>
+                        <CardMedia sx={{ height: { lg: 400, md: 400, sm: 300, xs: 160 }, width: { lg: 400, md: 400, sm: 300, xs: 160 } }}>
+                            {editImage ? (
+                                <ImageEditor fileUrl={fileUrl} zoom={zoom} crop={crop}
+                                    setCrop={setCrop} setZoom={setZoom} onCropComplete={onCropComplete} />
+                            ) : (
+                                <img src={fileUrl} alt="Pic Post"
+                                    style={{ maxWidth: 'auto', maxHeight: 'auto', height: 'inherit', width: 'inherit', borderRadius: '15px', }} />
+                            )}
+                        </CardMedia>
+                    </Card>
+                    {editImage && (
+                        <>
+                        <Box sx={{display:{lg:'block',md:'block',sm:'none',xs:'none'}}}>
+                            <Typography variant="body2" sx={{
+                                color: theme.secondaryText, textAlign: 'center', mb: 2,
+                                fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }
+                            }}>
+                                Use scroll from mouse / two finger swipe in mousepad to crop
+                            </Typography>
+                        </Box>
+                        <Box sx={{display:{lg:'none',md:'none',sm:'block',xs:'block'}}}>
+                            <Typography variant="body2" sx={{
+                                color: theme.secondaryText, textAlign: 'center', mb: 2,
+                                fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }
+                            }}>
+                                zoom in or out to crop
+                            </Typography>
+                        </Box>
+                        </>
+                    )}
+                </Box>
             )
         } else if (file.type.startsWith("video/")) {
             return (

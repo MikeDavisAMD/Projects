@@ -74,7 +74,7 @@ router.post('/create', auth, log, upload.single('media'), async (req, res) => {
 
 router.get('/all', log, auth, async (req, res) => {
     try {
-        const posts = await Post.find().sort({ postedAt: -1 })
+        const posts = await Post.find()
         if (!posts) return res.status(400).json({ message: "Posts not found" })
         const result = await Promise.all(
             posts.map(async (p) => {
@@ -93,7 +93,7 @@ router.get('/all', log, auth, async (req, res) => {
 
 router.put('/edit', log, auth, async (req, res) => {
     try {
-
+        
     } catch (error) {
         res.status(500).json({ error: error.message })
         console.error('Error Editing post', error)

@@ -70,7 +70,7 @@ export const Home = () => {
   const handleCloseCreatPostArticle = () => setOpenCreatePostArticle(false);
 
   // Menu in divider to sort
-  const options = ['Top', 'Recent']
+  const options = ['Recent','Top']
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const open = Boolean(anchorEl);
@@ -102,8 +102,8 @@ export const Home = () => {
 
       const formData = new FormData()
       formData.append("postText", postText)
-      formData.append("postView",optionsPostView[selectedIndexPostView].value)
-      formData.append("postComment",optionsPostComment[selectedIndexPostComment].value)
+      formData.append("postView", optionsPostView[selectedIndexPostView].value)
+      formData.append("postComment", optionsPostComment[selectedIndexPostComment].value)
 
       if (mediaUrl && mediaUrl.startsWith("blob:")) {
         const res = await fetch(mediaUrl)
@@ -996,7 +996,7 @@ export const Home = () => {
               </Grid>
               <Grid size={12}>
                 <Box sx={{ minHeight: '100vh', height: '100%' }}>
-                  <Posts />
+                  <Posts sortType={options[selectedIndex]}/>
                 </Box>
               </Grid>
             </Grid>
