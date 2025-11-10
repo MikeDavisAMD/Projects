@@ -12,15 +12,17 @@ const postSchema = new mongoose.Schema({
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     }],
     repost: [{
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
     }],
     savedPost: [{
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+        postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" }
     }],
     comments: [{
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         text: String,
-        likes: Number
+        likes: [{
+            userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        }],
     }]
 }, { timestamps: true })
 

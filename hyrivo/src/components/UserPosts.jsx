@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
-import { Alert, AppBar, Avatar, Box, Button, ButtonBase, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Divider, Grid, IconButton, Menu, MenuItem, Modal, Snackbar, TextareaAutosize, Toolbar, Typography } from '@mui/material'
+import { Alert, AppBar, Avatar, Box, Button, ButtonBase, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Divider, Grid, IconButton, Menu, MenuItem, Modal, Portal, Snackbar, TextareaAutosize, Toolbar, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, LockOutline, MoreHoriz, Public, Publish, Repeat, ThumbUpOutlined } from '@mui/icons-material'
+import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, LockOutline, MoreHoriz, Public, Publish, ThumbUpOutlined } from '@mui/icons-material'
 import { bull } from '../Utils/bull'
 import axios from 'axios'
 import { formatTimeAgo } from '../Utils/formatTimeAgo'
@@ -13,6 +13,7 @@ export const UserPosts = () => {
   const [posts, setPosts] = useState([])
   const [users, setUsers] = useState("")
   const [profiles, setProfiles] = useState("")
+  const [selectedPost, setSelectedPost] = useState("")
   const dp = profiles.currentDp
 
   const style = {
@@ -32,12 +33,15 @@ export const UserPosts = () => {
 
   // Menu for Edit Delete
   const [anchorEl, setAnchorEl] = useState(null);
+  const [activePostId, setActivePostId] = useState(null)
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, postId) => {
     setAnchorEl(event.currentTarget);
+    setActivePostId(postId)
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setActivePostId(null)
   };
 
   // Modal for create post
@@ -66,7 +70,7 @@ export const UserPosts = () => {
               <Typography variant='span' sx={{ fontWeight: 'bolder', color: theme.primaryText, fontSize: { sm: 20, xs: 20 } }}>{users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Typography variant='span' sx={{ color: theme.secondaryText, fontSize: { sm: 12, xs: 12 } }}>{optionsPostView[selectedIndexPostView]}</Typography>
+              <Typography variant='span' sx={{ color: theme.secondaryText, fontSize: { sm: 12, xs: 12 } }}>{optionsPostView[selectedIndexPostView].name}</Typography>
             </Box>
           </Grid>
           <Grid size={{ lg: 2, md: 2, sm: 2, xs: 2 }}>
@@ -96,8 +100,15 @@ export const UserPosts = () => {
 
   useEffect(() => { fetchData() }, [])
 
-  const optionsPostView = ['Post to anyone', 'Connections only']
-  const optionsPostComment = ['Anyone', 'Connections only', 'No one']
+  const optionsPostView = [
+    { name: 'Post to anyone', value: "everyone" },
+    { name: 'Connections only', value: "connections" }
+  ]
+  const optionsPostComment = [
+    { name: 'Anyone', value: "everyone" },
+    { name: 'Connections only', value: "connections" },
+    { name: 'No one', value: "none" }
+  ]
   const [anchorElPostView, setAnchorElPostView] = useState(null);
   const [selectedIndexPostView, setSelectedIndexPostView] = useState(0);
   const [selectedIndexPostComment, setSelectedIndexPostComment] = useState(0);
@@ -116,6 +127,59 @@ export const UserPosts = () => {
 
   const handleClosePostView = () => {
     setAnchorElPostView(null);
+  };
+
+  const handleEdit = async () => {
+    setLoading(true)
+    try {
+      const updatedData = {
+        postId: selectedPost._id,
+        postText: selectedPost.postText,
+        postView: optionsPostView[selectedIndexPostView]?.value,
+        postComment: optionsPostComment[selectedIndexPostComment]?.value
+      }
+      await axios.put("http://localhost:2000/posts/edit", updatedData, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` }
+      })
+
+      setSuccess("Post Edited Successfully")
+      setOpenSnackbar(true)
+      setOpenModal(false)
+      fetchData()
+    } catch (error) {
+      setError("Unable to edit")
+      setOpenSnackbar(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDelete = async (postId) => {
+    setLoading(true)
+    try {
+      await axios.delete('http://localhost:2000/posts/delete', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` },
+        data: { postId }
+      })
+
+      setPosts(prev => prev.filter(p => p._id !== postId))
+      handleClose()
+      setSuccess("Post deleted successfully")
+      setOpenSnackbar(true)
+    } catch (error) {
+      setError("Unable to delete")
+      setOpenSnackbar(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Portal for comments
+  const [showPortal, setShowPortal] = useState(false);
+  const container = useRef(null);
+
+  const handleClickPortal = () => {
+    setShowPortal(!showPortal);
   };
 
   // Snackbar
@@ -190,7 +254,7 @@ export const UserPosts = () => {
                   }
                   action={
                     <Box sx={{ display: 'flex', alignItems: 'center', height: 'fit-content' }}>
-                      <IconButton onClick={handleClick} sx={{
+                      <IconButton onClick={e => handleClick(e, p._id)} sx={{
                         color: theme.primaryText, '&:hover': {
                           color: theme.hoverAccent
                         }
@@ -200,7 +264,7 @@ export const UserPosts = () => {
                       <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
-                        open={open}
+                        open={open && activePostId === p._id}
                         onClose={handleClose}
                         slotProps={{
                           list: {
@@ -217,13 +281,25 @@ export const UserPosts = () => {
                       >
                         <MenuItem onClick={() => {
                           handleClose()
-                          handleOpenModal()
+                          setSelectedPost(p)
+
+                          const viewIndex = optionsPostView.findIndex(o => o.value === p.postView)
+                          const commentIndex = optionsPostComment.findIndex(o => o.value === p.postComment)
+
+                          setSelectedIndexPostView(viewIndex !== -1 ? viewIndex : 0)
+                          setSelectedIndexPostComment(commentIndex !== -1 ? commentIndex : 0)
+
+                          setTimeout(() => {
+                            handleOpenModal()
+                          }, 0);
                         }}>
                           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
                             <Edit />Edit
                           </Box>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={() => {
+                          handleDelete(p._id)
+                        }}>
                           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
                             <Delete />Delete
                           </Box>
@@ -346,7 +422,7 @@ export const UserPosts = () => {
                       Like
                     </Box></Button>
                   <Button variant='outlined' startIcon={<ChatBubbleOutline />}
-                    sx={{
+                    onClick={handleClickPortal} sx={{
                       color: theme.primaryText,
                       border: 'none', m: 0, p: 0,
                       '&:hover': {
@@ -355,7 +431,15 @@ export const UserPosts = () => {
                     }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
                       comment
                     </Box></Button>
+                  {showPortal ? (
+                    <Portal container={() => container.current}>
+                      <span>But I actually render here!</span>
+                    </Portal>
+                  ) : null}
                 </CardActions>
+                <CardContent ref={container}>
+
+                </CardContent>
               </Card>
               <Modal
                 open={openModal}
@@ -397,16 +481,71 @@ export const UserPosts = () => {
                         gap: 2, fontSize: { lg: 20, md: 20, sm: 18, xs: 15 },
                       }}>
                         <TextareaAutosize id='postTextArea' placeholder='What do you wanna talk about?'
-                          maxRows={15} minRows={5} style={{
+                          maxRows={15} minRows={5} value={selectedPost ? selectedPost.postText : ""}
+                          onChange={(e) => setSelectedPost({ ...selectedPost, postText: e.target.value })}
+                          style={{
                             border: 'none', outline: 'none',
                             background: 'transparent', resize: 'none',
                             width: '100%', color: theme.primaryText, font: 'inherit'
                           }} />
+                        <br />
+                        {selectedPost.media && (
+                          <CardMedia sx={{ display: 'flex', justifyContent: 'center' }}>
+                            {selectedPost.mediaType === 'image' && (
+                              <CardMedia
+                                component="img"
+                                src={selectedPost.media} alt='Pic Post'
+                                sx={{
+                                  maxWidth: 'fit-content', maxHeight: 'fit-content', ml: 2, mr: 2,
+                                }}
+                              />
+                            )}
+                            {selectedPost.mediaType === 'video' && (
+                              <CardMedia
+                                component="video"
+                                src={selectedPost.media} controls
+                                sx={{
+                                  maxWidth: 'fit-content', maxHeight: 'fit-content', ml: 2, mr: 2,
+                                }}
+                              />
+                            )}
+                            {selectedPost.mediaType === 'document' && (
+                              <Card sx={{ borderRadius: '15px', background: theme.cardBg, border: theme.cardBorder }}>
+                                <CardActionArea onClick={() => window.open(selectedPost.media, '_blank')}>
+                                  <CardContent sx={{ width: { lg: 500, md: 400, sm: 400, xs: 200 } }}>
+                                    <Box sx={{ flexGrow: 1 }}>
+                                      <Grid container spacing={2}>
+                                        <Grid size={{ lg: 2, md: 2, sm: 3, xs: 12 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                          <Description sx={{
+                                            color: theme.primaryText,
+                                            height: { lg: 100, md: 100, sm: 80, xs: 50 }, width: { lg: 100, md: 100, sm: 80, xs: 50 }
+                                          }} />
+                                        </Grid>
+                                        <Grid size={{ lg: 10, md: 10, sm: 9, xs: 12 }} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                          <Typography gutterBottom variant="h5" component="div" sx={{
+                                            color: theme.primaryText,
+                                            fontSize: { lg: 20, md: 20, sm: 18, xs: 15 }
+                                          }}>
+                                            {selectedPost.media.split("/").pop()}
+                                          </Typography>
+                                          <Typography variant="body2" sx={{ color: theme.secondaryText }}>
+                                            Document / PDF
+                                          </Typography>
+                                        </Grid>
+                                      </Grid>
+                                    </Box>
+                                  </CardContent>
+                                </CardActionArea>
+                              </Card>
+                            )}
+                          </CardMedia>
+                        )}
                       </Box>
                     </CardContent>
                     <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
                         <Button variant='outlined' size='large' startIcon={<Publish />}
+                          onClick={handleEdit}
                           sx={{
                             color: theme.primaryAccent,
                             borderColor: theme.primaryAccent,
@@ -442,7 +581,7 @@ export const UserPosts = () => {
                         </Box>
                         {optionsPostView.map((option, index) => (
                           <MenuItem
-                            key={option}
+                            key={option.value}
                             selected={index === selectedIndexPostView}
                             onClick={(event) => handleMenuPostView(event, index)}
                             sx={{
@@ -463,7 +602,7 @@ export const UserPosts = () => {
                               },
                             }}
                           >
-                            {option}
+                            {option.name}
                           </MenuItem>
                         ))}
                         <Divider color={theme.secondaryText} />
@@ -472,7 +611,7 @@ export const UserPosts = () => {
                         </Box>
                         {optionsPostComment.map((option, index) => (
                           <MenuItem
-                            key={option}
+                            key={option.value}
                             selected={index === selectedIndexPostComment}
                             onClick={(event) => handleMenuPostComment(event, index)}
                             sx={{
@@ -493,7 +632,7 @@ export const UserPosts = () => {
                               },
                             }}
                           >
-                            {option}
+                            {option.name}
                           </MenuItem>
                         ))}
                         <Divider color={theme.secondaryText} />
