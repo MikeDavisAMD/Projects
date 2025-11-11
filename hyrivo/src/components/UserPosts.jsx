@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
-import { Alert, AppBar, Avatar, Box, Button, ButtonBase, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Divider, Grid, IconButton, Menu, MenuItem, Modal, Portal, Snackbar, TextareaAutosize, Toolbar, Typography } from '@mui/material'
+import { Alert, AppBar, Avatar, Box, Button, ButtonBase, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Collapse, Divider, Grid, IconButton, Menu, MenuItem, Modal, Snackbar, TextareaAutosize, Toolbar, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, LockOutline, MoreHoriz, Public, Publish, ThumbUpOutlined } from '@mui/icons-material'
 import { bull } from '../Utils/bull'
 import axios from 'axios'
 import { formatTimeAgo } from '../Utils/formatTimeAgo'
+import { Comments } from '../Utils/Comments'
 
 export const UserPosts = () => {
   const { theme } = useThemeContext()
@@ -174,13 +175,12 @@ export const UserPosts = () => {
     }
   }
 
-  // Portal for comments
-  const [showPortal, setShowPortal] = useState(false);
-  const container = useRef(null);
+  // Comment section
+  const [openComment, setOpenComment] = useState(false)
 
-  const handleClickPortal = () => {
-    setShowPortal(!showPortal);
-  };
+  const handleOpenComment = (postId) => {
+    setOpenComment(openComment === postId ? null : postId)
+  }
 
   // Snackbar
   const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -422,7 +422,7 @@ export const UserPosts = () => {
                       Like
                     </Box></Button>
                   <Button variant='outlined' startIcon={<ChatBubbleOutline />}
-                    onClick={handleClickPortal} sx={{
+                    onClick={() => handleOpenComment(p._id)} sx={{
                       color: theme.primaryText,
                       border: 'none', m: 0, p: 0,
                       '&:hover': {
@@ -431,15 +431,10 @@ export const UserPosts = () => {
                     }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
                       comment
                     </Box></Button>
-                  {showPortal ? (
-                    <Portal container={() => container.current}>
-                      <span>But I actually render here!</span>
-                    </Portal>
-                  ) : null}
                 </CardActions>
-                <CardContent ref={container}>
-
-                </CardContent>
+                <Collapse in={openComment === p._id} timeout="auto" unmountOnExit>
+                  <Comments/>
+                </Collapse>
               </Card>
               <Modal
                 open={openModal}
