@@ -433,7 +433,7 @@ export const UserPosts = () => {
                     </Box></Button>
                 </CardActions>
                 <Collapse in={openComment === p._id} timeout="auto" unmountOnExit>
-                  <Comments/>
+                  <Comments dp={dp} users={users} profiles={profiles}/>
                 </Collapse>
               </Card>
               <Modal

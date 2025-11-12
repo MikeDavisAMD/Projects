@@ -19,11 +19,13 @@ const userRoute = require('./routes/userRoute')
 const profileRoute = require('./routes/profileRoute')
 const forgetPWRoute = require('./routes/forgetPWRoute')
 const postRoute = require('./routes/postRoute')
+const commentRoute = require('./routes/commentRoute')
 
 app.use('/pw-reset',forgetPWRoute)
 app.use('/user',userRoute)
 app.use('/profile',profileRoute)
 app.use('/posts',postRoute)
+app.use('/comment',commentRoute)
 
 app.get('/', (req,res)=>{
     res.send("Welcome to Hyrivo")
