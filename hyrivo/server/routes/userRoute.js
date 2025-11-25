@@ -389,9 +389,9 @@ router.post('/verify-auth', log, auth, async (req, res) => {
 router.get('/me', log, auth, async (req, res) => {
     try {
         const user = await User.findById(req.userId)
+        if (!user) return res.status(400).json({ message: 'Details not found' })
         const profile = await Profile.findOne({ userId: req.userId })
         const post = await Post.find({ userId: req.userId }).sort({ postedAt: -1 })
-        if (!user || !profile || !post) return res.status(400).json({ message: 'Details not found' })
         res.status(200).json({ user: user, profile: profile, post: post })
     } catch (error) {
         console.error(error.message)

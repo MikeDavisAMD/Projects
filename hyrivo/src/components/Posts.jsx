@@ -113,11 +113,16 @@ export const Posts = ({ sortType }) => {
                   subheader={
                     <Box>
                       <Typography variant="body2" sx={{
-                        display: 'block', maxWidth: '90%',
+                        display: 'flex', maxWidth: '90%', gap:.5, alignItems:'center',
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5
                       }}>
-                        @ {p.user.username} {p.user.isCompany ? `${bull} ${p.profile.industry}` : null}
+                        @ {p.user.username} {p.user.isCompany ? 
+                          <Box sx={{display:'flex', gap:.5}}>
+                            {bull}
+                            {p.profile.industry}
+                          </Box>
+                         : null}
                       </Typography>
                       <Typography variant="body2" sx={{
                         display: 'block', maxWidth: '90%',
@@ -131,7 +136,7 @@ export const Posts = ({ sortType }) => {
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 }
                       }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap:.5 }}>
                           {formatTimeAgo(p.post.postedAt)}
                           {bull}
                           {p.post.postView === "everyone" ?

@@ -317,11 +317,16 @@ export const UserPosts = () => {
                   subheader={
                     <Box>
                       <Typography variant="body2" sx={{
-                        display: 'block', maxWidth: '90%',
+                        display: 'flex', maxWidth: '90%', gap:.5, alignItems:'center',
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5
                       }}>
-                        @ {users.username} {users.isCompany ? `${bull} ${profiles.industry}` : null}
+                        @ {users.username} {users.isCompany ?
+                          <Box sx={{ display: 'flex', gap: .5 }}>
+                            {bull}
+                            {profiles.industry}
+                          </Box>
+                          : null}
                       </Typography>
                       <Typography variant="body2" sx={{
                         display: 'block', maxWidth: '90%',
@@ -335,7 +340,7 @@ export const UserPosts = () => {
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 }
                       }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap:.5 }}>
                           {formatTimeAgo(p.postedAt)}
                           {bull}
                           {p.postView === "everyone" ?
@@ -433,7 +438,7 @@ export const UserPosts = () => {
                     </Box></Button>
                 </CardActions>
                 <Collapse in={openComment === p._id} timeout="auto" unmountOnExit>
-                  <Comments dp={dp} users={users} profiles={profiles}/>
+                  <Comments dp={dp} users={users} profiles={profiles} />
                 </Collapse>
               </Card>
               <Modal
