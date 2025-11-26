@@ -121,7 +121,6 @@ export const Enable2FA = () => {
              setisCompany(response.data.user.isCompany)
           } catch (error) {
             setError("Failed to get user details",error)
-            console.error(error)
             setOpen(true)
           }
         }
