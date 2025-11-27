@@ -4,7 +4,7 @@ import { useThemeContext } from './ThemeContext'
 import { ArrowDropDown, ArrowDropUp, ArrowUpward, ThumbUpOffAlt } from '@mui/icons-material'
 
 export const Comments = ({ dp, users, profiles }) => {
-    // Portal
+    // Portal for comment
     const [showPortal, setShowPortal] = useState(false);
     const container = useRef(null);
 
@@ -32,11 +32,42 @@ export const Comments = ({ dp, users, profiles }) => {
                         <Grid container spacing={2}>
                             <Grid size={12}>
                                 <Box>
-                                    <Typography variant='body2' fullWidth>This is the Comment</Typography>
+                                    <Typography variant='body2' sx={{ color: theme.primaryText }} fullWidth>This is the Comment</Typography>
                                 </Box>
                             </Grid>
                             <Grid size={12}>
-                                
+                                <Box sx={{ flexGrow: 1 }}>
+                                    <Grid container alignItems="center">
+                                        <Grid size={6}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 12 }} fullWidth>0 likes | 0 replies</Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid size={3}>
+                                            <Box sx={{ display: 'flex', justifyContent:'flex-end' ,alignItems: 'center' }}>
+                                                <Link component="button" sx={{
+                                                    textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                                    '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                                }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        Reply
+                                                    </Box>
+                                                </Link>
+                                            </Box>
+                                        </Grid>
+                                        <Grid size={3}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', pl:2 }}>
+                                                <Link component="button" sx={{
+                                                    textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                                    '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                                }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        Show Replies
+                                                        <ArrowDropDown/>
+                                                    </Box>
+                                                </Link>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
                             </Grid>
                         </Grid>
                     </Grid>
