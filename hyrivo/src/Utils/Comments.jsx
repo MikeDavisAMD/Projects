@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, ButtonBase, Card, CardContent, Grid, Link, Portal, TextField, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, Button, ButtonBase, Card, CardContent, Collapse, Grid, Link, Portal, TextField, Tooltip, Typography } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { useThemeContext } from './ThemeContext'
 import { ArrowDropDown, ArrowDropUp, ArrowUpward, ThumbUpOffAlt } from '@mui/icons-material'
@@ -10,6 +10,13 @@ export const Comments = ({ dp, users, profiles }) => {
 
     const handleClickPortal = () => {
         setShowPortal(!showPortal);
+    };
+
+    // Collapse for Reply
+    const [checked, setChecked] = useState(false);
+
+    const handleChange = () => {
+        setChecked((prev) => !prev);
     };
 
     const CommentReply = () => {
@@ -44,8 +51,8 @@ export const Comments = ({ dp, users, profiles }) => {
                                             </Box>
                                         </Grid>
                                         <Grid size={3}>
-                                            <Box sx={{ display: 'flex', justifyContent:'flex-end' ,alignItems: 'center' }}>
-                                                <Link component="button" sx={{
+                                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                                <Link component="button" onClick={handleChange} sx={{
                                                     textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                     '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                                 }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -55,13 +62,13 @@ export const Comments = ({ dp, users, profiles }) => {
                                             </Box>
                                         </Grid>
                                         <Grid size={3}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', pl:2 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', pl: 2 }}>
                                                 <Link component="button" sx={{
                                                     textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                     '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                                 }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                         Show Replies
-                                                        <ArrowDropDown/>
+                                                        <ArrowDropDown />
                                                     </Box>
                                                 </Link>
                                             </Box>
@@ -106,44 +113,33 @@ export const Comments = ({ dp, users, profiles }) => {
                     </Grid>
                     <Grid size={{ lg: 10, md: 10, sm: 10, xs: 8 }}>
                         <Box sx={{ pl: 2, pr: 1 }}>
-                            <TextField variant='outlined' label='Add a comment...' fullWidth
+                            <TextField variant='standard' label='Add a comment...' fullWidth multiline maxRows={10}
                                 sx={{
-                                    "& .MuiInputBase-input": {
-                                        height: 2,
-                                        color: theme.primaryText, // input text color
-                                        "&::placeholder": {
-                                            color: theme.secondaryText, // placeholder color
-                                            opacity: 1, // ensures custom color shows
-                                        },
-                                    },
-                                    "& .MuiInputLabel-root": {
-                                        color: theme.secondaryText, // default label color
-                                        transform: "translateX(5%) translateY(6px)", // re-center label
-                                    },
-                                    "& .MuiInputLabel-root.Mui-focused": {
-                                        color: theme.primaryAccent, // focused label color
-                                        transform: "translateX(11%) translateY(-9px) scale(0.75)" // adjust when focused
-                                    },
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: theme.primaryAccent, // default border
-                                            borderRadius: 10,
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: theme.hoverAccent, // hover border
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: theme.primaryAccent, // focus border
-                                        },
-                                    },
-                                    '& label.Mui-focused': { //label on clicking
-                                        color: theme.primaryAccent
-                                    },
-                                    '&:hover label:not(.Mui-focused)': {
-                                        color: theme.primaryAccent
-                                    },
-                                    "& .MuiFormHelperText-root": {
+                                    // label color
+                                    '& .MuiInputLabel-root': {
                                         color: theme.secondaryText,
+                                    },
+                                    '&:hover .MuiInputLabel-root': {
+                                        color: theme.primaryAccent,
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: theme.primaryAccent,
+                                    },
+
+                                    // input text color
+                                    '& .MuiInputBase-input': {
+                                        color: theme.secondaryText,
+                                    },
+
+                                    // underline color
+                                    '& .MuiInput-underline:before': {
+                                        borderBottomColor: theme.primaryAccent,
+                                    },
+                                    '& .MuiInput-underline:hover:before': {
+                                        borderBottomColor: theme.hoverAccent,
+                                    },
+                                    '& .MuiInput-underline:after': {
+                                        borderBottomColor: theme.primaryAccent,
                                     },
                                 }} />
                         </Box>
@@ -161,6 +157,75 @@ export const Comments = ({ dp, users, profiles }) => {
                                 }
                             }}><ArrowUpward sx={{ width: 30, height: 30 }} /></Button>
                         </Tooltip>
+                    </Grid>
+                </Grid>
+            </Box>
+        )
+    }
+    const TypeReply = () => {
+        return (
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container alignItems="center">
+                    <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2.5 }}>
+                            {dp && dp.startsWith('https://') ? (
+                                <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
+                                    sx={{ width: 30, height: 30 }} />
+                            ) : (
+                                <Avatar sx={{ background: `linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`, width: { lg: 30, md: 25, sm: 25 }, height: { lg: 30, md: 25, sm: 25 }, fontSize: { lg: 17, md: 13, sm: 14 } }}>
+                                    {dp}
+                                </Avatar>
+                            )}
+                        </Box>
+                    </Grid>
+                    <Grid size={{ lg: 10, md: 10, sm: 10, xs: 8 }}>
+                        <Box sx={{ pl: 2, pr: 2 }}>
+                            <TextField variant='standard' label='Reply to comment...' fullWidth
+                                sx={{
+                                    // label color
+                                    '& .MuiInputLabel-root': {
+                                        color: theme.secondaryText,
+                                    },
+                                    '&:hover .MuiInputLabel-root': {
+                                        color: theme.primaryAccent,
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: theme.primaryAccent,
+                                    },
+
+                                    // input text color
+                                    '& .MuiInputBase-input': {
+                                        color: theme.secondaryText,
+                                    },
+
+                                    // underline color
+                                    '& .MuiInput-underline:before': {
+                                        borderBottomColor: theme.primaryAccent,
+                                    },
+                                    '& .MuiInput-underline:hover:before': {
+                                        borderBottomColor: theme.hoverAccent,
+                                    },
+                                    '& .MuiInput-underline:after': {
+                                        borderBottomColor: theme.primaryAccent,
+                                    },
+                                }} />
+                        </Box>
+                    </Grid>
+                    <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
+                        <Box sx={{ pt: 2.5 }}>
+                            <Tooltip title="Post Reply">
+                                <Button variant='contained' sx={{
+                                    display: 'flex', color: 'black',
+                                    flexDirection: 'column', justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: '50%', bgcolor: theme.primaryAccent,
+                                    height: 30, width: 30, minWidth: 0, padding: 0,
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        color: theme.hoverAccent,
+                                    }
+                                }}><ArrowUpward sx={{ width: 20, height: 20 }} /></Button>
+                            </Tooltip>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
@@ -196,6 +261,7 @@ export const Comments = ({ dp, users, profiles }) => {
                                             {showPortal ? (
                                                 <Portal container={() => container.current}>
                                                     <CommentReply />
+                                                    <Collapse in={checked}><TypeReply /></Collapse>
                                                 </Portal>
                                             ) : null}
                                         </Grid>
