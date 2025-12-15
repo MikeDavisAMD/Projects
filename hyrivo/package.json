@@ -34,6 +34,7 @@
     "json-server": "^1.0.0-beta.3",
     "jwt-decode": "^4.0.0",
     "media-trimmer": "^0.2.0",
+    "mongodb": "^7.0.0",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "react": "^19.1.0",
