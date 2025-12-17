@@ -2,11 +2,12 @@ import bloomHtml from '../Assets/Images/bloomhtml.png'
 import bloomReact from '../Assets/Images/bloommd73.png'
 import falconcams from '../Assets/Images/falconcams.png'
 import hyrivoapp from '../Assets/Images/hyrivoapp.png'
+import todo from '../Assets/Images/todomd73.png'
 
 export const ProjectsUi = () => {
-  return (
-    <>
-        <style>{`
+    return (
+        <>
+            <style>{`
             .cards {
                 display: flex;
                 flex-direction: row;
@@ -32,6 +33,14 @@ export const ProjectsUi = () => {
 
             .cards .green {
                 background-color: #34A853;
+            }
+
+            .cards .cyan {
+                background-color: #00CCCC;
+            }
+
+            .cards .violet {
+                background-color: #E44DFC;
             }
 
             .cards .card {
@@ -120,76 +129,93 @@ export const ProjectsUi = () => {
                 display: block;
             }
         `}</style>
-        
-        <div className="cards">
-            <a href='https://bloomhtml.web.app/' target='_blank' rel='noopener noreferrer'>
-            <div className="card red">
-                <p className="tip">Bloom with HTML</p>
-                <div className='content'>
-                    <p className="second-text">
-                        A practice project: a static website designed with pure HTML and CSS, built to test and refine my styling skills before moving to responsive design and functionality.
-                    </p>
-                    <img className="preview" src={bloomHtml} alt="Bloom HTML Preview"/>
-                </div>
-                <div className="third-text">
-                    <p className="chip">HTML</p>
-                    <p className="chip">CSS</p>
-                </div>
+
+            <div className="cards">
+                <a href='https://bloomhtml.web.app/' target='_blank' rel='noopener noreferrer'>
+                    <div className="card red">
+                        <p className="tip">Bloom <br /><span style={{ fontSize: "15px" }}>with HTML</span></p>
+                        <div className='content'>
+                            <p className="second-text">
+                                A practice project: a static website designed with pure HTML and CSS, built to test and refine my styling skills before moving to responsive design and functionality.
+                            </p>
+                            <img className="preview" src={bloomHtml} alt="Bloom HTML Preview" />
+                        </div>
+                        <div className="third-text">
+                            <p className="chip">HTML</p>
+                            <p className="chip">CSS</p>
+                        </div>
+                    </div>
+                </a>
+                <a href='https://bloommd73.web.app/' target='_blank' rel='noopener noreferrer'>
+                    <div className="card violet">
+                        <p className="tip">Bloom <br /><span style={{ fontSize: "15px" }}>with React and MUI</span></p>
+                        <div className='content'>
+                            <p className="second-text">
+                                A practice project: a responsive homepage built with React and Material UI, designed to test and refine my React development skills.
+                            </p>
+                            <img className="preview" src={bloomReact} alt="Bloom React Preview" />
+                        </div>
+                        <div className="third-text">
+                            <p className="chip">React JS</p>
+                            <p className="chip">Material UI</p>
+                        </div>
+                    </div>
+                </a>
+                <a href='https://todomd73.web.app/' target='_blank' rel='noopener noreferrer'>
+                    <div className="card blue">
+                        <p className="tip">To Do List <br /><span style={{ fontSize: "15px" }}>with ShadCN and Firestore</span></p>
+                        <div className='content'>
+                            <p className="second-text">
+                                A practice project: A responsive To-Do List app built using React, TypeScript, ShadCN UI, and Tailwind CSS, with task data stored in Firebase Firestore for real-time synchronization.
+                            </p>
+                            <img className="preview" src={todo} alt="to do list Preview" />
+                        </div>
+                        <div className="third-text">
+                            <p className="chip">React TS</p>
+                            <p className="chip">ShadCN UI</p>
+                            <p className="chip">Firestore</p>
+                            <p className="chip">Tailwind CSS</p>
+                        </div>
+                    </div>
+                </a>
+                <a href='https://falconcams.web.app/' target='_blank' rel="noopener noreferrer">
+                    <div className="card green">
+                        <p className="tip">Falcon Cameras</p>
+                        <div className='content'>
+                            <p className="second-text">
+                                This is a project done based on Frontend with dummy database. Used React JS along with Material UI to make this app responsive with dummy JSON database hosted in Firebase Realtime Database and hosted with Firebase Hosting.
+                            </p>
+                            <img className="preview" src={falconcams} alt="Falcon Camera Preview" />
+                        </div>
+                        <div className="third-text">
+                            <p className="chip">React JS</p>
+                            <p className="chip">Material UI</p>
+                            <p className="chip">Firebase Realtime DB</p>
+                            <p className="chip">JavaScript</p>
+                        </div>
+                    </div>
+                </a>
+                <a href='https://hyrivoapp.web.app/' target='_blank' rel='noopener noreferrer'>
+                    <div className="card cyan">
+                        <p className="tip">Hyrivo App</p>
+                        <div className='content'>
+                            <p className="second-text">
+                                A fullstack job-seeking platform developed using React.js for the frontend, Express.js for the backend, and MongoDB as the database, designed to connect job seekers with opportunities.
+                            </p>
+                            <img className="preview" src={hyrivoapp} alt="hyrivo app Preview" />
+                        </div>
+                        <div className="third-text">
+                            <p className="chip">HTML</p>
+                            <p className="chip">CSS</p>
+                            <p className="chip">React JS</p>
+                            <p className="chip">Material UI</p>
+                            <p className="chip">JavaScript</p>
+                            <p className="chip">Express JS</p>
+                            <p className="chip">Mongo DB</p>
+                        </div>
+                    </div>
+                </a>
             </div>
-            </a>
-            <a href='https://bloommd73.web.app/' target='_blank' rel='noopener noreferrer'>
-            <div className="card blue">
-                <p className="tip">Bloom with React and MUI</p>
-                <div className='content'>
-                    <p className="second-text">
-                        A practice project: a responsive homepage built with React and Material UI, designed to test and refine my React development skills.
-                    </p>
-                    <img className="preview" src={bloomReact} alt="Bloom React Preview"/>
-                </div>
-                <div className="third-text">
-                    <p className="chip">React JS</p>
-                    <p className="chip">Material UI</p>
-                </div>
-            </div>
-            </a>
-           <a href='https://falconcams.web.app/' target='_blank' rel="noopener noreferrer">
-           <div className="card green">
-                <p className="tip">Falcon Cameras</p>
-                <div className='content'>
-                    <p className="second-text">
-                        This is a project done based on Frontend with dummy database. Used React JS along with Material UI to make this app responsive with dummy JSON database hosted in Firebase Realtime Database and hosted with Firebase Hosting.
-                    </p>
-                    <img className="preview" src={falconcams} alt="Falcon Camera Preview"/>
-                </div>
-                <div className="third-text">
-                    <p className="chip">React JS</p>
-                    <p className="chip">Material UI</p>
-                    <p className="chip">Firebase Realtime DB</p>
-                    <p className="chip">JavaScript</p>
-                </div>
-            </div>
-           </a>
-            <a href='https://hyrivoapp.web.app/' target='_blank' rel='noopener noreferrer'>
-            <div className="card red">
-                <p className="tip">Hyrivo App</p>
-                <div className='content'>
-                    <p className="second-text">
-                        A fullstack job-seeking platform developed using React.js for the frontend, Express.js for the backend, and MongoDB as the database, designed to connect job seekers with opportunities. 
-                    </p>
-                    <img className="preview" src={hyrivoapp} alt="hyrivo app Preview"/>
-                </div>
-                <div className="third-text">
-                    <p className="chip">HTML</p>
-                    <p className="chip">CSS</p>
-                    <p className="chip">React JS</p>
-                    <p className="chip">Material UI</p>
-                    <p className="chip">JavaScript</p>
-                    <p className="chip">Express JS</p>
-                    <p className="chip">Mongo DB</p>
-                </div>
-            </div>
-            </a>
-        </div>
-    </>
-  )
+        </>
+    )
 }

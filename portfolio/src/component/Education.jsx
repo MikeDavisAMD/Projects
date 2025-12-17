@@ -6,6 +6,8 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import React from 'react'
+import sxcce from '../Assets/Logo/SXCCE.png'
+import karka from '../Assets/Logo/karka.png'
 
 export const Education = React.forwardRef((props,ref) => {
   return (
@@ -29,7 +31,9 @@ export const Education = React.forwardRef((props,ref) => {
           }}>
             <TimelineItem>
               <TimelineSeparator>
-                <TimelineDot sx={{backgroundColor:'#F9AB00'}}/>
+                <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
+                  <img src={sxcce} alt="SXCCE" height={40} width={40} style={{ aspectRatio: 1 / 1, borderRadius: 5 }} />
+                </TimelineDot>
                 <TimelineConnector sx={{backgroundColor:'#34A853'}}/>
               </TimelineSeparator>
               <TimelineContent sx={{fontSize:{lg:'22px',md:'22px'}}}>
@@ -40,7 +44,9 @@ export const Education = React.forwardRef((props,ref) => {
             </TimelineItem>
             <TimelineItem>
               <TimelineSeparator>
-              <TimelineDot sx={{backgroundColor:'#F9AB00'}}/>
+              <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
+                <img src={karka} alt="karka Academy" height={40} width={40} style={{ aspectRatio: 1 / 1, borderRadius: 5 }} />
+              </TimelineDot>
               <TimelineConnector sx={{backgroundColor:'#34A853'}}/>
               </TimelineSeparator>
               <TimelineContent sx={{fontSize:{lg:'22px',md:'22px'}}}>

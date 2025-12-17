@@ -52,9 +52,9 @@ export const Experience = React.forwardRef((props,ref) => {
           <TimelineItem>
             <TimelineSeparator >
               <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
-              <TimelineDot sx={{backgroundColor:'#34A853'}}>
+              <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
                 <IconButton sx={{p:0}} onClick={handleOpenHM}>
-                  <img src={hm} alt="Happiestminds Technologies" style={{borderRadius:'10px',height:'30px'}}/>
+                  <img src={hm} alt="Happiestminds Technologies" style={{borderRadius:'10px',height:'35px',width:'35px'}}/>
                 </IconButton>
               </TimelineDot>
               <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
@@ -72,9 +72,9 @@ export const Experience = React.forwardRef((props,ref) => {
           <TimelineItem>
             <TimelineSeparator>
               <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
-              <TimelineDot sx={{backgroundColor:'#34A853'}}>
+              <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
                 <IconButton sx={{p:0}} onClick={handleOpenRB}>
-                  <img src={rooks} alt="Rooks & Brooks Technologies" style={{borderRadius:'10px',height:'30px',width:'30px'}}/>
+                  <img src={rooks} alt="Rooks & Brooks Technologies" style={{borderRadius:5,height:'35px',width:'35px'}}/>
                 </IconButton>
               </TimelineDot>
               <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
