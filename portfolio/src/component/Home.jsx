@@ -24,7 +24,7 @@ export const Home = () => {
           </Typography><br />
           <Box sx={{textShadow:'0 6px 6px #F9AB00',fontSize:{lg:'70px',md:'70px',sm:'50px',xs:'20px'},color:'#34A853'}}>
             <TypeAnimation
-              sequence={['Web Developer',1000,'Frontend Developer',1000,'Backend Developer',1000]}
+              sequence={['Web Developer',1000,'Frontend Developer',1000,'Backend Developer',1000,'Fullstack Developer',1000,'MERN Developer',1000]}
               repeat={Infinity}
             />
           </Box>

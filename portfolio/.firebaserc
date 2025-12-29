@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "porfoliomd73"
-  }
+    "default": "mikedavisa-portfolio",
+    "portfolio": "mikedavisa-portfolio"
+  },
+  "targets": {},
+  "etags": {}
 }
