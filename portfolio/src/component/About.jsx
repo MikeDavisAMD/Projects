@@ -2,7 +2,7 @@ import { Facebook, GitHub, Instagram, LinkedIn, Mail, PhoneAndroid, WhatsApp } f
 import { Box, Button, Divider, Grid, Typography } from '@mui/material'
 import React from 'react'
 import aboutImg from '../Assets/Images/about.jpeg'
-import aboutBg from '../Assets/Images/aboutbg.png'
+import aboutBg from '../Assets/Images/aboutbg.jpg'
 
 export const About = React.forwardRef((props, ref) => {
   return (
