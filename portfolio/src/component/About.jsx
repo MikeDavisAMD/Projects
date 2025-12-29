@@ -18,7 +18,7 @@ export const About = React.forwardRef((props, ref) => {
         </Box>
       </Grid>
       <Grid size={{ sm: 12, xs: 12 }}>
-        <Box sx={{ display: { lg: 'none', md: 'none', sm: 'flex', xs: 'flex' }, justifyContent: 'center', backgroundColor: '#F5F7FA' }}>
+        <Box sx={{ display: { lg: 'none', md: 'none', sm: 'flex', xs: 'flex' }, justifyContent: 'center', backgroundColor: '#1A73E8', ml:4, mr:4, borderRadius:5 }}>
           <Box sx={{ display: 'inline-block', position: 'relative' }}>
             <Box component='img' src={aboutImg} variant='About image'
               sx={{ height: { sm: '500px', xs: '350px' }, width: 'auto', display: 'block' }}></Box>
