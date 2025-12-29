@@ -2,6 +2,7 @@ import { Facebook, GitHub, Instagram, LinkedIn, Mail, PhoneAndroid, WhatsApp } f
 import { Box, Button, Divider, Grid, Typography } from '@mui/material'
 import React from 'react'
 import aboutImg from '../Assets/Images/about.jpeg'
+import aboutBg from '../Assets/Images/aboutbg.png'
 
 export const About = React.forwardRef((props, ref) => {
   return (
@@ -18,35 +19,40 @@ export const About = React.forwardRef((props, ref) => {
         </Box>
       </Grid>
       <Grid size={{ sm: 12, xs: 12 }}>
-        <Box sx={{ display: { lg: 'none', md: 'none', sm: 'flex', xs: 'flex' }, justifyContent: 'center', backgroundColor: '#1A73E8', ml:4, mr:4, borderRadius:5 }}>
-          <Box sx={{ display: 'inline-block', position: 'relative' }}>
-            <Box component='img' src={aboutImg} variant='About image'
-              sx={{ height: { sm: '500px', xs: '350px' }, width: 'auto', display: 'block' }}></Box>
-            <Box sx={{
-              position: 'absolute', display: 'flex', justifyContent: 'center', gap: { sm: 4, xs: 2 },
-              alignItems: 'center', backgroundColor: '#1A73E8', height: { sm: '60px', xs: '50px' }, width: 'auto',
-              left: 0, right: 0, bottom: 0
-            }}>
-              <Button variant='outlined' href='https://www.facebook.com/share/1CA2gFtN5v/?mibextid=wwXIfr'
-                sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
-                <Facebook />
-              </Button>
-              <Button variant='outlined' href='https://github.com/MikeDavisAMD'
-                sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
-                <GitHub />
-              </Button>
-              <Button variant='outlined' href='https://www.linkedin.com/in/mikedavisa73'
-                sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
-                <LinkedIn />
-              </Button>
-              <Button variant='outlined' href='https://www.instagram.com/m.d.falcon73?igsh=MW1nazBqYmNjcmI4Yw%3D%3D&utm_source=qr'
-                sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
-                <Instagram />
-              </Button>
-              <Button variant='outlined' href='https://wa.me/917708172413'
-                sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
-                <WhatsApp />
-              </Button>
+        <Box sx={{ backgroundColor: '#F5F7FA', pt: 4 }}>
+          <Box sx={{
+            display: { lg: 'none', md: 'none', sm: 'flex', xs: 'flex' }, justifyContent: 'center',
+            backgroundImage: `url(${aboutBg})`, position: 'relative', ml: 4, mr: 4
+          }}>
+            <Box sx={{ display: 'inline-block' }}>
+              <Box component='img' src={aboutImg} variant='About image'
+                sx={{ height: { sm: '500px', xs: '350px' }, width: 'auto', display: 'block' }}></Box>
+              <Box sx={{
+                position: 'absolute', display: 'flex', flexGrow: 1, justifyContent: 'center', gap: { sm: 4, xs: 2 },
+                alignItems: 'center', backgroundColor: '#1A73E8', height: { sm: '60px', xs: '50px' }, width: 'auto',
+                left: 0, right: 0, bottom: 0
+              }}>
+                <Button variant='outlined' href='https://www.facebook.com/share/1CA2gFtN5v/?mibextid=wwXIfr'
+                  sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
+                  <Facebook />
+                </Button>
+                <Button variant='outlined' href='https://github.com/MikeDavisAMD'
+                  sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
+                  <GitHub />
+                </Button>
+                <Button variant='outlined' href='https://www.linkedin.com/in/mikedavisa73'
+                  sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
+                  <LinkedIn />
+                </Button>
+                <Button variant='outlined' href='https://www.instagram.com/m.d.falcon73?igsh=MW1nazBqYmNjcmI4Yw%3D%3D&utm_source=qr'
+                  sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
+                  <Instagram />
+                </Button>
+                <Button variant='outlined' href='https://wa.me/917708172413'
+                  sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
+                  <WhatsApp />
+                </Button>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -92,11 +98,13 @@ export const About = React.forwardRef((props, ref) => {
       </Grid>
       <Grid size={{ lg: 6, md: 6 }} sx={{ backgroundColor: '#F5F7FA' }}>
         <Box sx={{ display: { lg: 'flex', md: 'flex', sm: 'none', xs: 'none' }, justifyContent: 'center', backgroundColor: '#F5F7FA' }}>
-          <Box sx={{display:'inline-block', position:'relative'}}>
+          <Box sx={{ display: 'inline-block', position: 'relative' }}>
             <Box component='img' src={aboutImg} alt='About image'
-              sx={{ height: { lg: '610px', md: '680px' }, display:'block' }}></Box>
-            <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', gap: 4, alignItems: 'center', 
-              backgroundColor: '#1A73E8', height: { lg: '70px', md: '70px', }, left: 0, right: 0, bottom: 0 }}>
+              sx={{ height: { lg: '610px', md: '680px' }, display: 'block', pb:4 }}></Box>
+            <Box sx={{
+              position: 'absolute', display: 'flex', justifyContent: 'center', gap: 4, alignItems: 'center',
+              backgroundColor: '#1A73E8', height: { lg: '70px', md: '70px', }, left: 0, right: 0, bottom:32
+            }}>
               <Button variant='outlined' href='https://www.facebook.com/share/1CA2gFtN5v/?mibextid=wwXIfr'
                 sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
                 <Facebook />
