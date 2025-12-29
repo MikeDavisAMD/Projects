@@ -2,6 +2,7 @@ import { Avatar, Box, Button, ButtonBase, Card, CardContent, Collapse, Grid, Lin
 import React, { useRef, useState } from 'react'
 import { useThemeContext } from './ThemeContext'
 import { ArrowDropDown, ArrowDropUp, ArrowUpward, ThumbUpOffAlt } from '@mui/icons-material'
+import { bull } from './bull'
 
 export const Comments = ({ dp, users, profiles }) => {
     // Portal for comment
@@ -19,38 +20,68 @@ export const Comments = ({ dp, users, profiles }) => {
         setChecked((prev) => !prev);
     };
 
-    const CommentReply = () => {
+    const noComments = () => {
         return (
             <Box sx={{ flexGrow: 1, pt: 2 }}>
                 <Grid container spacing={2} alignItems="center">
-                    <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            {dp && dp.startsWith('https://') ? (
-                                <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
-                                    sx={{ width: 30, height: 30 }} />
-                            ) : (
-                                <Avatar sx={{ background: `linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`, width: { lg: 30, md: 25, sm: 25 }, height: { lg: 30, md: 25, sm: 25 }, fontSize: { lg: 17, md: 13, sm: 14 } }}>
-                                    {dp}
-                                </Avatar>
-                            )}
+                    <Grid size={12}>
+                        <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant='body2' sx={{ color: theme.secondaryText }} fullWidth>No Comments</Typography>
                         </Box>
                     </Grid>
-                    <Grid size={{ lg: 10, md: 10, sm: 10, xs: 8 }}>
+                </Grid>
+            </Box>
+        )
+    }
+
+    const CommentReply = ({ comment, level = 0 }) => {
+        return (
+            <Box sx={{ flexGrow: 1, pt: 2 }}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid size={{ lg: 11, md: 11, sm: 11, xs: 10 }}>
                         <Grid container spacing={2}>
                             <Grid size={12}>
+                                <Box sx={{ flexGrow: 1 }}>
+                                    <Grid container spacing={2} >
+                                        <Grid size={1}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                                {dp && dp.startsWith('https://') ? (
+                                                    <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
+                                                        sx={{ width: 40, height: 40 }} />
+                                                ) : (
+                                                    <Avatar sx={{ background: `linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`, width: { lg: 30, md: 25, sm: 25 }, height: { lg: 30, md: 25, sm: 25 }, fontSize: { lg: 17, md: 13, sm: 14 } }}>
+                                                        {dp}
+                                                    </Avatar>
+                                                )}
+                                            </Box>
+                                        </Grid>
+                                        <Grid size={11}>
+                                            <Box>
+                                                <Typography variant='body2' sx={{ color: theme.primaryText, fontWeight: 900, fontSize: 13 }} fullWidth>{`${profiles.firstName} ${profiles.lastName}`}</Typography>
+                                            </Box>
+                                            <Box sx={{ display: "flex", gap: 1, alignItems: 'center', p: 0 }}>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{`@ ${users.username}`}</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 20 }} fullWidth>{bull}</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </Grid>
+                            <Grid size={12}>
                                 <Box>
-                                    <Typography variant='body2' sx={{ color: theme.primaryText }} fullWidth>This is the Comment</Typography>
+                                    <Typography variant='body2' sx={{ color: theme.primaryText, fontSize: 20 }} fullWidth>This is the Comment</Typography>
                                 </Box>
                             </Grid>
                             <Grid size={12}>
                                 <Box sx={{ flexGrow: 1 }}>
                                     <Grid container alignItems="center">
-                                        <Grid size={6}>
+                                        <Grid size={7}>
                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 12 }} fullWidth>0 likes | 0 replies</Typography>
                                             </Box>
                                         </Grid>
-                                        <Grid size={3}>
+                                        <Grid size={2}>
                                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                                 <Link component="button" onClick={handleChange} sx={{
                                                     textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,

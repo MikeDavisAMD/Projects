@@ -19,12 +19,11 @@ router.post('/:postId', log, auth, async (req, res) => {
             userId: req.userId,
             text
         })
-
-        await newComment.save()
+            await newComment.save()
 
         post.comments.push(newComment._id)
         await post.save()
-        
+
         return res.status(200).json({ message: "New Comment Added" })
     } catch (error) {
         res.status(500).json({ message: error.message })

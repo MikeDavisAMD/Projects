@@ -3,16 +3,9 @@ const mongoose = require('mongoose');
 const replySchema = new mongoose.Schema({
     commentId: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    replyUserId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     text: String,
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    replies: [{
-        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-        commentId: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        text: String,
-        likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-        replies: []
-    }]
 }, { timestamps: true })
 
 const commentSchema = new mongoose.Schema({
