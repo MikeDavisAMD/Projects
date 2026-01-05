@@ -34,6 +34,7 @@ import { Game2048 } from './Games/Game2048'
 import { MemoryMatchGame } from './Games/MemoryMatchGame'
 import { MinesweeperGame } from './Games/MinesweeperGame'
 import { WordSearchGame } from './Games/WordSearchGame'
+import { MobileProfileCard } from './Utils/MobileProfileCard'
 
 const AppContent = () => {
 
@@ -149,6 +150,11 @@ const AppContent = () => {
         <Route path='/ProfileOrg' element={
           <RouteSecure>
             <ProfileOrg/>
+          </RouteSecure>
+        }/>
+        <Route path='/profile-card' element={
+          <RouteSecure>
+            <MobileProfileCard/>
           </RouteSecure>
         }/>
         <Route path='/Settings' element={

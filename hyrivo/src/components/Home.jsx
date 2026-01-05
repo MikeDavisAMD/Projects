@@ -24,6 +24,7 @@ export const Home = () => {
   const [dp, setDp] = useState('')
   const [followers, setFollowers] = useState([])
   const [following, setFollowing] = useState([])
+  const [posts, setPosts] = useState([])
   const [mediaUrl, setMediaUrl] = useState(null)
   const [mediaType, setMediaType] = useState(null)
   const [fileName, setFileName] = useState(null)
@@ -70,7 +71,7 @@ export const Home = () => {
   const handleCloseCreatPostArticle = () => setOpenCreatePostArticle(false);
 
   // Menu in divider to sort
-  const options = ['Recent','Top']
+  const options = ['Recent', 'Top']
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const open = Boolean(anchorEl);
@@ -263,6 +264,7 @@ export const Home = () => {
       setDp(profile.currentDp)
       setFollowers(profile.followers)
       setFollowing(profile.following)
+      setPosts(response.data.post)
     } catch (error) {
       console.error(error.message)
     }
@@ -336,9 +338,9 @@ export const Home = () => {
           <Box>
             {isCompany ? <HomeOrgProfileCard theme={theme} companyName={companyName} industry={industry}
               handleView={handleViewUserPosts} desc={desc} dp={dp} username={username} followers={followers}
-              following={following} /> :
+              following={following} posts={posts} /> :
               <HomeProfileCard theme={theme} firstName={firstName} lastName={lastName} following={following}
-                username={username} handleView={handleViewUserPosts} desc={desc} dp={dp} followers={followers} />}
+                username={username} handleView={handleViewUserPosts} desc={desc} dp={dp} followers={followers} posts={posts} />}
           </Box>
           <Box sx={{ display: { lg: 'none', md: 'none', sm: 'block', xs: 'none' }, width: 'auto', ml: 2, mr: 2, mb: 2 }}>
             <PuzzleList />
@@ -996,7 +998,7 @@ export const Home = () => {
               </Grid>
               <Grid size={12}>
                 <Box sx={{ minHeight: '100vh', height: '100%' }}>
-                  <Posts sortType={options[selectedIndex]}/>
+                  <Posts sortType={options[selectedIndex]} />
                 </Box>
               </Grid>
             </Grid>

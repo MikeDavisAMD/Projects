@@ -1,23 +1,34 @@
 import { Avatar, Box, Button, ButtonBase, Card, CardContent, Collapse, Grid, Link, Portal, TextField, Tooltip, Typography } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useThemeContext } from './ThemeContext'
 import { ArrowDropDown, ArrowDropUp, ArrowUpward, ThumbUpOffAlt } from '@mui/icons-material'
-import { bull } from './bull'
 
 export const Comments = ({ dp, users, profiles }) => {
     // Portal for comment
     const [showPortal, setShowPortal] = useState(false);
+    const [showReplyPortal, setShowReplyPortal] = useState(false);
     const container = useRef(null);
 
     const handleClickPortal = () => {
         setShowPortal(!showPortal);
     };
 
-    // Collapse for Reply
+    const handleClickReplyPortal = () => {
+        setShowReplyPortal(!showReplyPortal);
+    };
+
+    // Collapse for Comment
     const [checked, setChecked] = useState(false);
 
     const handleChange = () => {
         setChecked((prev) => !prev);
+    };
+
+    // Collapse for Reply
+    const [checkedReply, setCheckedReply] = useState(false);
+
+    const handleChangeReply = () => {
+        setCheckedReply((prev) => !prev);
     };
 
     const noComments = () => {
@@ -34,7 +45,7 @@ export const Comments = ({ dp, users, profiles }) => {
         )
     }
 
-    const CommentReply = ({ comment, level = 0 }) => {
+    const Comment = ({ comment }) => {
         return (
             <Box sx={{ flexGrow: 1, pt: 2 }}>
                 <Grid container spacing={2} alignItems="center">
@@ -47,7 +58,7 @@ export const Comments = ({ dp, users, profiles }) => {
                                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                                 {dp && dp.startsWith('https://') ? (
                                                     <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
-                                                        sx={{ width: 40, height: 40 }} />
+                                                        sx={{ width: 35, height: 35 }} />
                                                 ) : (
                                                     <Avatar sx={{ background: `linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`, width: { lg: 30, md: 25, sm: 25 }, height: { lg: 30, md: 25, sm: 25 }, fontSize: { lg: 17, md: 13, sm: 14 } }}>
                                                         {dp}
@@ -61,8 +72,6 @@ export const Comments = ({ dp, users, profiles }) => {
                                             </Box>
                                             <Box sx={{ display: "flex", gap: 1, alignItems: 'center', p: 0 }}>
                                                 <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{`@ ${users.username}`}</Typography>
-                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 20 }} fullWidth>{bull}</Typography>
-                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
                                             </Box>
                                         </Grid>
                                     </Grid>
@@ -76,13 +85,17 @@ export const Comments = ({ dp, users, profiles }) => {
                             <Grid size={12}>
                                 <Box sx={{ flexGrow: 1 }}>
                                     <Grid container alignItems="center">
-                                        <Grid size={7}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 12 }} fullWidth>0 likes | 0 replies</Typography>
+                                        <Grid size={8}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 likes</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 replies</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
                                             </Box>
                                         </Grid>
-                                        <Grid size={2}>
-                                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                        <Grid size={4}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
                                                 <Link component="button" onClick={handleChange} sx={{
                                                     textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                     '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
@@ -90,18 +103,20 @@ export const Comments = ({ dp, users, profiles }) => {
                                                         Reply
                                                     </Box>
                                                 </Link>
-                                            </Box>
-                                        </Grid>
-                                        <Grid size={3}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', pl: 2 }}>
-                                                <Link component="button" sx={{
+                                                <Link component="button" onClick={handleClickReplyPortal} sx={{
                                                     textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                     '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                                 }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        Show Replies
-                                                        <ArrowDropDown />
+                                                        {showReplyPortal ? "Hide Replies" : "Show Replies"}
+                                                        {showReplyPortal ? <ArrowDropUp /> : <ArrowDropDown />}
                                                     </Box>
                                                 </Link>
+                                                {showReplyPortal ? (
+                                                    <Portal container={() => container.current}>
+                                                        <CommentReply />
+                                                        <Collapse in={checkedReply}><TypeReply /></Collapse>
+                                                    </Portal>
+                                                ) : null}
                                             </Box>
                                         </Grid>
                                     </Grid>
@@ -126,6 +141,90 @@ export const Comments = ({ dp, users, profiles }) => {
             </Box>
         )
     }
+
+    const CommentReply = ({ reply }) => {
+        return (
+            <Box sx={{ flexGrow: 1, pt: 2, pl: 4 }}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid size={12}>
+                        <Box sx={{ flexGrow: 1 }}>
+                            <Grid container spacing={2} >
+                                <Grid size={1}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                        {dp && dp.startsWith('https://') ? (
+                                            <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
+                                                sx={{ width: 35, height: 35 }} />
+                                        ) : (
+                                            <Avatar sx={{ background: `linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`, width: { lg: 30, md: 25, sm: 25 }, height: { lg: 30, md: 25, sm: 25 }, fontSize: { lg: 17, md: 13, sm: 14 } }}>
+                                                {dp}
+                                            </Avatar>
+                                        )}
+                                    </Box>
+                                </Grid>
+                                <Grid size={11}>
+                                    <Box>
+                                        <Typography variant='body2' sx={{ color: theme.primaryText, fontWeight: 900, fontSize: 13 }} fullWidth>{`${profiles.firstName} ${profiles.lastName}`}</Typography>
+                                    </Box>
+                                    <Box sx={{ display: "flex", gap: 1, alignItems: 'center', p: 0 }}>
+                                        <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{`@ ${users.username}`}</Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Grid>
+                    <Grid size={12}>
+                        <Box>
+                            <Typography variant='body2' sx={{ color: theme.primaryText, fontSize: 20, display: 'flex', alignItems: 'center', gap: 1 }} fullWidth>
+                                <Link component="button" sx={{
+                                    textDecoration: 'none', color: theme.primaryAccent,
+                                    '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        @mainCommentUsername
+                                    </Box>
+                                </Link>
+                                This is the Reply
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid size={12}>
+                        <Box sx={{ flexGrow: 1 }}>
+                            <Grid container alignItems="center">
+                                <Grid size={9}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 likes</Typography>
+                                        <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
+                                        <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 replies</Typography>
+                                        <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
+                                        <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid size={3}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap:2 }}>
+                                        <Link component="button" sx={{
+                                            textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                            '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                        }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                Like
+                                            </Box>
+                                        </Link>
+                                        <Link component="button" onClick={handleChangeReply} sx={{
+                                            textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                            '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                        }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                Reply
+                                            </Box>
+                                        </Link>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Box>
+        )
+    }
+
     const TypeComment = () => {
         return (
             <Box sx={{ flexGrow: 1 }}>
@@ -291,7 +390,7 @@ export const Comments = ({ dp, users, profiles }) => {
                                             </Link>
                                             {showPortal ? (
                                                 <Portal container={() => container.current}>
-                                                    <CommentReply />
+                                                    <Comment />
                                                     <Collapse in={checked}><TypeReply /></Collapse>
                                                 </Portal>
                                             ) : null}

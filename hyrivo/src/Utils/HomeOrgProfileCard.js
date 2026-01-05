@@ -1,4 +1,4 @@
-export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, companyName, handleView, followers, following}) => {
+export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, companyName, handleView, followers, following, posts}) => {
     return (
         <>
         <style>{`
@@ -158,7 +158,7 @@ export const HomeOrgProfileCard = ({theme, dp, username, desc, industry, company
             <div class="stat-label">Following</div>
             </div>
             <div class="stat-item">
-            <div class="stat-value">0</div>
+            <div class="stat-value">{posts.length}</div>
             <div class="stat-label">Posts</div>
             </div>
         </div>

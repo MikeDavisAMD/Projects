@@ -1,4 +1,6 @@
-export const HomeProfileCard = ({theme, firstName, lastName, username, desc, handleView, dp, followers, following}) => {
+export const HomeProfileCard = ({theme, firstName, lastName, username, desc, handleView, dp, followers, following, posts}) => {
+
+
     return (
         <>
         <style>{`
@@ -157,7 +159,7 @@ export const HomeProfileCard = ({theme, firstName, lastName, username, desc, han
             <div class="stat-label">Following</div>
             </div>
             <div class="stat-item">
-            <div class="stat-value">0</div>
+            <div class="stat-value">{posts.length}</div>
             <div class="stat-label">Posts</div>
             </div>
         </div>
