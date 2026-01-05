@@ -158,7 +158,7 @@ export const Contact = React.forwardRef((props, ref) => {
               sx={{ '&:hover': { color: '#34A853' } }}>
               <LinkedIn />
             </IconButton>
-            <IconButton disableRipple href='https://www.instagram.com/m.d.falcon.73?igsh=MW1nazBqYmNjcmI4Yw%3D%3D&utm_source=qr'
+            <IconButton disableRipple href='https://www.instagram.com/m.d.falcon.73'
               sx={{ '&:hover': { color: '#34A853' } }}>
               <Instagram />
             </IconButton>

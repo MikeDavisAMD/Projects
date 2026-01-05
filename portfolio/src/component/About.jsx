@@ -44,7 +44,7 @@ export const About = React.forwardRef((props, ref) => {
                   sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
                   <LinkedIn />
                 </Button>
-                <Button variant='outlined' href='https://www.instagram.com/m.d.falcon.73?igsh=MW1nazBqYmNjcmI4Yw%3D%3D&utm_source=qr'
+                <Button variant='outlined' href='https://www.instagram.com/m.d.falcon.73'
                   sx={{ color: '#212121', backgroundColor: '#34A853', p: 0.5, minWidth: 'auto', borderRadius: '10px', '&:hover': { backgroundColor: '#F9AB00' } }}>
                   <Instagram />
                 </Button>
