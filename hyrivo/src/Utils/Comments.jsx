@@ -54,7 +54,7 @@ export const Comments = ({ dp, users, profiles }) => {
                             <Grid size={12}>
                                 <Box sx={{ flexGrow: 1 }}>
                                     <Grid container spacing={2} >
-                                        <Grid size={1}>
+                                        <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
                                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                                 {dp && dp.startsWith('https://') ? (
                                                     <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
@@ -66,7 +66,7 @@ export const Comments = ({ dp, users, profiles }) => {
                                                 )}
                                             </Box>
                                         </Grid>
-                                        <Grid size={11}>
+                                        <Grid size={{ lg: 11, md: 11, sm: 11, xs:10 }}>
                                             <Box>
                                                 <Typography variant='body2' sx={{ color: theme.primaryText, fontWeight: 900, fontSize: 13 }} fullWidth>{`${profiles.firstName} ${profiles.lastName}`}</Typography>
                                             </Box>
@@ -79,11 +79,49 @@ export const Comments = ({ dp, users, profiles }) => {
                             </Grid>
                             <Grid size={12}>
                                 <Box>
-                                    <Typography variant='body2' sx={{ color: theme.primaryText, fontSize: 20 }} fullWidth>This is the Comment</Typography>
+                                    <Typography variant='body2' sx={{ color: theme.primaryText, fontSize: { lg: 20, md: 20, sm: 15, xs: 15 } }} fullWidth>This is the Comment</Typography>
                                 </Box>
                             </Grid>
                             <Grid size={12}>
-                                <Box sx={{ flexGrow: 1 }}>
+                                <Box sx={{ flexGrow: 1, display: { lg: 'block', md: 'block', sm: 'none', xs: 'none' } }}>
+                                    <Grid container alignItems="center">
+                                        <Grid size={{ lg: 8, md: 7 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 likes</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 replies</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
+                                                <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid size={{ lg: 4, md: 5 }}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
+                                                <Link component="button" onClick={handleChange} sx={{
+                                                    textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                                    '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                                }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        Reply
+                                                    </Box>
+                                                </Link>
+                                                <Link component="button" onClick={handleClickReplyPortal} sx={{
+                                                    textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                                    '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                                }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        {showReplyPortal ? "Hide Replies" : "Show Replies"}
+                                                        {showReplyPortal ? <ArrowDropUp /> : <ArrowDropDown />}
+                                                    </Box>
+                                                </Link>
+                                                {showReplyPortal ? (
+                                                    <Portal container={() => container.current}>
+                                                        <CommentReply />
+                                                        <Collapse in={checkedReply}><TypeReply /></Collapse>
+                                                    </Portal>
+                                                ) : null}
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                                <Box sx={{ flexGrow: 1, display: { lg: 'none', md: 'none', sm: 'block', xs: 'block' } }}>
                                     <Grid container alignItems="center">
                                         <Grid size={8}>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -103,6 +141,10 @@ export const Comments = ({ dp, users, profiles }) => {
                                                         Reply
                                                     </Box>
                                                 </Link>
+                                            </Box>
+                                        </Grid>
+                                        <Grid size={12}>
+                                            <Box sx={{ pt: 2 }}>
                                                 <Link component="button" onClick={handleClickReplyPortal} sx={{
                                                     textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                     '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
@@ -149,7 +191,7 @@ export const Comments = ({ dp, users, profiles }) => {
                     <Grid size={12}>
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={2} >
-                                <Grid size={1}>
+                                <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
                                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                         {dp && dp.startsWith('https://') ? (
                                             <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
@@ -161,7 +203,7 @@ export const Comments = ({ dp, users, profiles }) => {
                                         )}
                                     </Box>
                                 </Grid>
-                                <Grid size={11}>
+                                <Grid size={{ lg: 11, md: 11, sm: 11, xs:10 }}>
                                     <Box>
                                         <Typography variant='body2' sx={{ color: theme.primaryText, fontWeight: 900, fontSize: 13 }} fullWidth>{`${profiles.firstName} ${profiles.lastName}`}</Typography>
                                     </Box>
@@ -174,23 +216,15 @@ export const Comments = ({ dp, users, profiles }) => {
                     </Grid>
                     <Grid size={12}>
                         <Box>
-                            <Typography variant='body2' sx={{ color: theme.primaryText, fontSize: 20, display: 'flex', alignItems: 'center', gap: 1 }} fullWidth>
-                                <Link component="button" sx={{
-                                    textDecoration: 'none', color: theme.primaryAccent,
-                                    '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
-                                }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        @mainCommentUsername
-                                    </Box>
-                                </Link>
-                                This is the Reply
+                            <Typography variant='body2' sx={{ color: theme.primaryText, fontSize: { lg: 20, md: 20, sm: 15, xs: 15 }, }} fullWidth>
+                                <span style={{ color: theme.primaryAccent }}>@mainCommentUsername</span> This is the Reply
                             </Typography>
                         </Box>
                     </Grid>
                     <Grid size={12}>
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container alignItems="center">
-                                <Grid size={9}>
+                                <Grid size={{ lg: 9, md: 9, sm: 9, xs: 8 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 likes</Typography>
                                         <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
@@ -199,8 +233,8 @@ export const Comments = ({ dp, users, profiles }) => {
                                         <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
                                     </Box>
                                 </Grid>
-                                <Grid size={3}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap:2 }}>
+                                <Grid size={{ lg: 3, md: 3, sm: 3, xs: 4 }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 2 }}>
                                         <Link component="button" sx={{
                                             textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                             '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
@@ -228,12 +262,12 @@ export const Comments = ({ dp, users, profiles }) => {
     const TypeComment = () => {
         return (
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2} alignItems="center">
+                <Grid container alignItems="center">
                     <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
-                        <Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2.5 }}>
                             {dp && dp.startsWith('https://') ? (
                                 <Avatar src={dp} alt={users.isCompany ? profiles.companyName : `${profiles.firstName} ${profiles.lastName}`}
-                                    sx={{ width: 50, height: 50 }} />
+                                    sx={{ width: 30, height: 30 }} />
                             ) : (
                                 <Avatar sx={{ background: `linear-gradient(40deg, ${theme.primaryAccent} 20%, ${theme.hoverAccent} 100%)`, width: { lg: 30, md: 25, sm: 25 }, height: { lg: 30, md: 25, sm: 25 }, fontSize: { lg: 17, md: 13, sm: 14 } }}>
                                     {dp}
@@ -242,8 +276,8 @@ export const Comments = ({ dp, users, profiles }) => {
                         </Box>
                     </Grid>
                     <Grid size={{ lg: 10, md: 10, sm: 10, xs: 8 }}>
-                        <Box sx={{ pl: 2, pr: 1 }}>
-                            <TextField variant='standard' label='Add a comment...' fullWidth multiline maxRows={10}
+                        <Box sx={{ pl: 2, pr: 2 }}>
+                            <TextField variant='standard' label='Reply to comment...' fullWidth
                                 sx={{
                                     // label color
                                     '& .MuiInputLabel-root': {
@@ -275,18 +309,20 @@ export const Comments = ({ dp, users, profiles }) => {
                         </Box>
                     </Grid>
                     <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
-                        <Tooltip title="Post Comment">
-                            <Button variant='contained' sx={{
-                                display: 'flex', color: 'black',
-                                flexDirection: 'column', justifyContent: 'center',
-                                alignItems: 'center', borderRadius: '50%', bgcolor: theme.primaryAccent,
-                                height: 50, width: 50, minWidth: 0, padding: 0,
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    color: theme.hoverAccent,
-                                }
-                            }}><ArrowUpward sx={{ width: 30, height: 30 }} /></Button>
-                        </Tooltip>
+                        <Box sx={{ pt: 2.5 }}>
+                            <Tooltip title="Post Reply">
+                                <Button variant='contained' sx={{
+                                    display: 'flex', color: 'black',
+                                    flexDirection: 'column', justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: '50%', bgcolor: theme.primaryAccent,
+                                    height: 30, width: 30, minWidth: 0, padding: 0,
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        color: theme.hoverAccent,
+                                    }
+                                }}><ArrowUpward sx={{ width: 20, height: 20 }} /></Button>
+                            </Tooltip>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
@@ -374,14 +410,14 @@ export const Comments = ({ dp, users, profiles }) => {
                             <Grid size={12}>
                                 <Box sx={{ flexGrow: 1 }}>
                                     <Grid container spacing={2}>
-                                        <Grid size={{ lg: 8 }}>
-                                            <Typography variant='span' sx={{ fontSize: { lg: '18px', md: '18px', sm: '13px', xs: '12px' }, color: theme.primaryText }}>
+                                        <Grid size={{ lg: 8, md: 8, sm: 6, xs: 6 }}>
+                                            <Typography variant='span' sx={{ fontSize: { lg: 17, md: 17, sm: 13, xs: 12 }, color: theme.primaryText }}>
                                                 0 Comments
                                             </Typography>
                                         </Grid>
-                                        <Grid size={{ lg: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <Grid size={{ lg: 4, md: 4, sm: 6, xs: 6 }} sx={{ display: 'flex', justifyContent: { lg: 'flex-end', md: 'flex-end', sm: 'flex-end', xs: 'center' } }}>
                                             <Link component="button" onClick={handleClickPortal} sx={{
-                                                textDecoration: 'none', color: theme.primaryAccent,
+                                                textDecoration: 'none', color: theme.primaryAccent, fontSize:{lg: 17, md:17, sm: 13, xs:12},
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                             }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                     {showPortal ? "Show Less" : "Show More"}
