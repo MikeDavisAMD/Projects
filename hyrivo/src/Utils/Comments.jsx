@@ -4,6 +4,13 @@ import { useThemeContext } from './ThemeContext'
 import { ArrowDropDown, ArrowDropUp, ArrowUpward, ThumbUpOffAlt } from '@mui/icons-material'
 
 export const Comments = ({ dp, users, profiles }) => {
+    // Comment states
+    const [commentText, setCommentText] = useState('')
+    const [replyText, setReplyText] = useState('')
+
+    const [comments, setComments] = useState([])
+    const [activeCommentId, setActiveCommentId] = useState(null)
+
     // Portal for comment
     const [showPortal, setShowPortal] = useState(false);
     const [showReplyPortal, setShowReplyPortal] = useState(false);
@@ -277,7 +284,8 @@ export const Comments = ({ dp, users, profiles }) => {
                     </Grid>
                     <Grid size={{ lg: 10, md: 10, sm: 10, xs: 8 }}>
                         <Box sx={{ pl: 2, pr: 2 }}>
-                            <TextField variant='standard' label='Reply to comment...' fullWidth
+                            <TextField variant='standard' label='Add a comment...' fullWidth
+                            value={commentText} onChange={(e) => setCommentText(e.target.value)}
                                 sx={{
                                     // label color
                                     '& .MuiInputLabel-root': {
