@@ -106,7 +106,7 @@ router.put('/edit', log, auth, async (req, res) => {
 
         return res.status(200).json({ message: "post edited successfully" })
     } catch (error) {
-        console.error("Unable to edit",error)
+        console.error("Unable to edit", error)
         res.status(500).json({ error: error.message })
         console.error('Error Editing post', error)
     }
@@ -125,7 +125,36 @@ router.delete('/delete', log, auth, async (req, res) => {
         return res.status(200).json({ message: "Post Deleted Successfully" })
     } catch (error) {
         res.status(500).json({ error: error.message })
-        console.error('Error Deleting post', error)
+    }
+})
+
+router.put('/like/:postId', log, auth, async (req, res) => {
+    try {
+        const { postId } = req.params
+        const userId = req.userId
+
+        if (!postId) return res.status(404).json("Error liking the post")
+
+        const post = await Post.findById(postId)
+        if (!post) return res.status(404).json({ message: "Post not found" })
+
+        const alreadyLiked = post.likes.includes(userId)
+
+        if (alreadyLiked) {
+            await Post.findByIdAndUpdate(postId, {
+                $pull: { likes: userId }
+            })
+
+            return res.status(200).json({ message: "Post Unliked", liked: false })
+        } else {
+            await Post.findByIdAndUpdate(postId, {
+                $addToSet: { likes: userId }
+            })
+
+            return res.status(200).json({ message: "Post liked", liked: true })
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message })
     }
 })
 

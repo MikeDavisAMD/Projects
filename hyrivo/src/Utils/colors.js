@@ -9,6 +9,8 @@ export const COLORS = {
     hoverAccent: '#FF6EC7',
     error:'#D72638',
     errorHover:'#B81F2F',
+    success: '#1BC47D',
+    successHover: '#16ab6dff',
     cardBg: '#FAFAFA', 
     background:'rgba(255, 255, 255, 0.9)',
     shadow: 'rgba(13, 13, 13, 0.9)'
@@ -24,7 +26,9 @@ export const COLORS = {
     primaryAccent: '#00E5FF',   
     hoverAccent: '#FF66CC',     
     error: '#FF2E63',           
-    errorHover: '#CC204F',
+    errorHover: '#CC204F', 
+    success: '#28ffa6ff',
+    successHover: '#07fc96ff',
     cardBg: 'rgba(255, 255, 255, 0.05)',
     background: 'rgba(13, 13, 13, 0.9)',
     shadow: 'rgba(255, 255, 255, 0.9)'

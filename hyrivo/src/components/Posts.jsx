@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { Avatar, Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material'
-import { BookmarkOutlined, ChatBubbleOutline, Description, LockOutline, MoreHoriz, Public, Repeat, ThumbUpOutlined } from '@mui/icons-material'
+import { BookmarkOutlined, ChatBubbleOutline, Description, LockOutline, MoreHoriz, Public, Repeat, ThumbUpAlt, ThumbUpOutlined } from '@mui/icons-material'
 import { bull } from '../Utils/bull'
 import { formatTimeAgo } from '../Utils/formatTimeAgo'
 import axios from 'axios'
 
-export const Posts = ({ sortType }) => {
+export const Posts = ({ sortType, users }) => {
   const { theme } = useThemeContext()
-  const [posts, setPosts] = useState("")
+  const [posts, setPosts] = useState([])
 
   // Menu for Edit Delete
   const [anchorEl, setAnchorEl] = useState(null);
@@ -19,6 +19,35 @@ export const Posts = ({ sortType }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const currentUserId = users?._id
+
+  const handleLike = async (postId) => {
+    if (!currentUserId) return
+
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) return
+
+    setPosts(prev => prev.map(p => {
+      if (p.post._id === postId) {
+        const liked = p.post.likes.includes(currentUserId)
+
+        return {
+          ...p, post: { ...p.post, likes: liked ? p.post.likes.filter(id => id !== currentUserId) : [...p.post.likes, currentUserId] }
+        }
+      }
+
+      return p
+    }))
+
+    try {
+      await axios.put(`http://localhost:2000/posts/like/${postId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    } catch (error) {
+      console.error("Error liking post", error)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,16 +142,16 @@ export const Posts = ({ sortType }) => {
                   subheader={
                     <Box>
                       <Typography variant="body2" sx={{
-                        display: 'flex', maxWidth: '90%', gap:.5, alignItems:'center',
+                        display: 'flex', maxWidth: '90%', gap: .5, alignItems: 'center',
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 }, pb: .5
                       }}>
-                        @ {p.user.username} {p.user.isCompany ? 
-                          <Box sx={{display:'flex', gap:.5}}>
+                        @ {p.user.username} {p.user.isCompany ?
+                          <Box sx={{ display: 'flex', gap: .5 }}>
                             {bull}
                             {p.profile.industry}
                           </Box>
-                         : null}
+                          : null}
                       </Typography>
                       <Typography variant="body2" sx={{
                         display: 'block', maxWidth: '90%',
@@ -136,7 +165,7 @@ export const Posts = ({ sortType }) => {
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         color: theme.secondaryText, fontSize: { lg: 10, md: 10, sm: 8, xs: 8 }
                       }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap:.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: .5 }}>
                           {formatTimeAgo(p.post.postedAt)}
                           {bull}
                           {p.post.postView === "everyone" ?
@@ -206,13 +235,14 @@ export const Posts = ({ sortType }) => {
                 <br />
                 <CardContent>
                   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Likes</Typography>
+                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.post.likes.length} Likes</Typography>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Comments</Typography>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Reposts</Typography>
                   </Box>
                 </CardContent>
                 <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap', gap: 1 }}>
-                  <Button variant='outlined' startIcon={<ThumbUpOutlined />}
+                  <Button variant='outlined' startIcon={p.post.likes.includes(currentUserId) ? <ThumbUpAlt/> : <ThumbUpOutlined />}
+                  onClick={() => handleLike(p.post._id)}
                     sx={{
                       color: theme.primaryText,
                       border: 'none', m: 0, p: 0,
@@ -220,7 +250,7 @@ export const Posts = ({ sortType }) => {
                         color: theme.hoverAccent
                       }
                     }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      Like
+                      {p.post.likes.includes(currentUserId) ? "Unlike" : "Like"}
                     </Box></Button>
                   <Button variant='outlined' startIcon={<ChatBubbleOutline />}
                     sx={{

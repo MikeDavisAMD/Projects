@@ -130,6 +130,14 @@ export const UserPosts = () => {
     setAnchorElPostView(null);
   };
 
+  const handleLike = async () => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
   const handleEdit = async () => {
     setLoading(true)
     try {
@@ -411,7 +419,7 @@ export const UserPosts = () => {
                 <CardContent>
                   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Likes</Typography>
-                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Comments</Typography>
+                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.comments.length} Comments</Typography>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Reposts</Typography>
                   </Box>
                 </CardContent>
@@ -438,7 +446,7 @@ export const UserPosts = () => {
                     </Box></Button>
                 </CardActions>
                 <Collapse in={openComment === p._id} timeout="auto" unmountOnExit>
-                  <Comments dp={dp} users={users} profiles={profiles} />
+                  <Comments dp={dp} users={users} profiles={profiles} postId={p._id}/>
                 </Collapse>
               </Card>
               <Modal
@@ -663,7 +671,7 @@ export const UserPosts = () => {
       <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} variant='filled' severity={error ? 'error' : 'success'}
           sx={{
-            backgroundColor: error ? '#FF4D6D' : '#1BC47D'
+            backgroundColor: error ? theme.error : theme.success
           }}>
           {error || success}
         </Alert>

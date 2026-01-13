@@ -89,4 +89,35 @@ router.post('/reply/like/:commentId/:replyId', log, auth, async (req, res) => {
     }
 })
 
+router.get('/:postId', log, auth, async (req, res) => {
+    try {
+        const { postId } = req.params
+
+        const comments = await Comment.find({ postId })
+
+        res.status(200).json({ comments })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
+router.delete('/:commentId', log, auth, async (req, res) => {
+    try {
+        const { commentId } = req.params
+
+        const comment = await Comment.findById(commentId)
+        if (!comment) return res.status(404).json({ message: "Comment not found" })
+
+        await Post.findByIdAndUpdate(comment.postId, {
+            $pull: { comments: comment._id }
+        })
+
+        await Comment.findByIdAndDelete(commentId)
+
+        res.status(200).json({ message: "Comment Deleted Successfully" })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 module.exports = router

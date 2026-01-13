@@ -28,6 +28,7 @@ export const Home = () => {
   const [mediaUrl, setMediaUrl] = useState(null)
   const [mediaType, setMediaType] = useState(null)
   const [fileName, setFileName] = useState(null)
+  const [users, setUsers] = useState([])
   const [expert, setExpert] = useState({ help: "", helpType: "", skills: "", location: "", desc: "" })
 
   const style = {
@@ -265,6 +266,7 @@ export const Home = () => {
       setFollowers(profile.followers)
       setFollowing(profile.following)
       setPosts(response.data.post)
+      setUsers(user)
     } catch (error) {
       console.error(error.message)
     }
@@ -998,7 +1000,7 @@ export const Home = () => {
               </Grid>
               <Grid size={12}>
                 <Box sx={{ minHeight: '100vh', height: '100%' }}>
-                  <Posts sortType={options[selectedIndex]} />
+                  <Posts sortType={options[selectedIndex]} users={users}/>
                 </Box>
               </Grid>
             </Grid>
