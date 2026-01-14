@@ -32,8 +32,9 @@ const NoReply = ({ theme }) => {
     )
 }
 
-const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPortal, showReplyPortal, container, checkedReply,
-    handleChangeReply, replyText, setReplyText, comment, handleLikeComment, handleDeleteComment }) => {
+const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container, checkedReply, activeReplyId,
+    handleChangeReply, replyText, setReplyText, comment, handleLikeComment, handleDeleteComment, setActiveCommentId }) => {
+        const showReplyPortal = activeReplyId === comment._id
     return (
         <Box sx={{ flexGrow: 1, pt: 2 }}>
             <Grid container spacing={2} alignItems="center">
@@ -84,7 +85,9 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                     </Grid>
                                     <Grid size={{ lg: 4, md: 5 }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
-                                            <Link component="button" onClick={handleChange} sx={{
+                                            <Link component="button" onClick={() => {
+                                                handleChangeReply(comment._id)
+                                            }} sx={{
                                                 textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                             }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -109,7 +112,7 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                                     <DeleteOutline sx={{ height: 15, width: 15 }} />
                                                 </Box>
                                             </Link>
-                                            <Link component="button" onClick={handleClickReplyPortal} sx={{
+                                            <Link component="button" onClick={() => handleClickReplyPortal(comment._id)} sx={{
                                                 textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                             }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -119,16 +122,23 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                             </Link>
                                             {showReplyPortal ? (
                                                 <Portal container={() => container.current}>
-                                                    <CommentReply dp={dp} users={users} profiles={profiles} theme={theme}
-                                                        handleChangeReply={handleChangeReply} />
-                                                    <Collapse in={checkedReply}>
-                                                        <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
-                                                            replyText={replyText} setReplyText={setReplyText} />
-                                                    </Collapse>
+                                                    {comment.replies?.length === 0 ? (
+                                                        <NoReply theme={theme} />
+                                                    ) : comment.replies.map((reply) => (
+                                                        <>
+                                                            <CommentReply key={reply._id} dp={dp} users={users} profiles={profiles} theme={theme}
+                                                                handleChangeReply={handleChangeReply} reply={reply}/>
+                                                            <Collapse in={checkedReply}>
+                                                                <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
+                                                                    replyText={replyText} setReplyText={setReplyText} />
+                                                            </Collapse>
+                                                        </>
+                                                    ))}
                                                 </Portal>
                                             ) : null}
                                         </Box>
                                     </Grid>
+                                    <Grid size={12} ref={container} />
                                 </Grid>
                             </Box>
                             <Box sx={{ flexGrow: 1, display: { lg: 'none', md: 'none', sm: 'block', xs: 'block' } }}>
@@ -137,14 +147,16 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.likes.length} likes</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
-                                            <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 replies</Typography>
+                                            <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.replies?.length} replies</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
                                         </Box>
                                     </Grid>
                                     <Grid size={6}>
                                         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 2, pt: 2 }}>
-                                            <Link component="button" onClick={handleChange} sx={{
+                                            <Link component="button" onClick={() => {
+                                                handleChangeReply(comment._id)
+                                            }} sx={{
                                                 textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                             }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -173,7 +185,7 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                     </Grid>
                                     <Grid size={6}>
                                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
-                                            <Link component="button" onClick={handleClickReplyPortal} sx={{
+                                            <Link component="button" onClick={() => handleClickReplyPortal(comment._id)} sx={{
                                                 textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
                                             }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -184,7 +196,7 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                             {showReplyPortal ? (
                                                 <Portal container={() => container.current}>
                                                     <CommentReply dp={dp} users={users} profiles={profiles} theme={theme}
-                                                        handleChangeReply={handleChangeReply} />
+                                                        handleChangeReply={handleChangeReply} comment={comment} setActiveCommentId={setActiveCommentId} />
                                                     <Collapse in={checkedReply}>
                                                         <TypeReply dp={dp} users={users} profiles={profiles} theme={theme} replyText={replyText} setReplyText={setReplyText} />
                                                     </Collapse>
@@ -192,6 +204,7 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
                                             ) : null}
                                         </Box>
                                     </Grid>
+                                    <Grid size={12} ref={container} />
                                 </Grid>
                             </Box>
                         </Grid>
@@ -202,7 +215,7 @@ const Comment = ({ dp, users, profiles, theme, handleChange, handleClickReplyPor
     )
 }
 
-const CommentReply = ({ dp, users, profiles, theme, handleChangeReply }) => {
+const CommentReply = ({ dp, users, profiles, theme }) => {
     return (
         <Box sx={{ flexGrow: 1, pt: 2, pl: 4 }}>
             <Grid container spacing={2} alignItems="center">
@@ -270,10 +283,11 @@ const CommentReply = ({ dp, users, profiles, theme, handleChangeReply }) => {
                                             <DeleteOutline sx={{ height: 15, width: 15 }} />
                                         </Box>
                                     </Link>
-                                    <Link component="button" onClick={handleChangeReply} sx={{
-                                        textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
-                                        '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
-                                    }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Link component="button"
+                                        sx={{
+                                            textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
+                                            '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
+                                        }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             Reply
                                         </Box>
                                     </Link>
@@ -357,7 +371,7 @@ const TypeComment = ({ dp, users, profiles, theme, commentText, setCommentText, 
         </Box>
     )
 }
-const TypeReply = ({ dp, users, profiles, theme, replyText, setReplyText }) => {
+const TypeReply = ({ dp, users, profiles, theme, replyText, setReplyText, handleAddReply }) => {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container alignItems="center">
@@ -410,7 +424,7 @@ const TypeReply = ({ dp, users, profiles, theme, replyText, setReplyText }) => {
                 <Grid size={{ lg: 1, md: 1, sm: 1, xs: 2 }}>
                     <Box sx={{ pt: 2.5 }}>
                         <Tooltip title="Post Reply">
-                            <Button variant='contained' sx={{
+                            <Button variant='contained' onClick={handleAddReply} sx={{
                                 display: 'flex', color: 'black',
                                 flexDirection: 'column', justifyContent: 'center',
                                 alignItems: 'center', borderRadius: '50%', bgcolor: theme.primaryAccent,
@@ -435,32 +449,24 @@ export const Comments = ({ dp, users, profiles, postId }) => {
 
     const [comments, setComments] = useState([])
     const [activeCommentId, setActiveCommentId] = useState(null)
+    const [activeReplyId, setActiveReplyId] = useState(null)
 
     // Portal for comment
     const [showPortal, setShowPortal] = useState(false);
-    const [showReplyPortal, setShowReplyPortal] = useState(false);
     const container = useRef(null);
+    const replyContainer = useRef(null);
 
     const handleClickPortal = () => {
         setShowPortal(!showPortal);
     };
 
-    const handleClickReplyPortal = () => {
-        setShowReplyPortal(!showReplyPortal);
+    const handleClickReplyPortal = (commentId) => {
+        setActiveReplyId(prev => prev === commentId ? null : commentId);
     };
 
     // Collapse for Comment
-    const [checked, setChecked] = useState(false);
-
-    const handleChange = () => {
-        setChecked((prev) => !prev);
-    };
-
-    // Collapse for Reply
-    const [checkedReply, setCheckedReply] = useState(false);
-
-    const handleChangeReply = () => {
-        setCheckedReply((prev) => !prev);
+    const handleChangeReply = (commentId) => {
+        setActiveCommentId((prev) => prev === commentId ? null : commentId);
     };
 
     // Comment handler
@@ -519,8 +525,23 @@ export const Comments = ({ dp, users, profiles, postId }) => {
 
     // Reply for comment handler
     const handleAddReply = async () => {
-        try {
+        if (!replyText.trim() || !activeCommentId) return
 
+        try {
+            const response = await axios.post(`http://localhost:2000/comment/reply/${activeCommentId}`, {
+                text: replyText,
+                replyUserId: users._id
+            }, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}` }
+            })
+
+            const newReply = response.data.reply
+
+            setComments(prev => prev.map(c => c._id === activeCommentId ? { ...c, replies: [...c.replies, newReply] } : c))
+            setReplyText('')
+            setActiveCommentId(null)
+            setSuccess("Replid to comment")
+            setOpenSnackbar(true)
         } catch (error) {
             setError("Unable to Add Reply to comment")
             setOpenSnackbar(true)
@@ -611,13 +632,12 @@ export const Comments = ({ dp, users, profiles, postId }) => {
                                                     ) : comments.map((comment) => (
                                                         <>
                                                             <Comment key={comment._id} comment={comment} dp={dp} users={users} profiles={profiles} theme={theme}
-                                                                handleChange={handleChange} handleClickReplyPortal={handleClickReplyPortal}
-                                                                showReplyPortal={showReplyPortal} container={container} checkedReply={checkedReply}
+                                                                handleClickReplyPortal={handleClickReplyPortal} setActiveCommentId={setActiveCommentId} container={replyContainer}
                                                                 handleChangeReply={handleChangeReply} replyText={replyText} setReplyText={setReplyText}
                                                                 handleLikeComment={handleLikeComment} handleDeleteComment={handleDeleteComment} />
-                                                            <Collapse in={checked}>
+                                                            <Collapse in={activeCommentId === comment._id}>
                                                                 <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
-                                                                    replyText={replyText} setReplyText={setReplyText} />
+                                                                    replyText={replyText} setReplyText={setReplyText} handleAddReply={handleAddReply} />
                                                             </Collapse>
                                                         </>
                                                     ))}

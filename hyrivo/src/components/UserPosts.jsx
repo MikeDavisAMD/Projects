@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { Alert, AppBar, Avatar, Box, Button, ButtonBase, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Collapse, Divider, Grid, IconButton, Menu, MenuItem, Modal, Snackbar, TextareaAutosize, Toolbar, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, LockOutline, MoreHoriz, Public, Publish, ThumbUpOutlined } from '@mui/icons-material'
+import { ArrowBackIos, ArrowDropDown, ArrowDropUp, Article, ChatBubbleOutline, Close, Delete, Description, Done, Edit, LockOutline, MoreHoriz, Public, Publish, ThumbUpAlt, ThumbUpOutlined } from '@mui/icons-material'
 import { bull } from '../Utils/bull'
 import axios from 'axios'
 import { formatTimeAgo } from '../Utils/formatTimeAgo'
@@ -130,11 +130,32 @@ export const UserPosts = () => {
     setAnchorElPostView(null);
   };
 
-  const handleLike = async () => {
+  const currentUserId = users?._id
+
+  const handleLike = async (postId) => {
+    if (!currentUserId) return
+
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) return
+
+    setPosts(prev => prev.map(p => {
+      if (p._id === postId) {
+        const liked = p.likes.includes(currentUserId)
+
+        return {
+          ...p, likes: liked ? p.likes.filter(id => id !== currentUserId) : [...p.likes, currentUserId] 
+        }
+      }
+
+      return p
+    }))
+
     try {
-      
+      await axios.put(`http://localhost:2000/posts/like/${postId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
     } catch (error) {
-      
+      console.error("Error liking post", error)
     }
   }
 
@@ -418,13 +439,14 @@ export const UserPosts = () => {
                 <br />
                 <CardContent>
                   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Likes</Typography>
+                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.likes.length} Likes</Typography>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.comments.length} Comments</Typography>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Reposts</Typography>
                   </Box>
                 </CardContent>
                 <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap', gap: 1 }}>
-                  <Button variant='outlined' startIcon={<ThumbUpOutlined />}
+                  <Button variant='outlined' startIcon={p.likes.includes(currentUserId) ? <ThumbUpAlt/> : <ThumbUpOutlined />}
+                  onClick={() => handleLike(p._id)}
                     sx={{
                       color: theme.primaryText,
                       border: 'none', m: 0, p: 0,
@@ -432,7 +454,7 @@ export const UserPosts = () => {
                         color: theme.hoverAccent
                       }
                     }}><Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      Like
+                      {p.likes.includes(currentUserId) ? "Unlike" : "Like"}
                     </Box></Button>
                   <Button variant='outlined' startIcon={<ChatBubbleOutline />}
                     onClick={() => handleOpenComment(p._id)} sx={{

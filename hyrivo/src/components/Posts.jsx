@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useThemeContext } from '../Utils/ThemeContext'
 import { Avatar, Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import { BookmarkOutlined, ChatBubbleOutline, Description, LockOutline, MoreHoriz, Public, Repeat, ThumbUpAlt, ThumbUpOutlined } from '@mui/icons-material'
@@ -236,7 +236,7 @@ export const Posts = ({ sortType, users }) => {
                 <CardContent>
                   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.post.likes.length} Likes</Typography>
-                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Comments</Typography>
+                    <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>{p.post.comments.length} Comments</Typography>
                     <Typography variant="body2" sx={{ color: theme.secondaryText, fontSize: { lg: 12, md: 12, sm: 10, xs: 10 } }}>0 Reposts</Typography>
                   </Box>
                 </CardContent>
