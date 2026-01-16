@@ -120,4 +120,12 @@ router.delete('/:commentId', log, auth, async (req, res) => {
     }
 })
 
+router.delete('/reply/:commentId/:replyId', log, auth, async (req, res) => {
+    try {
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 module.exports = router

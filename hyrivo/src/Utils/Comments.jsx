@@ -78,7 +78,7 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.likes.length} likes</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
-                                            <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>0 replies</Typography>
+                                            <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.replies.length} replies</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
                                         </Box>
@@ -124,11 +124,11 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                                 <Portal container={() => container.current}>
                                                     {comment.replies?.length === 0 ? (
                                                         <NoReply theme={theme} />
-                                                    ) : comment.replies.map((reply) => (
+                                                    ) : comment.replies?.map((reply) => (
                                                         <>
                                                             <CommentReply key={reply._id} dp={dp} users={users} profiles={profiles} theme={theme}
                                                                 handleChangeReply={handleChangeReply} reply={reply}/>
-                                                            <Collapse in={checkedReply}>
+                                                            <Collapse in={showReplyPortal}>
                                                                 <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
                                                                     replyText={replyText} setReplyText={setReplyText} />
                                                             </Collapse>
@@ -147,7 +147,7 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.likes.length} likes</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
-                                            <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.replies?.length} replies</Typography>
+                                            <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>{comment.replies.length} replies</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>|</Typography>
                                             <Typography variant='body2' sx={{ color: theme.secondaryText, fontSize: 10 }} fullWidth>1d</Typography>
                                         </Box>
@@ -197,7 +197,7 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                                 <Portal container={() => container.current}>
                                                     <CommentReply dp={dp} users={users} profiles={profiles} theme={theme}
                                                         handleChangeReply={handleChangeReply} comment={comment} setActiveCommentId={setActiveCommentId} />
-                                                    <Collapse in={checkedReply}>
+                                                    <Collapse in={showReplyPortal}>
                                                         <TypeReply dp={dp} users={users} profiles={profiles} theme={theme} replyText={replyText} setReplyText={setReplyText} />
                                                     </Collapse>
                                                 </Portal>
@@ -540,7 +540,7 @@ export const Comments = ({ dp, users, profiles, postId }) => {
             setComments(prev => prev.map(c => c._id === activeCommentId ? { ...c, replies: [...c.replies, newReply] } : c))
             setReplyText('')
             setActiveCommentId(null)
-            setSuccess("Replid to comment")
+            setSuccess("Replied to comment")
             setOpenSnackbar(true)
         } catch (error) {
             setError("Unable to Add Reply to comment")
@@ -633,7 +633,7 @@ export const Comments = ({ dp, users, profiles, postId }) => {
                                                         <>
                                                             <Comment key={comment._id} comment={comment} dp={dp} users={users} profiles={profiles} theme={theme}
                                                                 handleClickReplyPortal={handleClickReplyPortal} setActiveCommentId={setActiveCommentId} container={replyContainer}
-                                                                handleChangeReply={handleChangeReply} replyText={replyText} setReplyText={setReplyText}
+                                                                handleChangeReply={handleChangeReply} replyText={replyText} setReplyText={setReplyText} activeReplyId={activeReplyId}
                                                                 handleLikeComment={handleLikeComment} handleDeleteComment={handleDeleteComment} />
                                                             <Collapse in={activeCommentId === comment._id}>
                                                                 <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
