@@ -76,7 +76,7 @@ router.post('/reply/like/:commentId/:replyId', log, auth, async (req, res) => {
         const comment = await Comment.findById(commentId)
         if (!comment) return res.status(404).json({ message: "Cannot like the reply" })
 
-        const reply = comment.replies.id(replyId)
+        const reply = comment.replies.findById(replyId)
         if (!reply) return res.status(404).json({ message: "No reply found" })
 
         const index = reply.likes.indexOf(req.userId)

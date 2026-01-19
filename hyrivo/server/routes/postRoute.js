@@ -94,7 +94,7 @@ router.get('/all', log, auth, async (req, res) => {
 router.put('/edit', log, auth, async (req, res) => {
     try {
         const { postId, postText, postComment, postView } = req.body
-        if (!postId) return res.status(400).json({ message: "Unable to find Post" })
+        
         const post = await Post.findById(postId)
         if (!post) return res.status(400).json({ message: "Unable to find post" })
 

@@ -28,7 +28,7 @@ app.use('/posts',postRoute)
 app.use('/comment',commentRoute)
 
 app.get('/', (req,res)=>{
-    res.send("Welcome to Hyrivo")
+    res.send("Welcome to Hyrivo backend")
 })
 
 const port = process.env.PORT
