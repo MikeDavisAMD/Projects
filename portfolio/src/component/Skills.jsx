@@ -20,6 +20,7 @@ import shadcn from '../Assets/Logo/shadcn-ui-seeklogo.png'
 import firestore from '../Assets/Logo/firestore.png'
 import zod from '../Assets/Logo/zod.png'
 import reactHookForm from '../Assets/Logo/react-hook-form.png'
+import python from '../Assets/Logo/python.png'
 
 export const Skills = React.forwardRef((props, ref) => {
   return (
@@ -246,6 +247,21 @@ export const Skills = React.forwardRef((props, ref) => {
             </TimelineContent>
           </TimelineItem>
         </Timeline>
+        <TimelineItem>
+          <TimelineSeparator>
+            <TimelineConnector sx={{ height: '50px' }} />
+            <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
+              <img src={python} alt="Python" height={45} width={40} style={{ aspectRatio: 1 / 1 }} />
+            </TimelineDot>
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent sx={{ py: '20px', px: 2, display: 'flex', alignItems: 'end' }}>
+            <Typography variant="h6" component="span"
+              sx={{ fontFamily: '"Space Grotesk", sans-serif', fontOpticalSizing: 'auto', fontSize: { lg: 20, md: 20, sm: 15, xs: 12 } }}>
+              Python
+            </Typography>
+          </TimelineContent>
+        </TimelineItem>
       </Grid>
     </Grid>
   )
