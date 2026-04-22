@@ -8,6 +8,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import hm from '../Assets/Logo/HM.png'
 import rooks from '../Assets/Logo/rooks.png'
+import agile from '../Assets/Logo/AgileTribers.png'
 import { useState } from 'react';
 
 const style = {
@@ -25,10 +26,16 @@ const style = {
 export const Experience = React.forwardRef((props,ref) => {
   const [openHM, setOpenHM] = useState(false);
   const [openRB, setOpenRB] = useState(false);
+  const [openAT, setOpenAT] = useState(false);
+  const [openRB2, setOpenRB2] = useState(false);
   const handleOpenHM = () => setOpenHM(true);
   const handleOpenRB = () => setOpenRB(true);
+  const handleOpenAT = () => setOpenAT(true);
+  const handleOpenRB2 = () => setOpenRB(true);
   const handleCloseHM = () => setOpenHM(false);
   const handleCloseRB = () => setOpenRB(false);
+  const handleCloseAT = () => setOpenAT(false);
+  const handleCloseRB2 = () => setOpenRB2(false);
   
   return (
     <Grid container ref={ref}>
@@ -88,6 +95,44 @@ export const Experience = React.forwardRef((props,ref) => {
               <Typography sx={{opacity:0.3}}>Click logo to see roles and responsibilties</Typography>
             </TimelineContent>
           </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
+              <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
+                <IconButton sx={{p:0}} onClick={handleOpenAT}>
+                  <img src={agile} alt="Agile Tribers Pvt Ltd" style={{borderRadius:5,height:'35px',width:'35px'}}/>
+                </IconButton>
+              </TimelineDot>
+              <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '12px', px: 2 }}>
+              <Typography variant="body1" sx={{fontSize:{lg:'22px',md:'22px'}}} component="span">
+                AGILE TRIBERS PVT. LTD., NAGERCOIL, TAMILNADU, 629004. <br />
+                <i style={{opacity:0.5}}>Software Developer Intern (MERN Fullstack)</i> <br />
+                <i style={{opacity:0.5}}>(Aug 2025 - Dec 2025)</i>
+              </Typography>
+              <Typography sx={{opacity:0.3}}>Click logo to see roles and responsibilties</Typography>
+            </TimelineContent>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineSeparator>
+              <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
+              <TimelineDot sx={{ p: 0, bgcolor: 'transparent', boxShadow: 'none', border: 'none' }}>
+                <IconButton sx={{p:0}} onClick={handleOpenRB2}>
+                  <img src={rooks} alt="Rooks & Brooks Technologies" style={{borderRadius:5,height:'35px',width:'35px'}}/>
+                </IconButton>
+              </TimelineDot>
+              <TimelineConnector sx={{backgroundColor:'#F9AB00'}}/>
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: '12px', px: 2 }}>
+              <Typography variant="body1" sx={{fontSize:{lg:'22px',md:'22px'}}} component="span">
+                ROOKS AND BROOKS PVT. LTD., NAGERCOIL, TAMILNADU, 629004. <br />
+                <i style={{opacity:0.5}}>Python Programmer</i> <br />
+                <i style={{opacity:0.5}}>(2026 - Present)</i>
+              </Typography>
+              <Typography sx={{opacity:0.3}}>Click logo to see roles and responsibilties</Typography>
+            </TimelineContent>
+          </TimelineItem>
         </Timeline>
         <Modal
           sx={{overflow:'scroll'}}
@@ -107,23 +152,57 @@ export const Experience = React.forwardRef((props,ref) => {
             </Typography>
           </Box>
         </Modal>
-          <Modal
-            open={openRB}
-            onClose={handleCloseRB}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Roles and Responsibilities
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Coordinated the proposal submission process for research papers 
-              within designated timelines, while establishing a structured workflow outlining the 
-              development, review, and completion stages of each paper.
-              </Typography>
-            </Box>
-          </Modal>
+        <Modal
+          open={openRB}
+          onClose={handleCloseRB}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Roles and Responsibilities
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Coordinated the proposal submission process for research papers 
+            within designated timelines, while establishing a structured workflow outlining the 
+            development, review, and completion stages of each paper.
+            </Typography>
+          </Box>
+        </Modal>
+        <Modal
+          open={openAT}
+          onClose={handleCloseAT}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Roles and Responsibilities
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Completed a 6 months MERN Full Stack Development internship, contributing to live
+              projects and building personal applications using MongoDB, Express.js, React, and
+              Node.js.
+            </Typography>
+          </Box>
+        </Modal>
+        <Modal
+          open={openRB2}
+          onClose={handleCloseRB2}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Roles and Responsibilities
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Collaborated closely with proposal and writing teams to fine-tune AI models based on structured workflows, 
+            ensuring accurate analysis and result generation. Delivered high-quality outputs (graphs, tables, and visualizations) 
+            within defined timelines to support research paper publications.
+            </Typography>
+          </Box>
+        </Modal>
         </Box>
       </Grid>
     </Grid>
