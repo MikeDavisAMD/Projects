@@ -269,7 +269,7 @@ export const UserPosts = () => {
             <Box sx={{ textAlign: 'center', color: theme.primaryText }}>No Posts yet</Box>
           ) : posts.map((p, i) => (
             <Box key={i} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 2, gap: 2 }}>
-              <Card sx={{ width: { lg: '50%', md: '50%', sm: '80%', xs: '90%' }, borderRadius: '8px', background: theme.cardBg, border: theme.cardBorder, boxShadow: `2px 2px 10px ${theme.shadow}` }}>
+              <Card sx={{ width: { lg: '50%', md: '50%', sm: '80%', xs: '85%' }, borderRadius: '8px', background: theme.cardBg, border: theme.cardBorder, boxShadow: `2px 2px 10px ${theme.shadow}` }}>
                 <CardHeader
                   avatar={
                     dp && dp.startsWith('https://') ? (

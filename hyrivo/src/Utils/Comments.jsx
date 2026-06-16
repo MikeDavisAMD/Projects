@@ -32,7 +32,7 @@ const NoReply = ({ theme }) => {
     )
 }
 
-const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container, handleClickReply, activeReplyId, showReplyPortal,
+const Comment = ({ dp, users, profiles, theme, container, handleClickReply, activeReplyId, showReplyPortal,
     handleChangeReply, replyText, setReplyText, comment, handleLikeComment, handleDeleteComment, setActiveCommentId }) => {
     return (
         <Box sx={{ flexGrow: 1, pt: 2 }}>
@@ -113,7 +113,6 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                             </Link>
                                             <Link component="button" onClick={() => {
                                                 handleClickReply(comment._id)
-                                                handleClickReplyPortal()
                                             }} sx={{
                                                 textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
@@ -122,25 +121,24 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                                     {activeReplyId === comment._id ? <ArrowDropUp /> : <ArrowDropDown />}
                                                 </Box>
                                             </Link>
-                                            {showReplyPortal ? (
-                                                <Portal container={() => container.current}>
-                                                    {comment.replies?.length === 0 ? (
-                                                        <NoReply theme={theme} />
-                                                    ) : comment.replies?.map((reply) => (
-                                                        <>
-                                                            <CommentReply key={reply._id} dp={dp} users={users} profiles={profiles} theme={theme}
-                                                                handleChangeReply={handleChangeReply} reply={reply}/>
-                                                            <Collapse in={activeReplyId === comment._id}>
-                                                                <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
-                                                                    replyText={replyText} setReplyText={setReplyText} />
-                                                            </Collapse>
-                                                        </>
-                                                    ))}
-                                                </Portal>
-                                            ) : null}
                                         </Box>
                                     </Grid>
-                                    <Grid size={12} ref={container} />
+                                    <Grid size={12}>
+                                        <Collapse in={activeReplyId === comment._id}>
+                                            {comment.replies?.length === 0 ? (
+                                                <NoReply theme={theme} />
+                                            ) : comment.replies?.map((reply) => (
+                                                <>
+                                                    <CommentReply key={reply._id} dp={dp} users={users} profiles={profiles} theme={theme}
+                                                        handleChangeReply={handleChangeReply} reply={reply} />
+                                                    <Collapse in={activeReplyId === comment._id}>
+                                                        <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
+                                                            replyText={replyText} setReplyText={setReplyText} />
+                                                    </Collapse>
+                                                </>
+                                            ))}
+                                        </Collapse>
+                                    </Grid>
                                 </Grid>
                             </Box>
                             <Box sx={{ flexGrow: 1, display: { lg: 'none', md: 'none', sm: 'block', xs: 'block' } }}>
@@ -189,7 +187,6 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
                                             <Link component="button" onClick={() => {
                                                 handleClickReply(comment._id)
-                                                handleClickReplyPortal()
                                             }} sx={{
                                                 textDecoration: 'none', color: theme.primaryAccent, fontSize: 12,
                                                 '&:hover': { color: theme.hoverAccent, textDecoration: 'underline' }
@@ -198,18 +195,24 @@ const Comment = ({ dp, users, profiles, theme, handleClickReplyPortal, container
                                                     {activeReplyId === comment._id ? <ArrowDropUp /> : <ArrowDropDown />}
                                                 </Box>
                                             </Link>
-                                            {showReplyPortal ? (
-                                                <Portal container={() => container.current}>
-                                                    <CommentReply dp={dp} users={users} profiles={profiles} theme={theme}
-                                                        handleChangeReply={handleChangeReply} comment={comment} setActiveCommentId={setActiveCommentId} />
-                                                    <Collapse in={activeReplyId === comment._id}>
-                                                        <TypeReply dp={dp} users={users} profiles={profiles} theme={theme} replyText={replyText} setReplyText={setReplyText} />
-                                                    </Collapse>
-                                                </Portal>
-                                            ) : null}
                                         </Box>
                                     </Grid>
-                                    <Grid size={12} ref={container} />
+                                    <Grid size={12}>
+                                        <Collapse in={activeReplyId === comment._id}>
+                                            {comment.replies?.length === 0 ? (
+                                                <NoReply theme={theme} />
+                                            ) : comment.replies?.map((reply) => (
+                                                <>
+                                                    <CommentReply key={reply._id} dp={dp} users={users} profiles={profiles} theme={theme}
+                                                        handleChangeReply={handleChangeReply} reply={reply} />
+                                                    <Collapse in={activeReplyId === comment._id}>
+                                                        <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
+                                                            replyText={replyText} setReplyText={setReplyText} />
+                                                    </Collapse>
+                                                </>
+                                            ))}
+                                        </Collapse>
+                                    </Grid>
                                 </Grid>
                             </Box>
                         </Grid>
@@ -458,7 +461,7 @@ export const Comments = ({ dp, users, profiles, postId }) => {
 
     // Portal for comment
     const [showPortal, setShowPortal] = useState(false);
-    const [showReplyPortal, setShowReplyPortal] = useState(false); //Portal for reply
+    // const [showReplyPortal, setShowReplyPortal] = useState(false); //Portal for reply
 
     const container = useRef(null);
     const replyContainer = useRef(null);
@@ -467,12 +470,13 @@ export const Comments = ({ dp, users, profiles, postId }) => {
         setShowPortal(!showPortal);
     };
 
-    const handleClickReplyPortal = () => {
-        setShowReplyPortal(!showReplyPortal)
-    }
+    // const handleClickReplyPortal = () => {
+    //     setShowReplyPortal(!showReplyPortal)
+    // }
 
     const handleClickReply = (commentId) => {
         setActiveReplyId(prev => prev === commentId ? null : commentId);
+        // setShowReplyPortal(!showReplyPortal)
     };
 
     // Collapse for Comment
@@ -645,8 +649,7 @@ export const Comments = ({ dp, users, profiles, postId }) => {
                                                             <Comment key={comment._id} comment={comment} dp={dp} users={users} profiles={profiles} theme={theme}
                                                                 handleClickReply={handleClickReply} setActiveCommentId={setActiveCommentId} container={replyContainer}
                                                                 handleChangeReply={handleChangeReply} replyText={replyText} setReplyText={setReplyText} activeReplyId={activeReplyId}
-                                                                handleLikeComment={handleLikeComment} handleDeleteComment={handleDeleteComment} handleClickReplyPortal={handleClickReplyPortal}
-                                                                showReplyPortal={showReplyPortal}/>
+                                                                handleLikeComment={handleLikeComment} handleDeleteComment={handleDeleteComment} />
                                                             <Collapse in={activeCommentId === comment._id}>
                                                                 <TypeReply dp={dp} users={users} profiles={profiles} theme={theme}
                                                                     replyText={replyText} setReplyText={setReplyText} handleAddReply={handleAddReply} />
